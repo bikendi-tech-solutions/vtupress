@@ -199,12 +199,17 @@ $wpdb->update($db,['vp_bal' => 0],['ID' => $users->ID]);
                       <option value="munban">Un-Ban</option>
                       <option value="mrundan_monnify">Run-Dan Monnify</option>
                       <?php
-                          if(vp_getoption("vtupress_custom_kuda") == "yes" && vp_getoption("vtupress_custom_kuda") == "yes"){
+                          if(vp_getoption("vtupress_custom_vpay") == "yes"){
+                            ?>
+                      <option value="mrundan_vpay">Run-Dan Vpay</option>
+                      <?php
+                          }
+                          if(vp_getoption("vtupress_custom_kuda") == "yes"){
                             ?>
                       <option value="mrundan_kuda">Run-Dan Kuda</option>
                       <?php
                           }
-                          if(vp_getoption("vtupress_custom_gtbank") == "yes" && vp_getoption("vtupress_custom_gtbank") == "yes"){
+                          if(vp_getoption("vtupress_custom_gtbank") == "yes"){
                             ?>
                       <option value="mrundan_squadco">Run-Dan Squadco</option>
                     <?php

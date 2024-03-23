@@ -535,7 +535,7 @@ GTB
 
 jQuery(".generate_account").on("click",function(){
 
-    var forG = jQuery(".generate_account").attr("for");
+    var forG = jQuery(this).attr("for");
 
     if(forG != "gtb" && forG !="monnify" && forG != "kuda" && forG != "vpay"){
 

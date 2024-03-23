@@ -111,6 +111,244 @@ die("100");
 die("100");
 
         break;
+        case"mrundan_vpay":
+            global $wpdb;
+            $hid = explode(",", $ddid);
+
+            $gateways = "";
+     
+
+
+    if(vp_getoption('enablevpay') == "yes"){
+        $gateways .= "VPAY";
+        $did = "yes";
+
+        $total = 0;
+
+
+        $vpublickey = vp_getoption("vpay_public");
+        $vusername = vp_getoption("vpay_email");
+        $vpassword = vp_getoption("vpay_password");
+
+            foreach($hid as $hd){
+
+                if(!empty($hd)){
+                    $userid = $hd;
+
+                   $username = get_userdata($hd)->user_login;
+                   $email = get_userdata($hd)->user_email;
+                   $fun = vp_getuser($hd,"first_name",true);
+                   $lun = vp_getuser($hd,"last_name",true);
+
+            //sk_627c407a788c25602fbf36fdf99d5e888644766031
+            //pk_627c407a788c25602fbd2c939f993a8ce3507d0042
+
+                $public_key = $vpublickey;
+
+
+
+
+
+$unid = uniqid();
+$genemail = create_email();
+$num = "0".rand(7,9)."0".rand(11111111,99999999);
+
+$sub = uniqid();
+
+
+
+
+
+###################
+#####
+##### --- Do Login
+#####
+###################
+
+// API endpoint URL
+$url = 'https://services2.vpay.africa/api/service/v1/query/merchant/login';
+
+// Data to be sent in the request
+$data = array(
+    'username' => $vusername,
+    'password' => $vpassword
+);
+
+$headers = array(
+    'Content-Type: application/json', // Assuming JSON data is being sent
+    'publicKey: '.$vpublickey // Example Authorization header
+);
+
+
+
+// Initialize cURL session
+$ch = curl_init($url);
+
+// Set cURL options
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); // Set headers
+
+
+// Execute cURL session
+$response = curl_exec($ch);
+
+// Check for errors
+if ($response === false) {
+    echo 'cURL error: ' . curl_error($ch);
+} else {
+    // Handle response
+$apikey = json_decode($response);
+
+vp_addoption("vpay_apitoken","");
+
+$token = (isset($apikey->token) == true)?  $apikey->token : "";
+
+if(!empty($token)){
+    vp_updateoption("vpay_apitoken",$token);
+}else{
+    $token = vp_getoption("vpay_apitoken");
+}
+
+
+}
+
+// Close cURL session
+curl_close($ch);
+$token = vp_getoption("vpay_apitoken");
+
+if(empty($token)){
+    die("Tokenization Error|First Login Call");
+}
+
+
+##########################
+######
+###### --- SECOND ENDPOINT TO GET THE ID
+######
+##########################
+
+
+// API endpoint URL
+$url = 'https://services2.vpay.africa/api/service/v1/query/customer/add';
+
+$customer_firstN = $fun;
+$customer_lastN = $lun;
+$ref = uniqid();
+$customer_phone = $num;
+$customer_email = $email;
+
+// Data to be sent in the request
+$data = array(
+    'email' => $customer_email,
+    'phone' => $customer_phone,
+    'contactfirstname' => $customer_firstN,
+    'contactlastname' => $customer_lastN
+);
+
+$headers = array(
+    'Content-Type: application/json', // Assuming JSON data is being sent
+    'publicKey: '.$public_key, // Example Authorization header
+    'b-access-token: '.$token // Example Authorization header
+);
+
+
+
+// Initialize cURL session
+$ch = curl_init($url);
+
+// Set cURL options
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); // Set headers
+
+
+// Execute cURL session
+$response = curl_exec($ch);
+
+// Check for errors
+if ($response === false) {
+    echo 'cURL error: ' . curl_error($ch);
+} else {
+    // Handle response
+$apikey = json_decode($response);
+
+$response_id = (isset($apikey->id) == true)?  $apikey->id : die($response);
+
+}
+
+// Close cURL session
+curl_close($ch);
+
+
+
+##########################
+######
+###### --- THIRD ENDPOINT TO GET THE USER DATA
+######
+##########################
+
+
+// API endpoint URL
+$url = "https://services2.vpay.africa/api/service/v1/query/customer/$response_id/show";
+
+
+$headers = array(
+    'Content-Type: application/json', // Assuming JSON data is being sent
+    'publicKey: '.$public_key, // Example Authorization header
+    'b-access-token: '.$token // Example Authorization header
+);
+
+
+
+// Initialize cURL session
+$ch = curl_init($url);
+
+// Set cURL options
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); // Set headers
+
+
+// Execute cURL session
+$response = curl_exec($ch);
+
+// Check for errors
+if ($response === false) {
+    echo 'cURL error: ' . curl_error($ch);
+} else {
+    // Handle response
+$apikey = json_decode($response);
+
+if(!isset($apikey->nuban)){
+die($response);
+}else{
+    $accountNumber = $apikey->nuban;
+}
+
+}
+
+// Close cURL session
+curl_close($ch);
+
+
+vp_updateuser($userid,"vpayAccountNumber",$accountNumber);
+vp_updateuser($userid,"vpayAccountName",$customer_firstN);
+
+
+
+
+                }
+
+            }
+
+                die("100");
+    }else{
+        die("Please Enable Vpay");
+    }
+
+        break;
         case"mrundan_monnify":
             global $wpdb;
             $hid = explode(",", $ddid);
