@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<?php
+//wp_head();
+vtupress_js_css_user_plain();
+extract(vtupress_user_details());   
+
+?>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="csrf-token" content="8a61e0366d333b6dd21b8050f695db479cf3f0e7">
+<meta name="description" content="Automate data reselling directly from your own sim">
+<meta name="theme-color" content="#4c51bf">
+<meta name="google-site-verification" content="oTU7Ri_FE_RAd-MiKkqrB67abc9bJAASskSRna5MS2s">
+<title>Dashboard
+</title>
+<link rel="stylesheet" href="<?php echo $template_url."/default/csss";?>/fontawesome-all.css?v=1">
+<link rel="stylesheet" href="<?php echo esc_url(plugins_url("vtupress/css/bootstrap.min.css?v=1"));?>">
+<link rel="stylesheet" href="<?php echo $template_url."/classic/classic";?>/custom.css?v=1">
+<link rel="stylesheet" href="<?php echo $template_url."/classic/csss";?>/darkmode.css?v=7">
+<link rel="stylesheet" href="<?php echo $template_url."/classic/classic";?>/styles.css?v=1">
+<link rel="stylesheet" href="<?php echo $template_url."/classic/classic";?>/all.min.css?v=1">
+
+<link rel="stylesheet" href="<?php echo plugins_url('vtupress/admin/dist/css/icons/material-design-iconic-font/css/materialdesignicons.min.css');?>">
+
+<link rel="shortcut icon" href="<?php echo get_site_icon_url( 75, vp_option_array($option_array,'siteurl').'/wp-content/plugins/vtupress/images/login.png');?>" type="image/png">
+
+
+<style>
+
+		/* width */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* button */
+::-webkit-scrollbar-button {
+    background: #222;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #333;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #585858;
+}
+
+/* The track NOT covered by the handle.
+::-webkit-scrollbar-track-piece {
+    background: #000;
+}
+
+/* Corner */
+::-webkit-scrollbar-corner {
+    background: #999;
+}
+
+/* Resizer */
+::-webkit-resizer {
+    background: #111;
+}
+
+
+
+  #cover-spin {
+        position:fixed;
+        width:100%;
+        left:0;right:0;top:0;bottom:0;
+        background-color: rgba(255,255,255,0.7);
+        z-index:9999;
+        /*display:none;*/
+    }
+
+    @-webkit-keyframes spin {
+      from {-webkit-transform:rotate(0deg);}
+      to {-webkit-transform:rotate(360deg);}
+    }
+
+    @keyframes  spin {
+      from {transform:rotate(0deg);}
+      to {transform:rotate(360deg);}
+    }
+
+    #cover-spin::after {
+        content:"";
+        display:block;
+        position:absolute;
+        left:48%;top:40%;
+        width:40px;height:40px;
+        border-style:solid;
+		border-top: 16px solid blue;
+  border-right: 16px solid green;
+  border-bottom: 16px solid red;
+  border-left: 16px solid pink;
+        border-width: 4px;
+        border-radius:50%;
+        -webkit-animation: spin .8s linear infinite;
+        animation: spin .8s linear infinite;
+    }
+
+div.vnav ul.vnav li {
+    color: black;
+    padding: 0.5em;
+}
+div.vnav ul.vnav li * {
+    font-size: 1.1em;
+    padding-right: 0.5em;
+}
+
+div.vnav ul.vnav li:hover {
+background-color:#3028a7;
+}
+
+</style>
+
+<script defer="" src="<?php echo $template_url."/classic/classic";?>/cdn.min.js?v=1"></script>
+<script src="<?php echo $template_url."/classic/classic";?>/alpine@3.2.0.js?v=1" defer=""></script>
+<script src="<?php echo $template_url."/classic/classic";?>/axios.min.js?v=1"></script>
+<!--<script src="<?php echo $template_url."/classic/classic";?>/app.js?v=1"></script>-->
+<script src="<?php echo $template_url."/classic/classic";?>/wow.min.js?v=1"></script>
+<script src="<?php echo $template_url."/classic/classic";?>/cube.js?v=1"></script>
+<script src="<?php echo $template_url."/classic/classic";?>/countup.js?v=1"></script>
+<script>
+var darkMode = document.getElementById('darkMode');
+var darkLabel = "darkModeLabel";
+var darkLang = "Dark";
+var lightLang = "Light";
+var imgID = "logo";
+var darkImg = "./dark.png";
+var lightImg = "./light.png";
+window.addEventListener('load', function () {
+  if (darkMode) {
+    initTheme();
+    darkMode.addEventListener('change', function () {
+      resetTheme();
+    });
+  }
+});
+function initTheme() {
+  var darkThemeSelected = localStorage.getItem('darkMode') !== null && localStorage.getItem('darkMode') === 'dark';
+  darkMode.checked = darkThemeSelected;
+  darkThemeSelected ? document.body.setAttribute('data-theme', 'dark') : document.body.removeAttribute('data-theme');
+ // darkThemeSelected ? document.getElementById(imgID).src = darkImg : document.getElementById(imgID).src = lightImg;
+  darkThemeSelected ? document.getElementById(darkLabel).innerHTML = darkLang : document.getElementById(darkLabel).innerHTML = lightLang;
+}
+function resetTheme() {
+  if (darkMode.checked) {
+    document.body.setAttribute('data-theme', 'dark');
+    localStorage.setItem('darkMode', 'dark');
+    //document.getElementById(imgID).src = darkImg;
+    document.getElementById(darkLabel).innerHTML = darkLang;
+  } else {
+    document.body.removeAttribute('data-theme');
+    localStorage.removeItem('darkMode');
+   // document.getElementById(imgID).src = lightImg;
+    document.getElementById(darkLabel).innerHTML = lightLang;
+  }
+}
+</script>
+
+
+</head>
+<body class="bg-gray-100">
+<main>
+
+<aside style="z-index:20;" class="dark-white fixed top-0 bottom-0 z-10 duration-500 ease-in-out bg-indigo-800 shadow-lg w-72 md:w-64 -left-0 lg:left-0" id="sidebar">
+<div class="dark-white p-2 m-5 text-xs text-center uppercase truncate bg-gray-100 border rounded-lg">
+Support - <?php echo "0".vp_option_array($option_array,"vp_phone_line");?>
+</div>
+<hr class="mx-5 border-indigo-700">
+<div class="vnav px-6 pb-5 overflow-y-scroll text-xs h-85">
+<ul class="vnav mt-8 space-y-3">
+<li>
+<a href="/vpaccount" class="tracking-wider text-indigo-200 duration-150 ease-in-out hover:text-indigo-300">
+<i class="mr-3 fa fa-desktop"></i>
+Dashboard
+</a>
+</li>
+
+<?php
+if(vp_option_array($option_array,"setairtime") == "checked"){
+?>
+<li>
+<a href="?vend=airtime" class="tracking-wider flex justify-between hover:text-indigo-300 duration-150 text-indigo-200 ease-in-out hover:text-indigo-300">
+<div>
+<i class="mr-4 fas fa-mobile"></i>
+Buy Airtime
+</div>
+</a>
+</li>
+<?php
+}
+
+if(vp_option_array($option_array,"setdata") == "checked"){
+?>
+<li>
+<a href="?vend=data" class="tracking-wider flex justify-between hover:text-indigo-300 duration-150 text-indigo-200 ease-in-out hover:text-indigo-300">
+<div>
+<i class="mr-2 fa fa-wifi"></i>
+Buy Data
+</div>
+</a>
+</li>
+<?php
+}
+if(vp_option_array($option_array,"betcontrol") == "checked"){
+?>
+<li>
+<a href="?vend=bet" class="tracking-wider flex justify-between hover:text-indigo-300 duration-150 text-indigo-200 ease-in-out hover:text-indigo-300">
+<div>
+<i class="mr-2 fa fa-wifi"></i>
+Bet Funding
+</div>
+</a>
+</li>
+<?php
+}
+
+if(vp_option_array($option_array,"datascontrol") == "checked" && vp_option_array($option_array,"resell") == "yes"){
+?>
+<li>
+<a href="?vend=datacard" class="tracking-wider flex justify-between hover:text-indigo-300 duration-150 text-indigo-200 ease-in-out hover:text-indigo-300">
+<div>
+<i class="mr-2 fa fa-wifi"></i>
+Data Card
+</div>
+</a>
+</li>
+<?php
+}
+
+if(is_plugin_active("bcmv/bcmv.php")){
+if(vp_option_array($option_array,"setcable") == "checked"){?>
+<li>
+<a href="?vend=cable" class="tracking-wider flex justify-between hover:text-indigo-300 duration-150 text-indigo-200 ease-in-out hover:text-indigo-300">
+<div>
+<i class="mr-2 fas fa-tv nav-icon"></i>
+CableTv Sub*
+</div>
+</a>
+</li>
+<?php
+}
+
+if(vp_option_array($option_array,"setbill") == "checked"){
+?>
+<li>
+<a href="?vend=bill" class="tracking-wider flex justify-between hover:text-indigo-300 duration-150 text-indigo-200 ease-in-out hover:text-indigo-300">
+<div>
+<i class="mr-3 fa fa-building"></i>
+Pay Light Bills
+</div>
+</a>
+</li>
+<?php
+}
+}
+
+
+if(is_plugin_active("vpepin/vpepin.php") && vp_option_array($option_array,"epinscontrol") == "checked" && vp_option_array($option_array,"resell") == "yes"){ 
+		?>
+<li>
+<a href="?vend=epins" class="tracking-wider flex justify-between hover:text-indigo-300 duration-150 text-indigo-200 ease-in-out hover:text-indigo-300">
+<div>
+<i class="mr-2 fas fa-graduation-cap nav-icon"></i>
+Buy Exam Pins
+</div>
+</a>
+</li>
+<?php
+}
+
+
+ if(is_plugin_active("vpcards/vpcards.php") && vp_option_array($option_array,"cardscontrol") == "checked" && vp_option_array($option_array,"resell") == "yes"){ 
+		  		?>
+<li>
+<a href="?vend=cards" class="tracking-wider flex justify-between hover:text-indigo-300 duration-150 text-indigo-200 ease-in-out hover:text-indigo-300">
+<div>
+<i class="mr-3 fa fa-barcode" aria-hidden="true"></i>
+Recharge Cards
+</div>
+</a>
+</li>
+<?php
+}
+
+if(is_plugin_active("vpsms/vpsms.php") && vp_option_array($option_array,"smscontrol") == "checked" && vp_option_array($option_array,"resell") == "yes"){
+?>
+<li>
+<a href="?vend=sms" class="tracking-wider flex justify-between hover:text-indigo-300 duration-150 text-indigo-200 ease-in-out hover:text-indigo-300">
+<div>
+<i class="mr-3 nav-icon fas fa-envelope"></i>
+Send Bulk SMS
+</div>
+</a>
+</li>
+<?php
+}
+
+if(is_plugin_active("vprest/vprest.php") && vp_option_array($option_array,"resell") == "yes"){
+if(vp_option_array($option_array,"allow_crypto") == "yes"){
+?>
+<li>
+<a href="?vend=crypto" class="tracking-wider flex justify-between hover:text-indigo-300 duration-150 text-indigo-200 ease-in-out hover:text-indigo-300">
+<div>
+<i class="mr-3 fab fa-bitcoin"></i>
+Trade Cryptos
+</div>
+</a>
+</li>
+<?php
+}
+if(vp_option_array($option_array,"allow_cards") == "yes"){
+?>
+<li>
+<a href="?vend=gift-card" class="tracking-wider flex justify-between hover:text-indigo-300 duration-150 text-indigo-200 ease-in-out hover:text-indigo-300">
+<div>
+<i class="mr-2 fab fa-ebay"></i>
+Trade Gift Cards
+</div>
+</a>
+</li>
+<?php
+}
+}
+
+if(is_plugin_active("vprest/vprest.php")  && vp_option_array($option_array,"resell") == "yes"){
+?>
+<li>
+<a href="?vend=upgrade" class="tracking-wider flex justify-between hover:text-indigo-300 duration-150 text-indigo-200 ease-in-out hover:text-indigo-300">
+<div>
+<i class="mr-3 fa fa-line-chart" aria-hidden="true"></i>
+Upgrade Levels
+</div>
+</a>
+</li>
+<?php
+}
+
+if(is_plugin_active("vprest/vprest.php")  && vp_option_array($option_array,"resell") == "yes" && isset($level)){
+?>
+<li>
+<a href="?vend=pricing" class="tracking-wider flex justify-between hover:text-indigo-300 duration-150 text-indigo-200 ease-in-out hover:text-indigo-300">
+<div>
+<i class="mr-2 fa fa-tags" aria-hidden="true"></i>
+Pricing Page
+</div>
+</a>
+</li>
+<?php
+}
+
+
+
+if(is_plugin_active("vprest/vprest.php")  && vp_option_array($option_array,"resell") == "yes" && strtolower($level[0]->developer) == "yes"){
+?>
+<li>
+<a href="?vend=developer" class="tracking-wider flex justify-between hover:text-indigo-300 duration-150 text-indigo-200 ease-in-out hover:text-indigo-300">
+<div>
+<i class="mr-2 fa fa-cogs" aria-hidden="true"></i>
+Developers Api
+</div>
+</a>
+</li>
+<?php
+}
+
+
+?>
+<li>
+<a href="?vend=history&for=wallet" class="tracking-wider text-indigo-200 duration-150 ease-in-out hover:text-indigo-300">
+<i class="mr-3 fa fa-clock"></i>
+View Histories
+</a>
+</li>
+
+
+
+<?php
+if(vp_option_array($option_array,"wallet_to_wallet") == "yes"){
+?>
+<li>
+<a href="?vend=wallet" class="tracking-wider text-indigo-200 duration-150 ease-in-out hover:text-indigo-300">
+<i class="mr-3 fas fa-credit-card nav-icon"></i>
+Money
+</a>
+</li>
+<?php
+}
+?>
+
+<?php
+if(strtolower(vp_option_array($option_array,"allow_withdrawal")) == "yes" && strtolower($myplan) != strtolower("customer")){
+?>
+<li>
+<a href="?vend=withdraw" class="tracking-wider text-indigo-200 duration-150 ease-in-out hover:text-indigo-300">
+<i class="mr-3 fa fa-share" aria-hidden="true"></i>
+Withdraw Funds
+</a>
+</li>
+<?php
+}
+if(vp_getoption('wallet_to_wallet') == "yes" && isset($level) && $level[0]->transfer == "yes"){
+?>
+<li>
+<a href="?vend=transfer" class="tracking-wider text-indigo-200 duration-150 ease-in-out hover:text-indigo-300">
+<i class="mr-3 fa fa-paper-plane"></i>
+Transfer Funds
+</a>
+</li>
+<?php
+}
+?>
+<li>
+<a href="?vend=account" class="tracking-wider text-indigo-200 duration-150 ease-in-out hover:text-indigo-300">
+<i class="mr-3 fa fa-user"></i>
+My Account
+</a>
+</li>
+<?php
+
+if(is_plugin_active("vprest/vprest.php")  && vp_option_array($option_array,"resell") == "yes" && strtolower($kyc_data[0]->enable) == "yes"){
+
+?>
+<li>
+<a href="?vend=kyc" class="tracking-wider text-indigo-200 duration-150 ease-in-out hover:text-indigo-300">
+<i class="mr-3 fa fa-check" aria-hidden="true"></i>
+Verify My Account
+</a>
+</li>
+<?php
+}
+?>
+<li>
+<a href="?vend=message" class="tracking-wider text-indigo-200 duration-150 ease-in-out hover:text-indigo-300">
+<i class="mr-2 fas fa-inbox" aria-hidden="true"></i>
+Messages
+</a>
+</li>
+
+
+
+
+</ul>
+
+<div x-data="{opened: $persist(true).as(&#39;xportals-opened&#39;)}" class="mt-6 ">
+<a href="#" class="flex justify-between text-indigo-100 uppercase" @click.prevent="opened = !opened">
+<div>
+<i class="mr-2 fa fa-boxes"></i>
+Generate Accounts
+</div>
+<div>
+<i class="fa fa-angle-down" :class="opened ? &#39;fa-angle-down&#39; : &#39;fa-angle-right&#39;"></i>
+</div>
+</a>
+<ul class="vnav mt-3 space-y-3 text-white" :class=" opened ? &#39;&#39; : &#39;hidden&#39;">
+
+	<?php
+if( vp_getoption('enablevpay') == "yes" ){
+?>
+<li>
+<a href="#" for="vpay" class="flex generate_account justify-between text-indigo-200 duration-150 ease-in-out hover:text-indigo-300">
+<div>
+Vpay
+</div>
+</a>
+</li>
+
+<?php
+}
+?>
+
+<?php
+if( vp_getoption('enable_monnify') == "yes" ){
+?>
+<li>
+<a href="#" for="monnify" class="flex generate_account justify-between text-indigo-200 duration-150 ease-in-out hover:text-indigo-300">
+<div>
+Monnify
+</div>
+</a>
+</li>
+
+<?php
+}
+?>
+
+
+<?php
+if( vp_getoption('enablekuda') == "yes" ){
+?>
+<li>
+<a href="#" for="kuda" class="flex generate_account justify-between text-indigo-200 duration-150 ease-in-out hover:text-indigo-300">
+<div>
+Kuda
+</div>
+</a>
+</li>
+
+<?php
+}
+?>
+
+
+<?php
+if( vp_getoption('enablesquadco') == "yes"  ){
+?>
+<li>
+<a href="#" for="gtb" class="flex generate_account justify-between text-indigo-200 duration-150 ease-in-out hover:text-indigo-300">
+<div>
+GTB
+</div>
+</a>
+</li>
+
+<?php
+}
+?>
+
+
+
+
+</ul>
+</div>
+<script>
+
+jQuery(".generate_account").on("click",function(){
+
+    var forG = jQuery(".generate_account").attr("for");
+
+    if(forG != "gtb" && forG !="monnify" && forG != "kuda" && forG != "vpay"){
+
+        alert(forG+" is not a valid gateway");
+        return;
+    }
+
+    var obj = {};
+    obj["for"] = forG;
+    
+    jQuery("#cover-spin").show();
+	
+jQuery.ajax({
+	  url: '<?php echo esc_url(plugins_url("vtupress/generateAccounts.php"));?>',
+	  data: obj,
+	  dataType: 'text',
+	  'cache': false,
+	  "async": true,
+	  error: function (jqXHR, exception) {
+		  jQuery("#cover-spin").hide();
+			var msg = "";
+			if (jqXHR.status === 0) {
+				msg = "No Connection.\n Verify Network.";
+		 swal({
+	  title: "Error!",
+	  text: msg,
+	  icon: "error",
+	  button: "Okay",
+	}).then((value) => {
+		location.reload();
+	}); 
+	  
+			} else if (jqXHR.status == 404) {
+				msg = "Requested page not found. [404]";
+				 swal({
+	  title: "Error!",
+	  text: msg,
+	  icon: "error",
+	  button: "Okay",
+	}).then((value) => {
+		location.reload();
+	}); 
+			} else if (jqXHR.status == 500) {
+				msg = "Internal Server Error [500].";
+				 swal({
+	  title: "Error!",
+	  text: msg,
+	  icon: "error",
+	  button: "Okay",
+	}).then((value) => {
+		location.reload();
+	}); 
+			} else if (exception === "parsererror") {
+				msg = "Requested JSON parse failed.";
+				   swal({
+	  title: msg,
+	  text: jqXHR.responseText,
+	  icon: "error",
+	  button: "Okay",
+	}).then((value) => {
+		location.reload();
+	}); 
+			} else if (exception === "timeout") {
+				msg = "Time out error.";
+				 swal({
+	  title: "Error!",
+	  text: msg,
+	  icon: "error",
+	  button: "Okay",
+	}).then((value) => {
+		location.reload();
+	}); 
+			} else if (exception === "abort") {
+				msg = "Ajax request aborted.";
+				 swal({
+	  title: "Error!",
+	  text: msg,
+	  icon: "error",
+	  button: "Okay",
+	}).then((value) => {
+		location.reload();
+	}); 
+			} else {
+				msg = "Uncaught Error.\n" + jqXHR.responseText;
+				 swal({
+	  title: "Error!",
+	  text: msg,
+	  icon: "error",
+	  button: "Okay",
+	}).then((value) => {
+		location.reload();
+	}); 
+			}
+		},
+	  
+	  success: function(data) {
+		  jQuery("#cover-spin").hide();
+		  
+			if(data == "100" || data == 100){
+			  swal({
+	  title: "Success!",
+	  text: "Please confirm that you now have the dedicated account number for "+forG,
+	  icon: "success",
+	  button: "Okay",
+	}).then((value) => {
+		location.reload();
+	});
+		  }
+		  else{
+			jQuery("#cover-spin").hide();
+	swal({
+	  title: "Failed",
+	  text: data,
+	  icon: "error",
+	  button: "Okay",
+	}).then((value) => {
+		location.reload();
+	});   
+		  }
+	  },
+	  type: 'POST'
+	});
+	
+	});
+</script>
+
+
+<?php
+if(is_plugin_active("vpmlm/vpmlm.php")  && vp_option_array($option_array,'mlm') == "yes"){
+?>
+<div x-data="{opened: $persist(true).as(&#39;xportals-opened&#39;)}" class="mt-8 ">
+<a href="#" class="flex justify-between text-indigo-100 uppercase" @click.prevent="opened = !opened">
+<div>
+<i class="mr-2 fa fa-boxes"></i>
+Referal System
+</div>
+<div>
+<i class="fa fa-angle-down" :class="opened ? &#39;fa-angle-down&#39; : &#39;fa-angle-right&#39;"></i>
+</div>
+</a>
+<ul class="vnav mt-3 space-y-3 text-white" :class=" opened ? &#39;&#39; : &#39;hidden&#39;">
+<li>
+<a href="?vend=referral-details" class="flex justify-between text-indigo-200 duration-150 ease-in-out hover:text-indigo-300">
+<div>
+Referral Info
+</div>
+<div>
+<span class="inline-block px-1 text-xs font-semibold tracking-widest text-white uppercase bg-orange-600 rounded">
+Info
+</span>
+</div>
+</a>
+</li>
+<li>
+<a href="?vend=referrals" class="flex justify-between text-indigo-200 duration-150 ease-in-out hover:text-indigo-300">
+<div>
+My Referrals
+</div>
+<div>
+<span class="inline-block px-1 text-xs font-semibold tracking-widest text-red-600 uppercase bg-white rounded">Refs</span>
+</div>
+</a>
+</li>
+</ul>
+</div>
+
+<?php
+}
+?>
+
+</div>
+</aside>
+<section class="lg:ml-64">
+
+<div class="bg-secondary z-index-100">
+<div id="cover-spin">
+
+<div class="loader">
+</div>
+
+</div>
+
+</div>
+
+<header class="fixed top-0 left-0 right-0 py-1 bg-white shadow lg:ml-64 lg:py-0" style="z-index:10;">
+<div class="container mx-auto">
+<div class="flex items-center justify-between mx-3 lg:mx-5">
+<div class="flex items-center">
+<div class="flex items-center mr-5 lg:mr-10">
+<a href="?vend=account" id="nav-toggle" class="dark p-2 bg-gray-300 rounded-full lg:hidden">
+<svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
+<path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+</svg>
+</a>
+<a href="/" title="" class="hidden  lg:inline-block block p-3 rounded-full">
+<!--$template_url."/classic/classic";?>/icon.svg-->
+<img src="<?php echo get_site_icon_url( 75, vp_option_array($option_array,'siteurl').'/wp-content/plugins/vtupress/images/login.png');?>" alt="" class="inline-block w-6 h-6">
+</a>
+</div>
+<a href="?vend=account" class=" px-4 py-2 my-4 bg-gray-300 rounded-full lg:inline-block">
+<div class="flex items-center">
+<i class="text-indigo-900 fa fa-user-circle"></i>
+<span class="inline-block ml-2 text-xs text-gray-700 whitespace-no-wrap"><?php echo get_userdata($id)->user_login;?> - <?php echo $id;?></span>
+</div>
+</a>
+ </div>
+<div class="flex items-center text-sm text-center lg:text-right">
+<a href="<?php 
+$red = vp_getoption("vp_redirect");
+if(strtolower($red) == "false"){
+echo wp_logout_url(get_permalink());
+
+}
+else{
+$link = get_site_url().'/'.$red;
+
+echo wp_logout_url($link);
+}
+
+
+?>">
+<i class="fa fa-power-off"></i>
+Logout
+</a>
+</div>
+</div>
+</div>
+</header>
+<div class="p-8 lg:p-10"></div>
+
+
+<div id="dashboard-main-content">
+
+<!--MAIN DASHBOARD-->
+<?php
+if((isset($_GET["vend"]) && $_GET["vend"]!="airtime"  && $_GET["vend"]!="bet" && $_GET["vend"]!="datacard" && $_GET["vend"]!="message" && $_GET["vend"]!="kyc" && $_GET["vend"]!="pricing"  && $_GET["vend"]!="referral-details" && $_GET["vend"]!="bill" && $_GET["vend"]!="developer"  && $_GET["vend"]!="cards" && $_GET["vend"]!="referrals" && $_GET["vend"]!="gift-card" && $_GET["vend"]!="crypto"  && $_GET["vend"]!="transfer" && $_GET["vend"]!="sms" && $_GET["vend"]!="epins" && $_GET["vend"]!="withdraw" && $_GET["vend"]!="wallet" && $_GET["vend"]!="upgrade" && $_GET["vend"]!="data" && $_GET["vend"]!="cable" && $_GET["vend"]!="bill" && $_GET["vend"]!="history" && $_GET["vend"]!="account")  || !isset($_GET["vend"])){
+if(vp_option_array($option_array,"show_notify") == "yes"){
+	$meq = preg_replace('/\n|\t|\s|\r/'," ",$mess);
+	?>
+	<script>
+	jQuery(window).on("load",function(){
+		var word = "<?php echo $meq;?>";
+swal({
+  title: "NOTIFICATION",
+  text: "<?php echo $meq;?>",
+  icon: "info",
+  button: "Okay"
+});
+	});
+</script>
+	<?php
+}
+?>
+<div>
+<template x-if="notifs.length"></template><div class="container mx-auto mt-3">
+<div class=" py-sm-2">
+<template x-for="notif, index in notifs"></template><div class="px-3 py-3 text-sm text-white bg-blue-600 rounded">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<div>
+<i class="fa fa-info-circle fa-2x"></i>
+</div>
+<div>
+<div x-text="notif.title" class="font-bold">NOTIFICATION</div>
+<div x-text="notif.message" class="mt-1"><?php echo $mess;?> </div>
+</div>
+</div>
+<div>
+<a href="#" class="block pl-4" @click.prevent="notifs.splice(index)">
+<i class="text-white fa fa-times"></i>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<section>
+<div class="container mx-auto space-y-2">
+
+
+<!--CONTACT-->
+<div class="py-3">
+<div class="items-center justify-between py-3 px-3 text-sm bg-orange-100 border rounded lg:flex">
+<div class="flex">
+<div class="pr-2 dark">
+<i class="fa fa-info-circle"></i>
+</div>
+<div class="font-semibold dark">
+Need To Contact Us?
+</div>
+</div>
+<div class="mt-3 ml-5 lg:mt-0">
+<a href="whatsapp://send?phone=234<?php echo vp_option_array($option_array,"vp_whatsapp");?>&amp;text=Hi,+I+need+your+help+with">
+<button class="inline-block px-3 py-1 font-bold text-smtext-white text-white duration-300 bg-green-600 rounded hover:bg-yellow-700">
+Whatsapp Us
+</button>
+</a>
+<?php
+if(vp_getoption("vp_whatsapp_group") != "link" && vp_getoption("vp_whatsapp_group") != "false" && !empty(vp_getoption("vp_whatsapp_group"))){
+?>
+<a href="<?php echo vp_getoption("vp_whatsapp_group");?>">
+<button class="inline-block px-3 py-1 font-bold text-smtext-white text-white duration-300 bg-blue-600 rounded hover:bg-yellow-700">
+Whatsapp Group
+</button>
+</a>
+<?php
+}
+?>
+<a href="tel:+234<?php echo vp_option_array($option_array,"vp_phone_line");?>">
+<button class="inline-block px-3  font-bold py-1 text-smtext-white text-white duration-300 bg-yellow-600 rounded hover:bg-yellow-700">
+Call Us
+</button>
+</a>
+</div>
+</div>
+</div>
+
+
+
+
+<div class="items-center justify-between mx-5 mb-2 text-sm lg:flex">
+<div></div>
+<div class="flex items-center mt-4 lg:mt-0">
+<a href="?vend=wallet" class="dark inline-block px-3 py-2 mr-2 text-xs font-bold text-indigo-600 uppercase bg-gray-200 border rounded hover:bg-gray-300">
+  <i class="fa fa-filter"></i>
+Fund Wallet
+</a>
+<a href="?vend=history&for=wallet" class="inline-block px-3 py-2 mr-2 text-xs font-bold text-indigo-600 uppercase border rounded hover:bg-gray-200">
+<i class="fa fa-history"></i>
+Wallet History
+</a>
+<a href="?vend=account" class="inline-block  font-bold text-white px-3 py-2 text-xs font-bold text-indigo-100 uppercase bg-indigo-500 rounded hover:bg-indigo-700">
+<i class="fa fa-wallet"></i>
+My Account
+</a>
+</div>
+</div>
+<div class="container-fluid">
+<div class="row">
+<div class="flex mt-2 mb-4 col-md mb-sm-4 mb-md-4 mx-md-2  mt-md-4 gx-4 py-3 px-2  bg-white rounded shadow">
+<div class="p-3 text-indigo-800 bg-gray-200 rounded-full">
+<svg viewBox="0 0 24 24" class="w-8 h-8 fill-current">
+<defs></defs>
+<path d="M6 2h12a2 2 0 012 2v16a2 2 0 01-2 2H6a2 2 0 01-2-2V4c0-1.1.9-2 2-2zm0 2v16h12V4H6zm6 14a1 1 0 110-2 1 1 0 010 2z" class="heroicon-ui"></path>
+</svg>
+</div>
+<div class="ml-5">
+<p class="text-xs font-bold text-indigo-400 uppercase">Wallet (NGN)</p>
+<p class="text-2xl font-bold"><?php 
+
+if(!empty($bal)){
+echo floatval(round($bal,2));
+}
+else{
+echo "0.00";
+}
+
+
+?></p>
+</div>
+</div>
+<div class="flex mb-4 col-md mb-sm-4 mb-md-4 mx-md-2  mt-md-4 gx-4 py-3 px-2  bg-white rounded shadow">
+<div class="p-3 text-indigo-800 bg-gray-200 rounded-full">
+<svg viewBox="0 0 24 24" class="w-8 h-8 fill-current">
+<defs></defs>
+<path d="M12 12a5 5 0 110-10 5 5 0 010 10zm0-2a3 3 0 100-6 3 3 0 000 6zm9 11a1 1 0 01-2 0v-2a3 3 0 00-3-3H8a3 3 0 00-3 3v2a1 1 0 01-2 0v-2a5 5 0 015-5h8a5 5 0 015 5v2z" class="heroicon-ui"></path>
+</svg>
+</div>
+<div class="ml-5">
+<p class="text-xs font-bold text-indigo-400 uppercase">Plan</p>
+<p class="text-2xl font-bold"><?php echo ucfirst($myplan);?></p>
+</div>
+</div>
+
+
+<?php
+if(is_plugin_active("vpmlm/vpmlm.php")  && vp_option_array($option_array,'mlm') == "yes"){
+?>
+<div  class="flex mb-4 col-md mb-sm-4 mb-md-4 mx-md-2  mt-md-4 gx-4 py-3 px-2  bg-white rounded shadow">
+<div class="p-3 text-indigo-800 bg-gray-200 rounded-full">
+<svg viewBox="0 0 24 24" class="w-8 h-8 fill-current">
+<defs></defs>
+<path d="M20 15a1 1 0 002 0V7a1 1 0 00-1-1h-8a1 1 0 000 2h5.59L13 13.59l-3.3-3.3a1 1 0 00-1.4 0l-6 6a1 1 0 001.4 1.42L9 12.4l3.3 3.3a1 1 0 001.4 0L20 9.4V15z" class="heroicon-ui"></path>
+</svg>
+</div>
+<div class="ml-5">
+<p class="text-xs font-bold text-indigo-400 uppercase">Total Referred.</p>
+<p class="text-2xl font-bold">
+<?php 
+
+if(!empty($total_refered)){
+echo $total_refered;
+}
+else{
+echo "0";
+}
+
+?></p>
+</div>
+</div>
+
+
+<?php
+if(strtolower(vp_getoption("totcons")) == "yes"){
+?>
+
+<div class="flex mb-2 col-md mb-sm-4 mb-md-4  mx-md-2  mt-md-4 gx-4 py-3 px-2  bg-white rounded shadow">
+<div class="p-3 text-indigo-800 bg-gray-200 rounded-full">
+<svg viewBox="0 0 24 24" class="w-8 h-8 fill-current">
+<defs></defs>
+<path d="M20 22H4a2 2 0 01-2-2v-8c0-1.1.9-2 2-2h4V8c0-1.1.9-2 2-2h4V4c0-1.1.9-2 2-2h4a2 2 0 012 2v16a2 2 0 01-2 2zM14 8h-4v12h4V8zm-6 4H4v8h4v-8zm8-8v16h4V4h-4z" class="heroicon-ui"></path>
+</svg>
+</div>
+<div class="ml-5">
+<p class="text-xs font-bold text-indigo-400 uppercase">sales (ngn)</p>
+<p class="text-2xl font-bold">₦
+<?php
+if(!empty($cur_suc_trans_amt)){
+echo floatval($cur_suc_trans_amt);
+}
+else{
+echo "0";
+}
+?></p>
+</div>
+</div>
+
+<?php
+}
+?>
+
+
+<?php
+}
+?>
+
+</div>
+</div>
+</div>
+</section>
+
+
+<!--SERVICES-->
+<!--Services block for vtupress second template (wp-content/plugins/vtupress/template/classic/classic.html(is the __DIR__ sol:php call))-->
+<section>
+<div class="container mx-auto my-5">
+
+<div class="row">
+
+
+<?php
+if(vp_option_array($option_array,"setairtime") == "checked"){
+?>
+<div class="dark-white flex bg-gray-200 col-12 col-md items-center py-5  px-3 justify-between  duration-500 ease-in-out border-gray-300 border-b lg:border-r lg:border-b-0 hover:bg-gray-300">
+<div class="flex items-center ml-3">
+<img src="<?php echo $template_url."/classic/classic";?>/airtime1.svg" alt="MTN" class="w-10 h-10 rounded">
+<div class="ml-3">
+<div class="text-xs text-gray-600">
+<a href="?vend=airtime" class="font-semibold">
+Airtime
+</a>
+</div>
+<div class=" white text-xs font-semibold text-gray-800">
+<i class="fa fa-sim-card"></i>
+Best Airtime For You
+</div>
+<div class="text-xstext-gray-800">
+<a href="?vend=airtime">
+Buy Now
+</a>
+</div>
+</div>
+</div>
+<div class="mr-3">
+<a href="?vend=airtime" title="View" class="dark inline-block text-indigo-500 bg-gray-300 border border-gray-400 rounded-full">
+<svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
+<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+</svg>
+</a>
+</div>
+</div>
+<?php
+}
+if(vp_option_array($option_array,"setdata") == "checked"){
+?>
+<div class="dark-white flex bg-gray-200 col-12 col-md items-center py-5   px-3 justify-between duration-500 ease-in-out border-gray-300 border-b lg:border-r lg:border-b-0 hover:bg-gray-300">
+<div class="flex items-center  ml-3">
+<img src="<?php echo $template_url."/classic/classic";?>/data1.svg" alt="MTN" class="w-10 h-10 rounded">
+<div class="ml-3">
+ <div class="text-xs text-gray-600">
+<a href="?vend=data" class="font-semibold">
+Data
+</a>
+</div>
+<div class="white text-xs font-semibold text-gray-800">
+<i class="fa fa-sim-card"></i>
+Cheapest Data Plan
+</div>
+<div class="text-xstext-gray-800">
+<a href="?vend=data">
+Buy Now
+</a>
+</div>
+</div>
+</div>
+<div class="mr-3">
+<a href="?vend=data" title="View" class="dark inline-block text-indigo-500 bg-gray-300 border border-gray-400 rounded-full">
+<svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
+<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+</svg>
+</a>
+</div>
+</div>
+<?php
+}
+
+if(is_plugin_active("bcmv/bcmv.php")){
+if(vp_option_array($option_array,"setcable") == "checked"){
+
+?>
+<div class="dark-white flex bg-gray-200  col-12  col-md items-center py-5  px-3 justify-between duration-500 ease-in-out border-gray-300 border-b lg:border-r lg:border-b-0 hover:bg-gray-300">
+<div class="flex items-center  ml-3">
+<img src="<?php echo $template_url."/classic/classic";?>/cable1.svg" alt="MTN" class="w-10 h-10 rounded">
+<div class="ml-3">
+<div class="text-xs text-gray-600">
+<a href="?vend=cable" class="font-semibold">
+Cable
+</a>
+</div>
+<div class="white text-xs font-semibold text-gray-800">
+<i class="fa fa-sim-card"></i>
+Don't Miss Your Favourite Shows
+</div>
+<div class="text-xstext-gray-800">
+<a href="?vend=cable">
+Subscribe Now
+</a>
+</div>
+</div>
+</div>
+<div class="mr-3">
+<a href="?vend=cable" title="View" class="dark inline-block text-indigo-500 bg-gray-300 border border-gray-400 rounded-full">
+<svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
+<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+</svg>
+</a>
+</div>
+</div>
+<?php
+}
+if(vp_option_array($option_array,"setbill") == "checked"){
+
+?>
+<div class="dark-white flex bg-gray-200 col-12  col-md items-center py-5 px-3 justify-between duration-500 ease-in-out border-gray-300  border-b lg:border-r lg:border-b-0 hover:bg-gray-300">
+<div class="flex items-center  ml-3">
+<img src="<?php echo $template_url."/classic/classic";?>/bulb1.svg" alt="MTN" class="w-10 h-10 rounded">
+<div class="ml-3">
+<div class="text-xs text-gray-600">
+<a href="?vend=bill" class="font-semibold">
+Utility Bills
+</a>
+</div>
+<div class="white text-xs font-semibold text-gray-800">
+<i class="fa fa-sim-card"></i>
+Pay For Your Bills
+</div>
+<div class="text-xstext-gray-800">
+<a href="?vend=bill">
+Pay Now
+</a>
+</div>
+</div>
+</div>
+<div class="mr-3">
+<a href="?vend=bill" title="View" class="dark inline-block text-indigo-500 bg-gray-300 border border-gray-400 rounded-full">
+<svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
+<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+</svg>
+</a>
+</div>
+</div>
+<?php
+}
+}
+
+?>
+
+
+</div>
+
+</div>
+</section>
+
+
+
+
+<section>
+<div class="container mx-auto">
+<div class="mx-1">
+<div class="lg:flex">
+<div class="lg:w-3/12">
+<div class="flex justify-between">
+<h1 class="font-bold text-gray-800 white">
+Sell Data
+</h1>
+<div>
+<a href="?vend=history&for=transactions&type=data" class="dark px-2 py-1 text-xs font-semibold tracking-wide text-blue-700 uppercase duration-300 bg-gray-200 border rounded hover:shadow">
+<i class="mr-1 fa fa-database"></i>
+See Data History
+</a>
+</div>
+</div>
+<hr class="w-2/12 my-4 border-0 border-t-2 border-indigo-200">
+
+
+<?php 
+if(vp_option_array($option_array,"setdata") == "checked"){
+echo do_shortcode('[vtupress_data][/vtupress_data]');
+}
+else{
+
+echo'
+[Data Currently Not Available]
+';
+}
+?>
+
+
+
+</div>
+<div class="mt-10 lg:mt-0 lg:w-9/12 lg:pl-10">
+<div class="flex items-center justify-between">
+<h2 class="mb-2 text-xl font-bold text-gray-700 white">
+Recent transactions
+</h2>
+<a href="?vend=history&for=transactions" class="text-xs font-bold text-blue-700 uppercase">
+<i class="fa fa-eye"></i>
+See All Transactions
+</a>
+</div>
+<div class="bg-white rounded shadow min-h-72" style="overflow-x:auto;">
+<div class="px-0 py-3 lg:p-5 px-3" >
+
+<div class="px-3" style="overflow-x:auto;">
+
+
+<?php
+echo'
+<table class="table table-striped table-hover table-bordered table-responsive">
+<tbody>
+';
+
+$id =  get_current_user_id();
+global $wpdb;
+$table_name = $wpdb->prefix.'vp_wallet';
+$resultsad = $wpdb->get_results("SELECT * FROM  $table_name WHERE user_id = $id ORDER BY the_time DESC LIMIT 10");
+
+
+
+echo"
+<tr>
+<th scope='col'>Id</th>
+<th scope='col'>By</th>
+<th scope='col'>Type</th>
+<th scope='col'>Status</th>
+<th scope='col'>Amount</th>
+<th scope='col'>Previous Balance</th>
+<th scope='col'>Current Balance</th>
+<th scope='col'>Description</th>
+<th scope='col'>time</th>
+</tr>
+";
+foreach ($resultsad as $resultsa){ 
+echo "
+<tr>
+<td scope='row'>".$resultsa->id."</td>
+<td>".$resultsa->name."</td>
+<td>".$resultsa->type."</td>
+
+";
+if($resultsa->status == "Approved" || $resultsa->status == "Approve"){
+	echo"
+<td><span class='btn-success rounded shadow p-1'>".$resultsa->status."</span></td>
+";
+}
+elseif($resultsa->status == "Pending"){
+		echo"
+<td><span class='btn-info rounded shadow p-1'>".$resultsa->status."</span></td>
+";
+}
+else{
+	echo"
+<td><span class='btn-danger text-white rounded shadow p-1'>".$resultsa->status."</span></td>
+";
+}
+
+echo"
+<td>".$resultsa->fund_amount."</td>
+<td>".$resultsa->before_amount."</td>
+<td>".$resultsa->now_amount."</td>
+<td>".$resultsa->description."</td>
+<td>".$resultsa->the_time."</td>
+</tr>
+";
+}
+echo'</tbody>
+		</table>
+		';
+?>
+
+</div>
+
+
+</div>
+</div>
+<div class="p-5 mt-3 text-center">
+<a href="?vend=history&for=transactions" class="inline-block px-4 py-1 text-black bg-gray-300 border border-gray-400 rounded-full hover:bg-gray-400">
+See All Transactions
+</a>
+</div>
+</div>
+</div>
+
+
+
+
+<div class="row">
+<?php
+include('sections/statistics.php');
+?>
+</div>
+
+
+
+</div>
+</div>
+</section>
+</div>
+<?php
+}
+?>
+<!--SECTIONS DASHBOARD-->
+
+<!--<script src="<?php echo $template_url."/classic/classic";?>/index.js?v=1"></script>-->
+<div class="p-10 text-sm text-center text-gray-600">
+
+</div>
+
+
+<?php
+$id = get_current_user_id();
+include(__DIR__.'/airtime.html');
+include(__DIR__.'/data.html');		
+include(__DIR__.'/bet.html');		
+include(__DIR__.'/cable.html');
+include(__DIR__.'/bill.html');
+include(__DIR__.'/history.html');
+include(__DIR__.'/developer.html');
+include(__DIR__.'/account.html');		
+include(__DIR__.'/wallet.html');		
+include(__DIR__.'/transfer.html');		
+include(__DIR__.'/upgrade.html');		
+include(__DIR__.'/withdrawal.html');	
+include(__DIR__.'/crypto.html');		
+include(__DIR__.'/ref-info.html');		
+include(__DIR__.'/pricing.html');		
+include(__DIR__.'/kyc.html');			
+include(__DIR__.'/messages.html');		
+		
+do_action("user_feature");
+?>
+
+
+</div>
+
+
+
+</section>
+</main>
+
+<script>
+jQuery(window).on("load",function(){
+	jQuery("#cover-spin").hide();
+
+
+
+	});
+</script>
+
+</script>
+<?php 
+//wp_footer();
+?>
+
+
+<div class="position-fixed py-2 px-3 bg-dark text-white rounded-pill" style="bottom:1rem;right:1rem;">
+<div class="form-check form-switch pull-right">
+  <input class="form-check-input" type="checkbox" id="darkMode">
+  <label id="darkModeLabel" for="darkMode">Light</label>
+</div>
+</div>
+
+<script>
+var darkMode = document.getElementById('darkMode');
+var darkLabel = "darkModeLabel";
+var darkLang = "Dark";
+var lightLang = "Light";
+var imgID = "logo";
+var darkImg = "./dark.png";
+var lightImg = "./light.png";
+window.addEventListener('load', function () {
+  if (darkMode) {
+    initTheme();
+    darkMode.addEventListener('change', function () {
+      resetTheme();
+    });
+  }
+});
+function initTheme() {
+  var darkThemeSelected = localStorage.getItem('darkMode') !== null && localStorage.getItem('darkMode') === 'dark';
+  darkMode.checked = darkThemeSelected;
+  darkThemeSelected ? document.body.setAttribute('data-theme', 'dark') : document.body.removeAttribute('data-theme');
+ // darkThemeSelected ? document.getElementById(imgID).src = darkImg : document.getElementById(imgID).src = lightImg;
+  darkThemeSelected ? document.getElementById(darkLabel).innerHTML = darkLang : document.getElementById(darkLabel).innerHTML = lightLang;
+}
+function resetTheme() {
+  if (darkMode.checked) {
+    document.body.setAttribute('data-theme', 'dark');
+    localStorage.setItem('darkMode', 'dark');
+    //document.getElementById(imgID).src = darkImg;
+    document.getElementById(darkLabel).innerHTML = darkLang;
+  } else {
+    document.body.removeAttribute('data-theme');
+    localStorage.removeItem('darkMode');
+   // document.getElementById(imgID).src = lightImg;
+    document.getElementById(darkLabel).innerHTML = lightLang;
+  }
+}
+</script>
+<?php
+include_once(ABSPATH."wp-content/plugins/vtupress/do_not_tamper.php");
+?>

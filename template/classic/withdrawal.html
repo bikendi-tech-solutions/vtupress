@@ -1,0 +1,52 @@
+	<?php	
+if(is_plugin_active('vpmlm/vpmlm.php')  && vp_option_array($option_array,'mlm') == "yes" && isset($_GET["vend"])){
+
+if($_GET["vend"]=="withdraw" || $_GET["vend"]=="referrals" ){
+?>
+<div id="dashboard-main-content">
+<section class="container mx-auto">
+<div class="p-md-5 p-1">
+<div class="bg-white shadow">
+<div class="flex items-center justify-between p-5 bg-gray-100 dark-white">
+<h1 class="text-xl font-bold">
+<span class="lg:inline">Referral</span>
+</h1>
+<div class="font-bold tracking-wider">
+<span class="dark inline-block px-3 py-1 bg-gray-200 border rounded-lg cursor-pointer visually-hidden" id="copyme" x-text="`NGN ${$format(total_sum)}`"><?php echo get_bloginfo("url")."/vpaccount/?ref=".$id;?></span>
+
+					<span class="white ref-info-action ref inline-block px-3 py-1 bg-gray-200 border rounded-lg cursor-pointer" onclick="copyToClipboard('#copyme')">
+						Click To Copy Refer Link
+					</span>
+					
+					<script>
+	function copyToClipboard(element) {
+  var $temp = $("<input>");
+  $("body").append($temp);
+  $temp.val($(element).text()).select();
+  document.execCommand("copy");
+  $temp.remove();
+  alert("Link Copied \n Go Paste/Share It");
+}
+					</script>
+
+</div>
+
+
+</div>
+<div class="p-2 bg-white lg:p-5">
+<template x-for="transaction in transactions"></template>
+
+<?php
+include(__DIR__.'/sections/withdraw-referral.php');
+?>
+
+</div>
+</div>
+
+</div>
+</section>
+</div>
+<?php
+}
+}
+?>

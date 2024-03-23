@@ -1,0 +1,28 @@
+<th class="">
+<label class="customcheckbox mb-3">
+  <input type="checkbox" id="mainCheckbox"  />
+  <span class="checkmark"></span>
+</label>
+</th>
+
+<th class=''>
+    <label class=\"customcheckbox\">
+      <input type=\"checkbox\" class=\"listCheckbox\" value=\"$result->id\" amount='$result->amount' user='$result->user_id'/>
+      <span class=\"checkmark\"></span>
+    </label>
+  </th>
+
+  <div class="input-group">
+  <span class="input-group-text">Bulk Action</span>
+
+  <select onchange="openfunction('sdata','Data')">
+                      <option >--Select--</option>
+                      <option value="reverse">Reverse Transaction</option>
+                      <option value="success">Mark Successful</option>
+                      <option value="delete">Delete Selected Record</option>
+</select>
+<?php 
+include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
+include_once(ABSPATH."wp-content/plugins/vtupress/admin/pages/history/history.php");?>
+    
+</div>

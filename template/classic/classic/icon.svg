@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" image-rendering="optimizeQuality" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" viewBox="0 0 330 330">
+  <defs/>
+  <defs>
+    <style>
+      .fil1{fill:#667eea}
+    </style>
+  </defs>
+  <g id="Layer_x0020_1">
+    <g id="_2634300222864">
+      <path fill="#2a4365" fill-rule="nonzero" d="M186.83 3.84l26.2 26.2-39.71 39.73 88.28 88.24 39.71-39.74 26.2 26.2-39.72 39.73 38.97 38.97-33.48 33.47-11.29-11.3-66.11 62.89c-29.17 27.75-70.32 22.45-103.23-.81l-10.8-7.63c-.71 1.29-19.19 19.93-20.14 21.01-5.82 6.57-16.65 6.21-22.86 0L7.03 268.98c-6.21-6.21-5.89-16.2 0-22.85l.01-.01c1.02-1.15 19.73-19.4 21.03-20.12l-5.76-8.92c-21.87-33.89-28.76-73.94-.84-103.24l62.96-66.07-11.36-11.31 33.47-33.48 40.57 40.59 39.72-39.73z"/>
+      <rect width="132.78" height="132.78" class="fil1" rx="66.39" ry="66.39" transform="rotate(45 -133.246 185.532) scale(.94798 .07056)"/>
+      <rect width="132.78" height="132.78" class="fil1" rx="66.39" ry="66.39" transform="rotate(45 -113.13 193.864) scale(.94798 .07056)"/>
+      <rect width="132.78" height="132.78" class="fil1" rx="66.39" ry="66.39" transform="rotate(45 -93.015 202.196) scale(.94798 .07056)"/>
+      <path fill="#201e1e" fill-opacity=".149" stroke="#373435" stroke-miterlimit="2.613" stroke-opacity=".149" stroke-width="2.08" d="M106.54 2.98l220.21 220.2-33.46 33.46L73.08 36.44z"/>
+    </g>
+  </g>
+</svg>

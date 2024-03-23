@@ -1,0 +1,44 @@
+<?php
+if(isset($_GET["vend"]) && $_GET["vend"]=="data" && vp_option_array($option_array,"setdata") == "checked"){
+
+?>
+
+
+<div id="dashboard-main-content">
+<section class="m-md-5 m-2">
+<div class="mx-auto">
+<div class="mt-10">
+<a href="/vpaccount" class="text-xs font-bold uppercase">
+<i class="fa fa-arrow-left"></i>
+go back
+</a>
+</div>
+<div class="mt-5 bg-white shadow">
+<div class="p-5 bg-gray-100 dark-white">
+<h1 class="text-xl font-bold">
+Data Plans
+</h1>
+</div>
+<div class="lg:p-5 p-3">
+<div>
+
+
+<?php
+include('sections/data.php');	
+
+?>
+
+
+</div>
+</div>
+</div>
+</div></section>
+<div class="p-10 text-sm text-center text-gray-600">
+
+</div>
+</div>
+
+
+<?php
+}
+?>

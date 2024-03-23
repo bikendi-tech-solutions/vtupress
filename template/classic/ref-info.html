@@ -1,0 +1,178 @@
+	<?php	
+
+if(isset($_GET["vend"])){
+if(isset($_GET["vend"]) && $_GET["vend"]=="referral-details"){
+?>
+<div id="dashboard-main-content">
+<section class="container mx-auto">
+<div class="p-md-5 p-1">
+<div class="bg-white shadow">
+<div class="flex items-center justify-between p-5 bg-gray-100 dark-white">
+<h1 class="text-xl font-bold">
+<span class="lg:inline">Referral Info</span>
+</h1>
+<div class="font-bold tracking-wider">
+<span class="dark inline-block px-3 py-1 bg-gray-200 border rounded-lg cursor-pointer visually-hidden" id="copyme" x-text="`NGN ${$format(total_sum)}`"><?php echo get_bloginfo("url")."/vpaccount/?ref=".$id;?></span>
+
+					<span class="dark ref-info-action ref inline-block px-3 py-1 bg-gray-200 border rounded-lg cursor-pointer" onclick="copyToClipboard('#copyme')">
+						Click To Copy Refer Link
+					</span>
+					
+					<script>
+	function copyToClipboard(element) {
+  var $temp = $("<input>");
+  $("body").append($temp);
+  $temp.val($(element).text()).select();
+  document.execCommand("copy");
+  $temp.remove();
+  alert("Link Copied \n Go Paste/Share It");
+}
+					</script>
+
+
+</div>
+</div>
+<div class="p-2 bg-white lg:p-5">
+<template x-for="transaction in transactions"></template>
+
+<?php				
+if(is_plugin_active("vpmlm/vpmlm.php")  && vp_option_array($option_array,'mlm') == "yes"){
+
+$total_uplines = 0;
+foreach($levels as $upline){
+$total_up = $upline->total_level;
+if($total_up > $total_uplines){
+$total_uplines = $total_up;
+}
+}
+				
+?>
+<div class="container">
+<div class="row mb-2 ">
+<div class="col overflow-auto">
+<h2 class="font-bold">Bonus Percentage Level You Will Get If User Upgrades To Any Of These Levels</h2>
+<br>
+<table class="table table-responsive table-stripped ">
+<thead>
+<tr>
+<th>Package Name</th>
+<th>Package Amount</th>
+<th>You [Lv.1]</th>
+<?php
+for($i = 1; $i < $total_uplines; $i++){
+echo"
+<th>Upline [Lv.$i]</th>
+";
+}
+?>
+</tr>
+</thead>
+<tbody>
+
+<?php
+foreach($levels as $this_level){
+$total_level = $this_level->total_level;
+$name = $this_level->name;
+$amt = $this_level->upgrade;
+echo"<tr>
+<td> $name </td>
+<td> $amt </td>
+";
+for($lev = 1; $lev <= $total_uplines; $lev++){
+if($lev == 1){
+$you = $this_level->{"level_".$lev."_upgrade"};
+echo"
+<td>$you%</td>
+";
+}
+else{
+$upline = isset($this_level->{"level_".$lev."_upgrade"}) ? $upline = $this_level->{"level_".$lev."_upgrade"} :  $upline = "";
+ echo"<td>$upline% </td>";
+}
+
+
+}
+echo"</tr>";
+}
+?>
+
+</tbody>
+</table>
+
+</div>
+</div>
+
+
+
+<div class="row mt-5">
+<div class="col overflow-auto">
+<h2 class="font-bold">Bonus Percentage Level You Will Get If User Performs Any Transaction</h2>
+<br>
+<table class="table table-responsive table-stripped">
+<thead>
+<tr>
+
+<th>Package Name</th>
+<th>Package Amount</th>
+<th>You [Lv.1]</th>
+<?php
+for($i = 1; $i < $total_uplines; $i++){
+echo"
+<th>Upline [Lv.$i]</th>
+";
+}
+?>
+</tr>
+</thead>
+<tbody>
+
+<?php
+
+foreach($levels as $this_level){
+$total_level = $this_level->total_level;
+$name = $this_level->name;
+$amt = $this_level->upgrade;
+echo"<tr>
+<td> $name </td>
+<td> $amt </td>
+";
+for($lev = 1; $lev <= $total_uplines; $lev++){
+if($lev == 1){
+$you = $this_level->{"level_".$lev};
+echo"
+<td>$you%</td>
+";
+}
+else{
+$upline = isset($this_level->{"level_".$lev}) ? $upline = $this_level->{"level_".$lev} :  $upline =  "";
+ echo"<td>$upline% </td>";
+}
+
+
+}
+
+echo"</tr>";
+}
+?>
+
+</tbody>
+</table>
+
+</div>
+</div>
+</div>			
+						
+						
+<?php
+}
+?>
+</div>
+</div>
+
+</div>
+</section>
+</div>
+<?php
+}
+}
+?>
