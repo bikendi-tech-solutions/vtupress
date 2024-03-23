@@ -10,7 +10,7 @@
 *Plugin Name: VTU Press
 *Plugin URI: http://vtupress.com
 *Description: This is the very first <b>VTU plugin</b>. It's VTU services are all Automated with wonderful features
-*Version: 5.8.2
+*Version: 5.8.3
 *Author: Akor Victor
 *Author URI: https://facebook.com/vtupressceo
 *License:      GPL3
@@ -137,9 +137,10 @@ $myUpdateChecker = PucFactory::buildUpdateChecker(
 	__FILE__,
 	'vtupress'
 );
-
 //Set the branch that contains the stable release.
 $myUpdateChecker->setBranch('main');
+
+$myUpdateChecker->getVcsApi()->enableReleaseAssets();
 
 //Optional: If you're using a private repository, specify the access token like this:
 
