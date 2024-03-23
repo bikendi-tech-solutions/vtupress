@@ -48,12 +48,12 @@ include_once(ABSPATH ."wp-load.php");
 include_once(ABSPATH .'wp-content/plugins/vtupress/functions.php');
 include_once(ABSPATH .'wp-admin/includes/plugin.php');
 require_once(ABSPATH.'wp-admin/includes/upgrade.php');
-add_action('init','vtupress_remove_notice');
+add_action('init','vtupress_user_update');
 
 
 
 
-function vtupress_remove_notice(){
+function vtupress_user_update(){
 ob_start();
 header("Content-Security-Policy: https:");
 //Script_Transport-Security
@@ -65,11 +65,7 @@ header("X-Xss-Protection: 1");
 header('Permissions-Policy: geolocation=(self ),camera=(self), microphone=(self)');
 
 ob_flush();
-  if(is_numeric(stripos($_SERVER["REQUEST_URI"],"vtupanel"))){
-  remove_all_actions( 'admin_notices');
-  remove_all_actions( 'user_admin_notices');
-  remove_all_actions( 'all_admin_notices');
-  }
+
 
   if(is_user_logged_in()){
     if(current_user_can("administrator")){
