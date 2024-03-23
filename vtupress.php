@@ -134,11 +134,28 @@ ob_flush();
 }
 
 require __DIR__.'/plugin-update-checker/plugin-update-checker.php';
+use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
+
+$myUpdateChecker = PucFactory::buildUpdateChecker(
+	'https://github.com/bikendi-tech-solutions-ceo/vtupress',
+	__FILE__,
+	'vtupress'
+);
+
+//Set the branch that contains the stable release.
+$myUpdateChecker->setBranch('main');
+
+//Optional: If you're using a private repository, specify the access token like this:
+$myUpdateChecker->setAuthentication('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');
+
+/*
+require __DIR__.'/plugin-update-checker/plugin-update-checker.php';
 $myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
 	'https://vtupress.com/vtupress.json',
 	__FILE__, //Full path to the main plugin file or functions.php.
 	'vtupress'
 );
+*/
 
 /*
 add_action( 'admin_init', 'wpdocs_plugin_admin_init' );
