@@ -164,9 +164,6 @@ function wpdocs_plugin_admin_styles() {
 }
 */
 
-function vtupress_version(){
-return $vtupress_version = "latest";
-}
 
 add_action('wp_login','vtupress_login_session');
 function vtupress_login_session(){
@@ -1472,8 +1469,6 @@ if(is_numeric(stripos($_SERVER["REQUEST_URI"],'wp-login.php')) || is_numeric(str
  // vp_updateoption("last_activation_time", $dt);
 
 
-
-//register_activation_hook(__FILE__, 'vtupress_versions');
 
 
 
