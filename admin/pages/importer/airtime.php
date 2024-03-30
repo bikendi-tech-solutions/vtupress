@@ -70,7 +70,8 @@ Not even the developers of this plugin should be trusted enough to grant access 
 <option value="<?php echo vp_option_array($option_array,"vtu_airtime_platform");?>"><?php echo vp_option_array($option_array,"vtu_airtime_platform");?></option>
 
 <?php
-$data = file_get_contents("https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?vtu_names");
+
+
 $json = json_decode($data, true);
 foreach($json as $key => $value){
 	?>

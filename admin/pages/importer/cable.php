@@ -72,7 +72,19 @@ Not even the developers of this plugin should be trusted enough to grant access 
 <option value="<?php echo vp_option_array($option_array,"cable_platform");?>"><?php echo vp_option_array($option_array,"cable_platform");?></option>
 
 <?php
-$data = file_get_contents("https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?cable_names");
+$url = "https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?cable_names";
+
+$http_args = array(
+  'headers' => array(
+  'cache-control' => 'no-cache',
+  'content-type' => 'application/json',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:100.0) Gecko/20100101 Firefox/100.0'
+  ),
+  'timeout' => 120,
+  'sslverify' => false);
+
+$data =  wp_remote_get($url, $http_args);
+
 $json = json_decode($data, true);
 foreach($json as $key => $value){
 	?>
