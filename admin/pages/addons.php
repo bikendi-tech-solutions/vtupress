@@ -96,7 +96,19 @@ function is_vp_plugin_installed( $slug ) {
 
 
 	
-$files = file_get_contents("https://vtupress.com/codex.php");
+$url = "https://vtupress.com/codex.php";
+
+$http_args = array(
+  'headers' => array(
+  'cache-control' => 'no-cache',
+  'content-type' => 'application/json',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:100.0) Gecko/20100101 Firefox/100.0'
+  ),
+  'timeout' => 120,
+  'sslverify' => false);
+
+$files =  wp_remote_retrieve_body(wp_remote_get($url, $http_args));
+
 
 $file = json_decode($files,true);
 

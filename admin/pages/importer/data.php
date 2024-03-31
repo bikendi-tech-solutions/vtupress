@@ -83,7 +83,7 @@ $http_args = array(
   'timeout' => 120,
   'sslverify' => false);
 
-$data =  wp_remote_get($url, $http_args);
+$data =  wp_remote_retrieve_body(wp_remote_get($url, $http_args));
 
 $json = json_decode($data, true);
 foreach($json as $key => $value){
@@ -105,7 +105,18 @@ foreach($json as $key => $value){
 <option value="<?php echo vp_option_array($option_array,"corporate_data_platform");?>"><?php echo vp_option_array($option_array,"corporate_data_platform");?></option>
 
 <?php
-$data = file_get_contents("https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?corporate_names");
+$url = "https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?corporate_names";
+
+$http_args = array(
+  'headers' => array(
+  'cache-control' => 'no-cache',
+  'content-type' => 'application/json',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:100.0) Gecko/20100101 Firefox/100.0'
+  ),
+  'timeout' => 120,
+  'sslverify' => false);
+
+$data =  wp_remote_retrieve_body(wp_remote_get($url, $http_args));
 $json = json_decode($data, true);
 foreach($json as $key => $value){
 	?>
@@ -126,7 +137,18 @@ foreach($json as $key => $value){
 <option value="<?php echo vp_option_array($option_array,"direct_data_platform");?>"><?php echo vp_option_array($option_array,"direct_data_platform");?></option>
 
 <?php
-$data = file_get_contents("https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?direct_names");
+$url = "https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?direct_names";
+
+$http_args = array(
+  'headers' => array(
+  'cache-control' => 'no-cache',
+  'content-type' => 'application/json',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:100.0) Gecko/20100101 Firefox/100.0'
+  ),
+  'timeout' => 120,
+  'sslverify' => false);
+
+$data =  wp_remote_retrieve_body(wp_remote_get($url, $http_args));
 $json = json_decode($data, true);
 foreach($json as $key => $value){
 	?>
@@ -149,7 +171,20 @@ foreach($json as $key => $value){
 <option value="<?php echo vp_option_array($option_array,"smile_data_platform");?>"><?php echo vp_option_array($option_array,"smile_data_platform");?></option>
 
 <?php
-$data = file_get_contents("https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?smile_names");
+
+$url = "https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?smile_names";
+
+$http_args = array(
+  'headers' => array(
+  'cache-control' => 'no-cache',
+  'content-type' => 'application/json',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:100.0) Gecko/20100101 Firefox/100.0'
+  ),
+  'timeout' => 120,
+  'sslverify' => false);
+
+$data =  wp_remote_retrieve_body(wp_remote_get($url, $http_args));
+
 $json = json_decode($data, true);
 foreach($json as $key => $value){
 	?>
@@ -169,7 +204,18 @@ foreach($json as $key => $value){
 <option value="<?php echo vp_option_array($option_array,"alpha_data_platform");?>"><?php echo vp_option_array($option_array,"alpha_data_platform");?></option>
 
 <?php
-$data = file_get_contents("https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?alpha_names");
+$url = "https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?alpha_names";
+
+$http_args = array(
+  'headers' => array(
+  'cache-control' => 'no-cache',
+  'content-type' => 'application/json',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:100.0) Gecko/20100101 Firefox/100.0'
+  ),
+  'timeout' => 120,
+  'sslverify' => false);
+
+$data =  wp_remote_retrieve_body(wp_remote_get($url, $http_args));
 $json = json_decode($data, true);
 foreach($json as $key => $value){
 	?>

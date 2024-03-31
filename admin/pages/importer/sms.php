@@ -81,7 +81,7 @@ $http_args = array(
   'timeout' => 120,
   'sslverify' => false);
 
-$data =  wp_remote_get($url, $http_args);
+$data =  wp_remote_retrieve_body(wp_remote_get($url, $http_args));
 
 $json = json_decode($data, true);
 foreach($json as $key => $value){
