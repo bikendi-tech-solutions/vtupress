@@ -10,7 +10,7 @@
 *Plugin Name: VTU Press
 *Plugin URI: http://vtupress.com
 *Description: This is the very first <b>VTU plugin</b>. It's VTU services are all Automated with wonderful features
-*Version: 5.8.1
+*Version: 5.8.3
 *Author: Akor Victor
 *Author URI: https://facebook.com/vtupressceo
 *License:      GPL3
@@ -50,7 +50,19 @@ include_once(ABSPATH .'wp-admin/includes/plugin.php');
 require_once(ABSPATH.'wp-admin/includes/upgrade.php');
 add_action('init','vtupress_user_update');
 
+//add_shortcode( 'vtupress', 'vtupress_func' );
+add_shortcode( 'vtupress_airtime', 'vtupress_airtime' );
+add_shortcode( 'vtupress_data', 'vtupress_data' );
+add_shortcode( 'vtupress_bet', 'vtupress_bet' );
 
+do_action("vtupressmain");
+include_once('database.php');
+include_once('vtusettings.php');
+include_once('vtupressaction.php');
+include_once('transaction.php');
+include_once('actions.php');
+include_once('vpcustom.php');
+include_once('vpuser.php');
 
 
 function vtupress_user_update(){
@@ -301,9 +313,10 @@ vp_addoption('hollatagservices','');
 
 add_option("vtupress_options2","0");
 
-$update_vtupress_options = 33;
+$update_vtupress_options = 34;
 if(get_option("vtupress_options2") != $update_vtupress_options){
 
+  vtupress_verification();
   $url = home_url();
   $url = str_replace("http://","https://",$url);
   vp_updateoption("siteurl",$url);
@@ -802,19 +815,7 @@ Discuss on our forum <a href="https://vtupress.com/forum">VtuPress Forum</a>
 
 }
 
-//add_shortcode( 'vtupress', 'vtupress_func' );
-add_shortcode( 'vtupress_airtime', 'vtupress_airtime' );
-add_shortcode( 'vtupress_data', 'vtupress_data' );
-add_shortcode( 'vtupress_bet', 'vtupress_bet' );
 
-do_action("vtupressmain");
-include_once('database.php');
-include_once('vtusettings.php');
-include_once('vtupressaction.php');
-include_once('transaction.php');
-include_once('actions.php');
-include_once('vpcustom.php');
-include_once('vpuser.php');
 
 
 add_filter( 'page_template', 'vp_plugin_page_template' );
