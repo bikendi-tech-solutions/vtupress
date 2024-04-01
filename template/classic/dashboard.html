@@ -224,6 +224,18 @@ Bet Funding
 </li>
 <?php
 }
+if(vp_option_array($option_array,"setbvn") == "yes"){
+?>
+<li>
+<a href="?vend=verification" class="tracking-wider flex justify-between hover:text-indigo-300 duration-150 text-indigo-200 ease-in-out hover:text-indigo-300">
+<div>
+<i class="mr-2 fa fa-user"></i>
+ID Verification
+</div>
+</a>
+</li>
+<?php
+}
 
 if(vp_option_array($option_array,"datascontrol") == "checked" && vp_option_array($option_array,"resell") == "yes"){
 ?>
@@ -771,7 +783,7 @@ Logout
 
 <!--MAIN DASHBOARD-->
 <?php
-if((isset($_GET["vend"]) && $_GET["vend"]!="airtime"  && $_GET["vend"]!="bet" && $_GET["vend"]!="datacard" && $_GET["vend"]!="message" && $_GET["vend"]!="kyc" && $_GET["vend"]!="pricing"  && $_GET["vend"]!="referral-details" && $_GET["vend"]!="bill" && $_GET["vend"]!="developer"  && $_GET["vend"]!="cards" && $_GET["vend"]!="referrals" && $_GET["vend"]!="gift-card" && $_GET["vend"]!="crypto"  && $_GET["vend"]!="transfer" && $_GET["vend"]!="sms" && $_GET["vend"]!="epins" && $_GET["vend"]!="withdraw" && $_GET["vend"]!="wallet" && $_GET["vend"]!="upgrade" && $_GET["vend"]!="data" && $_GET["vend"]!="cable" && $_GET["vend"]!="bill" && $_GET["vend"]!="history" && $_GET["vend"]!="account")  || !isset($_GET["vend"])){
+if((isset($_GET["vend"]) && $_GET["vend"]!="airtime" && $_GET["vend"]!="bvn"  && $_GET["vend"]!="bet" && $_GET["vend"]!="datacard" && $_GET["vend"]!="message" && $_GET["vend"]!="kyc" && $_GET["vend"]!="pricing"  && $_GET["vend"]!="referral-details" && $_GET["vend"]!="bill" && $_GET["vend"]!="developer"  && $_GET["vend"]!="cards" && $_GET["vend"]!="referrals" && $_GET["vend"]!="gift-card" && $_GET["vend"]!="crypto"  && $_GET["vend"]!="transfer" && $_GET["vend"]!="sms" && $_GET["vend"]!="epins" && $_GET["vend"]!="withdraw" && $_GET["vend"]!="wallet" && $_GET["vend"]!="upgrade" && $_GET["vend"]!="data" && $_GET["vend"]!="cable" && $_GET["vend"]!="bill" && $_GET["vend"]!="history" && $_GET["vend"]!="account")  || !isset($_GET["vend"])){
 if(vp_option_array($option_array,"show_notify") == "yes"){
 	$meq = preg_replace('/\n|\t|\s|\r/'," ",$mess);
 	?>
@@ -1290,6 +1302,7 @@ $id = get_current_user_id();
 include(__DIR__.'/airtime.html');
 include(__DIR__.'/data.html');		
 include(__DIR__.'/bet.html');		
+include(__DIR__.'/bvn.html');		
 include(__DIR__.'/cable.html');
 include(__DIR__.'/bill.html');
 include(__DIR__.'/history.html');
