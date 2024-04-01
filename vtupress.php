@@ -1503,5 +1503,7 @@ register_activation_hook(__FILE__, 'vtuchoiced');
 
 register_activation_hook(__FILE__, 'vtupress_db_man');
 
+register_activation_hook(__FILE__, 'vtupress_verification');
+
 register_activation_hook(__FILE__, 'vtupress_create_profile');
 register_activation_hook(__FILE__, 'vtupress_create_notification');

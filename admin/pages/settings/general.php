@@ -177,7 +177,30 @@ if(current_user_can("vtupress_access_general")){
           <span class="input-group-text" id="basic-addon1">Raptor - Website Connection ID:</span>
           <input type="text" value="'.vp_getoption('raptor_conid').'" class="raptor_conid  updateThis " name="raptor_conid">
         </div>
+';
 
+if(vp_option_array($option_array,"vtupress_custom_bvn") == "yes"){
+
+  echo '
+  
+   <span> <b>Details Verifications</b></span>
+   <br>
+   <div class="p-2 border border-secondary">
+        <div class="input-group mb-2">
+          <span class="input-group-text" id="basic-addon1">Bvn Verification Charge</span>
+          <input type="text" value="'.vp_getoption('bvn_verification_charge').'" class="bvn_verification_charge  updateThis " name="bvn_verification_charge">
+          </div>
+
+        <div class="input-group mb-2">
+          <span class="input-group-text" id="basic-addon1">Nin Verification Charge</span>
+          <input type="text" value="'.vp_getoption('nin_verification_charge').'" class="nin_verification_charge  updateThis " name="nin_verification_charge">
+        </div>
+  </div>
+        
+    ';
+}
+
+echo'
         <div class="mt-2 d-flex justify-content-end">
             <button type="button" class="btn btn-primary test-connection">Test & Save Connection</button>
         </div>

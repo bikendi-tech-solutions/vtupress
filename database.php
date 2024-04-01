@@ -357,6 +357,28 @@ function vtupress_create_message(){
  dbDelta($sql); 
 }
 
+
+
+function vtupress_verification(){
+  global $wpdb;
+  $sd_name = $wpdb->prefix.'vp_verifications';
+  $charset_collate=$wpdb->get_charset_collate();
+  $sql= "CREATE TABLE IF NOT EXISTS $sd_name(
+  id int NOT NULL  AUTO_INCREMENT,
+  user_id int,
+  name text,
+  value text,
+  type text,
+  status text,
+  before_amount text,
+  now_amount text,
+  vDatas text,
+  the_time text,
+  PRIMARY KEY (id))$charset_collate;";
+  require_once(ABSPATH.'wp-admin/includes/upgrade.php');
+  dbDelta($sql); 
+ }
+
 function vtupress_create_notification(){
  global $wpdb;
  $sd_name = $wpdb->prefix.'vp_notifications';
