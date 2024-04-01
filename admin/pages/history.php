@@ -55,6 +55,12 @@ elseif($_GET["subpage"] == "bet" && $_GET["type"] == "unsuccessful"){
 elseif($_GET["subpage"] == "bet" && $_GET["type"] == "failed"){
   include_once(ABSPATH .'wp-content/plugins/vtupress/admin/pages/history/opbet.php');
 }
+elseif($_GET["subpage"] == "verification" && $_GET["type"] == "bvn"){
+  include_once(ABSPATH .'wp-content/plugins/vtupress/admin/pages/history/bvnverify.php');
+}
+elseif($_GET["subpage"] == "verification" && $_GET["type"] == "nin"){
+  include_once(ABSPATH .'wp-content/plugins/vtupress/admin/pages/history/ninverify.php');
+}
 elseif($_GET["subpage"] == "transfer" && $_GET["type"] == "cancled"){
   if(vp_getoption("resell") != "yes"){
     vp_die("Please Upgrade To Premium Package or Lifetime Package To Enjoy This Feature");

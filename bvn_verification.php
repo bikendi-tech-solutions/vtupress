@@ -1,4 +1,23 @@
 <?php
+if(!defined('ABSPATH')){
+    $pagePath = explode('/wp-content/', dirname(__FILE__));
+    include_once(str_replace('wp-content/' , '', $pagePath[0] . '/wp-load.php'));
+}
+if(WP_DEBUG == false){
+error_reporting(0);	
+}
+include_once(ABSPATH."wp-load.php");
+include_once(ABSPATH .'wp-content/plugins/vtupress/functions.php');
+
+global $wpdb;
+if (isset($_SERVER['HTTP_REFERER'])) {
+    $referer = $_SERVER['HTTP_REFERER'];
+$nm = $_SERVER['SERVER_NAME'];
+    if(!preg_match("/$nm/",$referer)) {
+        die("NO REF");
+    }
+
+}
 
 if(!isset($_POST["type"]) || !isset($_POST["value"])){
     die("NO TYPE OR VALUE");
@@ -8,13 +27,11 @@ $type = $_POST["type"];
 $value = $_POST["value"];
 $user_id = get_current_user_id();
 
-$userFullName = trim(vp_getuser());
-if(!preg_match("\s",$userFullName)){
-    die("Please make sure youre account has a valid first and last name");
-}
+$fn = vp_getuser($user_id,"first_name");
+$ln = vp_getuser($user_id,"last_name");
 
-$fn = explode(" ",$userFullName)[0];
-$ln = explode(" ",$userFullName)[1];
+$userFullName = $fn." ".$ln;
+
 $phone = vp_getuser($user_id, 'vp_phone', true);
 
 $current_bal = vp_getuser($user_id,"vp_bal",true);
@@ -22,14 +39,14 @@ $current_bal = vp_getuser($user_id,"vp_bal",true);
 
 switch($type){
     case"bvn":
-        $verTypeId = 1;
-        $charge = intval(vp_getoption("bvn_verification_charge"));
+        $verTypeId = "bvn";
+        $charge = intval(vp_getoption("u_bvn_verification_charge"));
         $method = "BVN";
         
     break;
     case"nin":
-        $verTypeId = 2;
-        $charge = intval(vp_getoption("nin_verification_charge"));
+        $verTypeId = "nin";
+        $charge = intval(vp_getoption("u_nin_verification_charge"));
         $method = "NIN";
 
 
@@ -80,7 +97,7 @@ die("There is something wrong . Please reach out to us");
 }
 elseif(!$bvnDetails->status){
 	$message = $bvnDetails->message;
-	die("ERR - ".$message);
+	die("ERR/RPT - ".$message);
 }else{
 	//It Is Real!!!
 
@@ -97,7 +114,7 @@ elseif(!$bvnDetails->status){
 	global $wpdb;
 	$table_name = $wpdb->prefix.'vp_wallet';
 $added_to_db = $wpdb->insert($table_name, array(
-'name'=> $name,
+'name'=> $userFullName,
 'type'=> "Wallet",
 'description'=> "Debited for $method verification ",
 'fund_amount' => $charge,
@@ -108,16 +125,18 @@ $added_to_db = $wpdb->insert($table_name, array(
 'the_time' => date('Y-m-d h:i:s A')
 ));
 
+
 global $wpdb;
 $table_name = $wpdb->prefix.'vp_verifications';
 $added_to_db = $wpdb->insert($table_name, array(
 'name'=> $userFullName,
 'type'=> strtoupper($type),
 'value' => $value,
+'fund_amount' => $charge,
 'before_amount' => $current_bal,
 'now_amount' => $new_bal_now,
 'user_id' => $user_id,
-'vDatas' => $bvnDetails,
+'vDatas' =>  str_replace("\/","/",$response),
 'status' => "approved",
 'the_time' => date('Y-m-d h:i:s A')
 ));

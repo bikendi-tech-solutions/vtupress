@@ -25,7 +25,7 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
       href="<?php echo esc_url(plugins_url("vtupress/admin")); ?>/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css"
       rel="stylesheet"
     />
-<div class="card">
+<div class="card table-responsive">
                 <div class="card-body">
                   <h5 class="card-title">Successful Data Transactions</h5>
 

@@ -250,6 +250,10 @@ function pagination_history_before($db="",$status="true",$whe=""){
    $where = "WHERE $stat ".$whe.$dDate;
 
   }
+  elseif($status == "approved"){
+   $stat = "status = 'approved'";
+   $where = "WHERE $stat ".$whe.$dDate;
+  }
   else{
    $stat = "status = 'Failed'";
    $where = "WHERE $stat ".$whe.$dDate;

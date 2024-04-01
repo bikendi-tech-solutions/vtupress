@@ -674,7 +674,7 @@ if(current_user_can("vtupress_access_history")){
 <!------------------------------------------------------------------------------------------------------------------------->
 
 <!--------------------------------------------------------------------------------------------------------------->
-<!--//////////////////////////////////////////////////DATA /////////////////////////////////////////-->
+<!--////////////////////////////////////////////////// BETTING /////////////////////////////////////////-->
 <li class="sidebar-item bg bg-success">   
                   <a
                   class="sidebar-link has-arrow waves-effect waves-dark"
@@ -703,7 +703,38 @@ if(current_user_can("vtupress_access_history")){
                     >
                   </li>
             </ul>
-        </li>
+</li>
+
+<!------------------------------------------------------------------------------------------------------------------------->
+
+
+<!------------------------------------------------------------------------------------------------------------------------->
+
+<!--------------------------------------------------------------------------------------------------------------->
+<!--////////////////////////////////////////////////// BETTING /////////////////////////////////////////-->
+<li class="sidebar-item bg bg-success">   
+                  <a
+                  class="sidebar-link has-arrow waves-effect waves-dark"
+                  href="javascript:void(0)"
+                  aria-expanded="false"
+                  ><i class="mdi mdi-account-search"></i
+                  ><span class="hide-menu">Verifications</span></a
+                >
+            <ul aria-expanded="false" class="collapse first-level">
+                  <li class="sidebar-item">
+                      <a href="?page=vtupanel&adminpage=history&subpage=verification&type=bvn" class="sidebar-link"
+                      ><i class="far fa-user"></i
+                      ><span class="hide-menu">BVN</span></a
+                    >
+                  </li>
+                   <li class="sidebar-item">
+                      <a href="?page=vtupanel&adminpage=history&subpage=verification&type=nin" class="sidebar-link"
+                      ><i class="far fa-user"></i
+                      ><span class="hide-menu">NIN</span></a
+                    >
+                  </li>
+            </ul>
+</li>
 
 <!------------------------------------------------------------------------------------------------------------------------->
 

@@ -51,6 +51,13 @@ if(isset($json->status)){
         else{
             vp_updateoption("raptor_allow_security", "no"); 
         }
+
+        if(vp_option_array($option_array,"vtupress_custom_bvn") == "yes"){
+            vp_updateoption("setbvn", trim($_POST["enable_bvn"]));
+            vp_updateoption("u_bvn_verification_charge", trim($_POST["u_bvn_verification_charge"]));
+            vp_updateoption("u_nin_verification_charge", trim($_POST["u_nin_verification_charge"]));
+        }
+
     }else{
         vp_updateoption("raptor_allow_security", "no");
     }

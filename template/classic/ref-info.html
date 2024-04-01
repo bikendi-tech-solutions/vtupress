@@ -50,7 +50,7 @@ $total_uplines = $total_up;
 <div class="container">
 <div class="row mb-2 ">
 <div class="col overflow-auto">
-<h2 class="font-bold">Bonus Percentage Level You Will Get If User Upgrades To Any Of These Levels</h2>
+<h2 class="font-bold">Commision Level You Will Get If User Upgrades To Any Of These Levels</h2>
 <br>
 <table class="table table-responsive table-stripped ">
 <thead>
@@ -68,34 +68,33 @@ echo"
 </tr>
 </thead>
 <tbody>
-
-<?php
-foreach($levels as $this_level){
-$total_level = $this_level->total_level;
-$name = $this_level->name;
-$amt = $this_level->upgrade;
-echo"<tr>
-<td> $name </td>
-<td> $amt </td>
-";
-for($lev = 1; $lev <= $total_uplines; $lev++){
-if($lev == 1){
-$you = $this_level->{"level_".$lev."_upgrade"};
-echo"
-<td>$you%</td>
-";
-}
-else{
-$upline = isset($this_level->{"level_".$lev."_upgrade"}) ? $upline = $this_level->{"level_".$lev."_upgrade"} :  $upline = "";
- echo"<td>$upline% </td>";
-}
-
-
-}
-echo"</tr>";
-}
-?>
-
+	<?php
+	foreach($levels as $this_level){
+	$total_level = $this_level->total_level;
+	$name = $this_level->name;
+	$amt = $this_level->upgrade;
+	echo"<tr>
+	<td> $name </td>
+	<td> $amt </td>
+	";
+	for($lev = 1; $lev <= $total_uplines; $lev++){
+	if($lev == 1){
+	$you = intval($this_level->{"level_".$lev."_upgrade"});
+	echo"
+	<td>₦$you</td>
+	";
+	}
+	else{
+	$upline = isset($this_level->{"level_".$lev."_upgrade"}) ? intval($this_level->{"level_".$lev."_upgrade"}) :  $upline = "0";
+	 echo"<td>₦$upline</td>";
+	}
+	
+	
+	}
+	echo"</tr>";
+	}
+	?>
+	
 </tbody>
 </table>
 
@@ -106,7 +105,7 @@ echo"</tr>";
 
 <div class="row mt-5">
 <div class="col overflow-auto">
-<h2 class="font-bold">Bonus Percentage Level You Will Get If User Performs Any Transaction</h2>
+<h2 class="font-bold">Max. Bonus Percentage Level You Will Get If User Performs Any Transaction</h2>
 <br>
 <table class="table table-responsive table-stripped">
 <thead>
@@ -126,34 +125,45 @@ echo"
 </thead>
 <tbody>
 
-<?php
+	<?php
 
-foreach($levels as $this_level){
-$total_level = $this_level->total_level;
-$name = $this_level->name;
-$amt = $this_level->upgrade;
-echo"<tr>
-<td> $name </td>
-<td> $amt </td>
-";
-for($lev = 1; $lev <= $total_uplines; $lev++){
-if($lev == 1){
-$you = $this_level->{"level_".$lev};
-echo"
-<td>$you%</td>
-";
-}
-else{
-$upline = isset($this_level->{"level_".$lev}) ? $upline = $this_level->{"level_".$lev} :  $upline =  "";
- echo"<td>$upline% </td>";
-}
-
-
-}
-
-echo"</tr>";
-}
-?>
+	foreach($levels as $this_level){
+	$total_level = $this_level->total_level;
+	$name = $this_level->name;
+	$amt = $this_level->upgrade;
+	echo"<tr>
+	<td> $name </td>
+	<td> $amt </td>
+	";
+	for($lev = 1; $lev <= $total_uplines; $lev++){
+	if($lev == 1){
+	$arr = [$this_level->{"level_".$lev},$this_level->{"level_".$lev."_data"},$this_level->{"level_".$lev."_cable"},$this_level->{"level_".$lev."_bill"}];
+	
+	$you = floatval(max($arr));
+	
+	echo"
+	<td>$you%</td>
+	";
+	}
+	else{
+	
+		if(isset($this_level->{"level_".$lev})){
+			$arr = [$this_level->{"level_".$lev},$this_level->{"level_".$lev."_data"},$this_level->{"level_".$lev."_cable"},$this_level->{"level_".$lev."_bill"}];	
+		}
+		else{
+	
+		}
+	$upline = floatval(max($arr));
+	 echo"<td>$upline% </td>";
+	}
+	
+	
+	}
+	
+	echo"</tr>";
+	}
+	?>
+	
 
 </tbody>
 </table>

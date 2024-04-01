@@ -22,8 +22,17 @@ if(isset($_GET["vend"]) && $_GET["vend"]=="history" && isset($_GET["for"])){
 		<div class="input-group mb-1 mt-2 trans-hist">
 		<a href="?vend=history&for=transactions&type=airtime" class="pe-2 text-decoration-none"><button class="airtime-hist btn-sm btn-primary btn"> <i class="mdi mdi-cellphone "></i> >Airtime</button> </a>
 		<a href="?vend=history&for=transactions&type=data" class="pe-2 text-decoration-none"><button class="data-hist btn-sm btn-primary btn"><i class="mdi mdi-wifi "></i> >Data</button></a>
+		';
+		if(vp_getoption("betcontrol") == "checked"){
+			echo'
 		<a href="?vend=history&for=transactions&type=bet" class="pe-2 text-decoration-none"><button class="data-hist btn-sm btn-primary btn"><i class="mdi mdi-wifi "></i> >Bet Funding</button></a>
 		';
+		}
+		if(vp_getoption("setbvn") == "yes"){
+			echo'
+		<a href="?vend=history&for=transactions&type=verification" class="pe-2 text-decoration-none"><button class="data-hist btn-sm btn-primary btn"><i class="mdi mdi-account-search "></i> >Verification</button></a>
+		';
+		}
 		if(is_plugin_active('bcmv/bcmv.php')){
 			?>
 		<a href="?vend=history&for=transactions&type=cable" class="pe-2 text-decoration-none"><button class="cable-hist btn-sm btn-primary btn"><i class="mdi mdi-television-guide "></i> >Cable</button></a>
@@ -62,7 +71,7 @@ if(isset($_GET["vend"]) && $_GET["vend"]=="history" && isset($_GET["for"])){
 
 
 if($_GET["for"] == "transactions"){
-	if($_GET["type"] == "sms"){		
+	if($_GET["type"] == "sms"){
 
 		echo'
 		<div id="smshist" class="thistory">
@@ -149,7 +158,7 @@ echo '
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">SMS Purchase Confirmation</h5>
+                      <h5 class="modal-title" id="exampleModalLabel">SMS Purchase </h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -199,14 +208,7 @@ echo '
 								</div>
 							</div>
 							
-							<div class="row bg bg-secondary text-white border border-bottom-primary md-2">
-								<div class="col">
-										<span class="input-group-text1"><h5>Amount</h5></span>
-								</div>
-								<div class="col right">
-										<span class="input-group-text1"><h5>'.strtoupper($resultsa->amount).'</h5></span>
-								</div>
-							</div>
+
 							<div class="row bg bg-secondary text-white border border-bottom-primary md-2">
 								<div class="col">
 										<span class="input-group-text1"><h5>Status</h5></span>
@@ -477,6 +479,247 @@ echo'</tbody>
 	}
 }
 
+################################-----VERIFICATION-----#####################		
+if($_GET["for"] == "transactions"){
+	if($_GET["type"] == "verification"){	
+		
+		echo'
+
+		<div id="verhist" class="thistory">
+		<!--SERVICE NAME-->
+		';
+		
+		pagination_before_front("?vend=history","verification","ver", "vp_verifications", "resultsadd", "WHERE user_id = $id");
+		
+		pagination_after_front("?vend=history","verification","ver");
+		echo'
+		
+<div class="bg bg-white p-3 overflow-auto mx-3 ">
+	<table class="history-successful h6 font-size verification-history d-flex justify-content-md-center table table-responsive table-hover ">
+		<tbody>
+		';
+		/*
+global $wpdb;
+$table_name = $wpdb->prefix.'sbet';
+$resultsadd = $wpdb->get_results($wpdb->prepare("SELECT * FROM  $table_name WHERE user_id= %d ORDER BY the_time DESC LIMIT %d", $id, 10));
+*/
+
+echo "
+<tr>
+<th scope='col'>Id</th>
+<th scope='col'>Type</th>
+<th scope='col'>Value</th>
+<th scope='col'>Charge</th>
+<th scope='col'>Bal.Before</th>
+<th scope='col'>Bal.Now</th>
+<th scope='col'>Details</th>
+<th>time</th>
+</tr>
+";
+global $resultsadd;
+foreach ($resultsadd as $resultsd){
+
+(isset(json_decode($resultsd->vDatas)->data))? $verify_data = json_decode($resultsd->vDatas)->data :  $verify_data = "" ;
+
+$accountImage = "data:image/jpeg;base64,".$verify_data->photo;
+
+
+$id = $resultsd->id;
+$type = $resultsd->type;
+$value = $resultsd->value;
+
+$fn = $verify_data->firstName;
+$ln = $verify_data->lastName;
+$mn = $verify_data->middleName;
+$phone = $verify_data->phone;
+$email = $verify_data->email;
+$dob = $verify_data->birthdate;
+$gender = $verify_data->gender;
+$lgar = $verify_data->lgaOfResidence;
+$sor = $verify_data->stateOfOrigin;
+$lgao = $verify_data->lgaOfOrigin;
+$ra = $verify_data->residentialAddress;
+
+echo "
+<tr>
+<td scope='row'>".$resultsd->id."</td>
+<td>".$resultsd->type."</td>
+<td>".$resultsd->value."</td>
+<td>".$resultsd->fund_amount."</td>
+<td>".$resultsd->before_amount."</td>
+<td>".$resultsd->now_amount."</td>
+<td>
+<button type='button' class=\"btn btn-sm btn-secondary   p-2 text-xs font-bold text-white uppercase bg-indigo-600 rounded shadow   show_airtime".$resultsd->id."\" data-bs-toggle=\"modal\" data-bs-target=\"#verexampleModal".$resultsd->id."\" data-bs-whatever='@getbootstrap'>VIEW</button>
+";
+echo '
+            <div class="modal fade" id="verexampleModal'.$resultsd->id.'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel"> '.strtoupper($resultsd->type).' Verification</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+						<div class="container-fluid border border-secondary" id="verificationreceipt'.$resultsd->id.'">
+								<div class="row text-white">
+									<div class="mt-2 col text-white d-flex justify-content-center">
+											<img src="'.$accountImage.'" width="150" height="150" />
+									</div>
+								</div>
+								<hr>
+
+								<div class="row">
+									<div class="col d-flex justify-content-start">
+										<h5>'.strtolower($type).' <code>*</code> : 
+									</div>
+									<div class="col d-flex justify-content-end">
+										<h6>'.$value.'</h6>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col d-flex justify-content-start">
+										<h5>firstName <code>*</code> : 
+									</div>
+									<div class="col d-flex justify-content-end">
+										<h6>'.$fn.'</h6>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col d-flex justify-content-start">
+										<h5>lastName <code>*</code> : 
+									</div>
+									<div class="col d-flex justify-content-end">
+										<h6>'.$ln.'</h6>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col d-flex justify-content-start">
+										<h5>middleName <code>*</code> : 
+									</div>
+									<div class="col d-flex justify-content-end">
+										<h6>'.$mn.'</h6>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col d-flex justify-content-start">
+										<h5>d.o.b <code>*</code> : 
+									</div>
+									<div class="col d-flex justify-content-end">
+										<h6>'.$dob.'</h6>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col d-flex justify-content-start">
+										<h5>gender <code>*</code> : 
+									</div>
+									<div class="col d-flex justify-content-end">
+										<h6>'.$gender.'</h6>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col d-flex justify-content-start">
+										<h5>email <code>*</code> : 
+									</div>
+									<div class="col d-flex justify-content-end">
+										<h6>'.$email.'</h6>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col d-flex justify-content-start">
+										<h5>phone <code>*</code> : 
+									</div>
+									<div class="col d-flex justify-content-end">
+										<h6>'.$phone.'</h6>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col d-flex justify-content-start">
+										<h5>state Of Origin <code>*</code> : 
+									</div>
+									<div class="col d-flex justify-content-end">
+										<h6>'.$sor.'</h6>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col d-flex justify-content-start">
+										<h5>local gov. area (origin) <code>*</code> : 
+									</div>
+									<div class="col d-flex justify-content-end">
+										<h6>'.$lgao.'</h6>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col d-flex justify-content-start">
+										<h5>local gov. area (residential) <code>*</code> : 
+									</div>
+									<div class="col d-flex justify-content-end">
+										<h6>'.$lgar.'</h6>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col d-flex justify-content-start">
+										<h5>residential addr. <code>*</code> : 
+									</div>
+									<div class="col d-flex justify-content-end">
+										<h6>'.$ra.'</h6>
+									</div>
+								</div>
+
+							
+						
+						
+						</div>
+		
+					</div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary  p-2 text-xs font-bold text-black uppercase bg-grey-600 rounded shadow   bet-proceed-cancled" data-bs-dismiss="modal">Cancel</button>
+					  <button type="button" id="" class="btn btn-info  p-2 text-xs font-bold text-white uppercase bg-blue-600 rounded shadow  "  onclick="printContent(\'verificationreceipt'.$resultsd->id.'\');">Print</button>
+                      <button type="button" name="verification_receipt" id="" class="btn btn-primary  p-2 text-xs font-bold text-black uppercase bg-indigo-600 rounded shadow   verification_proceed'.$resultsd->id.'" >Download</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+';
+echo"
+<script>
+jQuery(\".verification_proceed".$resultsd->id."\").on(\"click\",function(){
+
+ var element = document.getElementById(\"verificationreceipt".$resultsd->id."\");
+ alert('download would start shortly');
+html2pdf(element, {
+  margin:       10,
+  filename:     'verification.pdf',
+  image:        { type: 'jpeg', quality: 0.98 },
+  html2canvas:  { scale: 2, logging: true, dpi: 192, letterRendering: true },
+  jsPDF:        { unit:'mm', format: 'a4', orientation:'portrait' }
+});
+});
+
+</script>
+
+
+
+</td>
+<td>".$resultsd->the_time."</td>
+
+
+
+</tr>
+";
+}
+
+echo'</tbody>
+		</table>
+		
+</div>
+</div>
+';
+
+	}
+
+}
+
 ################################-----DATA-----#####################		
 if($_GET["for"] == "transactions"){
 	if($_GET["type"] == "data"){	
@@ -581,7 +824,7 @@ echo '
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel"> DATA Purchase Confirmation</h5>
+                      <h5 class="modal-title" id="exampleModalLabel"> DATA Purchase </h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -632,14 +875,6 @@ echo '
 								</div>
 							</div>
 							
-							<div class="row bg bg-secondary text-white border border-bottom-primary md-2">
-								<div class="col">
-										<span class="input-group-text1"><h5>Amount</h5></span>
-								</div>
-								<div class="col right">
-										<span class="input-group-text1"><h5>'.strtoupper($resultsd->amount).'</h5></span>
-								</div>
-							</div>
 							
 							<div class="row bg bg-secondary text-white border border-bottom-primary md-2">
 								<div class="col">
@@ -798,7 +1033,7 @@ echo '
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel"> DATA Purchase Confirmation</h5>
+                      <h5 class="modal-title" id="exampleModalLabel"> Bet Funding </h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -1023,7 +1258,7 @@ echo '
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel"> CABLE Purchase Confirmation</h5>
+                      <h5 class="modal-title" id="exampleModalLabel"> CABLE Purchase</h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -1234,7 +1469,7 @@ echo '
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel"> BILL Purchase Confirmation</h5>
+                      <h5 class="modal-title" id="exampleModalLabel"> BILL Purchase </h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">

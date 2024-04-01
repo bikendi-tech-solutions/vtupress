@@ -179,7 +179,7 @@ if(current_user_can("vtupress_access_general")){
         </div>
 ';
 
-if(vp_option_array($option_array,"vtupress_custom_bvn") == "yes"){
+if(vp_getoption("vtupress_custom_bvn") == "yes"){
 
   echo '
   
@@ -187,13 +187,22 @@ if(vp_option_array($option_array,"vtupress_custom_bvn") == "yes"){
    <br>
    <div class="p-2 border border-secondary">
         <div class="input-group mb-2">
+          <span class="input-group-text" id="basic-addon1">Enable Bvn/Nin Verification</span>
+          <select class="setbvn" name="setbvn" name="setbvn">
+            <option  value="'.vp_getoption('setbvn').'">'.vp_getoption('setbvn').'</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+
+        <div class="input-group mb-2">
           <span class="input-group-text" id="basic-addon1">Bvn Verification Charge</span>
-          <input type="text" value="'.vp_getoption('bvn_verification_charge').'" class="bvn_verification_charge  updateThis " name="bvn_verification_charge">
-          </div>
+          <input type="text" value="'.vp_getoption('u_bvn_verification_charge').'" class="u_bvn_verification_charge  updateThis " name="u_bvn_verification_charge">
+        </div>
 
         <div class="input-group mb-2">
           <span class="input-group-text" id="basic-addon1">Nin Verification Charge</span>
-          <input type="text" value="'.vp_getoption('nin_verification_charge').'" class="nin_verification_charge  updateThis " name="nin_verification_charge">
+          <input type="text" value="'.vp_getoption('u_nin_verification_charge').'" class="u_nin_verification_charge  updateThis " name="u_nin_verification_charge">
         </div>
   </div>
         
@@ -210,8 +219,11 @@ jQuery(".test-connection").on("click",function(){
 
   var raptorApiKey = jQuery(".raptor_apikey").val();
   var raptorConId = jQuery(".raptor_conid").val();
+  var bvn = jQuery(".u_bvn_verification_charge").val();
+  var nin = jQuery(".u_nin_verification_charge").val();
   var charge = jQuery(".bvn_verification_charge").val();
   var enable = jQuery(".enable_raptor").val();
+  var enable_bvn = jQuery(".setbvn").val();
 
   if(raptorApiKey == "" || raptorConId == ""){
     alert("Raptor ApiKey and Connection Id can\'t be empty");
@@ -222,7 +234,10 @@ jQuery(".preloader").show();
 obj = {};
 obj["Authorization"] = raptorApiKey;
 obj["connectionid"] = raptorConId;
+obj["u_bvn_verification_charge"] = bvn;
+obj["u_nin_verification_charge"] = nin;
 obj["charge"] = charge;
+obj["enable_bvn"] = enable_bvn;
 obj["enable"] = enable;
 obj["verificationType"] = "testConnection";
 obj["domain"] = "'.$_SERVER['SERVER_NAME'].'";

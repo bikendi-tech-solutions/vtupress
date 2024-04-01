@@ -99,10 +99,7 @@ if(isset($_POST["fset"])){
     }
     }
 
-    if(vp_option_array($option_array,"vtupress_custom_bvn") == "yes"){
-        vp_updateoption("bvn_verification_charge", trim($_POST["bvn_verification_charge"]));
-        vp_updateoption("nin_verification_charge", trim($_POST["nin_verification_charge"]));
-    }
+
 
     
 

@@ -370,6 +370,7 @@ function vtupress_verification(){
   value text,
   type text,
   status text,
+  fund_amount text,
   before_amount text,
   now_amount text,
   vDatas text,
