@@ -57,7 +57,7 @@ if(isset($_GET["vend"]) && $_GET["vend"]=="verification" && vp_option_array($opt
                     case"bvn":
                         ?>
 jQuery("#vtype").val("bvn");
-jQuery("#.value").attr("placeholder","Please enter bvn number");
+jQuery(".value").attr("placeholder","Please enter bvn number");
 jQuery("#vtype").prop("disabled",true);
 jQuery("#vtype").change();
                         <?php
