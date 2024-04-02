@@ -1,5 +1,5 @@
 <?php
-if(vp_option_array($option_array,"setbvn") == "yes"){
+if(isset($_GET["vend"]) && $_GET["vend"]=="verification" && vp_option_array($option_array,"setbvn") == "yes"){
 
 ?>
 

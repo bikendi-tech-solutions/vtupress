@@ -227,10 +227,18 @@ Bet Funding
 if(vp_option_array($option_array,"setbvn") == "yes"){
 ?>
 <li>
-<a href="?vend=bvn" class="tracking-wider flex justify-between hover:text-indigo-300 duration-150 text-indigo-200 ease-in-out hover:text-indigo-300">
+<a href="?vend=verification&type=bvn" class="tracking-wider flex justify-between hover:text-indigo-300 duration-150 text-indigo-200 ease-in-out hover:text-indigo-300">
 <div>
 <i class="mr-2 fa fa-user"></i>
-ID Verification
+Bvn Verification
+</div>
+</a>
+</li>
+<li>
+<a href="?vend=verification&type=nin" class="tracking-wider flex justify-between hover:text-indigo-300 duration-150 text-indigo-200 ease-in-out hover:text-indigo-300">
+<div>
+<i class="mr-2 fa fa-user"></i>
+Nin Verification
 </div>
 </a>
 </li>
@@ -783,7 +791,7 @@ Logout
 
 <!--MAIN DASHBOARD-->
 <?php
-if((isset($_GET["vend"]) && $_GET["vend"]!="airtime" && $_GET["vend"]!="bvn"  && $_GET["vend"]!="bet" && $_GET["vend"]!="datacard" && $_GET["vend"]!="message" && $_GET["vend"]!="kyc" && $_GET["vend"]!="pricing"  && $_GET["vend"]!="referral-details" && $_GET["vend"]!="bill" && $_GET["vend"]!="developer"  && $_GET["vend"]!="cards" && $_GET["vend"]!="referrals" && $_GET["vend"]!="gift-card" && $_GET["vend"]!="crypto"  && $_GET["vend"]!="transfer" && $_GET["vend"]!="sms" && $_GET["vend"]!="epins" && $_GET["vend"]!="withdraw" && $_GET["vend"]!="wallet" && $_GET["vend"]!="upgrade" && $_GET["vend"]!="data" && $_GET["vend"]!="cable" && $_GET["vend"]!="bill" && $_GET["vend"]!="history" && $_GET["vend"]!="account")  || !isset($_GET["vend"])){
+if((isset($_GET["vend"]) && $_GET["vend"]!="airtime" && $_GET["vend"]!="verification"  && $_GET["vend"]!="bet" && $_GET["vend"]!="datacard" && $_GET["vend"]!="message" && $_GET["vend"]!="kyc" && $_GET["vend"]!="pricing"  && $_GET["vend"]!="referral-details" && $_GET["vend"]!="bill" && $_GET["vend"]!="developer"  && $_GET["vend"]!="cards" && $_GET["vend"]!="referrals" && $_GET["vend"]!="gift-card" && $_GET["vend"]!="crypto"  && $_GET["vend"]!="transfer" && $_GET["vend"]!="sms" && $_GET["vend"]!="epins" && $_GET["vend"]!="withdraw" && $_GET["vend"]!="wallet" && $_GET["vend"]!="upgrade" && $_GET["vend"]!="data" && $_GET["vend"]!="cable" && $_GET["vend"]!="bill" && $_GET["vend"]!="history" && $_GET["vend"]!="account")  || !isset($_GET["vend"])){
 if(vp_option_array($option_array,"show_notify") == "yes"){
 	$meq = preg_replace('/\n|\t|\s|\r/'," ",$mess);
 	?>
@@ -1132,6 +1140,150 @@ Pay Now
 <?php
 }
 }
+
+?>
+
+
+</div>
+
+
+<!--Additions-->
+<div class="row">
+
+
+<?php
+if(vp_option_array($option_array,"setbvn") == "yes"){
+?>
+<div class="dark-white flex bg-gray-200 col-12 col-md items-center py-5  px-3 justify-between  duration-500 ease-in-out border-gray-300 border-b lg:border-r lg:border-b-0 hover:bg-gray-300">
+<div class="flex items-center ml-3">
+<i class="fa fa-search fs-2"></i>
+<div class="ml-3">
+<div class="text-xs text-gray-600">
+<a href="?vend=verification&type=bvn" class="font-semibold">
+Bvn
+</a>
+</div>
+<div class=" white text-xs font-semibold text-gray-800">
+<i class="fa fa-sim-card"></i>
+Bvn Verification
+</div>
+<div class="text-xstext-gray-800">
+<a href="?vend=verification&type=bvn">
+Verify Bvn
+</a>
+</div>
+</div>
+</div>
+<div class="mr-3">
+<a href="?vend=verification&type=bvn" title="View" class="dark inline-block text-indigo-500 bg-gray-300 border border-gray-400 rounded-full">
+<svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
+<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+</svg>
+</a>
+</div>
+</div>
+<?php
+}
+if(vp_option_array($option_array,"setbvn") == "yes"){
+?>
+<div class="dark-white flex bg-gray-200 col-12 col-md items-center py-5   px-3 justify-between duration-500 ease-in-out border-gray-300 border-b lg:border-r lg:border-b-0 hover:bg-gray-300">
+<div class="flex items-center  ml-3">
+<img src="<?php echo $template_url."/classic/classic";?>/data1.svg" alt="MTN" class="w-10 h-10 rounded">
+<div class="ml-3">
+ <div class="text-xs text-gray-600">
+<a href="?vend=verification&type=nin" class="font-semibold">
+Nin
+</a>
+</div>
+<div class="white text-xs font-semibold text-gray-800">
+<i class="fa fa-sim-card"></i>
+Nin Verification
+</div>
+<div class="text-xstext-gray-800">
+<a href="?vend=verification&type=nin">
+Verify Now
+</a>
+</div>
+</div>
+</div>
+<div class="mr-3">
+<a href="?vend=verification&type=nin" title="View" class="dark inline-block text-indigo-500 bg-gray-300 border border-gray-400 rounded-full">
+<svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
+<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+</svg>
+</a>
+</div>
+</div>
+<?php
+}
+
+if(is_plugin_active("vpsms/vpsms.php") && vp_option_array($option_array,"smscontrol") == "checked"){
+
+?>
+<div class="dark-white flex bg-gray-200  col-12  col-md items-center py-5  px-3 justify-between duration-500 ease-in-out border-gray-300 border-b lg:border-r lg:border-b-0 hover:bg-gray-300">
+<div class="flex items-center  ml-3">
+	<i class="fa fa-message fs-2"></i>
+<div class="ml-3">
+<div class="text-xs text-gray-600">
+<a href="?vend=sms" class="font-semibold">
+Sms
+</a>
+</div>
+<div class="white text-xs font-semibold text-gray-800">
+<i class="fa fa-sim-card"></i>
+Keep up with your customers
+</div>
+<div class="text-xstext-gray-800">
+<a href="?vend=sms">
+Send Sms
+</a>
+</div>
+</div>
+</div>
+<div class="mr-3">
+<a href="?vend=sms" title="View" class="dark inline-block text-indigo-500 bg-gray-300 border border-gray-400 rounded-full">
+<svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
+<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+</svg>
+</a>
+</div>
+</div>
+<?php
+}
+if(vp_option_array($option_array,"betcontrol") == "checked"){
+
+?>
+<div class="dark-white flex bg-gray-200 col-12  col-md items-center py-5 px-3 justify-between duration-500 ease-in-out border-gray-300  border-b lg:border-r lg:border-b-0 hover:bg-gray-300">
+<div class="flex items-center  ml-3">
+<i class="fa fa-message fs-2"></i>
+<div class="ml-3">
+<div class="text-xs text-gray-600">
+<a href="?vend=bet" class="font-semibold">
+Bet
+</a>
+</div>
+<div class="white text-xs font-semibold text-gray-800">
+<i class="fa fa-sim-card"></i>
+Bet Funding
+</div>
+<div class="text-xstext-gray-800">
+<a href="?vend=get">
+Fund Betting Account
+</a>
+</div>
+</div>
+</div>
+<div class="mr-3">
+<a href="?vend=bet" title="View" class="dark inline-block text-indigo-500 bg-gray-300 border border-gray-400 rounded-full">
+<svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
+<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+</svg>
+</a>
+</div>
+</div>
+<?php
+}
+
 
 ?>
 

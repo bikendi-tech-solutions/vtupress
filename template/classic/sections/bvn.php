@@ -21,15 +21,16 @@ if(isset($_GET["vend"]) && $_GET["vend"]=="bvn" && vp_option_array($option_array
                     <option value="nin">NIN</option>
                 </select>
 
-            <label for="vvalue">Verification Value<code>*</code> </label>
+            <label for="vvalue" class="mt-2" >Verification Value<code>*</code> </label>
                 <input id="vvalue" class="value form-control" type="number" placeholder="Please enter value"/>
 
-            <label for="amount">Charge</label>
+            <label for="amount" class="mt-2">Charge</label>
                 <input id="amount" class="form-control" type="number" readonly>
 
-            <button class="btn vverify w-full p-2 text-xs font-bold text-white uppercase bg-indigo-600 rounded shadow purchase-data">Verify</button>
+            <button class="btn mt-2 vverify w-full p-2 text-xs font-bold text-white uppercase bg-indigo-600 rounded shadow purchase-data">Verify</button>
 
             <script>
+
                 jQuery("#vtype").on("change",function(){
                     var amt = jQuery("#amount");
                     var type = jQuery("#vtype").val();
@@ -48,6 +49,33 @@ if(isset($_GET["vend"]) && $_GET["vend"]=="bvn" && vp_option_array($option_array
                     }
 
                 });
+
+    <?php
+            if(isset($_GET["type"])){
+                $type = $_GET["type"];
+                switch($type){
+                    case"bvn":
+                        ?>
+jQuery("#vtype").val("bvn");
+jQuery("#.value").attr("placeholder","Please enter bvn number");
+jQuery("#vtype").prop("disabled",true);
+jQuery("#vtype").change();
+                        <?php
+                    break;
+                    case"nin":
+                        ?>
+jQuery("#vtype").val("nin");
+jQuery(".value").attr("placeholder","Please enter nin number");
+jQuery("#vtype").prop("disabled",true);
+jQuery("#vtype").change();
+                        <?php 
+                    break;
+                }
+            }
+
+
+    ?>
+
                 		
 
                 jQuery(".vverify").on("click",function(){
