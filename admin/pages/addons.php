@@ -148,7 +148,6 @@ $version = $path["Version"];
             <th scope="col">Name</th>
             <th scope="col">Description</th>
             <th scope="col">Current Version</th>
-            <th scope="col">Latest Version</th>
             <th scope="col">Documentation</th>
             <th scope="col">Actions</th>
           </tr>
@@ -159,36 +158,22 @@ $version = $path["Version"];
 		
 		foreach($file as $key => $value){
 			
-			if(is_vp_plugin_installed($value['slug'])){
+	if(is_vp_plugin_installed($value['slug'])){
 				$installed = true;
-			$path = $_SERVER["DOCUMENT_ROOT"]."/wp-content/plugins/".$value["slug"];
+			$path = ABSPATH."/wp-content/plugins/".$value["slug"];
 			$path = get_plugin_data($path);
 			
 			if(!empty($path["Version"])){
 			$version = $path["Version"];
 			}else{
 			$version = "---";	
-			}
-			}else{
-				$installed = false;
-				$version = "Not Installed";
-			}
-			
-			if(is_plugin_active($value['slug'])){
-				$activated = true;
-			}else{
-				$activated = false;
-			}
-			
-				
-			
+			}	
 ?>
 
           <tr>
             <th scope="row"><?php echo $value['name'];?></th>
             <td><?php echo $value['description'];?></td>
             <td><?php echo $version;?></td>
-            <td><?php echo $value['version'];?></td>
             <td><a href="<?php echo $value['documentation'];?>">Link</a> </td>
             <td>
 			<?php
@@ -205,45 +190,7 @@ $version = $path["Version"];
 			}
 			 
 			 ?>
-			 <?php
-			 
-			 if($installed == true && $activated == false && (vp_getoption($value['require']) == "yes" || vp_getoption($value['require']) == "false")){
-				 ?>
-				 
-				<form targert="_self" method="post" class="do_this<?php echo $key;?>">
-				<input type="text" class="btn btn-danger install visually-hidden link<?php echo $key;?>" value="<?php echo $value['plugin_link'];?>" name="link">
-				<input type="text" class="btn btn-danger install visually-hidden slug<?php echo $key;?>" value="<?php echo $value['slug'];?>" name="slug">
 
-				<input type="button" class="btn btn-info activate vpaction<?php echo $key;?>" value="Activate" name="vpaction">
-				</form>
-			  
-			  <?php
-			  
-			 }
-			 
-			 if($installed == true && $activated == true && $version != $value['version'] && (vp_getoption($value['require']) == "yes" || vp_getoption($value['require']) == "false")){
-				 ?>
-				 
-  				<form targert="_self" method="post" class="do_this<?php echo $key;?>">
-				<input type="text" class="btn btn-danger install visually-hidden link<?php echo $key;?>" value="<?php echo $value['plugin_link'];?>" name="link">
-				<input type="text" class="btn btn-danger install visually-hidden slug<?php echo $key;?>" value="<?php echo $value['slug'];?>" name="slug">
-
-				<input type="button" class="btn btn-primary update vpaction<?php echo $key;?>" value="Update" name="vpaction">
-				
-				</form>
-			  
-			  <?php
-			  
-			 }
-			 if($installed == true && $activated == true && $version == $value['version'] && (vp_getoption($value['require']) == "yes" || vp_getoption($value['require']) == "false")){
-				 ?>
-				 
-              <button type="button" class="btn btn-success up-to-date">Up-To-Date</button>
-			  
-			  <?php
-			  
-			 }
-			 ?>
             </td>		
 					<script>
 jQuery(document).ready(function(){jQuery("#cover-spin").hide()});
@@ -381,6 +328,7 @@ jQuery.ajax({
 
 <?php
 		}
+  }
 		?>
 		</tbody>		
 		
