@@ -10,7 +10,7 @@
 *Plugin Name: VTU Press
 *Plugin URI: http://vtupress.com
 *Description: This is the very first <b>VTU plugin</b>. It's VTU services are all Automated with wonderful features
-*Version: 5.9.1
+*Version: 5.9.2
 *Author: Akor Victor
 *Author URI: https://facebook.com/vtupressceo
 *License:      GPL3
@@ -79,7 +79,7 @@ header('Permissions-Policy: geolocation=(self ),camera=(self), microphone=(self)
 ob_flush();
 
 
-  if(is_user_logged_in()){
+if(is_user_logged_in()){
     if(current_user_can("administrator")){
   global $wpdb;
   $user = $wpdb->prefix.'users';
