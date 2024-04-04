@@ -134,6 +134,7 @@ header("HTTP/1.1 200 OK");
 }
 else{}
 
+global $current_timestamp;
 $wpdb->insert($sd_name, array(
 'user_id'=> $userid,
 'gateway' => 'Paystack',
@@ -141,7 +142,7 @@ $wpdb->insert($sd_name, array(
 'referrence' => $ref,
 'status' => "pending",
 'response' => " ".esc_html(harray_key_first($response))."",
-'the_time' => date('Y-m-d H:i:s A')
+'the_time' => date('Y-m-d H:i:s A',$current_timestamp)
 ));
 
 

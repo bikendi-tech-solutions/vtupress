@@ -466,7 +466,7 @@ function vtupress_add_message(){
   'type' => "received",
   'status' => "unread",
   'attachment' => "none",
-  'the_time' => date('Y-m-d H:i:s A')
+  'the_time' => date(current_time('mysql').' A')
   ));
 }
 
@@ -596,9 +596,9 @@ function vtupress_db_man(){
 $nw_updt = 19;
 
 if(vp_getoption("fix_version") != $nw_updt){
+global $current_timestamp;
 
-
-  $next = date("Y-m-d H:i A");
+  $next = date("Y-m-d H:i A",$current_timestamp);
   vp_updateoption("vp_check_date", $next);
 
   vp_addoption("vtu_timeout","5");

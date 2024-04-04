@@ -254,13 +254,13 @@ if(isset($_SESSION["user_id"]) && isset($_SESSION["add_unrecorded"])){
 
   $last_login = $_SESSION["last_login"];
   $dur = vp_getoption("vtu_timeout");
-  $cur = date('Y-m-d H:i:s');
+  $cur = date('Y-m-d H:i:s',$current_timestamp);
   $timeout = date("Y-m-d H:i:s",strtotime("$last_login +$dur minutes"));
      
  // die( $cur ." - ".  $timeout ." -l-= " .  $last_login );
     if($cur < $timeout){
 
-    $_SESSION["last_login"] = date('Y-m-d H:i:s');
+    $_SESSION["last_login"] = date('Y-m-d H:i:s',$current_timestamp);
 
     if(!is_plugin_active("$vp_temp/$vp_temp.php")){
       include_once(ABSPATH."wp-content/plugins/vtupress/template/".constant('vtupress_template')."/dashboard.html");
@@ -355,4 +355,5 @@ $query = new WP_Query( array( 'pagename' => 'vpaccount' ) );
 
 
 
+session_write_close();
 ?>

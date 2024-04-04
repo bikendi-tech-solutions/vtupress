@@ -21,6 +21,7 @@ $option_array = json_decode(get_option("vp_options"),true);
 
 
 function search_bill_token_webhook($darray,$key){
+  global  $current_timestamp;
     $array = array_change_key_case($darray,CASE_LOWER);
    $results = array();
 
@@ -38,7 +39,7 @@ return $results;
 
 
 function validate_response_webhook($response, $key, $value, $alter="nothing_to_find"){
-    
+    global  $current_timestamp;
 if(json_decode($response) == NULL){
 $dis = new stdclass;
 $dis->str = $response;
@@ -123,7 +124,7 @@ $wpdb->insert($table_name, array(
 'response_id' => "",
 'server_ip' => "",
 'resp_log' => " ".esc_html(harray_key_first_webhook($content))."",
-'the_time' => date('Y-m-d h:i:s')
+'the_time' => date('Y-m-d h:i:s',$current_timestamp)
 ));
 */
 
@@ -255,7 +256,7 @@ $wpdb->insert($table_name, array(
 'response_id' => $the_airtime->response_id,
 'server_ip' => $ipa,
 'resp_log' => " ".esc_html(harray_key_first_webhook($content))."",
-'the_time' => date('Y-m-d h:i:s')
+'the_time' => date('Y-m-d h:i:s',$current_timestamp)
 ));
 
 
@@ -316,7 +317,7 @@ $wpdb->insert($table_name, array(
 'now_amount' => $bal,
 'user_id' => $user,
 'status' => "Approved",
-'the_time' => date('Y-m-d h:i:s')
+'the_time' => date('Y-m-d h:i:s',$current_timestamp)
 ));
 header("Status: 200 OK");
 $obj = new stdClass;
@@ -342,7 +343,7 @@ $wpdb->insert($table_name, array(
 'response_id' => $the_airtime->response_id,
 'server_ip' => $ipa,
 'resp_log' => " ".esc_html(harray_key_first_webhook($content))."",
-'the_time' => date('Y-m-d h:i:s')
+'the_time' => date('Y-m-d h:i:s',$current_timestamp)
 ));
 
 $sc = vp_getoption("sairtimesuccesscode");
@@ -400,7 +401,7 @@ $wpdb->insert($table_name, array(
 'now_amount' => $bal,
 'user_id' => $user,
 'status' => "Approved",
-'the_time' => date('Y-m-d h:i:s')
+'the_time' => date('Y-m-d h:i:s',$current_timestamp)
 ));
 header("Status: 200 OK");
 $obj = new stdClass;
@@ -424,7 +425,7 @@ $wpdb->insert($table_name, array(
 'response_id' => $the_airtime->response_id,
 'server_ip' => $ipa,
 'resp_log' => " ".esc_html(harray_key_first_webhook($content))."",
-'the_time' => date('Y-m-d h:i:s')
+'the_time' => date('Y-m-d h:i:s',$current_timestamp)
 ));
 
 $sc = vp_getoption("wairtimesuccesscode");
@@ -484,7 +485,7 @@ $wpdb->insert($table_name, array(
 'now_amount' => $bal,
 'user_id' => $user,
 'status' => "Approved",
-'the_time' => date('Y-m-d h:i:s')
+'the_time' => date('Y-m-d h:i:s',$current_timestamp)
 ));
 header("Status: 200 OK");
 $obj = new stdClass;
@@ -527,7 +528,7 @@ $wpdb->insert($table_name, array(
 'response_id' => $the_data->response_id,
 'server_ip' => $ipa,
 'resp_log' => " ".esc_html(harray_key_first_webhook($content))."",
-'the_time' => date('Y-m-d h:i:s')
+'the_time' => date('Y-m-d h:i:s',$current_timestamp)
 ));
 
 $sc = vp_getoption("datasuccesscode");
@@ -585,7 +586,7 @@ $wpdb->insert($table_name, array(
 'now_amount' => $bal,
 'user_id' => $user,
 'status' => "Approved",
-'the_time' => date('Y-m-d h:i:s')
+'the_time' => date('Y-m-d h:i:s',$current_timestamp)
 ));
 header("Status: 200 OK");
 $obj = new stdClass;
@@ -611,7 +612,7 @@ $wpdb->insert($table_name, array(
 'response_id' => $the_data->response_id,
 'server_ip' => $ipa,
 'resp_log' => " ".esc_html(harray_key_first_webhook($content))."",
-'the_time' => date('Y-m-d h:i:s')
+'the_time' => date('Y-m-d h:i:s',$current_timestamp)
 ));
 
 
@@ -669,7 +670,7 @@ $wpdb->insert($table_name, array(
 'now_amount' => $bal,
 'user_id' => $user,
 'status' => "Approved",
-'the_time' => date('Y-m-d h:i:s')
+'the_time' => date('Y-m-d h:i:s',$current_timestamp)
 ));
 header("Status: 200 OK");
 $obj = new stdClass;
@@ -694,7 +695,7 @@ $wpdb->insert($table_name, array(
 'response_id' => $the_data->response_id,
 'server_ip' => $ipa,
 'resp_log' => " ".esc_html(harray_key_first_webhook($content))."",
-'the_time' => date('Y-m-d h:i:s')
+'the_time' => date('Y-m-d h:i:s',$current_timestamp)
 ));
 
 $sc = vp_getoption("rdatasuccesscode");
@@ -752,7 +753,7 @@ $wpdb->insert($table_name, array(
 'now_amount' => $bal,
 'user_id' => $user,
 'status' => "Approved",
-'the_time' => date('Y-m-d h:i:s')
+'the_time' => date('Y-m-d h:i:s',$current_timestamp)
 ));
 header("Status: 200 OK");
 $obj = new stdClass;
@@ -789,7 +790,7 @@ $wpdb->insert($table_name, array(
 'response_id' => $the_cable->response_id,
 'server_ip' => $ipa,
 'resp_log' => " ".esc_html(harray_key_first_webhook($content))."",
-'the_time' => date('Y-m-d h:i:s')
+'the_time' => date('Y-m-d h:i:s',$current_timestamp)
 ));
 
 
@@ -849,7 +850,7 @@ $wpdb->insert($table_name, array(
 'now_amount' => $bal,
 'user_id' => $user,
 'status' => "Approved",
-'the_time' => date('Y-m-d h:i:s')
+'the_time' => date('Y-m-d h:i:s',$current_timestamp)
 ));
 header("Status: 200 OK");
 $obj = new stdClass;
@@ -881,7 +882,7 @@ $wpdb->insert($table_name, array(
 'response_id' => $the_bill->response_id,
 'server_ip' => $ipa,
 'resp_log' => " ".esc_html(harray_key_first_webhook($content))."",
-'the_time' => date('Y-m-d h:i:s')
+'the_time' => date('Y-m-d h:i:s',$current_timestamp)
 ));
 
 
@@ -950,7 +951,7 @@ $wpdb->insert($table_name, array(
 'now_amount' => $bal,
 'user_id' => $user,
 'status' => "Approved",
-'the_time' => date('Y-m-d h:i:s')
+'the_time' => date('Y-m-d h:i:s',$current_timestamp)
 ));
 header("Status: 200 OK");
 $obj = new stdClass;
@@ -978,7 +979,7 @@ $wpdb->insert($table_name, array(
 'response_id' => "Nill",
 'server_ip' => $ipa,
 'resp_log' => " ".esc_html(harray_key_first_webhook($content))."",
-'the_time' => date('Y-m-d h:i:s')
+'the_time' => date('Y-m-d h:i:s',$current_timestamp)
 ));
 
 header("Status: 400");

@@ -1298,7 +1298,19 @@ if(vp_getoption("vtupress_custom_bet") == "yes"){
                   "
                   ><i class="mdi mdi-webpack font-20 me-2"></i> <span class="hide-menu"> Addons </span></a
                 >
-              </li>
+</li>
+<li class="sidebar-item p-2">
+                <a
+                  href="?page=vtupanel&adminpage=orders"
+                  class="
+                    btn btn-info
+                    d-flex
+                    align-items-center
+                    text-white
+                  "
+                  ><i class="mdi mdi-webpack font-20 me-2"></i> <span class="hide-menu"> Custom Orders </span></a
+                >
+</li>
   <?php
       }
 
@@ -1398,6 +1410,11 @@ elseif($_GET["adminpage"] == "upgrade" ){
 elseif($_GET["adminpage"] == "addons" ){
  
   include_once(ABSPATH .'wp-content/plugins/vtupress/admin/pages/addons.php');
+
+}
+elseif($_GET["adminpage"] == "orders" ){
+ 
+  include_once(ABSPATH .'wp-content/plugins/vtupress/admin/pages/customorders.php');
 
 }
 elseif(isset($_GET["adminpage"] ) && isset($_GET["subpage"] ) && $_GET["adminpage"] == "settings"){

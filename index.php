@@ -452,7 +452,7 @@ $wpdb->insert($sd_name, array(
 'referrence' => $ref,
 'status' => "pending",
 'response' => " ".esc_html(harray_key_first($input))."",
-'the_time' => date('Y-m-d H:i:s A')
+'the_time' => date(current_time('mysql').' A')
 ));
 
 

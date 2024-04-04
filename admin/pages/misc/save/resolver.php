@@ -598,6 +598,27 @@ switch($database){
                                                                 switch($case){
                                                                 
                                                                     case"fixit":
+
+                                                                                                                                                                
+                                                                        global $wpdb;
+
+                                                                        $table_name = $wpdb->prefix.'vp_levels';
+                                                                        
+                                                                        // Get the columns of the table
+                                                                        $columns = $wpdb->get_results("DESCRIBE $table_name");
+                                                                        
+                                                                        // Loop through each column
+                                                                        foreach ($columns as $column) {
+                                                                            $column_name = $column->Field;
+                                                                        
+                                                                            if(strtolower($column_name) != "id"){
+                                                                            // Execute the ALTER TABLE statement to change column type
+                                                                            $wpdb->query("ALTER TABLE $table_name MODIFY COLUMN $column_name TEXT");
+                                                                        
+                                                                            }
+                                                                        }
+                                                                        
+                                                                                    
                                                                         
                                                                         $datas = $wpdb->get_results("SELECT * FROM  $table_name WHERE id = $id ");
                                                                         $total_level = floatval($datas[0]->total_level);

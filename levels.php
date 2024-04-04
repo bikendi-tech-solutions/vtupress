@@ -247,23 +247,23 @@ die("A Plan With Similar Name Already Exist");
 		$new_level = "level_".$next;
 		$new_upgrade = "level_".$next."_upgrade";
 		$new_upgrade_pv = "level_".$next."_upgrade_pv";
-		maybe_add_column($table_name,$new_level, "ALTER TABLE $table_name ADD $new_level DECIMAL(5,2)");
-		maybe_add_column($table_name,$new_level."_data", "ALTER TABLE $table_name ADD {$new_level}_data DECIMAL(5,2)");
-		maybe_add_column($table_name,$new_level."_cable", "ALTER TABLE $table_name ADD {$new_level}_cable DECIMAL(5,2)");
-		maybe_add_column($table_name,$new_level."_bill", "ALTER TABLE $table_name ADD {$new_level}_bill DECIMAL(5,2)");
-		maybe_add_column($table_name,$new_level."_ecards", "ALTER TABLE $table_name ADD {$new_level}_ecards DECIMAL(5,2)");
-		maybe_add_column($table_name,$new_level."_edatas", "ALTER TABLE $table_name ADD {$new_level}_edatas DECIMAL(5,2)");
-		maybe_add_column($table_name,$new_level."_epins", "ALTER TABLE $table_name ADD {$new_level}_epins DECIMAL(5,2)");
-		maybe_add_column($table_name,$new_level."_pv", "ALTER TABLE $table_name ADD {$new_level}_pv DECIMAL(5,2)");
-		maybe_add_column($table_name,$new_level."_data_pv", "ALTER TABLE $table_name ADD {$new_level}_data_pv DECIMAL(5,2)");
-		maybe_add_column($table_name,$new_level."_cable_pv", "ALTER TABLE $table_name ADD {$new_level}_cable_pv DECIMAL(5,2)");
-		maybe_add_column($table_name,$new_level."_bill_pv", "ALTER TABLE $table_name ADD {$new_level}_bill_pv DECIMAL(5,2)");
-		maybe_add_column($table_name,$new_level."_epins_pv", "ALTER TABLE $table_name ADD {$new_level}_epins_pv DECIMAL(5,2)");
-		maybe_add_column($table_name,$new_level."_ecards_pv", "ALTER TABLE $table_name ADD {$new_level}_ecards_pv DECIMAL(5,2)");
-		maybe_add_column($table_name,$new_level."_edatas_pv", "ALTER TABLE $table_name ADD {$new_level}_edatas_pv DECIMAL(5,2)");
+		maybe_add_column($table_name,$new_level, "ALTER TABLE $table_name ADD $new_level text");
+		maybe_add_column($table_name,$new_level."_data", "ALTER TABLE $table_name ADD {$new_level}_data text");
+		maybe_add_column($table_name,$new_level."_cable", "ALTER TABLE $table_name ADD {$new_level}_cable text");
+		maybe_add_column($table_name,$new_level."_bill", "ALTER TABLE $table_name ADD {$new_level}_bill text");
+		maybe_add_column($table_name,$new_level."_ecards", "ALTER TABLE $table_name ADD {$new_level}_ecards text");
+		maybe_add_column($table_name,$new_level."_edatas", "ALTER TABLE $table_name ADD {$new_level}_edatas text");
+		maybe_add_column($table_name,$new_level."_epins", "ALTER TABLE $table_name ADD {$new_level}_epins text");
+		maybe_add_column($table_name,$new_level."_pv", "ALTER TABLE $table_name ADD {$new_level}_pv text");
+		maybe_add_column($table_name,$new_level."_data_pv", "ALTER TABLE $table_name ADD {$new_level}_data_pv text");
+		maybe_add_column($table_name,$new_level."_cable_pv", "ALTER TABLE $table_name ADD {$new_level}_cable_pv text");
+		maybe_add_column($table_name,$new_level."_bill_pv", "ALTER TABLE $table_name ADD {$new_level}_bill_pv text");
+		maybe_add_column($table_name,$new_level."_epins_pv", "ALTER TABLE $table_name ADD {$new_level}_epins_pv text");
+		maybe_add_column($table_name,$new_level."_ecards_pv", "ALTER TABLE $table_name ADD {$new_level}_ecards_pv text");
+		maybe_add_column($table_name,$new_level."_edatas_pv", "ALTER TABLE $table_name ADD {$new_level}_edatas_pv text");
 
-		maybe_add_column($table_name,"$new_upgrade", "ALTER TABLE $table_name ADD $new_upgrade DECIMAL(5,2)");
-		maybe_add_column($table_name,"$new_upgrade_pv", "ALTER TABLE $table_name ADD $new_upgrade_pv DECIMAL(5,2)");
+		maybe_add_column($table_name,"$new_upgrade", "ALTER TABLE $table_name ADD $new_upgrade text");
+		maybe_add_column($table_name,"$new_upgrade_pv", "ALTER TABLE $table_name ADD $new_upgrade_pv text");
 		$where = [ 'id' => $id ];
 		$arr = [$new_level => "0", $new_upgrade => "0", "total_level" => $next ];
 $updated = $wpdb->update( $wpdb->prefix.'vp_levels', $arr, $where);
@@ -304,15 +304,15 @@ maybe_add_column($table,"monthly_referee", "ALTER TABLE $table ADD monthly_refer
 maybe_add_column($table,"monthly_transactions_number", "ALTER TABLE $table ADD monthly_transactions_number bigint");
 maybe_add_column($table,"monthly_transactions_amount", "ALTER TABLE $table ADD monthly_transactions_amount bigint");
 maybe_add_column($table,"upgrade_bonus", "ALTER TABLE $table ADD upgrade_bonus bigint");
-maybe_add_column($table,"airtime_pv", "ALTER TABLE $table ADD airtime_pv DECIMAL(5,2)");
-maybe_add_column($table,"data_pv", "ALTER TABLE $table ADD data_pv DECIMAL(5,2)");
-maybe_add_column($table,"cable_pv", "ALTER TABLE $table ADD cable_pv DECIMAL(5,2)");
-maybe_add_column($table,"bill_pv", "ALTER TABLE $table ADD bill_pv DECIMAL(5,2)");
-maybe_add_column($table,"airtime_pv", "ALTER TABLE $table ADD airtime_pv DECIMAL(5,2)");
-maybe_add_column($table,"data_mtn", "ALTER TABLE $table ADD data_mtn DECIMAL(5,2)");
-maybe_add_column($table,"data_glo", "ALTER TABLE $table ADD data_glo DECIMAL(5,2)");
-maybe_add_column($table,"data_airtel", "ALTER TABLE $table ADD data_airtel DECIMAL(5,2)");
-maybe_add_column($table,"data_9mobile", "ALTER TABLE $table ADD data_9mobile DECIMAL(5,2)");
+maybe_add_column($table,"airtime_pv", "ALTER TABLE $table ADD airtime_pv text");
+maybe_add_column($table,"data_pv", "ALTER TABLE $table ADD data_pv text");
+maybe_add_column($table,"cable_pv", "ALTER TABLE $table ADD cable_pv text");
+maybe_add_column($table,"bill_pv", "ALTER TABLE $table ADD bill_pv text");
+maybe_add_column($table,"airtime_pv", "ALTER TABLE $table ADD airtime_pv text");
+maybe_add_column($table,"data_mtn", "ALTER TABLE $table ADD data_mtn text");
+maybe_add_column($table,"data_glo", "ALTER TABLE $table ADD data_glo text");
+maybe_add_column($table,"data_airtel", "ALTER TABLE $table ADD data_airtel text");
+maybe_add_column($table,"data_9mobile", "ALTER TABLE $table ADD data_9mobile text");
 
 vp_updateoption("level_fixing_$id", "12");
 
@@ -404,21 +404,21 @@ $arr['transfer']= $_REQUEST['transfer'];
 for($lev = 1; $lev <= $total_level; $lev++){
 
 	if(!isset($datas[0]->{"level_".$lev."_edatas"})){
-	maybe_add_column($table,'level_'.$lev.'_data', "ALTER TABLE $table ADD level_{$lev}_data DECIMAL(5,2)");
-	maybe_add_column($table,'level_'.$lev.'_cable', "ALTER TABLE $table ADD level_{$lev}_cable DECIMAL(5,2)");
-	maybe_add_column($table,'level_'.$lev.'_bill', "ALTER TABLE $table ADD level_{$lev}_bill DECIMAL(5,2)");
-	maybe_add_column($table,'level_'.$lev.'_ecards', "ALTER TABLE $table ADD level_{$lev}_ecards DECIMAL(5,2)");
-	maybe_add_column($table,'level_'.$lev.'_edatas', "ALTER TABLE $table ADD level_{$lev}_edatas DECIMAL(5,2)");
-	maybe_add_column($table,'level_'.$lev.'_epins', "ALTER TABLE $table ADD level_{$lev}_epins DECIMAL(5,2)");
+	maybe_add_column($table,'level_'.$lev.'_data', "ALTER TABLE $table ADD level_{$lev}_data text");
+	maybe_add_column($table,'level_'.$lev.'_cable', "ALTER TABLE $table ADD level_{$lev}_cable text");
+	maybe_add_column($table,'level_'.$lev.'_bill', "ALTER TABLE $table ADD level_{$lev}_bill text");
+	maybe_add_column($table,'level_'.$lev.'_ecards', "ALTER TABLE $table ADD level_{$lev}_ecards text");
+	maybe_add_column($table,'level_'.$lev.'_edatas', "ALTER TABLE $table ADD level_{$lev}_edatas text");
+	maybe_add_column($table,'level_'.$lev.'_epins', "ALTER TABLE $table ADD level_{$lev}_epins text");
 
-	maybe_add_column($table,'level_'.$lev.'_pv', "ALTER TABLE $table ADD level_{$lev}_pv DECIMAL(5,2)");
-maybe_add_column($table,'level_'.$lev.'_data_pv', "ALTER TABLE $table ADD level_{$lev}_data_pv DECIMAL(5,2)");
-maybe_add_column($table,'level_'.$lev.'_cable_pv', "ALTER TABLE $table ADD level_{$lev}_cable_pv DECIMAL(5,2)");
-maybe_add_column($table,'level_'.$lev.'_bill_pv', "ALTER TABLE $table ADD level_{$lev}_bill_pv DECIMAL(5,2)");
-maybe_add_column($table,'level_'.$lev.'_ecards_pv', "ALTER TABLE $table ADD level_{$lev}_ecards_pv DECIMAL(5,2)");
-maybe_add_column($table,'level_'.$lev.'_edatas_pv', "ALTER TABLE $table ADD level_{$lev}_edatas_pv DECIMAL(5,2)");
-maybe_add_column($table,'level_'.$lev.'_epins_pv', "ALTER TABLE $table ADD level_{$lev}_epins_pv DECIMAL(5,2)");
-maybe_add_column($table,'level_'.$lev."_upgrade_pv", "ALTER TABLE $table ADD level_{$lev}_upgrade_pv DECIMAL(5,2)");
+	maybe_add_column($table,'level_'.$lev.'_pv', "ALTER TABLE $table ADD level_{$lev}_pv text");
+maybe_add_column($table,'level_'.$lev.'_data_pv', "ALTER TABLE $table ADD level_{$lev}_data_pv text");
+maybe_add_column($table,'level_'.$lev.'_cable_pv', "ALTER TABLE $table ADD level_{$lev}_cable_pv text");
+maybe_add_column($table,'level_'.$lev.'_bill_pv', "ALTER TABLE $table ADD level_{$lev}_bill_pv text");
+maybe_add_column($table,'level_'.$lev.'_ecards_pv', "ALTER TABLE $table ADD level_{$lev}_ecards_pv text");
+maybe_add_column($table,'level_'.$lev.'_edatas_pv', "ALTER TABLE $table ADD level_{$lev}_edatas_pv text");
+maybe_add_column($table,'level_'.$lev.'_epins_pv', "ALTER TABLE $table ADD level_{$lev}_epins_pv text");
+maybe_add_column($table,'level_'.$lev."_upgrade_pv", "ALTER TABLE $table ADD level_{$lev}_upgrade_pv text");
 
 	}
 

@@ -122,7 +122,7 @@ $added_to_db = $wpdb->insert($table_name, array(
 'now_amount' => $new_bal_now,
 'user_id' => $user_id,
 'status' => "approved",
-'the_time' => date('Y-m-d h:i:s A')
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
 ));
 
 
@@ -138,7 +138,7 @@ $added_to_db = $wpdb->insert($table_name, array(
 'user_id' => $user_id,
 'vDatas' =>  str_replace("\/","/",$response),
 'status' => "approved",
-'the_time' => date('Y-m-d h:i:s A')
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
 ));
 
 

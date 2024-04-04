@@ -19,7 +19,7 @@ error_reporting(0);
 }
 include_once(ABSPATH ."wp-load.php");
 include_once(ABSPATH .'wp-content/plugins/vtupress/functions.php');
-date_default_timezone_set("Africa/Lagos");
+
 if(isset($_REQUEST["enable-schedule"])){
 	
 	vp_updateoption("enable-schedule",$_REQUEST["enable-schedule"]);
@@ -29,7 +29,7 @@ if(isset($_REQUEST["enable-schedule"])){
 if(isset($_REQUEST["schedule-time"])){
 	
 	vp_updateoption("schedule-time",$_REQUEST["schedule-time"]);
-	$now = date('h:i:s', strtotime(date('h:i:s'). '+'.intval($_REQUEST["schedule-time"]).' Minutes'));
+	$now = date('h:i:s', strtotime(date('h:i:s',$current_timestamp). '+'.intval($_REQUEST["schedule-time"]).' Minutes'));
 	vp_updateoption("next-schedule", $now);
 	die("100");
 }

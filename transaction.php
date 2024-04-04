@@ -2,7 +2,7 @@
 ob_start();
 
 function transactions(){
-	global $results, $fdresults, $sdresults;
+	global $results, $fdresults, $sdresults,$current_timestamp;
 echo '
 <style>
 table.table th{
@@ -133,11 +133,13 @@ echo'
 </div>
 ';
 
+
+
 echo "<div class='success tsuccess container-fluid' id='overview' >";
 $enable_sch = vp_getoption("enable-schedule");
 $last_query = vp_getoption("last-schedule");
 $next_query = vp_getoption("next-schedule");
-$current_time = date('h:i');
+$current_time = date('h:i',$current_timestamp);
 $cron_failed = vp_getoption("cron_failed");
 $cron_successful = vp_getoption("cron_successful");
 $sch_time = vp_getoption("schedule-time");

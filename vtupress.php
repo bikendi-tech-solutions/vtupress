@@ -10,7 +10,7 @@
 *Plugin Name: VTU Press
 *Plugin URI: http://vtupress.com
 *Description: This is the very first <b>VTU plugin</b>. It's VTU services are all Automated with wonderful features
-*Version: 5.9.3
+*Version: 5.9.4
 *Author: Akor Victor
 *Author URI: https://facebook.com/vtupressceo
 *License:      GPL3
@@ -48,7 +48,7 @@ include_once(ABSPATH ."wp-load.php");
 include_once(ABSPATH .'wp-content/plugins/vtupress/functions.php');
 include_once(ABSPATH .'wp-admin/includes/plugin.php');
 require_once(ABSPATH.'wp-admin/includes/upgrade.php');
-add_action('init','vtupress_user_update');
+add_action('wp_head','vtupress_user_update');
 
 //add_shortcode( 'vtupress', 'vtupress_func' );
 add_shortcode( 'vtupress_airtime', 'vtupress_airtime' );
@@ -112,18 +112,18 @@ if(is_user_logged_in()){
       if (headers_sent()) {
     //
     } else {
-      session_start();
+     session_start();
     }
     }
-    ob_end_flush();
+global $current_timestamp;
   
     if(isset($_SESSION["last_login"])){
     $last_login = $_SESSION["last_login"];
     $dur = vp_getoption("vtu_timeout");
-    $cur = date('Y-m-d H:i:s');
+    $cur = date('Y-m-d H:i:s',$current_timestamp);
     $timeout = date("Y-m-d H:i:s",strtotime("$last_login +$dur minutes"));
       if($cur < $timeout){
-        $_SESSION["last_login"] = date('Y-m-d H:i:s');
+        $_SESSION["last_login"] = date('Y-m-d H:i:s',$current_timestamp);
 
         
       }
@@ -135,6 +135,8 @@ if(is_user_logged_in()){
     }
 
     session_write_close();
+
+    ob_end_flush();
 
     }
   }
@@ -179,6 +181,7 @@ function wpdocs_plugin_admin_styles() {
 
 add_action('wp_login','vtupress_login_session');
 function vtupress_login_session(){
+  global $current_timestamp;
   ob_start();
   if (!isset($_SESSION)) {
     if (headers_sent()) {
@@ -187,12 +190,13 @@ function vtupress_login_session(){
     session_start();
   }
   }
-ob_end_flush();
+
 
   $_SESSION["vtuloggedin"] = "yes";
-  $_SESSION["last_login"] = date('Y-m-d H:i:s');
+  $_SESSION["last_login"] = date('Y-m-d H:i:s',$current_timestamp);
 
   session_write_close();
+  ob_end_flush();
 }
 
 
@@ -313,10 +317,13 @@ vp_addoption('hollatagservices','');
 
 add_option("vtupress_options2","0");
 
-$update_vtupress_options = 34;
+$update_vtupress_options = 36;
 if(get_option("vtupress_options2") != $update_vtupress_options){
 
   vtupress_verification();
+
+
+
   $url = home_url();
   $url = str_replace("http://","https://",$url);
   vp_updateoption("siteurl",$url);
@@ -923,58 +930,58 @@ $sql= "CREATE TABLE IF NOT EXISTS $table_name(
 id int NOT NULL AUTO_INCREMENT,
 name text,
 
-airtime_pv DECIMAL(5,2) zerofill,
-data_pv DECIMAL(5,2) zerofill,
-cable_pv DECIMAL(5,2) zerofill,
-bill_pv DECIMAL(5,2) zerofill,
-mtn_vtu DECIMAL(5,2) zerofill,
-glo_vtu DECIMAL(5,2) zerofill,
-mobile_vtu DECIMAL(5,2) zerofill,
-airtel_vtu DECIMAL(5,2) zerofill,
+airtime_pv text ,
+data_pv text ,
+cable_pv text ,
+bill_pv text ,
+mtn_vtu text ,
+glo_vtu text ,
+mobile_vtu text ,
+airtel_vtu text ,
 
-mtn_awuf DECIMAL(5,2) zerofill,
-glo_awuf DECIMAL(5,2) zerofill,
-mobile_awuf DECIMAL(5,2) zerofill,
-airtel_awuf DECIMAL(5,2) zerofill,
+mtn_awuf text ,
+glo_awuf text ,
+mobile_awuf text ,
+airtel_awuf text ,
 
-mtn_share DECIMAL(5,2) zerofill,
-glo_share DECIMAL(5,2) zerofill,
-mobile_share DECIMAL(5,2) zerofill,
-airtel_share DECIMAL(5,2) zerofill,
+mtn_share text ,
+glo_share text ,
+mobile_share text ,
+airtel_share text ,
 
 
-mtn_sme DECIMAL(5,2) zerofill,
-glo_sme DECIMAL(5,2) zerofill,
-mobile_sme DECIMAL(5,2) zerofill,
-airtel_sme DECIMAL(5,2) zerofill,
+mtn_sme text ,
+glo_sme text ,
+mobile_sme text ,
+airtel_sme text ,
 
-mtn_corporate DECIMAL(5,2) zerofill,
-glo_corporate DECIMAL(5,2) zerofill,
-mobile_corporate DECIMAL(5,2) zerofill,
-airtel_corporate DECIMAL(5,2) zerofill,
+mtn_corporate text ,
+glo_corporate text ,
+mobile_corporate text ,
+airtel_corporate text ,
 
-mtn_gifting DECIMAL(5,2) zerofill,
-glo_gifting DECIMAL(5,2) zerofill,
-mobile_gifting DECIMAL(5,2) zerofill,
-airtel_gifting DECIMAL(5,2) zerofill,
+mtn_gifting text ,
+glo_gifting text ,
+mobile_gifting text ,
+airtel_gifting text ,
 
-cable DECIMAL(5,2) zerofill,
-bill_prepaid DECIMAL(5,2) zerofill,
+cable text ,
+bill_prepaid text ,
 
-card_mtn DECIMAL(5,2) zerofill,
-card_glo DECIMAL(5,2) zerofill,
-card_9mobile DECIMAL(5,2) zerofill,
-card_airtel DECIMAL(5,2) zerofill,
+card_mtn text ,
+card_glo text ,
+card_9mobile text ,
+card_airtel text ,
 
-data_mtn DECIMAL(5,2) zerofill,
-data_glo DECIMAL(5,2) zerofill,
-data_9mobile DECIMAL(5,2) zerofill,
-data_airtel DECIMAL(5,2) zerofill,
+data_mtn text ,
+data_glo text ,
+data_9mobile text ,
+data_airtel text ,
 
-epin_waec DECIMAL(5,2) zerofill,
-epin_neco DECIMAL(5,2) zerofill,
-epin_jamb DECIMAL(5,2) zerofill,
-epin_nabteb DECIMAL(5,2) zerofill,
+epin_waec text ,
+epin_neco text ,
+epin_jamb text ,
+epin_nabteb text ,
 
 
 status text,
@@ -993,25 +1000,25 @@ developer text,
 charge_back_percentage text,
 transfer text,
 
-total_level DECIMAL(5,2) zerofill,
-level_1 DECIMAL(5,2) zerofill,
-level_1_data DECIMAL(5,2) zerofill,
-level_1_cable DECIMAL(5,2) zerofill,
-level_1_bill DECIMAL(5,2) zerofill,
-level_1_ecards DECIMAL(5,2) zerofill,
-level_1_edatas DECIMAL(5,2) zerofill,
-level_1_epins DECIMAL(5,2) zerofill,
+total_level text ,
+level_1 text ,
+level_1_data text ,
+level_1_cable text ,
+level_1_bill text ,
+level_1_ecards text ,
+level_1_edatas text ,
+level_1_epins text ,
 
-level_1_pv DECIMAL(5,2) zerofill,
-level_1_data_pv DECIMAL(5,2) zerofill,
-level_1_cable_pv DECIMAL(5,2) zerofill,
-level_1_bill_pv DECIMAL(5,2) zerofill,
-level_1_ecards_pv DECIMAL(5,2) zerofill,
-level_1_edatas_pv DECIMAL(5,2) zerofill,
-level_1_epins_pv DECIMAL(5,2) zerofill,
+level_1_pv text ,
+level_1_data_pv text ,
+level_1_cable_pv text ,
+level_1_bill_pv text ,
+level_1_ecards_pv text ,
+level_1_edatas_pv text ,
+level_1_epins_pv text ,
 
-level_1_upgrade DECIMAL(5,2) zerofill,
-level_1_upgrade_pv DECIMAL(5,2) zerofill,
+level_1_upgrade text ,
+level_1_upgrade_pv text ,
 
 
 PRIMARY KEY (id))$charset_collate;";
@@ -1378,7 +1385,7 @@ name text NOT NULL,
 email varchar(255) NOT NULL,
 meterno text NOT NULL,
 product_id text NOT NULL,
-phone text(11) ZEROFILL NOT NULL,
+phone text(11)  NOT NULL,
 type text NOT NULL,
 meter_token text,
 bal_bf text,
