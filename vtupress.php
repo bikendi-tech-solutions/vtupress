@@ -10,7 +10,7 @@
 *Plugin Name: VTU Press
 *Plugin URI: http://vtupress.com
 *Description: This is the very first <b>VTU plugin</b>. It's VTU services are all Automated with wonderful features
-*Version: 5.9.8
+*Version: 5.9.9
 *Author: Akor Victor
 *Author URI: https://facebook.com/vtupressceo
 *License:      GPL3
@@ -71,10 +71,11 @@ include_once('vpcustom.php');
 include_once('vpuser.php');
 
 
-error_log(date('Y-m-d h:i:s A',$current_timestamp));
+//error_log(date('Y-m-d h:i:s A',$current_timestamp));
 
 function vtupress_user_update(){
-ob_start();
+  global $current_timestamp;
+
 header("Content-Security-Policy: https:");
 //Script_Transport-Security
 header("strict-transport-security: max-age=31536000 ");
@@ -84,7 +85,7 @@ header("Referrer-Policy: same-origin");
 header("X-Xss-Protection: 1");
 header('Permissions-Policy: geolocation=(self ),camera=(self), microphone=(self)');
 
-ob_flush();
+
 
 
 if(is_user_logged_in()){
@@ -113,25 +114,19 @@ if(is_user_logged_in()){
 
 
   if(vp_getoption("vtu_timeout") != "false" && vp_getoption("vtu_timeout") != "0" && !empty(vp_getoption("vtu_timeout")) && is_user_logged_in() && is_numeric(vp_getoption("vtu_timeout"))){
-    
+    global $current_timestamp;
     if(intval(vp_getoption("vtu_timeout")) <= 60 && intval(vp_getoption("vtu_timeout")) > 0){
-    ob_start();
-    if (!isset($_SESSION)) {
-      if (headers_sent()) {
-    //
-    } else {
-     session_start();
-    }
-    }
-global $current_timestamp;
+
   
-    if(isset($_SESSION["last_login"])){
-    $last_login = $_SESSION["last_login"];
+    if(isset($_COOKIE["last_login"])){
+    $last_login = $_COOKIE["last_login"];
     $dur = vp_getoption("vtu_timeout");
     $cur = date('Y-m-d H:i:s',$current_timestamp);
     $timeout = date("Y-m-d H:i:s",strtotime("$last_login +$dur minutes"));
-      if($cur < $timeout){
-        $_SESSION["last_login"] = date('Y-m-d H:i:s',$current_timestamp);
+
+
+      if(($cur < $timeout)  || (current_user_can("vtupress_admin") || current_user_can("administrator") )){
+        setcookie("last_login", date('Y-m-d H:i:s',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
 
         
       }
@@ -139,17 +134,22 @@ global $current_timestamp;
       wp_logout();
       }
     }else{
+
+
       wp_logout();
     }
 
-    session_write_close();
 
-    ob_end_flush();
+
+
 
     }
   }
 
 }
+
+
+
 
 require __DIR__.'/plugin-update-checker/plugin-update-checker.php';
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
@@ -190,31 +190,13 @@ function wpdocs_plugin_admin_styles() {
 add_action('wp_login','vtupress_login_session');
 function vtupress_login_session(){
   global $current_timestamp;
-  ob_start();
-  if (!isset($_SESSION)) {
-    if (headers_sent()) {
-  //
-  } else {
-    session_start();
-  }
-  }
-
-
-  $_SESSION["vtuloggedin"] = "yes";
-  $_SESSION["last_login"] = date('Y-m-d H:i:s',$current_timestamp);
-
-  session_write_close();
-  ob_end_flush();
-}
-
-
-
-add_action('shutdown','vtupress_shutdown');
-function vtupress_shutdown(){
-
-  session_write_close();
+  setcookie("vtuloggedin", "yes", time() + (30 * 24 * 60 * 60), "/");
+  setcookie("last_login", date('Y-m-d H:i:s',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
 
 }
+
+
+
 
 vp_addoption('enable_raptor',"no");
 vp_addoption("spraycode",uniqid());
@@ -1526,3 +1508,4 @@ register_activation_hook(__FILE__, 'vtupress_verification');
 
 register_activation_hook(__FILE__, 'vtupress_create_profile');
 register_activation_hook(__FILE__, 'vtupress_create_notification');
+

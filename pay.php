@@ -1,6 +1,6 @@
 <?php
 header("Access-Control-Allow-Origin: 'self'");
-session_start();
+
 if(!defined('ABSPATH')){
     $pagePath = explode('/wp-content/', dirname(__FILE__));
     include_once(str_replace('wp-content/' , '', $pagePath[0] . '/wp-load.php'));
@@ -34,7 +34,7 @@ $paychoice = $_POST["paymentchoice"];
 
 if(isset($_POST["amounte"])){
 $userid = $_POST["userid"];
-$_SESSION['userid'] = $_POST["userid"];
+setcookie('userid', $_POST["userid"], time() + (30 * 24 * 60 * 60), "/");
 $amounte = $_POST['amounte'];
 }
 
@@ -58,20 +58,20 @@ $amount = intval($_POST['amount']) + $remove;
 $tcode = $_POST['tcode'];
 
 
-$_SESSION['amount'] = $amount;
+setcookie('amount', $amount, time() + (30 * 24 * 60 * 60), "/");
 
 if(isset($_POST['secret'])){
-$_SESSION['secret'] = $_POST['secret'];
+setcookie('secret', $_POST['secret'], time() + (30 * 24 * 60 * 60), "/");
 }
-$_SESSION['tcode'] = "wallet";
+setcookie('tcode', "wallet", time() + (30 * 24 * 60 * 60), "/");
 }
 if(isset($_POST["ud"])){
 	$ud = $_POST['ud'];
-	$_SESSION['ud'] = $_POST['ud'];
+	setcookie('ud', $_POST['ud'], time() + (30 * 24 * 60 * 60), "/");
 }
 if(isset($_POST["id"])){
 	$id = $_POST['id'];
-	$_SESSION['id'] = $_POST['id'];
+	setcookie('id', $_POST['id'], time() + (30 * 24 * 60 * 60), "/");
 }
 
 
@@ -162,7 +162,7 @@ elseif($paychoice == "paystack"){
     }
 
 
-    $_SESSION['amount'] = $amount;
+    setcookie('amount', $amount, time() + (30 * 24 * 60 * 60), "/");
 
 echo '
 <div style="visibility:hidden;">
@@ -200,7 +200,7 @@ function payWithPaystack(e) {
       window.history.back();
     },
     callback: function(response){
-		 var locatio = "'.vp_getoption("siteurl").'/wp-content/plugins/vtupress/process.php?status=successful&current_clr='.$_SESSION["current_clr"].'&gateway=paystack&amount='.$amount.'&reference=" + response.reference;
+		 var locatio = "'.vp_getoption("siteurl").'/wp-content/plugins/vtupress/process.php?status=successful&current_clr='.$_COOKIE["current_clr"].'&gateway=paystack&amount='.$amount.'&reference=" + response.reference;
      
      			swal({
   title: "Wait",
@@ -451,7 +451,7 @@ elseif($paychoice == "monnify"){
     }
 
 
-    $_SESSION['amount'] = $amount;
+    setcookie('amount', $amount, time() + (30 * 24 * 60 * 60), "/");
     
   $apikeym = vp_getoption("monnifyapikey");
 $secretkeym = vp_getoption("monnifysecretkey");

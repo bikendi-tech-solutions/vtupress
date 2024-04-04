@@ -1,11 +1,5 @@
 <?php
-if (!isset($_SESSION)) {
-  if (headers_sent()) {
-//
-} else {
-  session_start();
-}
-}
+
 $option_array = json_decode(get_option("vp_options"),true);
 
 vp_addoption('manual_funding', "no message");
@@ -26,26 +20,28 @@ vp_addoption("vpwalm","No message");
 
 function vpaccount(){
 
+global $current_timestamp;
+  
   $vp_temp = vp_getoption("vp_template");
 
 
   if(!is_admin()){
-    $_SESSION["current_clr"] = uniqid("current_clr-",false);
-  $_SESSION["run_code"] = "vtupress";
-  if(!isset($_SESSION["last_bal"])){
-    $_SESSION["last_bal"] = 0;
+    setcookie("current_clr", uniqid("current_clr-",false), time() + (30 * 24 * 60 * 60), "/");
+  setcookie("run_code", "vtupress", time() + (30 * 24 * 60 * 60), "/");
+  if(!isset($_COOKIE["last_bal"])){
+    setcookie("last_bal", 0, time() + (30 * 24 * 60 * 60), "/");
   }
 
-  if(!isset($_SESSION["trans_reversal"])){
-    $_SESSION["trans_reversal"] = "no";
+  if(!isset($_COOKIE["trans_reversal"])){
+    setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/");
   }
 
 
-if(!isset($_SESSION["last_transaction_time"])){
-$_SESSION["last_transaction_time"] = "null";
-$_SESSION["last_recipient"] = "null";
+if(!isset($_COOKIE["last_transaction_time"])){
+setcookie("last_transaction_time", "null", time() + (30 * 24 * 60 * 60), "/");
+setcookie("last_recipient", "null", time() + (30 * 24 * 60 * 60), "/");
 }
-$_SESSION["run_code"] = "vtupress";
+setcookie("run_code", "vtupress", time() + (30 * 24 * 60 * 60), "/");
 $id = get_current_user_id();
 
 
@@ -159,17 +155,17 @@ die("Please Verify Your Email Before You Can Proceed. $DIAL");
 }
 else{}
 
-$_SESSION["run_code"] = "vtupress";
+setcookie("run_code", "vtupress", time() + (30 * 24 * 60 * 60), "/");
 
 
 //////////////////////////////////////
 
-if(isset($_SESSION["user_id"]) && isset($_SESSION["add_unrecorded"])){
-	if(is_numeric($_SESSION["user_id"]) && $_SESSION["add_unrecorded"] == 'yes' && isset($_SESSION["recipient"]) && isset($_SESSION["service"]) && $_SESSION["service"] !=  "ssms"){
+if(isset($_COOKIE["user_id"]) && isset($_COOKIE["add_unrecorded"])){
+	if(is_numeric($_COOKIE["user_id"]) && $_COOKIE["add_unrecorded"] == 'yes' && isset($_COOKIE["recipient"]) && isset($_COOKIE["service"]) && $_COOKIE["service"] !=  "ssms"){
   global $wpdb;
   
-  $service = $_SESSION["service"];
-  $trans_id = $_SESSION["request_id"];
+  $service = $_COOKIE["service"];
+  $trans_id = $_COOKIE["request_id"];
   $serv_tab = $wpdb->prefix.$service;
   $service_result = $wpdb->get_results($wpdb->prepare("SELECT * FROM $serv_tab WHERE request_id = %s",$trans_id));
   
@@ -179,14 +175,14 @@ if(isset($_SESSION["user_id"]) && isset($_SESSION["add_unrecorded"])){
   
   if(empty($vpresult) || $vpresult == null){
   
-    if(isset($_SESSION["api_from"])){
-      $fro = $_SESSION["api_from"];
+    if(isset($_COOKIE["api_from"])){
+      $fro = $_COOKIE["api_from"];
     }else{
       $fro = "User_Dashboard";
     }
 
-    if(isset($_SESSION["api_response"])){
-      $resp = $_SESSION["api_response"];
+    if(isset($_COOKIE["api_response"])){
+      $resp = $_COOKIE["api_response"];
     }else{
       $resp = "Undefined";
     }
@@ -196,23 +192,23 @@ if(isset($_SESSION["user_id"]) && isset($_SESSION["add_unrecorded"])){
   $unrecorded_added = $wpdb->insert($table_trans, array(
   'status' => 'Fa',
   'service' => $service,
-  'name'=> $_SESSION["name"],
-  'email'=> $_SESSION["email"],
-  'recipient' => $_SESSION["recipient"],
-  'bal_bf' => $_SESSION["bal_bf"],
-  'bal_nw' => $_SESSION["bal_nw"],
-  'amount' => $_SESSION["amount"],
+  'name'=> $_COOKIE["name"],
+  'email'=> $_COOKIE["email"],
+  'recipient' => $_COOKIE["recipient"],
+  'bal_bf' => $_COOKIE["bal_bf"],
+  'bal_nw' => $_COOKIE["bal_nw"],
+  'amount' => $_COOKIE["amount"],
   'request_id' => $trans_id,
-  'user_id' => $_SESSION["user_id"],
+  'user_id' => $_COOKIE["user_id"],
   'api_response' => $resp,
   'api_from' => $fro,
-  'the_time' => $_SESSION["the_time"]
+  'the_time' => $_COOKIE["the_time"]
   ));
   
-  $_SESSION["add_unrecorded"] = 'no';
-  $_SESSION["user_id"] = "none";
-  unset($_SESSION["user_id"]);
-  unset($_SESSION["recipient"]);
+  setcookie("add_unrecorded", 'no', time() + (30 * 24 * 60 * 60), "/");
+  setcookie("user_id", "none", time() + (30 * 24 * 60 * 60), "/");
+  unset($_COOKIE["user_id"]);
+  unset($_COOKIE["recipient"]);
   
   }else{}
   
@@ -234,10 +230,11 @@ if(isset($_SESSION["user_id"]) && isset($_SESSION["add_unrecorded"])){
 
   if(intval(vp_getoption("vtu_timeout")) <= 60 && intval(vp_getoption("vtu_timeout")) > 0){
 
-    if(isset($_SESSION["vtuloggedin"]) && isset($_SESSION["last_login"])){
+    if((isset($_COOKIE["vtuloggedin"]) && isset($_COOKIE["last_login"])) || (current_user_can("vtupress_admin") || current_user_can("administrator") )){
 
     }
     else{
+  
   
       wp_logout();
 
@@ -252,15 +249,17 @@ if(isset($_SESSION["user_id"]) && isset($_SESSION["add_unrecorded"])){
     }
 
 
-  $last_login = $_SESSION["last_login"];
+  $last_login = $_COOKIE["last_login"];
   $dur = vp_getoption("vtu_timeout");
   $cur = date('Y-m-d H:i:s',$current_timestamp);
   $timeout = date("Y-m-d H:i:s",strtotime("$last_login +$dur minutes"));
      
  // die( $cur ." - ".  $timeout ." -l-= " .  $last_login );
-    if($cur < $timeout){
 
-    $_SESSION["last_login"] = date('Y-m-d H:i:s',$current_timestamp);
+
+    if(($cur < $timeout)  || (current_user_can("vtupress_admin") || current_user_can("administrator") )){
+
+    setcookie("last_login", date('Y-m-d H:i:s',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
 
     if(!is_plugin_active("$vp_temp/$vp_temp.php")){
       include_once(ABSPATH."wp-content/plugins/vtupress/template/".constant('vtupress_template')."/dashboard.html");
@@ -273,6 +272,9 @@ if(isset($_SESSION["user_id"]) && isset($_SESSION["add_unrecorded"])){
     die();
   }
   else{
+
+    //error_log("user logged out 2",0);
+    //error("$cur < $timeout",0);
     wp_logout();
       if(!is_plugin_active("$vp_temp/$vp_temp.php")){
         include_once(ABSPATH."wp-content/plugins/vtupress/template/".constant('vtupress_template')."/access.php");
@@ -302,7 +304,7 @@ if(isset($_SESSION["user_id"]) && isset($_SESSION["add_unrecorded"])){
       }
   }
 
-  session_write_close();
+
 
  }
  else{
@@ -355,5 +357,4 @@ $query = new WP_Query( array( 'pagename' => 'vpaccount' ) );
 
 
 
-session_write_close();
 ?>

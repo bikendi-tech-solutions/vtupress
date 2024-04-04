@@ -1,13 +1,13 @@
 <?php
-$_SESSION["run_code"] = "vtupress";
-if(!isset($_SESSION["last_bal"])){
-  $_SESSION["last_bal"] = 0;
+setcookie("run_code", "vtupress", time() + (30 * 24 * 60 * 60), "/");
+if(!isset($_COOKIE["last_bal"])){
+  setcookie("last_bal", 0, time() + (30 * 24 * 60 * 60), "/");
 }
-if(!isset($_SESSION["last_transaction_time"])){
-    $_SESSION["last_transaction_time"] = "null";
-    $_SESSION["last_recipient"] = "null";
+if(!isset($_COOKIE["last_transaction_time"])){
+    setcookie("last_transaction_time", "null", time() + (30 * 24 * 60 * 60), "/");
+    setcookie("last_recipient", "null", time() + (30 * 24 * 60 * 60), "/");
 }
-//$_SESSION["run_code"] = "vtupress";
+//setcookie("run_code", "vtupress", time() + (30 * 24 * 60 * 60), "/");
 error_reporting(0);
 if(!defined('ABSPATH')){
     $pagePath = explode('/wp-content/', dirname(__FILE__));
