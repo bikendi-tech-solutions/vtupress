@@ -44,6 +44,7 @@ if(!defined('ABSPATH')){
 if(WP_DEBUG == false){
 error_reporting(0);	
 }
+
 include_once(ABSPATH ."wp-load.php");
 include_once(ABSPATH .'wp-content/plugins/vtupress/functions.php');
 include_once(ABSPATH .'wp-admin/includes/plugin.php');
