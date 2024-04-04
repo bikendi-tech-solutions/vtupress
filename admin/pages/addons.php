@@ -158,7 +158,7 @@ $version = $path["Version"];
 		
 		foreach($file as $key => $value){
 			
-	if(!is_vp_plugin_installed($value['slug'])){
+
 /*				$installed = true;
 			$path = ABSPATH."/wp-content/plugins/".$value["slug"];
 			$path = get_plugin_data($path);
@@ -176,13 +176,23 @@ $version = $path["Version"];
             <td><?php echo $value['version'];?></td>
             <td><a href="<?php echo $value['documentation'];?>">Link</a> </td>
             <td>
-
+<?php
+	if(!is_vp_plugin_installed($value['slug'])){
+    ?>
 				<form targert="_self" method="post" class="do_this<?php echo $key;?>">
 				<input type="text" class="btn btn-danger install visually-hidden link<?php echo $key;?>" value="<?php echo $value['plugin_link'];?>" name="link">
 				<input type="text" class="btn btn-danger install visually-hidden slug<?php echo $key;?>" value="<?php echo $value['slug'];?>" name="slug">
 				<input type="button" class="btn btn-danger install vpaction<?php echo $key;?>" value="Install" name="vpaction">
 				</form>
-        
+  <?php
+    }
+    else{
+      ?>
+				<input type="button" class="btn btn-primary" value="Installed">
+
+      <?php
+    }
+  ?>  
             </td>		
 					<script>
 jQuery(document).ready(function(){jQuery("#cover-spin").hide()});
@@ -319,7 +329,7 @@ jQuery.ajax({
 		
 
 <?php
-		}
+	
   }
 		?>
 		</tbody>		
