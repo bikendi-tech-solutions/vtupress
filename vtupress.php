@@ -10,7 +10,7 @@
 *Plugin Name: VTU Press
 *Plugin URI: http://vtupress.com
 *Description: This is the very first <b>VTU plugin</b>. It's VTU services are all Automated with wonderful features
-*Version: 5.9.6
+*Version: 5.9.8
 *Author: Akor Victor
 *Author URI: https://facebook.com/vtupressceo
 *License:      GPL3
@@ -45,11 +45,16 @@ if(WP_DEBUG == false){
 error_reporting(0);	
 }
 
+
 include_once(ABSPATH ."wp-load.php");
 include_once(ABSPATH .'wp-content/plugins/vtupress/functions.php');
 include_once(ABSPATH .'wp-admin/includes/plugin.php');
 require_once(ABSPATH.'wp-admin/includes/upgrade.php');
 add_action('wp_head','vtupress_user_update');
+
+global $current_timestamp;
+$current_timestamp = current_time('timestamp');
+
 
 //add_shortcode( 'vtupress', 'vtupress_func' );
 add_shortcode( 'vtupress_airtime', 'vtupress_airtime' );
@@ -65,6 +70,8 @@ include_once('actions.php');
 include_once('vpcustom.php');
 include_once('vpuser.php');
 
+
+error_log(date('Y-m-d h:i:s A',$current_timestamp));
 
 function vtupress_user_update(){
 ob_start();
@@ -318,8 +325,11 @@ vp_addoption('hollatagservices','');
 
 add_option("vtupress_options2","0");
 
-$update_vtupress_options = 36;
+$update_vtupress_options = 40;
 if(get_option("vtupress_options2") != $update_vtupress_options){
+
+  update_option('timezone_string',"Africa/Lagos");
+  update_option('start_of_week',0);
 
   vtupress_verification();
 
