@@ -18,11 +18,12 @@ function shell_exec_enabled() {
 }
 
 function removeCronJob($path) {
+  //  error_log($path,0);
     if (empty($path) || !file_exists($path)) {
         return false;
     }
 
-    
+
     if (!shell_exec_enabled()) {
         return "no_shell"; // Shell exec not enabled
     }

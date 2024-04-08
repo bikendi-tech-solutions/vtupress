@@ -158,7 +158,7 @@ if($mode == "default"){
     $path = vp_query_registry($key,$name,$for); 
 
     if(preg_match("/\//",$path)){
-        $path .= ABSPATH.$path;
+        $path = ABSPATH.$path;
     }
 # $path = ABSPATH."wp-content/plugins/vtupress/crons/provider/ibro.php";
 
