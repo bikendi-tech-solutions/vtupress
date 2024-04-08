@@ -157,6 +157,9 @@ if($mode == "default"){
 
     $path = vp_query_registry($key,$name,$for); 
 
+    if(preg_match("/\//",$path)){
+        $path .= ABSPATH.$path;
+    }
 # $path = ABSPATH."wp-content/plugins/vtupress/crons/provider/ibro.php";
 
 }elseif($mode == "custom"){
@@ -178,7 +181,7 @@ return $path;
 }
 
 
-$registry_version = 4;
+$registry_version = 5;
 if(vp_getoption("registry_version") != $registry_version){
     global $wpdb;
 $stable_name = $wpdb->prefix.'vtupress_registry';
@@ -195,7 +198,7 @@ dbDelta($sql);
 
 //install ibrolinks default value
 $value = [
-    "path" => ABSPATH."wp-content/plugins/vtupress/crons/provider/ibro.php"
+    "path" => "wp-content/plugins/vtupress/crons/provider/ibro.php"
 ];
 vp_insert_registry("cron","ibro",$value);
 
