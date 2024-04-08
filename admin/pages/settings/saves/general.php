@@ -57,6 +57,13 @@ elseif(strtolower($spray_code) != "false"){
 if(isset($_POST["fset"])){
 
 
+    if(vp_getoption("vtupress_custom_ibrolinks_profit") == "yes"){
+
+        vp_updateoption("ibrolinks_profit", trim($_POST["ibrolinks_profit"]));
+
+    }
+
+
     vp_updateoption("vpdebug", trim($_POST["vpdebug"]));
     vp_updateoption("spraycode", $spray_code);
     if(vp_getoption("vp_security") == "yes"){

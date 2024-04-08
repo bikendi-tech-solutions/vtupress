@@ -10,7 +10,7 @@
 *Plugin Name: VTU Press
 *Plugin URI: http://vtupress.com
 *Description: This is the very first <b>VTU plugin</b>. It's VTU services are all Automated with wonderful features
-*Version: 6.0.0
+*Version: 6.0.1
 *Author: Akor Victor
 *Author URI: https://facebook.com/vtupressceo
 *License:      GPL3
@@ -63,6 +63,7 @@ add_shortcode( 'vtupress_bet', 'vtupress_bet' );
 
 do_action("vtupressmain");
 include_once('database.php');
+include_once('registry/function.php');
 include_once('vtusettings.php');
 include_once('vtupressaction.php');
 include_once('transaction.php');
@@ -70,6 +71,7 @@ include_once('actions.php');
 include_once('vpcustom.php');
 include_once('vpuser.php');
 
+//error_log(print_r($_SERVER,true),0);
 
 //error_log(date('Y-m-d h:i:s A',$current_timestamp));
 
@@ -214,7 +216,10 @@ add_action('init', 'vp_redirect_core', 50);
 add_action('wp_loaded', 'vp_redirect_core', 50);
 function vp_redirect_core(){
   if (!is_ssl()) {
+
+    if(isset($_SERVER['HTTP_HOST'])){
     wp_redirect('https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'], 301);
+    }
 
   }
 }
@@ -226,7 +231,7 @@ function vp_redirect_core(){
 	
 
 	
-
+if(isset($_SERVER['HTTP_HOST'])){
 
 if(vp_getoption("vp_security") == "yes" && vp_getoption("secur_mod") != "off" && !is_admin() &&  stripos($_SERVER["SCRIPT_NAME"],"system.php") === false &&  stripos($_SERVER["SCRIPT_NAME"],"vend.php") === false &&  stripos($_SERVER["SCRIPT_NAME"],"saveauth.php") === false && stripos($_SERVER["SCRIPT_NAME"],"index.php") === false &&  stripos($_SERVER["SCRIPT_NAME"],"index.php") === false &&  stripos($_SERVER["SCRIPT_NAME"],"vpsystem.php") === false){
 
@@ -293,8 +298,7 @@ if(isset($details->country)){
 
 }
 
-
-
+}
 
 vp_addoption('allow_card_method','yes');
 vp_addoption('cron_successful','0');

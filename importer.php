@@ -624,30 +624,6 @@ foreach($json as $key => $value){
 		case"smeinfo":
 				vp_updateoption("sme_info","$value");
 		break;
-			case"smeadd1":
-		foreach($value as $key2 => $value2){
-				vp_updateoption("smeaddheaders1","$key2");
-				vp_updateoption("smeaddvalue1","$value2");
-		}
-		break;
-		case"smeadd2":
-		foreach($value as $key2 => $value2){
-				vp_updateoption("smeaddheaders2","$key2");
-				vp_updateoption("smeaddvalue2","$value2");
-		}
-		break;
-		case"smeadd3":
-		foreach($value as $key2 => $value2){
-				vp_updateoption("smeaddheaders3","$key2");
-				vp_updateoption("smeaddvalue3","$value2");
-		}
-		break;
-		case"smeadd4":
-		foreach($value as $key2 => $value2){
-				vp_updateoption("smeaddheaders4","$key2");
-				vp_updateoption("smeaddvalue4","$value2");
-		}
-		break;
 		case"baseurl":
 		vp_updateoption("databaseurl","$value");
 		break;
@@ -1423,25 +1399,25 @@ foreach($json as $key => $value){
 		case"directinfo":
 				vp_updateoption("direct_info","$value");
 		break;
-				case"directadd1":
+				case"vtuadd1":
 		foreach($value as $key2 => $value2){
 				vp_updateoption("directaddheaders1","$key2");
 				vp_updateoption("directaddvalue1","$value2");
 		}
 		break;
-		case"directadd2":
+		case"vtuadd2":
 		foreach($value as $key2 => $value2){
 				vp_updateoption("directaddheaders2","$key2");
 				vp_updateoption("directaddvalue2","$value2");
 		}
 		break;
-		case"directadd3":
+		case"vtuadd3":
 		foreach($value as $key2 => $value2){
 				vp_updateoption("directaddheaders3","$key2");
 				vp_updateoption("directaddvalue3","$value2");
 		}
 		break;
-		case"directadd4":
+		case"vtuadd4":
 		foreach($value as $key2 => $value2){
 				vp_updateoption("directaddheaders4","$key2");
 				vp_updateoption("directaddvalue4","$value2");
@@ -1625,7 +1601,16 @@ foreach($json as $key => $value){
 				vp_updateoption("corporateaddendpoint",$query[2]);
 		}
 		break;
-		case"vtuadd1":
+		case"altcode":
+				vp_updateoption("r2datasuccessvalue2","$value");
+		break;
+		case"corporatevisible":
+				vp_updateoption("corporate_visible_networks","$value");
+		break;
+		case"corporateinfo":
+				vp_updateoption("corporate_info","$value");
+		break;
+			case"vtuadd1":
 		foreach($value as $key2 => $value2){
 				vp_updateoption("corporateaddheaders1","$key2");
 				vp_updateoption("corporateaddvalue1","$value2");
@@ -1644,39 +1629,6 @@ foreach($json as $key => $value){
 		}
 		break;
 		case"vtuadd4":
-		foreach($value as $key2 => $value2){
-				vp_updateoption("corporateaddheaders4","$key2");
-				vp_updateoption("corporateaddvalue4","$value2");
-		}
-		break;
-		case"altcode":
-				vp_updateoption("r2datasuccessvalue2","$value");
-		break;
-		case"corporatevisible":
-				vp_updateoption("corporate_visible_networks","$value");
-		break;
-		case"corporateinfo":
-				vp_updateoption("corporate_info","$value");
-		break;
-			case"corporateadd1":
-		foreach($value as $key2 => $value2){
-				vp_updateoption("corporateaddheaders1","$key2");
-				vp_updateoption("corporateaddvalue1","$value2");
-		}
-		break;
-		case"corporateadd2":
-		foreach($value as $key2 => $value2){
-				vp_updateoption("corporateaddheaders2","$key2");
-				vp_updateoption("corporateaddvalue2","$value2");
-		}
-		break;
-		case"corporateadd3":
-		foreach($value as $key2 => $value2){
-				vp_updateoption("corporateaddheaders3","$key2");
-				vp_updateoption("corporateaddvalue3","$value2");
-		}
-		break;
-		case"corporateadd4":
 		foreach($value as $key2 => $value2){
 				vp_updateoption("corporateaddheaders4","$key2");
 				vp_updateoption("corporateaddvalue4","$value2");
@@ -1867,25 +1819,25 @@ foreach($json as $key => $value){
 		case"cableinfo":
 				vp_updateoption("cable_info","$value");
 		break;		
-	case"cableadd1":
+	case"vtuadd1":
 		foreach($value as $key2 => $value2){
 				vp_updateoption("cableaddheaders1","$key2");
 				vp_updateoption("cableaddvalue1","$value2");
 		}
 		break;
-		case"cableadd2":
+		case"vtuadd2":
 		foreach($value as $key2 => $value2){
 				vp_updateoption("cableaddheaders2","$key2");
 				vp_updateoption("cableaddvalue2","$value2");
 		}
 		break;
-		case"cableadd3":
+		case"vtuadd3":
 		foreach($value as $key2 => $value2){
 				vp_updateoption("cableaddheaders3","$key2");
 				vp_updateoption("cableaddvalue3","$value2");
 		}
 		break;
-		case"cableadd4":
+		case"vtuadd4":
 		foreach($value as $key2 => $value2){
 				vp_updateoption("cableaddheaders4","$key2");
 				vp_updateoption("cableaddvalue4","$value2");
@@ -2047,25 +1999,25 @@ foreach($json as $key => $value){
 		case"tokenattr":
 				vp_updateoption("metertoken","$value");
 		break;
-			case"billadd1":
+			case"vtuadd1":
 		foreach($value as $key2 => $value2){
 				vp_updateoption("billaddheaders1","$key2");
 				vp_updateoption("billaddvalue1","$value2");
 		}
 		break;
-		case"billadd2":
+		case"vtuadd2":
 		foreach($value as $key2 => $value2){
 				vp_updateoption("billaddheaders2","$key2");
 				vp_updateoption("billaddvalue2","$value2");
 		}
 		break;
-		case"billadd3":
+		case"vtuadd3":
 		foreach($value as $key2 => $value2){
 				vp_updateoption("billaddheaders3","$key2");
 				vp_updateoption("billaddvalue3","$value2");
 		}
 		break;
-		case"billadd4":
+		case"vtuadd4":
 		foreach($value as $key2 => $value2){
 				vp_updateoption("billaddheaders4","$key2");
 				vp_updateoption("billaddvalue4","$value2");

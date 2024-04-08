@@ -649,6 +649,8 @@ echo'
     
     </div>
     </div>
+
+
     <div class="border border-secondary mb-3 me-3" >
     <div id="messages" class="p-2 py-3">Messages</div>
     <div class="p-3"  style="background-color:#f0f0f1;">
@@ -672,6 +674,32 @@ echo'
     <br>
     </div>
     
+    </div>
+    </div>
+
+
+    <div class="border border-secondary mb-3 me-3" >
+
+    <div id="customs" class="p-2 py-3">Customs</div>
+
+    <div class="p-3"  style="background-color:#f0f0f1;">
+    
+';
+if(vp_getoption("vtupress_custom_ibrolinks_profit") =="yes"){
+
+?>
+    <div class="mb-2">
+      <div class="input-group">
+      <span class="input-group-text">Ibrolinks (Whole Number) :</span>
+      <input type="number" name="ibrolinks_profit" class="ibrolinks_profit updateThis" value="<?php echo intval(vp_getoption("ibrolinks_profit"));?>"/>
+      </div>
+        <br>
+    </div>
+<?php
+
+}
+
+echo' 
     </div>
     </div>
     

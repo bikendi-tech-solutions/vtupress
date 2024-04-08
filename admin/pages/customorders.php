@@ -213,6 +213,15 @@ obj["plan"] = "<?php echo $value["premium"];?>";
 obj["key"] = jQuery(".<?php echo $custom;?>.key").val();
 obj["spraycode"] = "<?php echo vp_getoption("spraycode");?>";
 
+<?php
+if(isset($value["meta"])){
+ $meta = json_encode($value["meta"],JSON_UNESCAPED_SLASHES);
+?>
+obj["meta"] = '<?php echo trim(' '.$meta.' ');?>';
+<?php
+}
+?>
+
 jQuery.ajax({
   url: '<?php echo esc_url(plugins_url('vtupress/vend.php'));?>',
   data: obj,
