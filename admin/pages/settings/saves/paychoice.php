@@ -44,7 +44,7 @@ if(isset($_POST['updatefl'])){
     vp_updateoption('squad_admin_ln', $_POST['squad_admin_ln']);
     vp_updateoption('squad_admin_dob', $_POST['squad_admin_dob']);
     vp_updateoption('squad_admin_bvn', $_POST['squad_admin_bvn']);
-    
+
   //  if(is_plugin_active("vtupress4squadco/vtupress4squadco.php")){
 
     vp_updateoption('vpay_public', $_POST['vpay_public']);
@@ -81,6 +81,7 @@ if(isset($_POST['updatefl'])){
       vp_updateoption('ncwallet_pin', $_POST['ncwallet_pin']);
       vp_updateoption('ncwallet_charge_method', $_POST['ncwallet_charge_method']);
       vp_updateoption('ncwallet_charge_back', $_POST['ncwallet_charge_back']);
+      vp_updateoption('ncwallet_admin_bvn', $_POST['ncwallet_admin_bvn']);
       vp_updateoption('enable_ncwallet', $_POST['enable_ncwallet']);
 
    }

@@ -539,6 +539,7 @@ vp_updateuser($userid,"vpayAccountName",$customer_firstN);
 
                 $gateways = "NCWALLET & ";
                 $total = 0;
+                $admin_bvn = strtolower(vp_getoption("ncwallet_admin_bvn"));
                 foreach($hid as $hd){
                     if(!empty($hd)){
                         $userid = $hd;
@@ -546,7 +547,7 @@ vp_updateuser($userid,"vpayAccountName",$customer_firstN);
                         $bvn = vp_getuser($userid,"myBvn",true);
                         $nin = vp_getuser($userid,"myNin",true);
     
-                        if(($bvn == 'false' && $nin == 'false') || (empty($bvn) && empty($nin)) || (mb_strlen($bvn) < 10 ) ){
+                        if((($bvn == 'false' && $nin == 'false') || (empty($bvn) && empty($nin)) || (mb_strlen($bvn) < 10 )) && (empty($admin_bvn)  || $admin_bvn == "false")  ){
                             continue;
                         }else{
                             $total += 1; 
@@ -561,6 +562,7 @@ vp_updateuser($userid,"vpayAccountName",$customer_firstN);
                         $pin = vp_getoption("ncwallet_pin");
 
 
+                if(empty($admin_bvn) || $admin_bvn == "false"){
                     $payload =  [
                         "account_name" => $fun." ".$lun,
                         "bank_code" => "safehaven",
@@ -570,6 +572,17 @@ vp_updateuser($userid,"vpayAccountName",$customer_firstN);
                         "phone_number" => $phone
 
                     ];
+                }else{
+                    $payload =  [
+                        "account_name" => $fun." ".$lun,
+                        "bank_code" => "safehaven",
+                        "account_type" => "static",
+                        "email" => $email,
+                        "bvn" => $admin_bvn,
+                        "phone_number" => $phone
+
+                    ];   
+                }
 
 
                 $url = "https://ncwallet.africa/api/v1/bank/create";
@@ -654,6 +667,10 @@ vp_updateuser($userid,"vpayAccountName",$customer_firstN);
             if(vp_getoption('enablesquadco') == "yes"  && vp_getoption("vtupress_custom_gtbank") == "yes"){
                 $gateways = "SQUADCO & ";
                 $total = 0;
+                $admin_bvn = strtolower(vp_getoption("squad_admin_bvn"));
+                $admin_fn = vp_getoption("squad_admin_fn");
+                $admin_ln = vp_getoption("squad_admin_ln");
+                $admin_dob = vp_getoption("squad_admin_dob");
                 foreach($hid as $hd){
                     if(!empty($hd)){
                         $userid = $hd;
@@ -662,7 +679,7 @@ vp_updateuser($userid,"vpayAccountName",$customer_firstN);
                     $bvn = vp_getuser($userid,"myBvn",true);
                     $nin = vp_getuser($userid,"myNin",true);
 
-                    if(($bvn == 'false' && $nin == 'false') || (empty($bvn) && empty($nin)) || (mb_strlen($bvn) < 10 /*&& mb_strlen($nin) < 10*/) || empty(vp_getoption("squad_admin_bvn"))){
+                    if((($bvn == 'false' && $nin == 'false') || (empty($bvn) && empty($nin)) || (mb_strlen($bvn) < 10 /*&& mb_strlen($nin) < 10*/)) && (empty($admin_bvn) || $admin_bvn == "false")){
                         continue;
                     }else{
                         $total += 1; 
@@ -692,28 +709,28 @@ vp_updateuser($userid,"vpayAccountName",$customer_firstN);
                     $customer_phone = $num;
                     $customer_email = $email;
 
-            if(empty(vp_getoption("squad_admin_bvn"))){
+            if(empty($admin_bvn) || $admin_bvn == "false"){
                     $payload =  [
                         "first_name" => $customer_firstN,
                         "customer_identifier" => $ref,
                         "last_name" => $customer_lastN,
                         "mobile_num" => $customer_phone,
                         "email" => $customer_email,
-                        "bvn" => "22144339466",
-                        "dob" => "07/11/1981",
-                        "address" => "here",
+                        "bvn" => "$bvn",
+                        "dob" => "",
+                        "address" => "",
                         "gender" => "1"
 
                     ];
             }else{
                 $payload =  [
-                    "first_name" => vp_getoption("squad_admin_fn"),
+                    "first_name" => $admin_fn,
                     "customer_identifier" => $ref,
-                    "last_name" => vp_getoption("squad_admin_ln"),
+                    "last_name" => $admin_ln,
                     "mobile_num" => $customer_phone,
                     "email" => $customer_email,
-                    "bvn" => vp_getoption("squad_admin_bvn"),
-                    "dob" => vp_getoption("squad_admin_dob"),
+                    "bvn" => $admin_bvn,
+                    "dob" => $admin_dob,
                     "address" => "here",
                     "gender" => "1"
 

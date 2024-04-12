@@ -100,6 +100,15 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
     <input type='text' class='form-control' name='ncwallet_pin' value='".vp_getoption('ncwallet_pin')."'><br>
 
 
+    <div class='my-2'>
+    
+    <code>Enter your bvn here to use your bvn to generate an account number. Note: unlike squadco, it doesnt use your name or details to generate account number. bvn is just mandated. Ignoring will enforce your users to do KYC before they can generate an account number</code>
+    <label>Your BVN:</label>
+    <input type='text' class='form-control ncwallet_admin_bvn' name='ncwallet_admin_bvn'  value='".intval(vp_getoption('ncwallet_admin_bvn'))."'/>
+
+    </div>
+
+
     <div class='input-group  mb-2'>
       <span class='input-group-text' id='basic-addon1'>Wallet Funding Charge</span>
       <select name='ncwallet_charge_method' class='form-control ncwallet_charge_method '>
@@ -109,6 +118,8 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
       </select>
       <input class='form-control ncwallet_charge_back ' name='ncwallet_charge_back' value='".floatval(vp_getoption('ncwallet_charge_back'))."'>
     </div>
+    
+
 
     <br>
     <label for='enable_ncwallet'>Enable Ncwallet: </label> <br>
