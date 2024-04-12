@@ -57,12 +57,120 @@ if(!isset($_POST["for"])){
 $for = $_POST["for"];
 
 switch($for){
+    case"ncwallet":
+
+        if(vp_getoption('enable_ncwallet') == "yes"){
+    
+            $apikey = vp_getoption("ncwallet_apikey");
+            $pin = vp_getoption("ncwallet_pin");
+            $hd = $id;
+                    if(!empty($hd)){
+                        $userid = $hd;
+                    
+                        $bvn = trim(vp_getuser($userid,"myBvn",true));
+                        $nin = trim(vp_getuser($userid,"myNin",true));
+                        $phone = vp_getuser($userid, "vp_phone",true);
+
+    
+                        if(($bvn == 'false' && $nin == 'false') || (empty($bvn) && empty($nin)) || (mb_strlen($bvn) < 10 && mb_strlen($nin) < 10 )){
+                            die("BVN / NIN KYC VERIFICATION IS NECESSARY");
+                        }else{
+                        
+                        }
+    
+                       $username = get_userdata($hd)->user_login;
+                       $email = get_userdata($hd)->user_email;
+                       $fun = vp_getuser($hd,"first_name",true);
+                       $lun = vp_getuser($hd,"last_name",true);
+
+                            
+    
+                       $payload =  [
+                        "account_name" => $fun." ".$lun,
+                        "bank_code" => "safehaven",
+                        "account_type" => "static",
+                        "email" => $email,
+                        "bvn" => $bvn,
+                        "phone_number" => $phone
+
+                    ];
+
+
+                $url = "https://ncwallet.africa/api/v1/bank/create";
+
+
+
+                $curl = curl_init();
+
+                curl_setopt_array($curl, [
+                CURLOPT_URL =>  $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS =>json_encode($payload),
+                CURLOPT_HTTPHEADER => [
+                    "Authorization: $token",
+                    "trnx_pin: $pin",
+                    "Accept: application/json",
+                    "Content-Type: application/json"
+                ],
+                ]);
+
+                $res = curl_exec($curl);
+                $response = json_decode($res,true); 
+                $err = curl_error($curl);
+
+                curl_close($curl);
+
+                if ($err) {
+
+                $return_account = new stdClass;
+                $return_account->status = 'failed';
+                $return_account->message = $err;
+
+                $msg = json_encode($return_account);
+                error_log($msg);
+                die($msg);
+
+                } else {
+
+                        if(!isset($response["status"])){
+                            die($res);
+                        }
+
+                        if($response["status"] != "success"){
+                            die($res);
+                        }
+
+
+                    vp_updateuser($hd,"ncwallet_accountnumber",$response["data"]["account_number"]);
+                    vp_updateuser($hd,"ncwallet_accountname",$response["data"]["account_name"]);
+
+
+                }
+
+
+
+
+                        }else{
+                            die("PLEASE LOGIN");
+                        }           
+    
+    
+                    die("100");
+        }else{
+            die("Ncwallet Africa Is Currently Not Enabled!");
+        }
+    break;
     case"monnify":
 
         if(vp_getoption('enable_monnify') == "yes"){
     
             $contract_code = vp_getoption("monnifycontractcode");
-   $hd = $id;
+            $hd = $id;
                     if(!empty($hd)){
                         $userid = $hd;
                     
@@ -379,7 +487,7 @@ switch($for){
                 $bvn = vp_getuser($userid,"myBvn",true);
                 $nin = vp_getuser($userid,"myNin",true);
 
-                if(($bvn == 'false' && $nin == 'false') || (empty($bvn) && empty($nin)) || (mb_strlen($bvn) < 10 /*&& mb_strlen($nin) < 10*/ )){
+                if(($bvn == 'false' && $nin == 'false') || (empty($bvn) && empty($nin)) || (mb_strlen($bvn) < 10 /*&& mb_strlen($nin) < 10*/ ) || empty(vp_getoption("squad_admin_bvn"))){
                     die("BVN / NIN KYC VERIFICATION IS NECESSARY");
                 }
 

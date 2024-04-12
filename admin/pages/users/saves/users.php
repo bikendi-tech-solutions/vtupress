@@ -528,6 +528,122 @@ vp_updateuser($userid,"vpayAccountName",$customer_firstN);
     }
 
         break;
+        case"mrundan_ncwallet":
+            global $wpdb;
+            $hid = explode(",", $ddid);
+
+            $gateways = "";
+        
+            if(vp_getoption('enable_ncwallet') == "yes"  && vp_getoption("vtupress_custom_ncwallet") == "yes"){
+
+
+                $gateways = "NCWALLET & ";
+                $total = 0;
+                foreach($hid as $hd){
+                    if(!empty($hd)){
+                        $userid = $hd;
+
+                        $bvn = vp_getuser($userid,"myBvn",true);
+                        $nin = vp_getuser($userid,"myNin",true);
+    
+                        if(($bvn == 'false' && $nin == 'false') || (empty($bvn) && empty($nin)) || (mb_strlen($bvn) < 10 ) ){
+                            continue;
+                        }else{
+                            $total += 1; 
+                        }
+
+                        $username = get_userdata($hd)->user_login;
+                        $email = get_userdata($hd)->user_email;
+                        $fun = vp_getuser($hd,"first_name",true);
+                        $lun = vp_getuser($hd,"last_name",true);
+                        $phone = vp_getuser($hd, "vp_phone",true);
+                        $token = vp_getoption("ncwallet_apikey");
+                        $pin = vp_getoption("ncwallet_pin");
+
+
+                    $payload =  [
+                        "account_name" => $fun." ".$lun,
+                        "bank_code" => "safehaven",
+                        "account_type" => "static",
+                        "email" => $email,
+                        "bvn" => $bvn,
+                        "phone_number" => $phone
+
+                    ];
+
+
+                $url = "https://ncwallet.africa/api/v1/bank/create";
+
+
+
+                $curl = curl_init();
+
+                curl_setopt_array($curl, [
+                CURLOPT_URL =>  $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS =>json_encode($payload),
+                CURLOPT_HTTPHEADER => [
+                    "Authorization: $token",
+                    "trnx_pin: $pin",
+                    "Accept: application/json",
+                    "Content-Type: application/json"
+                ],
+                ]);
+
+                $res = curl_exec($curl);
+                $response = json_decode($res,true); 
+                $err = curl_error($curl);
+
+                curl_close($curl);
+
+                if ($err) {
+
+                $return_account = new stdClass;
+                $return_account->status = 'failed';
+                $return_account->message = $err;
+
+                $msg = json_encode($return_account);
+                error_log($msg);
+                die($msg);
+
+                } else {
+
+                        if(!isset($response["status"])){
+                            die($res);
+                        }
+
+                        if($response["status"] != "success"){
+                            die($res);
+                        }
+
+
+                    vp_updateuser($hd,"ncwallet_accountnumber",$response["data"]["account_number"]);
+                    vp_updateuser($hd,"ncwallet_accountname",$response["data"]["account_name"]);
+
+
+                }
+
+
+
+
+
+                    }
+                }
+
+                die("100");
+
+            }
+            else{
+                die("Please enable ncwallet");
+            }
+
+
+        break;
         case"mrundan_squadco":
             global $wpdb;
             $hid = explode(",", $ddid);
@@ -546,7 +662,7 @@ vp_updateuser($userid,"vpayAccountName",$customer_firstN);
                     $bvn = vp_getuser($userid,"myBvn",true);
                     $nin = vp_getuser($userid,"myNin",true);
 
-                    if(($bvn == 'false' && $nin == 'false') || (empty($bvn) && empty($nin)) || (mb_strlen($bvn) < 10 /*&& mb_strlen($nin) < 10*/) ){
+                    if(($bvn == 'false' && $nin == 'false') || (empty($bvn) && empty($nin)) || (mb_strlen($bvn) < 10 /*&& mb_strlen($nin) < 10*/) || empty(vp_getoption("squad_admin_bvn"))){
                         continue;
                     }else{
                         $total += 1; 
@@ -559,35 +675,50 @@ vp_updateuser($userid,"vpayAccountName",$customer_firstN);
                        $lun = vp_getuser($hd,"last_name",true);
 
 
-$token = vp_getoption("squad_secret");
+                    $token = vp_getoption("squad_secret");
 
 
 
 
-$unid = uniqid();
-$genemail = create_email();
-$num = "0".rand(7,9)."0".rand(11111111,99999999);
+                    $unid = uniqid();
+                    $genemail = create_email();
+                    $num = "0".rand(7,9)."0".rand(11111111,99999999);
 
-$sub = uniqid();
+                    $sub = uniqid();
 
-$customer_firstN = $fun;
-$customer_lastN = $lun;
-$ref = uniqid();
-$customer_phone = $num;
-$customer_email = $email;
+                    $customer_firstN = $fun;
+                    $customer_lastN = $lun;
+                    $ref = uniqid();
+                    $customer_phone = $num;
+                    $customer_email = $email;
 
-$payload =  [
-    "first_name" => $customer_firstN,
-    "customer_identifier" => $ref,
-    "last_name" => $customer_lastN,
-    "mobile_num" => $customer_phone,
-    "email" => $customer_email,
-    "bvn" => "22144339466",
-    "dob" => "07/11/1981",
-    "address" => "here",
-    "gender" => "1"
+            if(empty(vp_getoption("squad_admin_bvn"))){
+                    $payload =  [
+                        "first_name" => $customer_firstN,
+                        "customer_identifier" => $ref,
+                        "last_name" => $customer_lastN,
+                        "mobile_num" => $customer_phone,
+                        "email" => $customer_email,
+                        "bvn" => "22144339466",
+                        "dob" => "07/11/1981",
+                        "address" => "here",
+                        "gender" => "1"
 
-];
+                    ];
+            }else{
+                $payload =  [
+                    "first_name" => vp_getoption("squad_admin_fn"),
+                    "customer_identifier" => $ref,
+                    "last_name" => vp_getoption("squad_admin_ln"),
+                    "mobile_num" => $customer_phone,
+                    "email" => $customer_email,
+                    "bvn" => vp_getoption("squad_admin_bvn"),
+                    "dob" => vp_getoption("squad_admin_dob"),
+                    "address" => "here",
+                    "gender" => "1"
+
+                ];
+            }
 
 //
 // "beneficiary_account" => "0451037627",
@@ -671,6 +802,8 @@ vp_updateuser($userid,"squadAccountName",$customer_firstN);
                 }
 
                 $did = "yes";
+
+                die("100");
 
             }else{
                 die("Please enable squadco");

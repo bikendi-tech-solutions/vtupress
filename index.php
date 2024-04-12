@@ -28,6 +28,23 @@ function harray_key_first($arr) {
 }
 
 
+
+if (!function_exists('getallheaders')){
+    function getallheaders()
+    {
+           $headers = [];
+       foreach ($_SERVER as $name => $value)
+       {
+           if (substr($name, 0, 5) == 'HTTP_')
+           {
+               $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+           }
+       }
+       return $headers;
+    }
+}
+
+
 function convertArrayKeysToLowerCase($array) {
     $result = array();
     
@@ -69,26 +86,54 @@ function computeSHA512TransactionHash($stringifiedData, $clientSecret) {
     return $computedHash;
   }
 
-    
-if(isset($event->eventType) && $event->eventType == "SUCCESSFUL_TRANSACTION" ){
+if(isset($event->event_type) ){
 
-
-
-
-if (!function_exists('getallheaders')){
-    function getallheaders()
-    {
-           $headers = [];
-       foreach ($_SERVER as $name => $value)
-       {
-           if (substr($name, 0, 5) == 'HTTP_')
-           {
-               $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
-           }
-       }
-       return $headers;
+    if(strtoupper($event->event_type) != "COLLECTION"){
+        die("Not a successful tranaction - Ncwallet / Safehaven");
     }
+
+    if(function_exists('getallheaders')){
+
+        if(isset(getallheaders()["api-key"])){
+            $signature = getallheaders()["api-key"];
+        }
+        elseif(isset(getallheaders()["api-key"])){
+
+            $signature = getallheaders()["api-key"];
+        }
+        else{
+        die("No Signature From Ncwallet");
+        }
+
+    }else{
+        die("getallheaders() Not Running On Your Server. Contact US");  
+    }
+
+    $apikey = vp_getoption("ncwallet_apikey");
+    $hashed = computeSHA512TransactionHash($input, $apikey);
+    if($hashed != $signature){
+        die("Signature Mismatch - Ncwallet Africa");
+    }
+
+    $userID = get_user_by("email",$array["email"])->ID;
+    $userData = get_userdata($userID);
+
+    $amount = $array["amount"];
+    $processor = "ncwallet";    
+    $session_id = $array["session_id"];
+    $email =  $userData->user_email;
+    $user_data = $userData;
+    $userid = $userID;
+    $ref = $session_id;
+    $total_amount = $amount;
+
+} 
+elseif(isset($event->eventType) && isset($event->settled_amount)){
+if($event->eventType != "SUCCESSFUL_TRANSACTION" ){
+    die("Not a successful transaction - Monnify");
 }
+
+
 
 
     if(function_exists('getallheaders')){
@@ -486,6 +531,16 @@ switch(strtolower($processor)){
     case"squadco":
         $charge = floatval(vp_getoption("gtb_charge_back"));
         if(vp_getoption("gtb_charge_method") == "fixed"){
+            $minus = $total_amount - $charge;
+            }
+            else{
+            $remove = ($total_amount *  $charge) / 100;
+            $minus = $total_amount - $remove ;
+            }
+    break;
+    case"ncwallet":
+        $charge = floatval(vp_getoption("ncwallet_charge_back"));
+        if(vp_getoption("ncwallet_charge_method") == "fixed"){
             $minus = $total_amount - $charge;
             }
             else{

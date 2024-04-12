@@ -21,10 +21,17 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
     <div class='mb-3'>
     <label>Select Payment Gateway</label>
     <select name='paychoice' class='form-select payment-opt' >
-    <option value='paystack'>PayStack</option>
-    <option value='monnify'>Monnify</option>
+      <option value='paystack'>PayStack</option>
+      <option value='monnify'>Monnify</option>
 
     ";
+
+    
+    if(vp_getoption("vtupress_custom_ncwallet") == "yes"){
+      echo"
+      <option value='ncwallet'>Ncwallet Africa</option>";
+    }
+
 
     if(vp_getoption("vtupress_custom_gtbank") == "yes"){
       echo"
@@ -85,6 +92,34 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
     </div>
 </div>
 
+<div class='ncwallet'>
+    <div class='mb-3'>
+    <label for='ppublickey' class='form-label'>Ncwallet Public Key.</label><br>
+    <input type='text' class='form-control' name='ncwallet_apikey' value='".vp_getoption('ncwallet_apikey')."'><br>
+    <label for='secretkey'>Ncwallet Trnx Pin.</label><br>
+    <input type='text' class='form-control' name='ncwallet_pin' value='".vp_getoption('ncwallet_pin')."'><br>
+
+
+    <div class='input-group  mb-2'>
+      <span class='input-group-text' id='basic-addon1'>Wallet Funding Charge</span>
+      <select name='ncwallet_charge_method' class='form-control ncwallet_charge_method '>
+      <option value='".vp_getoption('ncwallet_charge_method')."'>".vp_getoption('ncwallet_charge_method')."</option>
+      <option value='percentage'>Percentage[%]</option>
+      <option value='fixed'>Fixed[NGN]</option>
+      </select>
+      <input class='form-control ncwallet_charge_back ' name='ncwallet_charge_back' value='".floatval(vp_getoption('ncwallet_charge_back'))."'>
+    </div>
+
+    <br>
+    <label for='enable_ncwallet'>Enable Ncwallet: </label> <br>
+    <select name='enable_ncwallet'>
+      <option value='".vp_getoption('enable_ncwallet')."' >".strtoupper(vp_getoption('enable_ncwallet'))."</option>
+      <option value='yes' >YES</option>
+      <option value='no' >NO</option>
+    </select>
+    </div>
+</div>
+
 
 
 
@@ -129,6 +164,28 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
     <input type='text' class='form-control' name='squadpublic'value='".vp_getoption('squad_public')."'><br>
     <label for='secretkey'>SquadCo SecretKey</label><br>
     <input type='text' class='form-control' name='squadsecret' value='".vp_getoption('squad_secret')."'><br>
+
+<div class='my-2 border'>
+(Recommended) - <code>Filling your details here would make use of your bvn to generate account number for your users without them needing to do KYC which will also contain your name but whenever your user
+makes any transfer to that account, their account will automatically be credited. Its more of less giving them your account number for manual funding
+but its all automated
+</code>
+<code class='mt-2'>You can leave the bvn empty to disable using your details to generate an account for your users</code>
+<br>
+    <label>First Name:</label>
+    <input type='text' class='form-control squad_admin_fn' name='squad_admin_fn' value='".vp_getoption('squad_admin_fn')."'>
+    <br>
+    <label>Last Name:</label>
+    <input type='text' class='form-control squad_admin_ln' name='squad_admin_ln' value='".vp_getoption('squad_admin_ln')."'>
+    <br>
+    <label>Date Of Birth:</label>
+    <input type='text' class='form-control squad_admin_dob' name='squad_admin_dob' value='".vp_getoption('squad_admin_dob')."'>
+    <code>Make sure your date of birth is in this format MM/DD/YYYY</code>
+    <br>
+    <label>Bvn:</label>
+    <input type='text' class='form-control squad_admin_bvn' name='squad_admin_bvn' value='".vp_getoption('squad_admin_bvn')."'>
+
+</div>
 
     <div class='input-group  mb-2'>
       <span class='input-group-text' id='basic-addon1'>Wallet Funding Charge</span>
@@ -257,6 +314,7 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
       jQuery(".paystack").show();
       jQuery(".squadco").hide();
       jQuery(".kuda").hide();
+      jQuery(".ncwallet").hide();
 
     }
     else if(popt == "monnify"){
@@ -264,7 +322,7 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
       jQuery(".vpay").hide();
       jQuery(".paystack").hide();
       jQuery(".kuda").hide();
-
+      jQuery(".ncwallet").hide();
       jQuery(".squadco").hide();
     }
     else if(popt == "squadco"){
@@ -273,6 +331,8 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
       jQuery(".paystack").hide();
       jQuery(".kuda").hide();
       jQuery(".squadco").show();
+      jQuery(".ncwallet").hide();
+
       
     }
     else if(popt == "kuda"){
@@ -280,6 +340,7 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
       jQuery(".monnify").hide();
       jQuery(".paystack").hide();
       jQuery(".squadco").hide();
+      jQuery(".ncwallet").hide();
       jQuery(".kuda").show();
     }
     else if(popt == "vpay"){
@@ -287,52 +348,79 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
       jQuery(".monnify").hide();
       jQuery(".paystack").hide();
       jQuery(".squadco").hide();
+      jQuery(".ncwallet").hide();
       jQuery(".kuda").hide();
+    }
+    else if(popt == "ncwallet"){
+      jQuery(".vpay").hide();
+      jQuery(".monnify").hide();
+      jQuery(".paystack").hide();
+      jQuery(".squadco").hide();
+      jQuery(".kuda").hide();
+      jQuery(".ncwallet").show();
+
     }
   
     jQuery(".payment-opt").on("change",function(){
   
       var popt = jQuery(".payment-opt").val();
       if(popt == "paystack"){
-      jQuery(".vpay").hide();
-      jQuery(".monnify").hide();
+        jQuery(".vpay").hide();
+        jQuery(".monnify").hide();
         jQuery(".paystack").show();
         jQuery(".squadco").hide();
         jQuery(".kuda").hide();
+        jQuery(".ncwallet").hide();
 
       }
       else if(popt == "monnify"){
-      jQuery(".vpay").hide();
-      jQuery(".monnify").show();
+        jQuery(".vpay").hide();
+        jQuery(".monnify").show();
         jQuery(".paystack").hide();
         jQuery(".squadco").hide();
         jQuery(".kuda").hide();
+        jQuery(".ncwallet").hide();
+
 
       }
       else if(popt == "squadco"){
-      jQuery(".vpay").hide();
-      jQuery(".monnify").hide();
+        jQuery(".vpay").hide();
+        jQuery(".monnify").hide();
         jQuery(".paystack").hide();
         jQuery(".kuda").hide();
         jQuery(".squadco").show();
+        jQuery(".ncwallet").hide();
+
   
       }
       else if(popt == "kuda"){
-        jQuery(".vpay").hide();
-        jQuery(".monnify").hide();
+          jQuery(".vpay").hide();
+          jQuery(".monnify").hide();
           jQuery(".paystack").hide();
           jQuery(".kuda").show();
           jQuery(".squadco").hide();
+          jQuery(".ncwallet").hide();
+
     
         }
       else if(popt == "vpay"){
           jQuery(".vpay").show();
           jQuery(".monnify").hide();
-            jQuery(".paystack").hide();
-            jQuery(".kuda").hide();
-            jQuery(".squadco").hide();
-    
-        }
+          jQuery(".paystack").hide();
+          jQuery(".kuda").hide();
+          jQuery(".squadco").hide();
+          jQuery(".ncwallet").hide();
+
+      }
+      else if(popt == "ncwallet"){
+          jQuery(".vpay").hide();
+          jQuery(".monnify").hide();
+          jQuery(".paystack").hide();
+          jQuery(".kuda").hide();
+          jQuery(".squadco").hide();
+          jQuery(".ncwallet").show();
+
+      }
         
     });
   

@@ -199,6 +199,11 @@ $wpdb->update($db,['vp_bal' => 0],['ID' => $users->ID]);
                       <option value="munban">Un-Ban</option>
                       <option value="mrundan_monnify">Run-Dan Monnify</option>
                       <?php
+                          if(vp_getoption("vtupress_custom_ncwallet") == "yes"){
+                            ?>
+                      <option value="mrundan_ncwallet">Run-Dan Ncwallet Africa</option>
+                      <?php
+                          }
                           if(vp_getoption("vtupress_custom_vpay") == "yes"){
                             ?>
                       <option value="mrundan_vpay">Run-Dan Vpay</option>
