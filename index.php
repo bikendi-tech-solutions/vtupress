@@ -97,9 +97,9 @@ if(isset($event->event_type) && isset($event->settled_amount)){
         if(isset(getallheaders()["api-key"])){
             $signature = getallheaders()["api-key"];
         }
-        elseif(isset(getallheaders()["api-key"])){
+        elseif(isset(getallheaders()["api_key"])){
 
-            $signature = getallheaders()["api-key"];
+            $signature = getallheaders()["api_key"];
         }
         else{
         die("No Signature From Ncwallet");
