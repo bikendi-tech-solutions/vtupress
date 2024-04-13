@@ -61,7 +61,7 @@ switch($for){
 
         $token = vp_getoption("ncwallet_apikey");
         $pin = vp_getoption("ncwallet_pin");
-        
+
         if(vp_getoption('enable_ncwallet') == "yes"){
     
             $apikey = vp_getoption("ncwallet_apikey");
@@ -76,7 +76,7 @@ switch($for){
                         $phone = vp_getuser($userid, "vp_phone",true);
 
     
-                        if((($bvn == 'false' && $nin == 'false') || (empty($bvn) && empty($nin)) || (mb_strlen($bvn) < 10 && mb_strlen($nin) < 10 )) && (!empty($admin_bvn) && $admin_bvn != "false")){
+                        if((($bvn == 'false' && $nin == 'false') || (empty($bvn) && empty($nin)) || (mb_strlen($bvn) < 10 && mb_strlen($nin) < 10 )) && (empty($admin_bvn) || $admin_bvn == "false")){
                             die("BVN / NIN KYC VERIFICATION IS NECESSARY");
                         }else{
                         
@@ -508,7 +508,7 @@ switch($for){
                 $bvn = vp_getuser($userid,"myBvn",true);
                 $nin = vp_getuser($userid,"myNin",true);
 
-                if((($bvn == 'false' && $nin == 'false') || (empty($bvn) && empty($nin)) || (mb_strlen($bvn) < 10 /*&& mb_strlen($nin) < 10*/ )) && ( empty($admin_bvn)  && $admin_bvn != "false" )){
+                if((($bvn == 'false' && $nin == 'false') || (empty($bvn) && empty($nin)) || (mb_strlen($bvn) < 10 /*&& mb_strlen($nin) < 10*/ )) && ( empty($admin_bvn)  || $admin_bvn == "false" )){
                     die("BVN / NIN KYC VERIFICATION IS NECESSARY");
                 }
 
@@ -538,7 +538,7 @@ $customer_phone = $num;
 $customer_email = $email;
 
 
-if(empty($admin_bvn) && $admin_bvn != "false"){
+if(empty($admin_bvn) || $admin_bvn == "false"){
 $payload =  [
 "first_name" => "VTU-$customer_firstN",
 "customer_identifier" => $ref,
