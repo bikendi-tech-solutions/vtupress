@@ -75,6 +75,7 @@ include_once('vpuser.php');
 
 //error_log(date('Y-m-d h:i:s A',$current_timestamp));
 
+
 function vtupress_user_update(){
   global $current_timestamp;
 
