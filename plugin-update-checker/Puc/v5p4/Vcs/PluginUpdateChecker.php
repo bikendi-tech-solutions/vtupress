@@ -33,7 +33,7 @@ if ( !class_exists(PluginUpdateChecker::class, false) ):
 			//We have to make several remote API requests to gather all the necessary info
 			//which can take a while on slow networks.
 			if ( function_exists('set_time_limit') ) {
-				@set_time_limit(60);
+				@set_time_limit(600);
 			}
 
 			$api = $this->api;
@@ -67,9 +67,10 @@ if ( !class_exists(PluginUpdateChecker::class, false) ):
 					'puc_api_error',
 					new \WP_Error(
 						'puc-no-update-source',
-						'Could not retrieve version information from the repository. '
+						'Cod not retrieve version information from the repository. '
 						. 'This usually means that the update checker either can\'t connect '
 						. 'to the repository or it\'s configured incorrectly.'
+						. print_r($updateSource,true)
 					),
 					null, null, $this->slug
 				);

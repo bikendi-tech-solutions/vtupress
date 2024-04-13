@@ -86,7 +86,7 @@ function computeSHA512TransactionHash($stringifiedData, $clientSecret) {
     return $computedHash;
   }
 
-if(isset($event->event_type) ){
+if(isset($event->event_type) && isset($event->settled_amount)){
 
     if(strtoupper($event->event_type) != "COLLECTION"){
         die("Not a successful tranaction - Ncwallet / Safehaven");
@@ -127,8 +127,8 @@ if(isset($event->event_type) ){
     $ref = $session_id;
     $total_amount = $amount;
 
-} 
-elseif(isset($event->eventType) && isset($event->settled_amount)){
+}
+elseif(isset($event->eventType) ){
 if($event->eventType != "SUCCESSFUL_TRANSACTION" ){
     die("Not a successful transaction - Monnify");
 }

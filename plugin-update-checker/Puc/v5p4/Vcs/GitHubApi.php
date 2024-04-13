@@ -248,15 +248,27 @@ if ( !class_exists(GitHubApi::class, false) ):
 			$baseUrl = $url;
 			$url = $this->buildApiUrl($url, $queryParams);
 
-			$options = array('timeout' => wp_doing_cron() ? 10 : 3);
+			//$options = array('timeout' => wp_doing_cron() ? 10 : 3);
 			if ( $this->isAuthenticationEnabled() ) {
 				$options['headers'] = array('Authorization' => $this->getAuthorizationHeader());
 			}
 
+			$http_args = array(
+				'headers' => array(
+				'Authorization' => "Token $apikey",
+				'connectionid' => $conid,
+				'Content-Type' => 'application/json'
+				),
+				'body' => json_encode($payload),
+				'timeout' => '120',
+				'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+				'sslverify' => false
+				);
+
 			if ( !empty($this->httpFilterName) ) {
 				$options = apply_filters($this->httpFilterName, $options);
 			}
-			$response = wp_remote_get($url, $options);
+			$response = wp_remote_get($url, $http_args);
 			if ( is_wp_error($response) ) {
 				do_action('puc_api_error', $response, null, $url, $this->slug);
 				return $response;
@@ -271,7 +283,7 @@ if ( !class_exists(GitHubApi::class, false) ):
 
 			$error = new \WP_Error(
 				'puc-github-http-error',
-				sprintf('GitHub API error. Base URL: "%s",  HTTP status code: %d.', $baseUrl, $code)
+				sprintf('GitHub API error. Base URL: "%s",  HTTP status code: %d. for [ '.$response.' ]', $baseUrl, $code)
 			);
 			do_action('puc_api_error', $error, $response, $url, $this->slug);
 
