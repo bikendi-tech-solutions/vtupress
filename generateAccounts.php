@@ -59,6 +59,9 @@ $for = $_POST["for"];
 switch($for){
     case"ncwallet":
 
+        $token = vp_getoption("ncwallet_apikey");
+        $pin = vp_getoption("ncwallet_pin");
+        
         if(vp_getoption('enable_ncwallet') == "yes"){
     
             $apikey = vp_getoption("ncwallet_apikey");

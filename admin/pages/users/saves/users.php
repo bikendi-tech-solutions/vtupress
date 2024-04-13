@@ -533,6 +533,8 @@ vp_updateuser($userid,"vpayAccountName",$customer_firstN);
             $hid = explode(",", $ddid);
 
             $gateways = "";
+            $token = vp_getoption("ncwallet_apikey");
+            $pin = vp_getoption("ncwallet_pin");
         
             if(vp_getoption('enable_ncwallet') == "yes"  && vp_getoption("vtupress_custom_ncwallet") == "yes"){
 
@@ -558,8 +560,7 @@ vp_updateuser($userid,"vpayAccountName",$customer_firstN);
                         $fun = vp_getuser($hd,"first_name",true);
                         $lun = vp_getuser($hd,"last_name",true);
                         $phone = vp_getuser($hd, "vp_phone",true);
-                        $token = vp_getoption("ncwallet_apikey");
-                        $pin = vp_getoption("ncwallet_pin");
+
 
 
                 if(empty($admin_bvn) || $admin_bvn == "false"){
