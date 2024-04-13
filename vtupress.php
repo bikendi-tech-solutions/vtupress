@@ -157,7 +157,7 @@ require __DIR__.'/plugin-update-checker/plugin-update-checker.php';
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
 $myUpdateChecker = PucFactory::buildUpdateChecker(
-	'https://github.com/bikendi-tech-solutions/vtupress',
+	'https://github.com/bikendi-tech-solutions/vtupress/',
 	__FILE__,
 	'vtupress'
 );
