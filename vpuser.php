@@ -23,13 +23,20 @@ function vpaccount(){
 global $current_timestamp;
   
   $vp_temp = vp_getoption("vp_template");
-
+  $id = get_current_user_id();
 
   if(!is_admin()){
     setcookie("current_clr", uniqid("current_clr-",false), time() + (30 * 24 * 60 * 60), "/");
   setcookie("run_code", "vtupress", time() + (30 * 24 * 60 * 60), "/");
   if(!isset($_COOKIE["last_bal"])){
     setcookie("last_bal", 0, time() + (30 * 24 * 60 * 60), "/");
+  }else{
+ 
+    $now_bal = vp_getuser($id,"vp_bal",true);
+
+    if($now_bal != $_COOKIE["last_bal"]){
+      setcookie("last_bal", 0, time() + (30 * 24 * 60 * 60), "/");
+    }
   }
 
   if(!isset($_COOKIE["trans_reversal"])){
@@ -37,12 +44,18 @@ global $current_timestamp;
   }
 
 
+
+
+
+
 if(!isset($_COOKIE["last_transaction_time"])){
 setcookie("last_transaction_time", "null", time() + (30 * 24 * 60 * 60), "/");
 setcookie("last_recipient", "null", time() + (30 * 24 * 60 * 60), "/");
 }
 setcookie("run_code", "vtupress", time() + (30 * 24 * 60 * 60), "/");
-$id = get_current_user_id();
+
+
+
 
 
 

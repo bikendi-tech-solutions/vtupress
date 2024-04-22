@@ -10,7 +10,7 @@
 *Plugin Name: VTU Press
 *Plugin URI: http://vtupress.com
 *Description: This is the very first <b>VTU plugin</b>. It's VTU services are all Automated with wonderful features
-*Version: 6.1.1
+*Version: 6.1.2
 *Author: Akor Victor
 *Author URI: https://facebook.com/vtupressceo
 *License:      GPL3
@@ -79,6 +79,7 @@ include_once('vpuser.php');
 function vtupress_user_update(){
   global $current_timestamp;
 
+  ob_start();
 header("Content-Security-Policy: https:");
 //Script_Transport-Security
 header("strict-transport-security: max-age=31536000 ");
@@ -151,7 +152,7 @@ if(is_user_logged_in()){
 
 }
 
-
+ob_end_flush();
 
 
 require __DIR__.'/plugin-update-checker/plugin-update-checker.php';
