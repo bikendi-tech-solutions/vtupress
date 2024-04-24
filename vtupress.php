@@ -77,7 +77,7 @@ include_once('vpuser.php');
 
 
 function vtupress_user_update(){
-  if(!headers_sent()){
+  if(headers_sent()){
     ob_start();
   }
 
@@ -155,9 +155,8 @@ if(is_user_logged_in()){
 
 }
 
-if(!headers_sent()){
+if(headers_sent()){
   ob_flush();
-
 }
 
 
