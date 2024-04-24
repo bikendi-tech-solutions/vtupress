@@ -10,7 +10,7 @@
 *Plugin Name: VTU Press
 *Plugin URI: http://vtupress.com
 *Description: This is the very first <b>VTU plugin</b>. It's VTU services are all Automated with wonderful features
-*Version: 6.1.3
+*Version: 6.1.4
 *Author: Akor Victor
 *Author URI: https://facebook.com/vtupressceo
 *License:      GPL3
@@ -77,9 +77,11 @@ include_once('vpuser.php');
 
 
 function vtupress_user_update(){
-  global $current_timestamp;
+  if(!headers_sent()){
+    ob_start();
+  }
 
-  ob_start();
+
 header("Content-Security-Policy: https:");
 //Script_Transport-Security
 header("strict-transport-security: max-age=31536000 ");
@@ -89,6 +91,7 @@ header("Referrer-Policy: same-origin");
 header("X-Xss-Protection: 1");
 header('Permissions-Policy: geolocation=(self ),camera=(self), microphone=(self)');
 
+  global $current_timestamp;
 
 
 
@@ -152,7 +155,10 @@ if(is_user_logged_in()){
 
 }
 
-ob_flush();
+if(!headers_sent()){
+  ob_flush();
+
+}
 
 
 require __DIR__.'/plugin-update-checker/plugin-update-checker.php';
@@ -677,7 +683,9 @@ echo '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
 
 
 function vtupress_airtime(){
+
 ob_start();
+
 $option_array = json_decode(get_option("vp_options"),true);
 $phpVersion = phpversion();
 if(floatval($phpVersion) > floatval("7.4.0") || floatval($phpVersion) < floatval("8.0.60")){
