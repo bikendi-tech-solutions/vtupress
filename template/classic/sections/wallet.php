@@ -31,7 +31,7 @@ if(isset($_GET["vend"]) && $_GET["vend"]=="wallet"){
   function accountNumber($aza, $generate){
     $aza = strtolower($aza);
 
-    if(emppty($aza) || $aza == "false" || $aza == "null"){
+    if(empty($aza) || $aza == "false" || $aza == "null"){
       echo "<span class='btn btn-primary generate_account' for='$generate'><i class='fa fa-history'></i> Generate Account Number</span>";
     }
     else{
