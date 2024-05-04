@@ -31,7 +31,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with {Plugin Name}. If not, see {URI to Plugin License}.
 */
-
 //--hRequires PHP: 7.4
 
 
