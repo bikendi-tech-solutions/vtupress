@@ -28,6 +28,17 @@ if(isset($_GET["vend"]) && $_GET["vend"]=="wallet"){
     return $msg;
   }
 
+  function accountNumber($aza, $generate){
+    $aza = strtolower($aza);
+
+    if(emppty($aza) || $aza == "false" || $aza == "null"){
+      echo "<span class='btn btn-primary generate_account' for='$generate'><i class='fa fa-history'></i> Generate Account Number</span>";
+    }
+    else{
+      echo $aza;
+    }
+  }
+
 			?>
 <script>
 jQuery("body").ready(function(){
@@ -339,7 +350,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
                   <?php } 
                   
                   if(vp_getoption('enable_monnify') == "yes"){?>
-                  <li class="nav-item">
+                  <li class="nav-item <?php if(stripos("mon",$bank_name2) === false){echo "d-none";} ?>">
                     <a
                       class="nav-link <?php echo banksbtn();?>"
                       data-bs-toggle="tab"
@@ -349,7 +360,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
                       <span class="hidden-xs-down"><?php echo $bank_name2;?></span></a
                     >
                   </li>
-                  <li class="nav-item">
+                  <li class="nav-item  <?php if(stripos("mon",$bank_name1) === false){echo "d-none";} ?>">
                     <a
                       class="nav-link <?php echo banksbtn();?>"
                       data-bs-toggle="tab"
@@ -359,7 +370,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
                       <span class="hidden-xs-down"><?php echo $bank_name1;?></span></a
                     >
                   </li>
-                  <li class="nav-item">
+                  <li class="nav-item  <?php if(stripos("mon",$bank_name) === false){echo "d-none";} ?>">
                     <a
                       class="nav-link <?php echo banksbtn();?>"
                       data-bs-toggle="tab"
@@ -397,7 +408,7 @@ VPAY / Vfd
 
 <div class="row mb-3">
 <div class="col card-number text-center">
-<p><?php echo $vpayAccountNumber;?></p>
+<p><?php accountNumber($vpayAccountNumber,"vpay");?></p>
 </div>
 </div>
 
@@ -432,7 +443,7 @@ VISA
 
 if(vp_getoption('enable_ncwallet') == "yes"  && vp_getoption("vtupress_custom_ncwallet") == "yes"){?>
 
-  <div class="tab-pane <?php echo banksmodal();?>" id="vpay" role="tabpanel">
+  <div class="tab-pane <?php echo banksmodal();?>" id="ncwallet" role="tabpanel">
       <div class="p-md-20">
 
       <!-------------CONTENT----------->
@@ -450,7 +461,7 @@ Safehaven
 
 <div class="row mb-3">
 <div class="col card-number text-center">
-<p><?php echo $ncwallet_AccountNumber;?></p>
+<p><?php accountNumber($ncwallet_AccountNumber,"ncwallet");?></p>
 </div>
 </div>
 
@@ -502,7 +513,7 @@ GTBANK
 
 <div class="row mb-3">
 <div class="col card-number text-center">
-<p><?php echo $squadAccountNumber;?></p>
+<p><?php accountNumber($squadAccountNumber,"gtb");?></p>
 </div>
 </div>
 
@@ -555,7 +566,7 @@ if(vp_getoption('enablekuda') == "yes"  && vp_getoption("vtupress_custom_kuda") 
   
   <div class="row mb-3">
   <div class="col card-number text-center">
-  <p><?php echo $kudaAccountNumber;?></p>
+  <p><?php accountNumber($kudaAccountNumber,"kuda");?></p>
   </div>
   </div>
   
@@ -617,7 +628,7 @@ if(vp_getoption('enablekuda') == "yes"  && vp_getoption("vtupress_custom_kuda") 
 
 <div class="row mb-3">
 <div class="col card-number text-center">
-<p><?php echo $account_number2;?></p>
+<p><?php accountNumber($account_number2,"monnify");?></p>
 </div>
 </div>
 
@@ -671,7 +682,7 @@ VISA
 
 <div class="row mb-3">
 <div class="col card-number text-center">
-<p><?php echo $account_number1;?></p>
+<p><?php accountNumber($account_number1,"monnify");?></p>
 </div>
 </div>
 
@@ -723,7 +734,7 @@ VISA
 
 <div class="row mb-3">
 <div class="col card-number text-center">
-<p><?php echo $account_number;?></p>
+<p><?php accountNumber($account_number,"monnify");?></p>
 </div>
 </div>
 

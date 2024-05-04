@@ -290,7 +290,7 @@ if(airtimechoice == "vtu"){
 
 if(airtimechoice == "share"){
 	switch(airtime_network_value){
-case"<?php echo vp_option_array($option_array,'sairtimemtn');?>":
+        case"<?php echo vp_option_array($option_array,'sairtimemtn');?>":
 		discount = <?php echo floatval($level[0]->mtn_share);?>;
 		break;
 		case"<?php echo vp_option_array($option_array,'sairtimeglo');?>":
@@ -1215,7 +1215,7 @@ jQuery('.btn-close').trigger('click');
 	
 var obj = {};
 obj["vend"] = "vend";
-obj["airtimechoice"] = jQuery("#airtimechoice").val();
+obj["airtimechoice"] = jQuery("#airtimechoice").val();//which is the netwprk id
 obj["network"] = jQuery("#net").val();
 obj["vpname"] = jQuery(".airtime-name").val();
 obj["vpemail"] = jQuery(".airtime-email").val();

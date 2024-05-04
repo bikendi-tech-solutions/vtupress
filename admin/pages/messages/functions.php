@@ -9,7 +9,6 @@ error_reporting(0);
 include_once(ABSPATH."wp-load.php");
 include_once(ABSPATH .'wp-content/plugins/vtupress/functions.php');
 include_once(ABSPATH .'wp-content/plugins/vtupress/admin/pages/users/functions.php');
-include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
 
 function pagination_message_before($where=""){
 	  
@@ -26,82 +25,82 @@ function pagination_message_before($where=""){
    $pages = ceil( $num  / $limit );
 
 if(isset($_GET['userpage'])){
-$stat = $start;
-$selec = "vtu";
+    $stat = $start;
+    $selec = "vtu";
 }
 else{
 
-  if($pages != "0"){
-    for($i = 1; $i<= $pages; $i++){
-    $stat = ($i - 1) * $limit;
-    $selec = $i;
-    }
-  }
-  else{
-    $stat =   $page; 
-    $selec = "vtu";
-  }
+        if($pages != "0"){
+          for($i = 1; $i<= $pages; $i++){
+          $stat = ($i - 1) * $limit;
+          $selec = $i;
+          }
+        }
+        else{
+          $stat =   $page; 
+          $selec = "vtu";
+        }
 
 }
 
-   
-       $use = $wpdb->get_results("SELECT * FROM  $table_name $where ORDER BY ID ASC LIMIT $stat, $limit");
- 
-       if($use == null){
-         $messages = "null";
-       }
-       else{
-         $messages = $use;
- 
-       
-       $Previous = $page - 1;
-       $Next = $page + 1;
-       echo '
- 
-       <div class="row">
-       <div class="col-12 col-md-4">
- <div class="input-group">
- <span class="input-group-text">Page</span>
- <select class="change-page float-left" onchange="changepage();">
-         ';
- for($i = 1; $i<= $pages; $i++){
- if(isset($_GET["userpage"]) && $_GET["userpage"] == $i ||  $selec == $i){
-    echo'
-    <option value="'.$i.'" disabled selected  class="opt" >'.$i.'<option>
-    ';
-     }elseif(empty($i)){
- 
-     }
-     else{
-        echo'
-        <option value="'.$i.'" class="opt" >'.$i.'<option>
-        ';
-     }
- 
- }
-   echo'
-   </select>
-   <script>
-   jQuery(".change-page option:not(.opt)").hide();
-   </script>
-   </div>
-   </div>
- 
- 
- </div>
- 
- ';
- 
- ?>
- <script>
- function changepage(){
- var userpage = jQuery(".change-page").val();
- 
- window.location = "<?php echo $_SERVER["REQUEST_URI"];?>&userpage="+userpage;
- }
- </script>
- 
- <?php
+      
+          $use = $wpdb->get_results("SELECT * FROM  $table_name $where ORDER BY ID ASC LIMIT $stat, $limit");
+    
+          if($use == null){
+            $messages = "null";
+          }
+          else{
+            $messages = $use;
+    
+                
+                $Previous = $page - 1;
+                $Next = $page + 1;
+                echo '
+          
+                    <div class="row">
+                    <div class="col-12 col-md-4">
+              <div class="input-group">
+              <span class="input-group-text">Page</span>
+              <select class="change-page float-left" onchange="changepage();">
+                  ';
+          for($i = 1; $i<= $pages; $i++){
+          if(isset($_GET["userpage"]) && $_GET["userpage"] == $i ||  $selec == $i){
+              echo'
+              <option value="'.$i.'" disabled selected  class="opt" >'.$i.'<option>
+              ';
+              }elseif(empty($i)){
+          
+              }
+              else{
+                  echo'
+                  <option value="'.$i.'" class="opt" >'.$i.'<option>
+                  ';
+              }
+          
+          }
+            echo'
+            </select>
+            <script>
+            jQuery(".change-page option:not(.opt)").hide();
+            </script>
+            </div>
+            </div>
+          
+          
+          </div>
+          
+          ';
+          
+          ?>
+          <script>
+          function changepage(){
+          var userpage = jQuery(".change-page").val();
+          
+          window.location = "<?php echo $_SERVER["REQUEST_URI"];?>&userpage="+userpage;
+          }
+          </script>
+      
+      <?php
  
  
  }
