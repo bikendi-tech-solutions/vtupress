@@ -161,14 +161,20 @@ $version = $path["Version"];
 			
 
 			//$installed = true;
+      
 			$path = ABSPATH."/wp-content/plugins/".$value["slug"];
-			$path = get_plugin_data($path);
+      if(is_vp_plugin_installed($value['slug'])){
+			  $path = get_plugin_data($path);
+        if(!empty($path["Version"])){
+          $version = $path["Version"];
+          }else{
+          $version = "---";	
+          }	
+      }else{
+        $version = "---";	
+      }
 			
-			if(!empty($path["Version"])){
-			$version = $path["Version"];
-			}else{
-			$version = "---";	
-			}	
+
 ?>
 
           <tr>
