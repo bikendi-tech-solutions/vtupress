@@ -148,6 +148,7 @@ $version = $path["Version"];
             <th scope="col">Name</th>
             <th scope="col">Description</th>
             <th scope="col">Install Version</th>
+            <th scope="col">Latest Version</th>
             <th scope="col">Documentation</th>
             <th scope="col">Actions</th>
           </tr>
@@ -159,7 +160,7 @@ $version = $path["Version"];
 		foreach($file as $key => $value){
 			
 
-/*				$installed = true;
+			//$installed = true;
 			$path = ABSPATH."/wp-content/plugins/".$value["slug"];
 			$path = get_plugin_data($path);
 			
@@ -167,12 +168,13 @@ $version = $path["Version"];
 			$version = $path["Version"];
 			}else{
 			$version = "---";	
-			}	*/
+			}	
 ?>
 
           <tr>
             <th scope="row"><?php echo $value['name'];?></th>
             <td><?php echo $value['description'];?></td>
+            <td><?php echo $version;?></td>
             <td><?php echo $value['version'];?></td>
             <td><a href="<?php echo $value['documentation'];?>">Link</a> </td>
             <td>
