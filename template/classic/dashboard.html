@@ -563,136 +563,6 @@ GTB
 
 </ul>
 </div>
-<script>
-
-jQuery(".generate_account").on("click",function(){
-
-    var forG = jQuery(this).attr("for");
-
-    if(forG != "gtb" && forG != "ncwallet" && forG !="monnify" && forG != "kuda" && forG != "vpay"){
-
-        alert(forG+" is not a valid gateway");
-        return;
-    }
-
-    var obj = {};
-    obj["for"] = forG;
-    
-    jQuery("#cover-spin").show();
-	
-jQuery.ajax({
-	  url: '<?php echo esc_url(plugins_url("vtupress/generateAccounts.php"));?>',
-	  data: obj,
-	  dataType: 'text',
-	  'cache': false,
-	  "async": true,
-	  error: function (jqXHR, exception) {
-		  jQuery("#cover-spin").hide();
-			var msg = "";
-			if (jqXHR.status === 0) {
-				msg = "No Connection.\n Verify Network.";
-		 swal({
-	  title: "Error!",
-	  text: msg,
-	  icon: "error",
-	  button: "Okay",
-	}).then((value) => {
-		location.reload();
-	}); 
-	  
-			} else if (jqXHR.status == 404) {
-				msg = "Requested page not found. [404]";
-				 swal({
-	  title: "Error!",
-	  text: msg,
-	  icon: "error",
-	  button: "Okay",
-	}).then((value) => {
-		location.reload();
-	}); 
-			} else if (jqXHR.status == 500) {
-				msg = "Internal Server Error [500].";
-				 swal({
-	  title: "Error!",
-	  text: msg,
-	  icon: "error",
-	  button: "Okay",
-	}).then((value) => {
-		location.reload();
-	}); 
-			} else if (exception === "parsererror") {
-				msg = "Requested JSON parse failed.";
-				   swal({
-	  title: msg,
-	  text: jqXHR.responseText,
-	  icon: "error",
-	  button: "Okay",
-	}).then((value) => {
-		location.reload();
-	}); 
-			} else if (exception === "timeout") {
-				msg = "Time out error.";
-				 swal({
-	  title: "Error!",
-	  text: msg,
-	  icon: "error",
-	  button: "Okay",
-	}).then((value) => {
-		location.reload();
-	}); 
-			} else if (exception === "abort") {
-				msg = "Ajax request aborted.";
-				 swal({
-	  title: "Error!",
-	  text: msg,
-	  icon: "error",
-	  button: "Okay",
-	}).then((value) => {
-		location.reload();
-	}); 
-			} else {
-				msg = "Uncaught Error.\n" + jqXHR.responseText;
-				 swal({
-	  title: "Error!",
-	  text: msg,
-	  icon: "error",
-	  button: "Okay",
-	}).then((value) => {
-		location.reload();
-	}); 
-			}
-		},
-	  
-	  success: function(data) {
-		  jQuery("#cover-spin").hide();
-		  
-			if(data == "100" || data == 100){
-			  swal({
-	  title: "Success!",
-	  text: "Please confirm that you now have the dedicated account number for "+forG,
-	  icon: "success",
-	  button: "Okay",
-	}).then((value) => {
-		location.reload();
-	});
-		  }
-		  else{
-			jQuery("#cover-spin").hide();
-	swal({
-	  title: "Failed",
-	  text: data,
-	  icon: "error",
-	  button: "Okay",
-	}).then((value) => {
-		location.reload();
-	});   
-		  }
-	  },
-	  type: 'POST'
-	});
-	
-	});
-</script>
 
 
 <?php
@@ -1551,6 +1421,140 @@ function resetTheme() {
     document.getElementById(darkLabel).innerHTML = lightLang;
   }
 }
+</script>
+<script>
+
+document.addEventListener("DOMContentLoaded",function(){
+jQuery(".generate_account").on("click",function(){
+
+    var forG = jQuery(this).attr("for");
+
+    if(forG != "gtb" && forG != "ncwallet" && forG !="monnify" && forG != "kuda" && forG != "vpay"){
+
+        alert(forG+" is not a valid gateway");
+        return;
+    }
+
+    var obj = {};
+    obj["for"] = forG;
+    
+    jQuery("#cover-spin").show();
+	
+jQuery.ajax({
+	  url: '<?php echo esc_url(plugins_url("vtupress/generateAccounts.php"));?>',
+	  data: obj,
+	  dataType: 'text',
+	  'cache': false,
+	  "async": true,
+	  error: function (jqXHR, exception) {
+		  jQuery("#cover-spin").hide();
+			var msg = "";
+			if (jqXHR.status === 0) {
+				msg = "No Connection.\n Verify Network.";
+		 swal({
+	  title: "Error!",
+	  text: msg,
+	  icon: "error",
+	  button: "Okay",
+	}).then((value) => {
+		location.reload();
+	}); 
+	  
+			} else if (jqXHR.status == 404) {
+				msg = "Requested page not found. [404]";
+				 swal({
+	  title: "Error!",
+	  text: msg,
+	  icon: "error",
+	  button: "Okay",
+	}).then((value) => {
+		location.reload();
+	}); 
+			} else if (jqXHR.status == 500) {
+				msg = "Internal Server Error [500].";
+				 swal({
+	  title: "Error!",
+	  text: msg,
+	  icon: "error",
+	  button: "Okay",
+	}).then((value) => {
+		location.reload();
+	}); 
+			} else if (exception === "parsererror") {
+				msg = "Requested JSON parse failed.";
+				   swal({
+	  title: msg,
+	  text: jqXHR.responseText,
+	  icon: "error",
+	  button: "Okay",
+	}).then((value) => {
+		location.reload();
+	}); 
+			} else if (exception === "timeout") {
+				msg = "Time out error.";
+				 swal({
+	  title: "Error!",
+	  text: msg,
+	  icon: "error",
+	  button: "Okay",
+	}).then((value) => {
+		location.reload();
+	}); 
+			} else if (exception === "abort") {
+				msg = "Ajax request aborted.";
+				 swal({
+	  title: "Error!",
+	  text: msg,
+	  icon: "error",
+	  button: "Okay",
+	}).then((value) => {
+		location.reload();
+	}); 
+			} else {
+				msg = "Uncaught Error.\n" + jqXHR.responseText;
+				 swal({
+	  title: "Error!",
+	  text: msg,
+	  icon: "error",
+	  button: "Okay",
+	}).then((value) => {
+		location.reload();
+	}); 
+			}
+		},
+	  
+	  success: function(data) {
+		  jQuery("#cover-spin").hide();
+		  
+			if(data == "100" || data == 100){
+			  swal({
+	  title: "Success!",
+	  text: "Please confirm that you now have the dedicated account number for "+forG,
+	  icon: "success",
+	  button: "Okay",
+	}).then((value) => {
+		location.reload();
+	});
+		  }
+		  else{
+			jQuery("#cover-spin").hide();
+	swal({
+	  title: "Failed",
+	  text: data,
+	  icon: "error",
+	  button: "Okay",
+	}).then((value) => {
+		location.reload();
+	});   
+		  }
+	  },
+	  type: 'POST'
+	});
+	
+	});
+
+});
+
 </script>
 <?php
 include_once(ABSPATH."wp-content/plugins/vtupress/do_not_tamper.php");
