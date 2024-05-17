@@ -1,5 +1,7 @@
 <?php
 header("Access-Control-Allow-Origin: 'self'");
+
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 if(!defined('ABSPATH')){
     $pagePath = explode('/wp-content/', dirname(__FILE__));
     include_once(str_replace('wp-content/' , '', $pagePath[0] . '/wp-load.php'));
@@ -78,6 +80,10 @@ if(!empty($sida)){
             $amount = explode("-",$sida)[1];
             $id = explode("-",$sida)[2];
             //set status to failed
+
+            if(preg_match("/-/",$amount)){
+                die("Amount can't contain minus [ - ]");
+            }
             
             $data = [ 'status' => 'Failed' ];
             $where = [ 'id' => $sid ];
@@ -166,6 +172,10 @@ die("100");
                 $amount = explode("-",$sida)[1];
                 $user = explode("-",$sida)[2];
 
+                if(preg_match("/-/",$amount)){
+                    die("Amount can't contain minus [ - ]");
+                }
+
                 $current_user_bal = vp_getuser($user,"vp_bal",true);
                 $minus_total = floatval($current_user_bal) - floatval($amount);
                 vp_updateuser($user,"vp_bal",$minus_total);
@@ -216,6 +226,10 @@ elseif(isset($_POST["process_with"])){
 	$forthis = $_POST["with_user_id"];
 	$amount = $_POST["with_amount"];
 	$row = $_POST["the_row_id"];
+
+    if(preg_match("/-/",$amount)){
+        die("Amount can't contain minus [ - ]");
+    }
 	
 	if($dothis == "Approve"){
 		$update = "Approved";
@@ -247,6 +261,10 @@ echo'200';
 	$convert_id = $_POST["convert_id"];
 	$convert_user_id = $_POST["convert_user_id"];
 	$convert_amount = $_POST["convert_amount"];
+
+    if(preg_match("/-/",$convert_amount)){
+        die("Amount can't contain minus [ - ]");
+    }
 	
 
 		global $wpdb;

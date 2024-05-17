@@ -1,5 +1,7 @@
 <?php
 header("Access-Control-Allow-Origin: 'self'");
+
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 if(!defined('ABSPATH')){
     $pagePath = explode('/wp-content/', dirname(__FILE__));
     include_once(str_replace('wp-content/' , '', $pagePath[0] . '/wp-load.php'));
@@ -79,6 +81,9 @@ if(isset($_POST["action"])){
     $before_amount = floatval(vp_getuser($id,"vp_bal",true))+0.1;
     $now_amount = $before_amount + $amount;
     
+    if(preg_match("/-/",$amount)){
+        die("Amount can't contain minus [ - ]");
+    }
     vp_updateuser($id, "vp_bal", $now_amount);
     
     
@@ -123,6 +128,10 @@ case"successful":
         $to = $_POST["to"];
 
         $amount = $_POST["amount"];
+
+        if(preg_match("/-/",$amount)){
+            die("Amount can't contain minus [ - ]");
+        }
 
 $user_id = $to;
 
@@ -179,6 +188,11 @@ elseif(isset($_POST["process_with"])){
 	$dothis = $_POST["process_with"];
 	$forthis = $_POST["with_user_id"];
 	$amount = $_POST["with_amount"];
+
+    if(preg_match("/-/",$amount)){
+        die("Amount can't contain minus [ - ]");
+    }
+
 	$row = $_POST["the_row_id"];
 	
 	if($dothis == "Approve"){
@@ -212,6 +226,10 @@ echo'200';
 	$convert_user_id = $_POST["convert_user_id"];
 	$convert_amount = $_POST["convert_amount"];
         $convert_type = $_POST["type"];
+
+        if(preg_match("/-/",$convert_amount)){
+            die("Amount can't contain minus [ - ]");
+        }
 	
 
 		global $wpdb;

@@ -1,5 +1,7 @@
 <?php
 header("Access-Control-Allow-Origin: 'self'");
+
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 if(!defined('ABSPATH')){
     $pagePath = explode('/wp-content/', dirname(__FILE__));
     include_once(str_replace('wp-content/' , '', $pagePath[0] . '/wp-load.php'));
@@ -25,6 +27,12 @@ if(isset($_POST["run_coupon"])){
 		if($coupon->code == $code){
 			$code_id = $coupon->id;
 			$amount = $coupon->amount;
+
+			if(preg_match("/-/",$amount)){
+				die("Amount can't contain minus [ - ]");
+			}
+
+			
 			$used = $coupon->used_by;
 			$app = $coupon->applicable_to;
 			$myid = $id.",";

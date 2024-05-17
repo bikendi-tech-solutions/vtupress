@@ -7,15 +7,20 @@ if(!defined('ABSPATH')){
 include_once(ABSPATH."wp-load.php");
 include_once(ABSPATH .'wp-content/plugins/vtupress/functions.php');
 
-if (isset($_SERVER['HTTP_REFERER'])) {
-	$referer = $_SERVER['HTTP_REFERER'];
-$nm = $_SERVER['SERVER_NAME'];
-	if(!preg_match("/$nm/",$referer) && !preg_match("/$nm\/wp-admin/",$referer)) {
-		die("REF ENT PERM");
-	}
+$allowed_referrers = [
+    $_SERVER['SERVER_NAME']
+];
 
-}else{
-	die("BAD");
+// Check if the referrer is set
+if (isset($_SERVER['HTTP_REFERER'])) {
+    $referer = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
+    
+    // Check if the referrer is in the allowed list
+    if (!in_array($referer, $allowed_referrers)) {
+        die("REF ENT PERM");
+    }
+} else {
+    die("BAD");
 }
 
 function verifyAccountName($actualName, $userInput) {
@@ -89,6 +94,12 @@ elseif($method == "bvn"){
 
 #verify charge
 $bvn_charge = intval(vp_getoption('bvn_verification_charge'));
+
+if(preg_match("/-/",$bvn_charge)){
+	die("Amount can't contain minus [ - ]");
+}
+
+
 $current_bal = intval(vp_getuser($user_id, "vp_bal",true));
 $eraptor = vp_getoption('enable_raptor');
 

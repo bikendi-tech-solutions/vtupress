@@ -111,6 +111,8 @@ if(strtolower(vp_getoption("vpdebug")) != "yes"){
 if(vp_getoption("vp_security") == "yes" && vp_getoption("secur_mod") != "off"){
 ob_start();
 header("Access-Control-Allow-Origin: 'self'");
+
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Content-Security-Policy: https:");
  //Script_Transport-Security
 header("strict-transport-security: max-age=31536000 ");
