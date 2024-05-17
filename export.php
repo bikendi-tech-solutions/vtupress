@@ -1,5 +1,6 @@
 <?php
 header("Access-Control-Allow-Origin: 'self'");
+/*
 if(!defined('ABSPATH')){
     $pagePath = explode('/wp-content/', dirname(__FILE__));
     include_once(str_replace('wp-content/' , '', $pagePath[0] . '/wp-load.php'));
@@ -99,6 +100,13 @@ else{
     echo "Stored in: " . $_FILES["vtupress"]["tmp_name"];
     */
 
+
+
+
+
+
+
+  /*
 $csv = array_map('str_getcsv', file($_FILES["vtupress"]["tmp_name"]));
 
 //print_r($csv);
@@ -120,3 +128,4 @@ die("100");
 }
 
 ?>
+*/

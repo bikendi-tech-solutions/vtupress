@@ -10,7 +10,7 @@
 *Plugin Name: VTU Press
 *Plugin URI: http://vtupress.com
 *Description: This is the very first <b>VTU plugin</b>. It's VTU services are all Automated with wonderful features
-*Version: 6.2.2
+*Version: 6.2.3
 *Author: Akor Victor
 *Author URI: https://facebook.com/vtupressceo
 *License:      GPL3
@@ -332,8 +332,6 @@ if(get_option("vtupress_options2") != $update_vtupress_options){
   $url = home_url();
   $url = str_replace("http://","https://",$url);
   vp_updateoption("siteurl",$url);
-  vp_updateoption("site_url",$url);
-  vp_updateoption("site-url",$url);
 
   global $wpdb;
   $table_name = $wpdb->prefix.'vp_kyc';

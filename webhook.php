@@ -1,6 +1,8 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 
+/*
+
 if(!defined('ABSPATH')){
     $pagePath = explode('/wp-content/', dirname(__FILE__));
     include_once(str_replace('wp-content/' , '', $pagePath[0] . '/wp-load.php'));
@@ -128,6 +130,12 @@ $wpdb->insert($table_name, array(
 ));
 */
 
+
+
+
+
+
+/*
 global $wpdb;
 $airtime = $wpdb->prefix.'sairtime';
 $data = $wpdb->prefix.'sdata';
@@ -243,6 +251,10 @@ $type = strtolower(vp_getvalue($the_airtime->trans_type));
 echo "<pre>";
 echo $the_airtime->id .$type;
 */
+
+
+
+/*
 switch($type){
 	case"vtu":
 #echo "vtu";
@@ -311,7 +323,7 @@ $table_name = $wpdb->prefix.'vp_wallet';
 $wpdb->insert($table_name, array(
 'name'=> $name,
 'type'=> "Wallet",
-'description'=> "Refund for Airtime transaction with ID $trans_id",
+'description'=> "[Webhook] Refund for Airtime transaction with ID $trans_id",
 'fund_amount' => $amount_billed,
 'before_amount' => $curr,
 'now_amount' => $bal,
@@ -395,7 +407,7 @@ $table_name = $wpdb->prefix.'vp_wallet';
 $wpdb->insert($table_name, array(
 'name'=> $name,
 'type'=> "Wallet",
-'description'=> "Refund for Airtime transaction with ID $trans_id",
+'description'=> "[Webhook] Refund for Airtime transaction with ID $trans_id",
 'fund_amount' => $amount_billed,
 'before_amount' => $curr,
 'now_amount' => $bal,
@@ -479,7 +491,7 @@ $table_name = $wpdb->prefix.'vp_wallet';
 $wpdb->insert($table_name, array(
 'name'=> $name,
 'type'=> "Wallet",
-'description'=> "Refund for Airtime transaction with ID $trans_id",
+'description'=> "[Webhook] Refund for Airtime transaction with ID $trans_id",
 'fund_amount' => $amount_billed,
 'before_amount' => $curr,
 'now_amount' => $bal,
@@ -580,7 +592,7 @@ $table_name = $wpdb->prefix.'vp_wallet';
 $wpdb->insert($table_name, array(
 'name'=> $name,
 'type'=> "Wallet",
-'description'=> "Refund for Data transaction with ID $trans_id",
+'description'=> "[Webhook] Refund for Data transaction with ID $trans_id",
 'fund_amount' => $amount_billed,
 'before_amount' => $curr,
 'now_amount' => $bal,
@@ -664,7 +676,7 @@ $table_name = $wpdb->prefix.'vp_wallet';
 $wpdb->insert($table_name, array(
 'name'=> $name,
 'type'=> "Wallet",
-'description'=> "Refund for Data transaction with ID $trans_id",
+'description'=> "[Webhook] Refund for Data transaction with ID $trans_id",
 'fund_amount' => $amount_billed,
 'before_amount' => $curr,
 'now_amount' => $bal,
@@ -747,7 +759,7 @@ $table_name = $wpdb->prefix.'vp_wallet';
 $wpdb->insert($table_name, array(
 'name'=> $name,
 'type'=> "Wallet",
-'description'=> "Refund for Data transaction with ID $trans_id",
+'description'=> "[Webhook] Refund for Data transaction with ID $trans_id",
 'fund_amount' => $amount_billed,
 'before_amount' => $curr,
 'now_amount' => $bal,
@@ -844,7 +856,7 @@ $table_name = $wpdb->prefix.'vp_wallet';
 $wpdb->insert($table_name, array(
 'name'=> $name,
 'type'=> "Wallet",
-'description'=> "Refund for Cable transaction with ID $trans_id",
+'description'=> "[Webhook] Refund for Cable transaction with ID $trans_id",
 'fund_amount' => $amount_billed,
 'before_amount' => $curr,
 'now_amount' => $bal,
@@ -945,7 +957,7 @@ $table_name = $wpdb->prefix.'vp_wallet';
 $wpdb->insert($table_name, array(
 'name'=> $name,
 'type'=> "Wallet",
-'description'=> "Refund for Bill transaction with ID $trans_id",
+'description'=> "[Webhook] Refund for Bill transaction with ID $trans_id",
 'fund_amount' => $amount_billed,
 'before_amount' => $curr,
 'now_amount' => $bal,
@@ -997,3 +1009,5 @@ else{
 header("Status: 500 Internal Server Error");
 die();
 }
+
+*/
