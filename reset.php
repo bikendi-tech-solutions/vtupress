@@ -32,9 +32,19 @@ if (isset($_SERVER['HTTP_REFERER'])) {
 if(isset($_POST["firstreset"])){
 
 $name = $_POST["username"];
-$email = $_POST["email"];
-$pin = $_POST["pin"];
+$email = sanitize_email($_POST["email"]);
+$pin = intval($_POST["pin"]);
 $password = $_POST["password"];
+
+if (!is_email($sanitized_email)) {
+    // The email is valid, proceed with further processing
+	die('{"status":"200","message":"Use a valid email"}');
+
+} elseif(!is_numeric($pin)){
+	die('{"status":"200","message":"Use a valid numeric pin"}');
+
+}
+
 
 $status = get_user_by('login',$name);
 
