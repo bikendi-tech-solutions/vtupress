@@ -158,7 +158,8 @@ vp_adduser($ma_id,"beneficiaries","");
 
 
 $verify_email = strtolower(vp_getoption("email_verification"));
-if($verify_email != "false" && $verify_email != "no" ){
+$template = constant('vtupress_template');
+if($verify_email != "false" && $verify_email != "no" && !preg_match("/opay/",$template)){
 
 $verify = vp_getuser($ma_id,"email_verified");
 if(strtolower( $verify ) != "verified" && !current_user_can("administrator")){

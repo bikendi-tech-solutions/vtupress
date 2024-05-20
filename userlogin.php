@@ -76,7 +76,7 @@ if($verify_email){
 				if($verify_zero === 0){  
 					  $verify_pin = preg_match("/[^0-9]/", $pin);
 				
-				if($verify_pin === 0 && strlen($pin) >= 4 ){
+				if($verify_pin === 0 && strlen($pin) == 4 ){
 
 					if(username_exists($user)){
 						die('{"status":"101","message":"Sorry, that username already exists!"}');
@@ -537,7 +537,7 @@ die('{"status":"100"}');
 
 				}
 				else{
-				die('{"status":"101","message":"Pin Must Be Numeric And At Least 4 Digits"}');
+				die('{"status":"101","message":"Pin Must Be 4 Digits"}');
 				}
 				
 				}
