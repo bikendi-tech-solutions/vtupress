@@ -367,6 +367,7 @@ function vtupress_verification(){
   id int NOT NULL  AUTO_INCREMENT,
   user_id int,
   name text,
+  card_type text,
   value text,
   type text,
   status text,
@@ -604,6 +605,10 @@ global $current_timestamp;
   vp_addoption("vtu_timeout","5");
 
   global $wpdb;
+  $lsd_name = $wpdb->prefix.'vp_verifications';
+  maybe_add_column($lsd_name,'card_type', "ALTER TABLE $lsd_name ADD card_type text ");
+
+
   $lsd_name = $wpdb->prefix.'vp_levels';
   maybe_add_column($lsd_name,'data_mtn', "ALTER TABLE $lsd_name ADD data_mtn text ");
   maybe_add_column($lsd_name,'data_glo', "ALTER TABLE $lsd_name ADD data_glo text ");
