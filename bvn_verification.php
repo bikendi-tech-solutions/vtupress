@@ -25,6 +25,13 @@ if(!isset($_POST["type"]) || !isset($_POST["value"])){
 
 $type = $_POST["type"];
 $value = $_POST["value"];
+
+if(isset($_POST["card"])){
+$card = $_POST["card"];
+}
+else{
+$card = "portrait_card";
+}
 $user_id = get_current_user_id();
 
 $fn = vp_getuser($user_id,"first_name");
@@ -120,6 +127,7 @@ $added_to_db = $wpdb->insert($table_name, array(
 'fund_amount' => $charge,
 'before_amount' => $current_bal,
 'now_amount' => $new_bal_now,
+'card_type' => $card,
 'user_id' => $user_id,
 'status' => "approved",
 'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
