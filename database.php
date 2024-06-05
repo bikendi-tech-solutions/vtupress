@@ -594,7 +594,7 @@ function vtupress_db_man(){
 }
 
 
-$nw_updt = 19;
+$nw_updt = 22;
 
 if(vp_getoption("fix_version") != $nw_updt){
 global $current_timestamp;
