@@ -89,7 +89,7 @@ function computeSHA512TransactionHash($stringifiedData, $clientSecret) {
 if(isset($event->event_type) && isset($event->settled_amount)){
 
     if(strtoupper($event->event_type) != "COLLECTION"){
-        die("Not a successful tranaction - Ncwallet / Safehaven");
+        die("Not a successful tranaction - Ncwallet / Providus");
     }
 
     if(function_exists('getallheaders')){

@@ -568,20 +568,22 @@ vp_updateuser($userid,"vpayAccountName",$customer_firstN);
                 if(empty($admin_bvn) || $admin_bvn == "false"){
                     $payload =  [
                         "account_name" => $fun." ".$lun,
-                        "bank_code" => "safehaven",
+                        "bank_code" => "providus",
                         "account_type" => "static",
                         "email" => $email,
-                        "bvn" => $bvn,
+                        "validation_type" => "BVN",
+                        "validation_number" => $bvn,
                         "phone_number" => $phone
 
                     ];
                 }else{
                     $payload =  [
                         "account_name" => $fun." ".$lun,
-                        "bank_code" => "safehaven",
+                        "bank_code" => "providus",
                         "account_type" => "static",
                         "email" => $email,
-                        "bvn" => $admin_bvn,
+                        "validation_type" => "BVN",
+                        "validation_number" => $admin_bvn,
                         "phone_number" => $phone
 
                     ];   

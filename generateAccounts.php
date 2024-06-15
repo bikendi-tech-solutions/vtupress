@@ -92,20 +92,22 @@ switch($for){
                 if($admin_bvn == "false" || empty($admin_bvn)){
                        $payload =  [
                         "account_name" => $fun." ".$lun,
-                        "bank_code" => "safehaven",
+                        "bank_code" => "providus",
                         "account_type" => "static",
                         "email" => $email,
-                        "bvn" => $bvn,
+                        "validation_type" => "BVN",
+                        "validation_number" => $bvn,
                         "phone_number" => $phone
 
                     ];
                 }else{
                     $payload =  [
                         "account_name" => $fun." ".$lun,
-                        "bank_code" => "safehaven",
+                        "bank_code" => "providus",
                         "account_type" => "static",
                         "email" => $email,
-                        "bvn" => $admin_bvn,
+                        "validation_type" => "BVN",
+                        "validation_number" => $admin_bvn,
                         "phone_number" => $phone
 
                     ];   

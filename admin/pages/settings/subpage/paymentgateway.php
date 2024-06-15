@@ -50,6 +50,7 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
     <option value='kuda'>Kuda</option>";
     }
 
+
     echo"
     </select>
     </div>
