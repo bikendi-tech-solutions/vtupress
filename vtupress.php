@@ -92,8 +92,6 @@ header('Permissions-Policy: geolocation=(self ),camera=(self), microphone=(self)
 
   global $current_timestamp;
 
-
-
 if(is_user_logged_in()){
     if(current_user_can("administrator")){
   global $wpdb;
