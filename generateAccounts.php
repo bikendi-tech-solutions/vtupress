@@ -613,7 +613,7 @@ switch($for){
             $admin_bvn = strtolower(vp_getoption("squad_admin_bvn"));
             $admin_fn = vp_getoption("squad_admin_fn");
             $admin_ln = vp_getoption("squad_admin_ln");
-            $admin_dob = vp_getoption("squad_admin_dob");
+            $admin_dob = str_replace("\/","/",vp_getoption("squad_admin_dob"));
 
                 if(!empty($hd)){
                     $userid = $hd;
@@ -654,7 +654,7 @@ $customer_email = $email;
 
 if(empty($admin_bvn) || $admin_bvn == "false"){
 $payload =  [
-"first_name" => "VTU-$customer_firstN",
+"first_name" => "$customer_firstN",
 "customer_identifier" => $ref,
 "last_name" => $customer_lastN,
 "mobile_num" => $customer_phone,

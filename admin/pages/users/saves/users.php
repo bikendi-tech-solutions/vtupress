@@ -786,16 +786,16 @@ vp_updateuser($userid,"vpayAccountName",$customer_firstN);
             if(vp_getoption('enablesquadco') == "yes"  && vp_getoption("vtupress_custom_gtbank") == "yes"){
                 $gateways = "SQUADCO & ";
                 $total = 0;
-                $admin_bvn = strtolower(vp_getoption("squad_admin_bvn"));
+                $admin_bvn = vp_getoption("squad_admin_bvn");
                 $admin_fn = vp_getoption("squad_admin_fn");
                 $admin_ln = vp_getoption("squad_admin_ln");
-                $admin_dob = vp_getoption("squad_admin_dob");
+                $admin_dob = str_replace("\/","/",strtolower(vp_getoption("squad_admin_dob")));
                 foreach($hid as $hd){
                     if(!empty($hd)){
                         $userid = $hd;
 
                                         
-                    $bvn = vp_getuser($userid,"myBvn",true);
+                    $bvn = str_replace("\/","/",strtolower(vp_getuser($userid,"myBvn",true)));
                     $nin = vp_getuser($userid,"myNin",true);
 
                     if((($bvn == 'false' && $nin == 'false') || (empty($bvn) && empty($nin)) || (mb_strlen($bvn) < 10 /*&& mb_strlen($nin) < 10*/)) && (empty($admin_bvn) || $admin_bvn == "false")){
