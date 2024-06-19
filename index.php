@@ -73,7 +73,6 @@ if(isset($_SERVER['REMOTE_ADDR'])){
 
 }
 
-//error_log($input);
 
 
 
@@ -126,6 +125,38 @@ if(isset($event->event_type) && isset($event->settled_amount)){
     $userid = $userID;
     $ref = $session_id;
     $total_amount = $amount;
+
+}
+elseif(isset($event->event)  && array_key_exists('http_x_wiaxy_signature', $_XERVER)){
+
+    $apikey = vp_getoption("billstack_apikey");
+
+
+
+    $signature = $_XERVER['http_x_wiaxy_signature'];
+
+    if( strtolower($signature) !== strtolower(md5($apikey)) ){
+
+
+         die("HASH DOES NOT TALLY!");
+     }
+
+
+
+
+
+     $userID = get_user_by("email",$array["data"]["customer"]["email"])->ID;
+     $userData = get_userdata($userID);
+ 
+     $amount = $array["data"]["amount"];
+     $processor = "billstack";    
+     $session_id = $array["data"]["transaction_ref"];
+     $email =  $userData->user_email;
+     $user_data = $userData;
+     $userid = $userID;
+     $ref = $session_id;
+     $total_amount = $amount;
+
 
 }
 elseif(isset($event->eventType) ){
@@ -541,6 +572,16 @@ switch(strtolower($processor)){
     case"ncwallet":
         $charge = floatval(vp_getoption("ncwallet_charge_back"));
         if(vp_getoption("ncwallet_charge_method") == "fixed"){
+            $minus = $total_amount - $charge;
+            }
+            else{
+            $remove = ($total_amount *  $charge) / 100;
+            $minus = $total_amount - $remove ;
+            }
+    break;
+    case"billstack":
+        $charge = floatval(vp_getoption("billstack_charge_back"));
+        if(vp_getoption("billstack_charge_method") == "fixed"){
             $minus = $total_amount - $charge;
             }
             else{
