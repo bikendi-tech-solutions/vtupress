@@ -500,6 +500,18 @@ Vpay
 ?>
 
 <?php
+if( vp_getoption('enable_billstack') == "yes" ){
+?>
+<li>
+<a href="#" for="billstack" class="flex generate_account justify-between text-indigo-200 duration-150 ease-in-out hover:text-indigo-300">
+<div>
+Billstack
+</div>
+</a>
+</li>
+
+<?php
+}
 if( vp_getoption('enable_ncwallet') == "yes" ){
 ?>
 <li>
@@ -1429,7 +1441,7 @@ jQuery(".generate_account").on("click",function(){
 
     var forG = jQuery(this).attr("for");
 
-    if(forG != "gtb" && forG != "ncwallet" && forG !="monnify" && forG != "kuda" && forG != "vpay"){
+    if(forG != "gtb" && forG != "ncwallet" && forG != "billstack" && forG !="monnify" && forG != "kuda" && forG != "vpay"){
 
         alert(forG+" is not a valid gateway");
         return;

@@ -27,6 +27,11 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
     ";
 
     
+    if(vp_getoption("vtupress_custom_billstack") == "yes"){
+      echo"
+      <option value='billstack'>Bill Stack</option>";
+    }
+
     if(vp_getoption("vtupress_custom_ncwallet") == "yes"){
       echo"
       <option value='ncwallet'>Ncwallet Africa</option>";
@@ -93,6 +98,9 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
     </div>
 </div>
 
+
+
+<!-- NCWALLET-->
 <div class='ncwallet'>
     <div class='mb-3'>
     <label for='ppublickey' class='form-label'>Ncwallet Public Key.</label><br>
@@ -126,6 +134,36 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
     <label for='enable_ncwallet'>Enable Ncwallet: </label> <br>
     <select name='enable_ncwallet'>
       <option value='".vp_getoption('enable_ncwallet')."' >".strtoupper(vp_getoption('enable_ncwallet'))."</option>
+      <option value='yes' >YES</option>
+      <option value='no' >NO</option>
+    </select>
+    </div>
+</div>
+
+
+
+<!--BILLSTACK-->
+<div class='billstack'>
+    <div class='mb-3'>
+    <label for='billstacksec' class='form-label'>Billstack Secret/Api Key.</label><br>
+    <input type='text' class='form-control' name='billstack_apikey' value='".vp_getoption('billstack_apikey')."'><br>
+
+    <div class='input-group  mb-2'>
+      <span class='input-group-text' id='basic-addon1'>Wallet Funding Charge</span>
+      <select name='billstack_charge_method' class='form-control billstack_charge_method '>
+      <option value='".vp_getoption('billstack_charge_method')."'>".vp_getoption('billstack_charge_method')."</option>
+      <option value='percentage'>Percentage[%]</option>
+      <option value='fixed'>Fixed[NGN]</option>
+      </select>
+      <input class='form-control billstack_charge_back ' name='billstack_charge_back' value='".floatval(vp_getoption('billstack_charge_back'))."'>
+    </div>
+    
+
+
+    <br>
+    <label for='enable_billstack'>Enable Billstack: </label> <br>
+    <select name='enable_billstack'>
+      <option value='".vp_getoption('enable_billstack')."' >".strtoupper(vp_getoption('enable_billstack'))."</option>
       <option value='yes' >YES</option>
       <option value='no' >NO</option>
     </select>
@@ -327,6 +365,7 @@ but its all automated
       jQuery(".squadco").hide();
       jQuery(".kuda").hide();
       jQuery(".ncwallet").hide();
+      jQuery(".billstack").hide();
 
     }
     else if(popt == "monnify"){
@@ -335,6 +374,7 @@ but its all automated
       jQuery(".paystack").hide();
       jQuery(".kuda").hide();
       jQuery(".ncwallet").hide();
+      jQuery(".billstack").hide();
       jQuery(".squadco").hide();
     }
     else if(popt == "squadco"){
@@ -344,6 +384,7 @@ but its all automated
       jQuery(".kuda").hide();
       jQuery(".squadco").show();
       jQuery(".ncwallet").hide();
+      jQuery(".billstack").hide();
 
       
     }
@@ -354,6 +395,8 @@ but its all automated
       jQuery(".squadco").hide();
       jQuery(".ncwallet").hide();
       jQuery(".kuda").show();
+      jQuery(".billstack").hide();
+
     }
     else if(popt == "vpay"){
       jQuery(".vpay").show();
@@ -362,6 +405,8 @@ but its all automated
       jQuery(".squadco").hide();
       jQuery(".ncwallet").hide();
       jQuery(".kuda").hide();
+      jQuery(".billstack").hide();
+
     }
     else if(popt == "ncwallet"){
       jQuery(".vpay").hide();
@@ -370,6 +415,19 @@ but its all automated
       jQuery(".squadco").hide();
       jQuery(".kuda").hide();
       jQuery(".ncwallet").show();
+      jQuery(".billstack").hide();
+
+
+    }
+     else if(popt == "billstack"){
+      jQuery(".vpay").hide();
+      jQuery(".monnify").hide();
+      jQuery(".paystack").hide();
+      jQuery(".squadco").hide();
+      jQuery(".kuda").hide();
+      jQuery(".ncwallet").hide();
+      jQuery(".billstack").show();
+
 
     }
   
@@ -383,6 +441,8 @@ but its all automated
         jQuery(".squadco").hide();
         jQuery(".kuda").hide();
         jQuery(".ncwallet").hide();
+        jQuery(".billstack").hide();
+
 
       }
       else if(popt == "monnify"){
@@ -392,6 +452,8 @@ but its all automated
         jQuery(".squadco").hide();
         jQuery(".kuda").hide();
         jQuery(".ncwallet").hide();
+        jQuery(".billstack").hide();
+
 
 
       }
@@ -402,6 +464,7 @@ but its all automated
         jQuery(".kuda").hide();
         jQuery(".squadco").show();
         jQuery(".ncwallet").hide();
+        jQuery(".billstack").hide();
 
   
       }
@@ -412,6 +475,7 @@ but its all automated
           jQuery(".kuda").show();
           jQuery(".squadco").hide();
           jQuery(".ncwallet").hide();
+          jQuery(".billstack").hide();
 
     
         }
@@ -422,6 +486,8 @@ but its all automated
           jQuery(".kuda").hide();
           jQuery(".squadco").hide();
           jQuery(".ncwallet").hide();
+          jQuery(".billstack").hide();
+
 
       }
       else if(popt == "ncwallet"){
@@ -431,6 +497,19 @@ but its all automated
           jQuery(".kuda").hide();
           jQuery(".squadco").hide();
           jQuery(".ncwallet").show();
+          jQuery(".billstack").hide();
+
+
+      }
+      else if(popt == "billstack"){
+          jQuery(".vpay").hide();
+          jQuery(".monnify").hide();
+          jQuery(".paystack").hide();
+          jQuery(".kuda").hide();
+          jQuery(".squadco").hide();
+          jQuery(".ncwallet").hide();
+          jQuery(".billstack").show();
+
 
       }
         

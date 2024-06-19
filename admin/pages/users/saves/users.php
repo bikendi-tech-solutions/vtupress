@@ -530,6 +530,120 @@ vp_updateuser($userid,"vpayAccountName",$customer_firstN);
     }
 
         break;
+        case"mrundan_billstack":
+            global $wpdb;
+            $hid = explode(",", $ddid);
+
+            $gateways = "";
+            $token = vp_getoption("billstack_apikey");
+        
+            if(vp_getoption('enable_billstack') == "yes"  && vp_getoption("vtupress_custom_billstack") == "yes"){
+
+
+                $gateways = "BILLSTACK & ";
+                $total = 0;
+                foreach($hid as $hd){
+                    if(!empty($hd)){
+                        $userid = $hd;
+    
+                        $username = get_userdata($hd)->user_login;
+                        $email = get_userdata($hd)->user_email;
+                        $fun = vp_getuser($hd,"first_name",true);
+                        $lun = vp_getuser($hd,"last_name",true);
+                        $phone = vp_getuser($hd, "vp_phone",true);
+
+
+
+
+                    $payload =  [
+                        "firstName" => $fun,
+                        "lastName" => $lun,
+                        "bank" => "9PSB",
+                        "email" => $email,
+                        "reference" => uniqid(),
+                        "phone" => $phone
+
+                    ];
+                
+
+
+                $url = "https://api.billstack.co/v2/thirdparty/generateVirtualAccount/";
+
+
+
+                $curl = curl_init();
+
+                curl_setopt_array($curl, [
+                CURLOPT_URL =>  $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS =>json_encode($payload),
+                CURLOPT_HTTPHEADER => [
+                    "Authorization: Bearer $token",
+                    "Accept: application/json",
+                    "Content-Type: application/json"
+                ],
+                ]);
+
+                $res = curl_exec($curl);
+                $response = json_decode($res,true); 
+                $err = curl_error($curl);
+
+                curl_close($curl);
+
+                if ($err) {
+
+                $return_account = new stdClass;
+                $return_account->status = 'failed';
+                $return_account->message = $err;
+
+                $msg = json_encode($return_account);
+                error_log($msg);
+                die($msg);
+
+                } else {
+
+                        if(!isset($response["status"])){
+                            die($res);
+                        }
+
+                        if($response["status"] != "true"){
+                            die($res);
+                        }
+
+                        if(!isset($response["data"]["account"])){
+                            die($res);
+                        }
+
+                        $account = $response["data"]["account"][0];
+
+
+                    vp_updateuser($hd,"billstack_accountnumber",$account["account_number"]);
+                    vp_updateuser($hd,"billstack_accountname",$account["account_name"]);
+
+
+                }
+
+
+
+
+
+                    }
+                }
+
+                die("100");
+
+            }
+            else{
+                die("Please enable Billstack");
+            }
+
+
+        break;
         case"mrundan_ncwallet":
             global $wpdb;
             $hid = explode(",", $ddid);

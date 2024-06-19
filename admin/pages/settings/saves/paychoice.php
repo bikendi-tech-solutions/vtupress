@@ -79,14 +79,23 @@ if(isset($_POST['updatefl'])){
 
    if(vp_getoption("vtupress_custom_ncwallet") == "yes"){
 
-      vp_updateoption('ncwallet_apikey', $_POST['ncwallet_apikey']);
-      vp_updateoption('ncwallet_pin', $_POST['ncwallet_pin']);
-      vp_updateoption('ncwallet_charge_method', $_POST['ncwallet_charge_method']);
-      vp_updateoption('ncwallet_charge_back', $_POST['ncwallet_charge_back']);
-      vp_updateoption('ncwallet_admin_bvn', $_POST['ncwallet_admin_bvn']);
-      vp_updateoption('enable_ncwallet', $_POST['enable_ncwallet']);
+    vp_updateoption('ncwallet_apikey', $_POST['ncwallet_apikey']);
+    vp_updateoption('ncwallet_pin', $_POST['ncwallet_pin']);
+    vp_updateoption('ncwallet_charge_method', $_POST['ncwallet_charge_method']);
+    vp_updateoption('ncwallet_charge_back', $_POST['ncwallet_charge_back']);
+    vp_updateoption('ncwallet_admin_bvn', $_POST['ncwallet_admin_bvn']);
+    vp_updateoption('enable_ncwallet', $_POST['enable_ncwallet']);
 
-   }
+ }
+
+ if(vp_getoption("vtupress_custom_billstack") == "yes"){
+
+  vp_updateoption('billstack_apikey', $_POST['billstack_apikey']);
+  vp_updateoption('billstack_charge_method', $_POST['billstack_charge_method']);
+  vp_updateoption('billstack_charge_back', $_POST['billstack_charge_back']);
+  vp_updateoption('enable_billstack', $_POST['enable_billstack']);
+
+}
     
 
 
