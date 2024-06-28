@@ -109,7 +109,7 @@ switch($for){
             CURLOPT_TIMEOUT => 30,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
-                CURLOPT_POSTFIELDS =>json_encode($payload),
+                CURLOPT_POSTFIELDS =>json_encode($payload,JSON_UNESCAPED_SLASHES),
             CURLOPT_HTTPHEADER => [
                 "Authorization: Bearer $token",
                 "Accept: application/json",
@@ -240,7 +240,7 @@ switch($for){
                 CURLOPT_TIMEOUT => 30,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => "POST",
-                    CURLOPT_POSTFIELDS =>json_encode($payload),
+                    CURLOPT_POSTFIELDS =>json_encode($payload,JSON_UNESCAPED_SLASHES),
                 CURLOPT_HTTPHEADER => [
                     "Authorization: $token",
                     "trnx_pin: $pin",
@@ -533,7 +533,7 @@ switch($for){
             CURLOPT_TIMEOUT => 30,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS =>json_encode($payload),
+            CURLOPT_POSTFIELDS =>json_encode($payload,JSON_UNESCAPED_SLASHES),
             CURLOPT_HTTPHEADER => [
             "Authorization: Bearer $token",
             "Accept: application/json",
@@ -704,7 +704,7 @@ CURLOPT_MAXREDIRS => 10,
 CURLOPT_TIMEOUT => 30,
 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 CURLOPT_CUSTOMREQUEST => "POST",
-CURLOPT_POSTFIELDS =>json_encode($payload),
+CURLOPT_POSTFIELDS =>json_encode($payload,JSON_UNESCAPED_SLASHES),
 CURLOPT_HTTPHEADER => [
   "Authorization: Bearer $token",
 "Accept: application/json",

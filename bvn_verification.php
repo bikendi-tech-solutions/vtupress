@@ -61,6 +61,10 @@ switch($type){
     default: die("Type Undefined/Incorrect");
 }
 
+if($current_bal < $charge && $charge > 2){
+    die("Balanace is too low");
+}
+
 
 //check for raptor details
 $raptor_conid = vp_getoption('raptor_conid');
