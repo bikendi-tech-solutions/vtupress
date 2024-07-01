@@ -27,6 +27,11 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
     ";
 
     
+    if(vp_getoption("vtupress_custom_payvessel") == "yes"){
+      echo"
+      <option value='payvessel'>Payvessel</option>";
+    }
+
     if(vp_getoption("vtupress_custom_billstack") == "yes"){
       echo"
       <option value='billstack'>Bill Stack</option>";
@@ -134,6 +139,47 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
     <label for='enable_ncwallet'>Enable Ncwallet: </label> <br>
     <select name='enable_ncwallet'>
       <option value='".vp_getoption('enable_ncwallet')."' >".strtoupper(vp_getoption('enable_ncwallet'))."</option>
+      <option value='yes' >YES</option>
+      <option value='no' >NO</option>
+    </select>
+    </div>
+</div>
+
+
+
+<!--PAYVESSEL-->
+<div class='payvessel'>
+    <div class='mb-3'>
+    <label for='payvesselbiz' class='form-label'>Payvessel Business Id.</label><br>
+    <input type='text' class='form-control' name='payvessel_biz' value='".vp_getoption('payvessel_biz')."'><br>
+
+    <label for='payvesselbiz' class='form-label mt-2'>Payvessel Admin Bvn.</label><br>
+    <input type='text' class='form-control' name='payvessel_admin_bvn' value='".vp_getoption('payvessel_admin_bvn')."'><br>
+
+
+    <label for='payvesselapi' class='form-label mt-2'>Payvessel Api Key.</label><br>
+    <input type='text' class='form-control' name='payvessel_apikey' value='".vp_getoption('payvessel_apikey')."'><br>
+
+    <label for='payvesselsec' class='form-label mt-2'>Payvessel Secret/Api Key.</label><br>
+    <input type='text' class='form-control' name='payvessel_seckey' value='".vp_getoption('payvessel_seckey')."'><br>
+
+
+    <div class='input-group  mb-2'>
+      <span class='input-group-text' id='basic-addon1'>Wallet Funding Charge</span>
+      <select name='payvessel_charge_method' class='form-control payvessel_charge_method '>
+      <option value='".vp_getoption('payvessel_charge_method')."'>".vp_getoption('payvessel_charge_method')."</option>
+      <option value='percentage'>Percentage[%]</option>
+      <option value='fixed'>Fixed[NGN]</option>
+      </select>
+      <input class='form-control payvessel_charge_back ' name='payvessel_charge_back' value='".floatval(vp_getoption('payvessel_charge_back'))."'>
+    </div>
+    
+
+
+    <br>
+    <label for='enable_payvessel'>Enable Payvessel: </label> <br>
+    <select name='enable_payvessel'>
+      <option value='".vp_getoption('enable_payvessel')."' >".strtoupper(vp_getoption('enable_payvessel'))."</option>
       <option value='yes' >YES</option>
       <option value='no' >NO</option>
     </select>
@@ -356,7 +402,7 @@ but its all automated
     </form>
     
     <script>
-
+function selectGateway(){
     var popt = jQuery(".payment-opt").val();
     if(popt == "paystack"){
       jQuery(".monnify").hide();
@@ -366,6 +412,7 @@ but its all automated
       jQuery(".kuda").hide();
       jQuery(".ncwallet").hide();
       jQuery(".billstack").hide();
+      jQuery(".payvessel").hide();
 
     }
     else if(popt == "monnify"){
@@ -375,6 +422,7 @@ but its all automated
       jQuery(".kuda").hide();
       jQuery(".ncwallet").hide();
       jQuery(".billstack").hide();
+      jQuery(".payvessel").hide();
       jQuery(".squadco").hide();
     }
     else if(popt == "squadco"){
@@ -385,6 +433,8 @@ but its all automated
       jQuery(".squadco").show();
       jQuery(".ncwallet").hide();
       jQuery(".billstack").hide();
+      jQuery(".payvessel").hide();
+
 
       
     }
@@ -396,6 +446,8 @@ but its all automated
       jQuery(".ncwallet").hide();
       jQuery(".kuda").show();
       jQuery(".billstack").hide();
+      jQuery(".payvessel").hide();
+
 
     }
     else if(popt == "vpay"){
@@ -406,6 +458,8 @@ but its all automated
       jQuery(".ncwallet").hide();
       jQuery(".kuda").hide();
       jQuery(".billstack").hide();
+      jQuery(".payvessel").hide();
+
 
     }
     else if(popt == "ncwallet"){
@@ -416,6 +470,7 @@ but its all automated
       jQuery(".kuda").hide();
       jQuery(".ncwallet").show();
       jQuery(".billstack").hide();
+      jQuery(".payvessel").hide();
 
 
     }
@@ -427,91 +482,33 @@ but its all automated
       jQuery(".kuda").hide();
       jQuery(".ncwallet").hide();
       jQuery(".billstack").show();
+      jQuery(".payvessel").hide();
+
 
 
     }
+    else if(popt == "payvessel"){
+      jQuery(".vpay").hide();
+      jQuery(".monnify").hide();
+      jQuery(".paystack").hide();
+      jQuery(".squadco").hide();
+      jQuery(".kuda").hide();
+      jQuery(".ncwallet").hide();
+      jQuery(".billstack").hide();
+      jQuery(".payvessel").show();
+
+
+
+    }
+
+  }
   
+
+  selectGateway();
+
     jQuery(".payment-opt").on("change",function(){
-  
-      var popt = jQuery(".payment-opt").val();
-      if(popt == "paystack"){
-        jQuery(".vpay").hide();
-        jQuery(".monnify").hide();
-        jQuery(".paystack").show();
-        jQuery(".squadco").hide();
-        jQuery(".kuda").hide();
-        jQuery(".ncwallet").hide();
-        jQuery(".billstack").hide();
 
-
-      }
-      else if(popt == "monnify"){
-        jQuery(".vpay").hide();
-        jQuery(".monnify").show();
-        jQuery(".paystack").hide();
-        jQuery(".squadco").hide();
-        jQuery(".kuda").hide();
-        jQuery(".ncwallet").hide();
-        jQuery(".billstack").hide();
-
-
-
-      }
-      else if(popt == "squadco"){
-        jQuery(".vpay").hide();
-        jQuery(".monnify").hide();
-        jQuery(".paystack").hide();
-        jQuery(".kuda").hide();
-        jQuery(".squadco").show();
-        jQuery(".ncwallet").hide();
-        jQuery(".billstack").hide();
-
-  
-      }
-      else if(popt == "kuda"){
-          jQuery(".vpay").hide();
-          jQuery(".monnify").hide();
-          jQuery(".paystack").hide();
-          jQuery(".kuda").show();
-          jQuery(".squadco").hide();
-          jQuery(".ncwallet").hide();
-          jQuery(".billstack").hide();
-
-    
-        }
-      else if(popt == "vpay"){
-          jQuery(".vpay").show();
-          jQuery(".monnify").hide();
-          jQuery(".paystack").hide();
-          jQuery(".kuda").hide();
-          jQuery(".squadco").hide();
-          jQuery(".ncwallet").hide();
-          jQuery(".billstack").hide();
-
-
-      }
-      else if(popt == "ncwallet"){
-          jQuery(".vpay").hide();
-          jQuery(".monnify").hide();
-          jQuery(".paystack").hide();
-          jQuery(".kuda").hide();
-          jQuery(".squadco").hide();
-          jQuery(".ncwallet").show();
-          jQuery(".billstack").hide();
-
-
-      }
-      else if(popt == "billstack"){
-          jQuery(".vpay").hide();
-          jQuery(".monnify").hide();
-          jQuery(".paystack").hide();
-          jQuery(".kuda").hide();
-          jQuery(".squadco").hide();
-          jQuery(".ncwallet").hide();
-          jQuery(".billstack").show();
-
-
-      }
+    selectGateway();
         
     });
   

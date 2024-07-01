@@ -59,6 +59,7 @@ $_XERVER = convertArrayKeysToLowerCase($_SERVER);
 
 
 $input = file_get_contents("php://input");
+$payload = $input;
 
 $event = json_decode(str_replace(" ","",$input));
 $array = json_decode(str_replace(" ","",$input), true);
@@ -83,7 +84,7 @@ $headers = array('Content-Type: text/html; charset=UTF-8');
 function computeSHA512TransactionHash($stringifiedData, $clientSecret) {
     $computedHash = hash_hmac('sha512', $stringifiedData, $clientSecret);
     return $computedHash;
-  }
+}
 
 if(isset($event->event_type) && isset($event->settled_amount)){
 
@@ -127,6 +128,84 @@ if(isset($event->event_type) && isset($event->settled_amount)){
     $total_amount = $amount;
 
 }
+elseif (  array_key_exists('http_payvessel_http_signature', $_XERVER)) {
+
+
+   // error_log("Yes payvessel",0);
+    // CSRF exemption
+
+    $payvessel_signature = $_XERVER['http_payvessel_http_signature'];
+    //this line maybe be differ depends on your server
+    //$ip_address = $_SERVER['HTTP_X_FORWARDED_FOR']; 
+    $ip_address = $_SERVER['REMOTE_ADDR']; 
+    $secret = vp_getoption("payvessel_seckey");
+    $hashkey = hash_hmac('sha512', $payload, $secret);
+
+    if ($payvessel_signature == $hashkey && $ip_address == "162.246.254.36") {
+
+
+        /*
+        {
+        "transaction":{"date":"---","reference":"---","sessionid":"---"},
+            "order":{
+            "currency":"NGN",
+            "amount":500,
+            "settlement_amount":470,
+            "fee":30,
+            "description":"---"
+            },
+            "customer":{
+            "email":"----",
+            "phone":"--"
+            },
+            "virtualAccount":{
+            "virtualAccountNumber":"---",
+            "virtualBank":"120001"
+            },
+            "sender":{
+            "senderAccountNumber":"---",
+            "SenderBankCode":"---",
+            "senderBankName":"---",
+            "senderName":"---"
+            },"message":"---",
+            "code":"00"
+            }
+        */
+   // error_log("payvessel match",0);
+
+        $data = json_decode($payload, true);
+        $amount = floatval($data['order']['amount']);
+        $settlementAmount = floatval($data['order']['settlement_amount']);
+        $fee = floatval($data['order']['fee']);
+        $reference = $data['transaction']['reference'];
+        $description = $data['order']['description'];
+        $settlementAmount = $settlementAmount;
+
+
+        $userD = get_user_by("email",$array["customer"]["email"]);
+        
+        if(empty($userD)){
+            die("User not found");
+        }
+        $userID  = $userD->ID;
+        $userData = get_userdata($userID);
+        $processor = "payvessel";    
+        $session_id =  $data['transaction']['sessionid'];;
+        $email =  $userData->user_email;
+        $user_data = $userData;
+        $userid = $userID;
+        $ref = $reference;
+        $total_amount = $amount;
+
+    } else {
+
+   // error_log("payvessel mismatch",0);
+
+        echo json_encode(["message" => "Permission denied, invalid hash or ip address."]);
+        http_response_code(400);
+    }
+
+}
 elseif(isset($event->event)  && array_key_exists('http_x_wiaxy_signature', $_XERVER)){
 
     $apikey = vp_getoption("billstack_apikey");
@@ -160,9 +239,9 @@ elseif(isset($event->event)  && array_key_exists('http_x_wiaxy_signature', $_XER
 
 }
 elseif(isset($event->eventType) ){
-if($event->eventType != "SUCCESSFUL_TRANSACTION" ){
-    die("Not a successful transaction - Monnify");
-}
+    if($event->eventType != "SUCCESSFUL_TRANSACTION" ){
+        die("Not a successful transaction - Monnify");
+    }
 
 
 
@@ -186,28 +265,28 @@ if($event->eventType != "SUCCESSFUL_TRANSACTION" ){
 
 
 
-$DEFAULT_MERCHANT_CLIENT_SECRET = trim(vp_getoption("monnifysecretkey"));
+    $DEFAULT_MERCHANT_CLIENT_SECRET = trim(vp_getoption("monnifysecretkey"));
 
-$computedHash = computeSHA512TransactionHash($input, $DEFAULT_MERCHANT_CLIENT_SECRET);
+    $computedHash = computeSHA512TransactionHash($input, $DEFAULT_MERCHANT_CLIENT_SECRET);
 
-if($signature != $computedHash){
-die("Signature Mismatch");
-}
-else{
-//echo "Signature = ComputedHash <br>";
-}
-
-
-$email =  $event->eventData->customer->email;
-$amount = $event->eventData->amountPaid;
-$total_amount = $amount;
-$userid = get_user_by( 'email', $email )->ID;
-
-$ref = $event->eventData->transactionReference;
-
-$processor = "Monnify";
-
+    if($signature != $computedHash){
+    die("Signature Mismatch");
     }
+    else{
+    //echo "Signature = ComputedHash <br>";
+    }
+
+
+    $email =  $event->eventData->customer->email;
+    $amount = $event->eventData->amountPaid;
+    $total_amount = $amount;
+    $userid = get_user_by( 'email', $email )->ID;
+
+    $ref = $event->eventData->transactionReference;
+
+    $processor = "Monnify";
+
+}
 elseif((strtoupper($_XERVER['request_method']) == 'POST' ) &&  array_key_exists('http_x_squad_signature', $_XERVER)){
  #######################--- FOR SQUAD CO TRANSFER -----###################
  
@@ -218,59 +297,59 @@ elseif((strtoupper($_XERVER['request_method']) == 'POST' ) &&  array_key_exists(
     $squadSecretKey = vp_getoption('squad_secret');
     define('SQUAD_SECRET_KEY',$squadSecretKey ); //ENTER YOUR SECRET KEY HERE
 
-if( $_XERVER['http_x_squad_signature'] !== strtolower(hash_hmac('sha512', $input, SQUAD_SECRET_KEY)) ){
-   //error_log("Hash",0);
-  
-    die("HASH DOES NOT TALLY!");
-}
-else{
-
-    $body = json_decode(str_replace(" ","",$input),true);
-
-}
-
-//error_log($input,0);
-
-if(isset($body['transaction_indicator'])){
-
-    if(strtolower($body['transaction_indicator']) == "c"){
-     //  error_log("char suc",0);
-
-    }else{
- // error_log("charge nt suc",0);
-
-        die("Charge Not Successful");
+    if( $_XERVER['http_x_squad_signature'] !== strtolower(hash_hmac('sha512', $input, SQUAD_SECRET_KEY)) ){
+    //error_log("Hash",0);
+    
+        die("HASH DOES NOT TALLY!");
     }
-}
-else{
-   // error_log("no event".print_r($body,true),0);
+    else{
 
-    die("No Event");
-}
+        $body = json_decode(str_replace(" ","",$input),true);
 
-$the_accountNumber = $body["virtual_account_number"];
-global $wpdb;
-$userdata_tb = $wpdb->prefix."usermeta";
-$userdata_result = $wpdb->get_results($wpdb->prepare("SELECT * FROM $userdata_tb WHERE meta_value LIKE %s","%$the_accountNumber%"));
+    }
 
-if($userdata_result == NULL){
- //   error_log("[TRANSACTION ERROR] - USER WITH $the_accountNumber DOES NOT EXIST",0);
-    die("[TRANSACTION ERROR] - USER WITH $the_accountNumber DOES NOT EXIST");
-}
-else{
-   $uid =  $userdata_result[0]->user_id;
-}
-  
+    //error_log($input,0);
 
-$transaction_type = "Credit";
-$amount =  intval($body['principal_amount']);
-$total_amount = $amount;
-$user_data = get_user_by( 'ID',$uid);
-$email =  $user_data->user_email;
-$userid = $user_data->ID;
-$ref = $body['transaction_reference'];
+    if(isset($body['transaction_indicator'])){
 
-$processor = "SquadCo";
+        if(strtolower($body['transaction_indicator']) == "c"){
+        //  error_log("char suc",0);
+
+        }else{
+    // error_log("charge nt suc",0);
+
+            die("Charge Not Successful");
+        }
+    }
+    else{
+    // error_log("no event".print_r($body,true),0);
+
+        die("No Event");
+    }
+
+    $the_accountNumber = $body["virtual_account_number"];
+    global $wpdb;
+    $userdata_tb = $wpdb->prefix."usermeta";
+    $userdata_result = $wpdb->get_results($wpdb->prepare("SELECT * FROM $userdata_tb WHERE meta_value LIKE %s","%$the_accountNumber%"));
+
+    if($userdata_result == NULL){
+    //   error_log("[TRANSACTION ERROR] - USER WITH $the_accountNumber DOES NOT EXIST",0);
+        die("[TRANSACTION ERROR] - USER WITH $the_accountNumber DOES NOT EXIST");
+    }
+    else{
+    $uid =  $userdata_result[0]->user_id;
+    }
+    
+
+    $transaction_type = "Credit";
+    $amount =  intval($body['principal_amount']);
+    $total_amount = $amount;
+    $user_data = get_user_by( 'ID',$uid);
+    $email =  $user_data->user_email;
+    $userid = $user_data->ID;
+    $ref = $body['transaction_reference'];
+
+    $processor = "SquadCo";
 }
 elseif((strtoupper($_XERVER['request_method']) == 'POST' ) &&  array_key_exists('http_x_squad_encrypted_body', $_XERVER)){
     ####################### --- CARD PAYMENT --- ################
@@ -361,7 +440,7 @@ elseif(isset($array["transactionType"])){
         die("Not Kuda");
     }
 
-$token =  vp_getoption('kuda_generated_apikey');
+    $token =  vp_getoption('kuda_generated_apikey');
     //Get transaction data
     $kudaressap = <<<EOD
 
@@ -381,73 +460,73 @@ $token =  vp_getoption('kuda_generated_apikey');
         "clientRequestRef":"16932447073645600961506853044504IWA2H04HC"}
     EOD;
 
-$recipient_number = $array["accountNumber"];
-$session_id = $array["SessionId"];
+    $recipient_number = $array["accountNumber"];
+    $session_id = $array["SessionId"];
 
 
-global $wpdb;
-$usermeta = $wpdb->prefix."usermeta";
-$userTb = $wpdb->get_results($wpdb->prepare("SELECT * FROM $usermeta WHERE meta_value LIKE %s ","%$recipient_number%"));
-if($userTb == NULL || empty($userTb)) {
-die("User With The Account Not Found");
-}
+    global $wpdb;
+    $usermeta = $wpdb->prefix."usermeta";
+    $userTb = $wpdb->get_results($wpdb->prepare("SELECT * FROM $usermeta WHERE meta_value LIKE %s ","%$recipient_number%"));
+    if($userTb == NULL || empty($userTb)) {
+    die("User With The Account Not Found");
+    }
 
-$userID = $userTb[0]->user_id;
-$userData = get_userdata($userID);
+    $userID = $userTb[0]->user_id;
+    $userData = get_userdata($userID);
 
-$trackingRef = vp_getuser($userID,"kudaTrackingRef",true);
+    $trackingRef = vp_getuser($userID,"kudaTrackingRef",true);
 
-$transaction_type = "Credit";
-$amount = $array["amount"]/100;
-$total_amount = $amount;
-$email =  $userData->user_email;
-$user_data = $userData;
-$userid = $userID;
-$ref = $session_id;
-
-
+    $transaction_type = "Credit";
+    $amount = $array["amount"]/100;
+    $total_amount = $amount;
+    $email =  $userData->user_email;
+    $user_data = $userData;
+    $userid = $userID;
+    $ref = $session_id;
 
 
-$payload = [
-    'serviceType' => "WITHDRAW_VIRTUAL_ACCOUNT",
-    'requestRef' => uniqid(),
-    'Data' => [
-        "TrackingReference" => $trackingRef,
-        "Amount" => $array["amount"],
-        "Narration" => "To main account",
-        "narration" => "text it",
-        "ClientFeeCharge" => 0
-        ]
-    ];
-    
-$live_url = "https://kuda-openapi.kuda.com/v2.1";
-
-$curl = curl_init();
-
-curl_setopt_array($curl, [
-  CURLOPT_URL =>  $live_url,
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => "",
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 30,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => "POST",
-    CURLOPT_POSTFIELDS =>json_encode($payload),
-  CURLOPT_HTTPHEADER => [
-    "accept: application/json",
-    "content-type: application/json",
-     "Authorization: Bearer $token"
-  ],
-]);
-
-$res = curl_exec($curl);
-$response = json_decode($res,true); 
-$err = curl_error($curl);
-
-curl_close($curl);
 
 
-$processor = "KUDA";
+    $payload = [
+        'serviceType' => "WITHDRAW_VIRTUAL_ACCOUNT",
+        'requestRef' => uniqid(),
+        'Data' => [
+            "TrackingReference" => $trackingRef,
+            "Amount" => $array["amount"],
+            "Narration" => "To main account",
+            "narration" => "text it",
+            "ClientFeeCharge" => 0
+            ]
+        ];
+        
+    $live_url = "https://kuda-openapi.kuda.com/v2.1";
+
+    $curl = curl_init();
+
+    curl_setopt_array($curl, [
+    CURLOPT_URL =>  $live_url,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => "",
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 30,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => "POST",
+        CURLOPT_POSTFIELDS =>json_encode($payload),
+    CURLOPT_HTTPHEADER => [
+        "accept: application/json",
+        "content-type: application/json",
+        "Authorization: Bearer $token"
+    ],
+    ]);
+
+    $res = curl_exec($curl);
+    $response = json_decode($res,true); 
+    $err = curl_error($curl);
+
+    curl_close($curl);
+
+
+    $processor = "KUDA";
 
 }
 else{

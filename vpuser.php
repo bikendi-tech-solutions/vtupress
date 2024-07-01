@@ -2,20 +2,12 @@
 
 $option_array = json_decode(get_option("vp_options"),true);
 
-vp_addoption('manual_funding', "no message");
-vp_addoption("show_services_bonus", "yes");
-vp_addoption("refbo",0);
-vp_addoption("cb",0);
 
 add_shortcode("vpaccount","vpaccount");
-vp_addoption("vpap","no");
-vp_addoption("vpwalm","No message");
+
 
 
 //user account
-
-
-
 
 
 function vpaccount(){

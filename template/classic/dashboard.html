@@ -512,6 +512,18 @@ Billstack
 
 <?php
 }
+if( vp_getoption('enable_payvessel') == "yes" ){
+?>
+<li>
+<a href="#" for="payvessel" class="flex generate_account justify-between text-indigo-200 duration-150 ease-in-out hover:text-indigo-300">
+<div>
+Payvessel
+</div>
+</a>
+</li>
+
+<?php
+}
 if( vp_getoption('enable_ncwallet') == "yes" ){
 ?>
 <li>

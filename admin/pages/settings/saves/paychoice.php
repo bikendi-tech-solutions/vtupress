@@ -98,6 +98,19 @@ if(isset($_POST['updatefl'])){
 }
     
 
+if(vp_getoption("vtupress_custom_payvessel") == "yes"){
+
+  vp_updateoption('payvessel_apikey', $_POST['payvessel_apikey']);
+  vp_updateoption('payvessel_seckey', $_POST['payvessel_seckey']);
+  vp_updateoption('payvessel_biz', $_POST['payvessel_biz']);
+  vp_updateoption('payvessel_admin_bvn', $_POST['payvessel_admin_bvn']);
+  vp_updateoption('payvessel_charge_method', $_POST['payvessel_charge_method']);
+  vp_updateoption('payvessel_charge_back', $_POST['payvessel_charge_back']);
+  vp_updateoption('enable_payvessel', $_POST['enable_payvessel']);
+
+}
+    
+
 
    if(vp_getoption("vtupress_custom_kuda") == "yes" && $_POST['enablekuda'] == "yes"){
 

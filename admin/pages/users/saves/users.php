@@ -530,6 +530,133 @@ vp_updateuser($userid,"vpayAccountName",$customer_firstN);
     }
 
         break;
+        case"mrundan_payvessel":
+            global $wpdb;
+            $hid = explode(",", $ddid);
+
+            $gateways = "";
+            $apikey = vp_getoption("payvessel_apikey");
+            $seckey = vp_getoption("payvessel_seckey");
+            $biz = vp_getoption("payvessel_biz");
+
+            $admin_bvn = strtolower(vp_getoption("payvessel_admin_bvn"));
+            
+        
+            if(vp_getoption('enable_payvessel') == "yes"  && vp_getoption("vtupress_custom_payvessel") == "yes"){
+
+
+                $gateways = "PAYVESSEL & ";
+                $total = 0;
+                foreach($hid as $hd){
+                    if(!empty($hd)){
+                        $userid = $hd;
+    
+                        $username = get_userdata($hd)->user_login;
+                        $bvn = vp_getuser($userid,"myBvn",true);
+                        $email = get_userdata($hd)->user_email;
+                        $fun = vp_getuser($hd,"first_name",true);
+                        $lun = vp_getuser($hd,"last_name",true);
+                        $phone = vp_getuser($hd, "vp_phone",true);
+
+
+                        if(empty($bvn) || mb_strlen($bvn) < 10){
+                            $bvn = $admin_bvn;
+                        }
+
+
+
+                    $payload =  [
+                        "email" => $email,
+                        "name" => $fun." ".$lun,
+                        "phoneNumber" => $phone,
+                        "bankcode" => ["120001"],
+                        "account_type" => "STATIC",
+                        "businessid" => $biz,
+                        "bvn" => $bvn,
+                        "reference" => uniqid()
+
+                    ];
+                
+
+
+                $url = "https://api.payvessel.com/api/external/request/customerReservedAccount/";
+
+
+
+                $curl = curl_init();
+
+                curl_setopt_array($curl, [
+                CURLOPT_URL =>  $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS =>json_encode($payload,JSON_UNESCAPED_SLASHES),
+                CURLOPT_HTTPHEADER => [
+                    "api-key: $apikey",
+                    "api-secret: Bearer $seckey",
+                    "Accept: application/json",
+                    "Content-Type: application/json"
+                ],
+                ]);
+
+                $res = curl_exec($curl);
+                $response = json_decode($res,true); 
+                $err = curl_error($curl);
+
+                curl_close($curl);
+
+                if ($err) {
+
+                $return_account = new stdClass;
+                $return_account->status = 'failed';
+                $return_account->message = $err;
+
+                $msg = json_encode($return_account);
+                error_log($msg);
+                die($msg);
+
+                } else {
+
+                        if(!isset($response["status"])){
+                            die($res);
+                        }
+
+                        if($response["status"] != "true"){
+                            die($res);
+                        }
+
+                        if(!isset($response["banks"][0]["bankName"])){
+                            die($res);
+                        }
+
+                        $account = $response["banks"][0];
+
+
+                    vp_updateuser($hd,"payvessel_accountnumber",$account["accountNumber"]);
+                    vp_updateuser($hd,"payvessel_accountname",$account["accountName"]);
+
+
+                }
+
+
+
+
+
+                    }
+                }
+
+                die("100");
+
+            }
+            else{
+                die("Please enable PAYVESSEL");
+            }
+
+
+        break;
         case"mrundan_billstack":
             global $wpdb;
             $hid = explode(",", $ddid);
