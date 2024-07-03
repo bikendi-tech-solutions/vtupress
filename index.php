@@ -668,6 +668,16 @@ switch(strtolower($processor)){
             $minus = $total_amount - $remove ;
             }
     break;
+    case"payvessel":
+        $charge = floatval(vp_getoption("payvessel_charge_back"));
+        if(vp_getoption("payvessel_charge_method") == "fixed"){
+            $minus = $total_amount - $charge;
+            }
+            else{
+            $remove = ($total_amount *  $charge) / 100;
+            $minus = $total_amount - $remove ;
+            }
+    break;
     case"vpay":
         $charge = floatval(vp_getoption("vpay_charge_back"));
         if(vp_getoption("vpay_charge_method") == "fixed"){
