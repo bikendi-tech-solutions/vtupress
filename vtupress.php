@@ -74,6 +74,7 @@ include_once('vpuser.php');
 //error_log(date('Y-m-d h:i:s A',$current_timestamp));
 
 
+
 function vtupress_user_update(){
   header("Content-Security-Policy: https:");
   //Script_Transport-Security
