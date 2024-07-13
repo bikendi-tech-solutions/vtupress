@@ -23,6 +23,11 @@ extract(vtupress_user_details());
 <link rel="stylesheet" href="<?php echo $template_url."/classic/classic";?>/all.min.css?v=1">
 
 <link rel="stylesheet" href="<?php echo plugins_url('vtupress/admin/dist/css/icons/material-design-iconic-font/css/materialdesignicons.min.css');?>">
+<link rel="stylesheet" href="<?php echo plugins_url('vtupress/css/toast.css');?>">
+<link rel="stylesheet" href="<?php echo plugins_url('vtupress/css/datatables.css');?>">
+<script src="<?php echo plugins_url('vtupress/js/datatables.js');?>"></script>
+<script src="<?php echo plugins_url('vtupress/js/toast.js');?>"></script>
+<script src="<?php echo plugins_url('vtupress/js/custom.js');?>"></script>
 
 <link rel="shortcut icon" href="<?php echo get_site_icon_url( 75, vp_option_array($option_array,'siteurl').'/wp-content/plugins/vtupress/images/login.png');?>" type="image/png">
 
@@ -122,7 +127,7 @@ background-color:#3028a7;
 
 </style>
 
-<script defer="" src="<?php echo $template_url."/classic/classic";?>/cdn.min.js?v=1"></script>
+<script defer="" src="<?php echo $template_url."/classic/classic";?>/cdn.min.js?v=1"></>
 <script src="<?php echo $template_url."/classic/classic";?>/alpine@3.2.0.js?v=1" defer=""></script>
 <script src="<?php echo $template_url."/classic/classic";?>/axios.min.js?v=1"></script>
 <!--<script src="<?php echo $template_url."/classic/classic";?>/app.js?v=1"></script>-->
@@ -320,6 +325,19 @@ if(is_plugin_active("vpsms/vpsms.php") && vp_option_array($option_array,"smscont
 <div>
 <i class="mr-3 nav-icon fas fa-envelope"></i>
 Send Bulk SMS
+</div>
+</a>
+</li>
+<?php
+}
+
+if( vp_option_array($option_array,"vtupress_custom_isavings") == "yes"){
+?>
+<li>
+<a href="?vend=savings" class="tracking-wider flex justify-between hover:text-indigo-300 duration-150 text-indigo-200 ease-in-out hover:text-indigo-300">
+<div>
+<i class="mr-3 nav-icon fa fa-piggy-bank"></i>
+Savings
 </div>
 </a>
 </li>
@@ -697,7 +715,7 @@ Logout
 
 <!--MAIN DASHBOARD-->
 <?php
-if((isset($_GET["vend"]) && $_GET["vend"]!="airtime" && $_GET["vend"]!="verification"  && $_GET["vend"]!="bet" && $_GET["vend"]!="datacard" && $_GET["vend"]!="message" && $_GET["vend"]!="kyc" && $_GET["vend"]!="pricing"  && $_GET["vend"]!="referral-details" && $_GET["vend"]!="bill" && $_GET["vend"]!="developer"  && $_GET["vend"]!="cards" && $_GET["vend"]!="referrals" && $_GET["vend"]!="gift-card" && $_GET["vend"]!="crypto"  && $_GET["vend"]!="transfer" && $_GET["vend"]!="sms" && $_GET["vend"]!="epins" && $_GET["vend"]!="withdraw" && $_GET["vend"]!="wallet" && $_GET["vend"]!="upgrade" && $_GET["vend"]!="data" && $_GET["vend"]!="cable" && $_GET["vend"]!="bill" && $_GET["vend"]!="history" && $_GET["vend"]!="account")  || !isset($_GET["vend"])){
+if((isset($_GET["vend"]) && $_GET["vend"]!="savings"  && $_GET["vend"]!="airtime" && $_GET["vend"]!="verification"  && $_GET["vend"]!="bet" && $_GET["vend"]!="datacard" && $_GET["vend"]!="message" && $_GET["vend"]!="kyc" && $_GET["vend"]!="pricing"  && $_GET["vend"]!="referral-details" && $_GET["vend"]!="bill" && $_GET["vend"]!="developer"  && $_GET["vend"]!="cards" && $_GET["vend"]!="referrals" && $_GET["vend"]!="gift-card" && $_GET["vend"]!="crypto"  && $_GET["vend"]!="transfer" && $_GET["vend"]!="sms" && $_GET["vend"]!="epins" && $_GET["vend"]!="withdraw" && $_GET["vend"]!="wallet" && $_GET["vend"]!="upgrade" && $_GET["vend"]!="data" && $_GET["vend"]!="cable" && $_GET["vend"]!="bill" && $_GET["vend"]!="history" && $_GET["vend"]!="account")  || !isset($_GET["vend"])){
 if(vp_option_array($option_array,"show_notify") == "yes"){
 	$meq = preg_replace('/\n|\t|\s|\r/'," ",$mess);
 	?>
@@ -1368,6 +1386,7 @@ include(__DIR__.'/developer.html');
 include(__DIR__.'/account.html');		
 include(__DIR__.'/wallet.html');		
 include(__DIR__.'/transfer.html');		
+include(__DIR__.'/savings.html');		
 include(__DIR__.'/upgrade.html');		
 include(__DIR__.'/withdrawal.html');	
 include(__DIR__.'/crypto.html');		

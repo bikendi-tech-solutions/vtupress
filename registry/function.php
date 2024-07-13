@@ -24,7 +24,7 @@ function convertToCronSchedule($frequency = "minutes", $interval = "5") {
             $duration = "*/$interval * * * *";
         break;
         case 'hours':
-            // Runs every $interval minutes
+            // Runs every $interval hour
             $duration = "* */$interval * * *";
         break;
         case 'days':

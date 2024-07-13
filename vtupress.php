@@ -10,7 +10,7 @@
 *Plugin Name: VTU Press
 *Plugin URI: http://vtupress.com
 *Description: This is the very first <b>VTU plugin</b>. It's VTU services are all Automated with wonderful features
-*Version: 6.3.8
+*Version: 6.3.9
 *Author: Akor Victor
 *Author URI: https://facebook.com/vtupressceo
 *License:      GPL3
@@ -33,9 +33,6 @@ along with {Plugin Name}. If not, see {URI to Plugin License}.
 */
 //--hRequires PHP: 7.4
 
-
-
-
 if(!defined('ABSPATH')){
     $pagePath = explode('/wp-content/', dirname(__FILE__));
     include_once(str_replace('wp-content/' , '', $pagePath[0] . '/wp-load.php'));
@@ -49,7 +46,7 @@ include_once(ABSPATH ."wp-load.php");
 include_once(ABSPATH .'wp-content/plugins/vtupress/functions.php');
 include_once(ABSPATH .'wp-admin/includes/plugin.php');
 require_once(ABSPATH.'wp-admin/includes/upgrade.php');
-add_action('wp_head','vtupress_user_update');
+add_action('init','vtupress_user_update');
 
 
 global $current_timestamp;
@@ -78,19 +75,14 @@ include_once('vpuser.php');
 
 
 function vtupress_user_update(){
-  if(headers_sent()){
-    ob_start();
-  }
-
-
-header("Content-Security-Policy: https:");
-//Script_Transport-Security
-header("strict-transport-security: max-age=31536000 ");
-header("X-Frame-Options: SAMEORIGIN");
-header("X-Content-Type-Options: nosniff");
-header("Referrer-Policy: same-origin");
-header("X-Xss-Protection: 1");
-header('Permissions-Policy: geolocation=(self ),camera=(self), microphone=(self)');
+  header("Content-Security-Policy: https:");
+  //Script_Transport-Security
+  header("strict-transport-security: max-age=31536000 ");
+  header("X-Frame-Options: SAMEORIGIN");
+  header("X-Content-Type-Options: nosniff");
+  header("Referrer-Policy: same-origin");
+  header("X-Xss-Protection: 1");
+  header('Permissions-Policy: geolocation=(self ),camera=(self), microphone=(self)');
 
   global $current_timestamp;
 
@@ -152,9 +144,7 @@ if(is_user_logged_in()){
     }
   }
 
-  if(headers_sent()){
-    ob_flush();
-  }
+
 }
 
 
@@ -288,8 +278,196 @@ function vtupress_login_session(){
 
 
 
-$update_vtupress_options = 40;
+$update_vtupress_options = 70;
 if(get_option("vtupress_options2") != $update_vtupress_options){
+
+  //cut either month or withdrawal
+
+    global $wpdb;
+    $table_name = $wpdb->prefix.'vp_daily_savings_settings';
+    $charset_collate=$wpdb->get_charset_collate();
+    $sql= "CREATE TABLE IF NOT EXISTS $table_name(
+    id int NOT NULL AUTO_INCREMENT,
+    sign_up_fee text,
+    cut text,
+    cut_type text,
+    minimum_amount text,
+    interest text,
+    status text,
+    referer_commission text,
+    PRIMARY KEY (id))$charset_collate;";
+    require_once(ABSPATH.'wp-admin/includes/upgrade.php');
+    dbDelta($sql);
+    maybe_add_column($table_name,"status","ALTER  TABLE  $table_name ADD status text");
+    maybe_add_column($table_name,"cut_type","ALTER  TABLE  $table_name ADD cut_type text");
+
+    $payload = [
+      "sign_up_fee" => "1000",
+      "cut" => "1",
+      "cut_type" => "off",
+      "minimum_amount" => "0",
+      "interest" => "0",
+      "status" => "off",
+      "referer_commission" => "400"
+    ];
+
+    //check if exist
+    $results = $wpdb->get_results("SELECT * FROM $table_name");
+    if(empty($results)){
+      $wpdb->insert($table_name,$payload);
+    }
+
+
+
+    global $wpdb;
+    $table_name = $wpdb->prefix.'vp_fixed_savings_settings';
+    //$wpdb->query("DROP TABLE IF EXISTS $table_name");
+
+    $charset_collate=$wpdb->get_charset_collate();
+    $sql= "CREATE TABLE IF NOT EXISTS $table_name(
+    id int NOT NULL AUTO_INCREMENT,
+    sign_up_fee text,
+    duration text,
+    status text,
+    interest text,
+    referer_commission text,
+    applicable_after text,
+    recurrent_after_first text,
+    penalty text,
+    cut text,
+    minimum_amount text,
+    cut_type text,
+    stop_after_due text,
+    PRIMARY KEY (id))$charset_collate;";
+    require_once(ABSPATH.'wp-admin/includes/upgrade.php');
+    dbDelta($sql);
+    maybe_add_column($table_name,"penalty","ALTER  TABLE  $table_name ADD penalty text");
+    maybe_add_column($table_name,"cut","ALTER  TABLE  $table_name ADD cut text");
+    maybe_add_column($table_name,"cut_type","ALTER  TABLE  $table_name ADD cut_type text");
+    maybe_add_column($table_name,"recurrent_after_first","ALTER  TABLE  $table_name ADD recurrent_after_first text");
+
+    $payload = [
+      "sign_up_fee" => "1000",
+      "duration" => "3 Months",
+      "status" => "off",
+      "cut" => "1",
+      "cut_type" => "percentage",
+      "interest" => "4",
+      "applicable_after" => "2 Months",
+      "recurrent_after_first" => "no",
+      "minimum_amount" => "0",
+      "referer_commission" => "400",
+      "penalty" => "10",
+      "stop_after_due" => "yes"
+    ];
+
+    $results = $wpdb->get_results("SELECT * FROM $table_name WHERE duration = '3 Months' ");
+    if(empty($results)){
+      $wpdb->insert($table_name,$payload);
+    }
+
+    $payload = [
+      "sign_up_fee" => "1000",
+      "duration" => "6 Months",
+      "status" => "off",
+      "cut" => "1",
+      "cut_type" => "percentage",
+      "interest" => "10",
+      "applicable_after" => "5 Months",
+      "recurrent_after_first" => "no",
+      "minimum_amount" => "0",
+      "referer_commission" => "400",
+      "penalty" => "10",
+      "stop_after_due" => "yes"
+    ];
+
+    $results = $wpdb->get_results("SELECT * FROM $table_name WHERE duration = '6 Months' ");
+    if(empty($results)){
+      $wpdb->insert($table_name,$payload);
+    }
+
+    $payload = [
+      "sign_up_fee" => "1000",
+      "duration" => "12 Months",
+      "status" => "off",
+      "cut" => "1",
+      "cut_type" => "percentage",
+      "interest" => "22",
+      "applicable_after" => "10 Months",
+      "recurrent_after_first" => "no",
+      "minimum_amount" => "0",
+      "referer_commission" => "400",
+      "penalty" => "10",
+      "stop_after_due" => "yes"
+    ];
+
+    $results = $wpdb->get_results("SELECT * FROM $table_name WHERE duration = '12 Months' ");
+    if(empty($results)){
+      $wpdb->insert($table_name,$payload);
+    }
+
+
+    //type - daily savings, fixed savings
+    //duration - 1 month, 2 months, 3 months
+    //liquidated  - yes, no
+    global $wpdb;
+    $table_name = $wpdb->prefix.'vp_savings';
+    $charset_collate=$wpdb->get_charset_collate();
+    $sql= "CREATE TABLE IF NOT EXISTS $table_name(
+    id int NOT NULL AUTO_INCREMENT,
+    user_id text,
+    type text,
+    duration text,
+    save_interval text,
+    status text,
+    start_amount text,
+    amount_saved text,
+    interest text,
+    applicable_on text,
+    next_applicable_on text,
+    interest_applied text,
+    save_count text,
+    automatic text,
+    info text,
+    last_check text,
+    started_at text,
+    next_save text,
+    ends_at text,
+    liquidated text,
+    PRIMARY KEY (id))$charset_collate;";
+    require_once(ABSPATH.'wp-admin/includes/upgrade.php');
+    dbDelta($sql);
+    maybe_add_column($table_name,"applicable_on","ALTER  TABLE  $table_name ADD applicable_on text");
+    maybe_add_column($table_name,"start_amount","ALTER  TABLE  $table_name ADD start_amount text");
+    maybe_add_column($table_name,"save_interval","ALTER  TABLE  $table_name ADD save_interval text");
+    maybe_add_column($table_name,"save_count","ALTER  TABLE  $table_name ADD save_count text");
+    maybe_add_column($table_name,"last_check","ALTER  TABLE  $table_name ADD last_check text");
+    maybe_add_column($table_name,"interest_applied","ALTER  TABLE  $table_name ADD interest_applied text");
+    maybe_add_column($table_name,"next_applicable_on","ALTER  TABLE  $table_name ADD next_applicable_on text");
+    maybe_add_column($table_name,"next_save","ALTER  TABLE  $table_name ADD next_save text");
+
+
+    global $wpdb;
+    $table_name = $wpdb->prefix.'vp_savings_withdrawal';
+    $charset_collate=$wpdb->get_charset_collate();
+    $sql= "CREATE TABLE IF NOT EXISTS $table_name(
+    id int NOT NULL AUTO_INCREMENT,
+    user_id text,
+    type text,
+    duration text,
+    amount_withdrawn text,
+    wallet_id text,
+    savings_id text,
+    amount_saved text,
+    status text,
+    the_time text,
+    PRIMARY KEY (id))$charset_collate;";
+    require_once(ABSPATH.'wp-admin/includes/upgrade.php');
+    dbDelta($sql);
+    maybe_add_column($table_name,"wallet_id","ALTER  TABLE  $table_name ADD wallet_id text");
+    maybe_add_column($table_name,"savings_id","ALTER  TABLE  $table_name ADD savings_id text");
+
+
 
       vp_addoption('enable_raptor',"no");
       vp_addoption("spraycode",uniqid());

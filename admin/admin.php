@@ -63,6 +63,8 @@ $notifications = $wpdb->get_results("SELECT * FROM $noti WHERE status = 'unread'
     
     <link href="<?php echo esc_url(plugins_url("vtupress/admin")); ?>/assets/libs/flot/css/float-chart.css" rel="stylesheet" />
     <link href="<?php echo esc_url(plugins_url("vtupress/admin")); ?>/dist/css/style.min.css" rel="stylesheet" />
+    <link href="<?php echo esc_url(plugins_url("vtupress/css")); ?>/datatables.css" rel="stylesheet" />
+    <link href="<?php echo esc_url(plugins_url("vtupress/css")); ?>/toast.css" rel="stylesheet" />
     <style>
 .card {
     margin-top: 0;
@@ -81,6 +83,9 @@ z-index: 9999999;
 </style>
 <script src="<?php echo esc_url( plugins_url( 'vtupress/js/sweet.js?v=1') );?>" ></script>
 <script src="<?php echo esc_url( plugins_url( 'vtupress/js/jquery.js?v=1') );?>" ></script>
+<script src="<?php echo esc_url( plugins_url( 'vtupress/js/datatables.js?v=1') );?>" ></script>
+<script src="<?php echo esc_url( plugins_url( 'vtupress/js/toast.js?v=1') );?>" ></script>
+<script src="<?php echo esc_url( plugins_url( 'vtupress/js/custom.js?v=1') );?>" ></script>
 <script>
 var width = jQuery(window).width()+"px";
 //alert(width);
@@ -1024,44 +1029,83 @@ if(current_user_can("vtupress_access_users")){
 }
 
 if(current_user_can("vtupress_access_security")){
-?>
-      <li class="sidebar-item bg bg-primary">   
-                  <a
-                  class="sidebar-link has-arrow waves-effect waves-dark"
-                  href="javascript:void(0)"
-                  aria-expanded="false"
-                  ><i class="mdi mdi-hand-pointing-right"></i
-                  ><span class="hide-menu">Misc</span></a
-                >
-                <ul aria-expanded="false" class="collapse first-level">
-                <li class="sidebar-item">
-                      <a href="/wp-admin/site-health.php?tab=debug" class="sidebar-link"
-                      ><i class="mdi mdi-information"></i
-                      ><span class="hide-menu">System Info</span></a
-                    >
-                </li>
-                <li class="sidebar-item">
-                      <a href="?page=vtupanel&adminpage=misc&subpage=resolver" class="sidebar-link"
-                      ><i class="mdi mdi-database-plus"></i
-                      ><span class="hide-menu">Database Resolver</span></a
-                    >
+  ?>
+        <li class="sidebar-item bg bg-primary">   
+                    <a
+                    class="sidebar-link has-arrow waves-effect waves-dark"
+                    href="javascript:void(0)"
+                    aria-expanded="false"
+                    ><i class="mdi mdi-hand-pointing-right"></i
+                    ><span class="hide-menu">Misc</span></a
+                  >
+                  <ul aria-expanded="false" class="collapse first-level">
+                  <li class="sidebar-item">
+                        <a href="/wp-admin/site-health.php?tab=debug" class="sidebar-link"
+                        ><i class="mdi mdi-information"></i
+                        ><span class="hide-menu">System Info</span></a
+                      >
                   </li>
                   <li class="sidebar-item">
-                      <a href="?page=vtupanel&adminpage=misc&subpage=folder" class="sidebar-link"
-                      ><i class="mdi mdi-folder-multiple"></i
-                      ><span class="hide-menu">Folder/File Scan</span></a
+                        <a href="?page=vtupanel&adminpage=misc&subpage=resolver" class="sidebar-link"
+                        ><i class="mdi mdi-database-plus"></i
+                        ><span class="hide-menu">Database Resolver</span></a
+                      >
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="?page=vtupanel&adminpage=misc&subpage=folder" class="sidebar-link"
+                        ><i class="mdi mdi-folder-multiple"></i
+                        ><span class="hide-menu">Folder/File Scan</span></a
+                      >
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="?page=vtupanel&adminpage=misc&subpage=security" class="sidebar-link"
+                        ><i class="mdi mdi-security"></i
+                        ><span class="hide-menu">Security</span></a
+                      >
+                    </li>
+              </ul>
+        </li>
+  <?php
+  }
+  if(vp_getoption("vtupress_custom_isavings") == "yes"){
+    ?>
+          <li class="sidebar-item bg bg-primary">   
+                      <a
+                      class="sidebar-link has-arrow waves-effect waves-dark"
+                      href="javascript:void(0)"
+                      aria-expanded="false"
+                      ><i class="mdi mdi-bank"></i
+                      ><span class="hide-menu">iSavings</span></a
                     >
-                  </li>
-                  <li class="sidebar-item">
-                      <a href="?page=vtupanel&adminpage=misc&subpage=security" class="sidebar-link"
-                      ><i class="mdi mdi-security"></i
-                      ><span class="hide-menu">Security</span></a
-                    >
-                  </li>
-            </ul>
-      </li>
-<?php
-}
+                    <ul aria-expanded="false" class="collapse first-level">
+                    <li class="sidebar-item">
+                          <a href="?page=vtupanel&adminpage=isavings&subpage=daily-settings" class="sidebar-link"
+                          ><i class="mdi mdi-clock"></i
+                          ><span class="hide-menu">Daily Settings</span></a
+                        >
+                    </li>
+                    <li class="sidebar-item">
+                          <a href="?page=vtupanel&adminpage=isavings&subpage=fixed-settings" class="sidebar-link"
+                          ><i class="mdi mdi-calendar-clock"></i
+                          ><span class="hide-menu">Fixed Settings</span></a
+                        >
+                    </li>
+                    <li class="sidebar-item">
+                          <a href="?page=vtupanel&adminpage=isavings&subpage=history" class="sidebar-link"
+                          ><i class="mdi mdi-history"></i
+                          ><span class="hide-menu">History</span></a
+                        >
+                      </li>
+                      <li class="sidebar-item ">
+                          <a href="?page=vtupanel&adminpage=isavings&subpage=withdrawal" class="sidebar-link"
+                          ><i class="mdi mdi-coin"></i
+                          ><span class="hide-menu">Withdrawal</span></a
+                        >
+                      </li>
+                </ul>
+          </li>
+    <?php
+    }
 if(current_user_can("vtupress_access_gateway")){
   ?>
 
@@ -1581,6 +1625,34 @@ jQuery(".smspostvalue2, .airtimepostvalue2, .sairtimepostvalue2, .wairtimepostva
 
 </script>
 ';
+
+}
+elseif(isset($_GET["adminpage"] ) && $_GET["adminpage"] == "isavings" && isset($_GET["subpage"])){
+  if(vp_getoption("vprun") == "block"){
+    $url = get_site_url()."/wp-admin/admin.php?page=vtupanel&adminpage=license";
+
+    $string = '<script type="text/javascript">';
+    $string .= 'window.location = "' . $url. '"';
+    $string .= '</script>';
+
+    echo $string;
+
+  }else{
+    if($_GET["subpage"] == "daily-settings"){
+      include_once(ABSPATH .'wp-content/plugins/vtupress/admin/pages/isavings/daily/settings.php');
+    }
+    elseif($_GET["subpage"] == "fixed-settings"){
+      include_once(ABSPATH .'wp-content/plugins/vtupress/admin/pages/isavings/fixed/settings.php');
+    }
+  elseif($_GET["subpage"] == "history"){
+    include_once(ABSPATH .'wp-content/plugins/vtupress/admin/pages/isavings/history.php');
+  }
+  elseif($_GET["subpage"] == "withdrawal"){
+    include_once(ABSPATH .'wp-content/plugins/vtupress/admin/pages/isavings/withdrawal.php');
+  }
+
+}
+
 
 }
 elseif(isset($_GET["adminpage"] ) && $_GET["adminpage"] == "import" && isset($_GET["subpage"])){

@@ -1,0 +1,18 @@
+<?php
+if(isset($_GET["vend"])){
+    if(isset($_GET["vend"]) && $_GET["vend"]=="savings"){
+?>
+<div id="dashboard-main-content">
+    <section class="container mx-auto">
+
+       <?php include(__DIR__.'/sections/savings.php'); ?>
+
+    </section>
+</div>
+
+
+
+<?php
+    }
+}
+?>
