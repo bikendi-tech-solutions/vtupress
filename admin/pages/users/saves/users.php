@@ -373,11 +373,11 @@ vp_updateuser($userid,"vpayAccountName",$customer_firstN);
                     $bvn = vp_getuser($userid,"myBvn",true);
                     $nin = vp_getuser($userid,"myNin",true);
 
-                    /*if(($bvn == 'false' && $nin == 'false') || (empty($bvn) && empty($nin)) || (mb_strlen($bvn) < 10 && mb_strlen($nin) < 10) ){
+                    if(($bvn == 'false' && $nin == 'false') || (empty($bvn) && empty($nin)) || (mb_strlen($bvn) < 10 && mb_strlen($nin) < 10) ){
                         continue;
                     }else{
                         $total += 1; 
-                    }*/
+                    }
 
                     $total += 1;
 
@@ -437,12 +437,12 @@ vp_updateuser($userid,"vpayAccountName",$customer_firstN);
                         $data["customerName"] = $fun." ".$lun;
                         $data["getAllAvailableBanks"] = false;
                         $data["preferredBanks"] = ["035","232","50515"];
-                        /*if($bvn != "false" && !empty($bvn) && mb_strlen($nin) > 10 && is_numeric($bvn)){
+                        if($bvn != "false" && !empty($bvn) && mb_strlen($nin) > 10 && is_numeric($bvn)){
                             $data["bvn"] = $bvn;
                         }
                         if($nin != "false" && !empty($nin) && mb_strlen($nin) > 9 && is_numeric($nin)){
                             $data["nin"] = $nin;
-                        }*/
+                        }
                         curl_setopt_array($curl, array(
                           CURLOPT_URL => $baseurl.'/api/v2/bank-transfer/reserved-accounts',
                           CURLOPT_RETURNTRANSFER => true,
