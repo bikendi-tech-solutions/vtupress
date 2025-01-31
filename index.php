@@ -58,6 +58,8 @@ function convertArrayKeysToLowerCase($array) {
 $_XERVER = convertArrayKeysToLowerCase($_SERVER);
 
 
+
+
 $input = file_get_contents("php://input");
 $payload = $input;
 
@@ -435,6 +437,71 @@ elseif(($server_ip == "54.173.229.200" || $server_ip == "54.175.230.252" || $ser
     $total_amount = $amount;
 
 }
+elseif(array_key_exists('http_paymentpoint_signature', $_XERVER)){
+    /*
+    {"notification_status":"payment_successful","transaction_id":"fe976992ac3418a32e74863cbac1071ce6d4429b","amount_paid":100,"settlement_amount":99.5,"settlement_fee":0.5,"transaction_status":"success","sender":{"name":"VICTOR OJOGBANE AKOR","account_number":"****6922","bank":"OPAY"},"receiver":{"name":"Imperialmobile enterprise-Ako(Paymentpoint)","account_number":"6677946038","bank":"PalmPay"},"customer":{"name":"Akor Victor","email":"akorvictor26@gmail.com","phone":null,"customer_id":"17b041448457465c0e810c9b1675a9e2f8243d83"},"description":"Your payment has been successfully processed.","timestamp":"2025-01-31T20:15:37.639947Z"}
+    */
+
+    $signatureHeader = $_SERVER['HTTP_PAYMENTPOINT_SIGNATURE'];
+
+    $paymentpoint = vp_getoption("paymentpoint_secretkey");
+    $calculatedSignature = hash_hmac('sha256', $input, $paymentpoint);
+    
+    if(!hash_equals($calculatedSignature, $signatureHeader)){
+        //error_log("Hash",0);
+        // error_log("NOT MATCH");
+            die("HASH DOES NOT TALLY!");
+    }
+    else{
+    
+            $body = json_decode(str_replace(" ","",$input),true);
+            error_log(print_r($body,true),0);
+            $webhookData = $body;
+    
+    }
+
+    $transactionId = $webhookData['transaction_id'] ?? null;
+    $amount = $webhookData['amount_paid'] ?? null;
+    $settlementAmount = $webhookData['settlement_amount'] ?? null;
+    $status = $webhookData['transaction_status'] ?? null;
+    $email = $webhookData['customer']["email"] ?? null;
+    $recipient_number = $webhookData['receiver']["account_number"] ?? null;
+    
+    // error_log($email);
+
+    // Check if required data is present
+    if (!$transactionId || !$amount || !$settlementAmount || !$status) {
+        http_response_code(400);
+        echo "Missing required data.";
+        exit;
+    }
+    elseif($status != "success"){
+        http_response_code(400);
+        echo "Not Successful";
+        exit;
+    }
+
+    $total_amount = $amount;
+    $userid = get_user_by( 'email', $email );
+    if(empty($userid)){
+        global $wpdb;
+        $usermeta = $wpdb->prefix."usermeta";
+        $userTb = $wpdb->get_results($wpdb->prepare("SELECT * FROM $usermeta WHERE meta_value LIKE %s ","%$recipient_number%"));
+        if($userTb == NULL || empty($userTb)) {
+        die("User With The Account Not Found");
+        }
+    
+        $userid = $userTb[0]->user_id;
+    }else{
+        $userid = $userid->ID;
+    }
+
+    $ref = $transactionId;
+    $processor = "Paymentpoint";
+
+
+
+}
 elseif(isset($array["transactionType"])){
     if(strtolower($array["transactionType"]) != "credit"){
         die("Not Kuda");
@@ -627,6 +694,17 @@ $minus = $total_amount - $remove ;
 */
 
 switch(strtolower($processor)){
+    case"paymentpoint":
+        $charge = floatval(vp_getoption("paymentpoint_charge_back"));
+
+        if(vp_getoption("paymentpoint_charge_method") == "fixed"){
+            $minus = $total_amount - $charge;
+            }
+            else{
+            $remove = ($total_amount *  $charge) / 100;
+            $minus = $total_amount - $remove ;
+            }
+    break;
     case"monnify":
         $charge = floatval(vp_getoption("charge_back"));
 

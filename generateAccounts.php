@@ -57,6 +57,126 @@ if(!isset($_POST["for"])){
 $for = $_POST["for"];
 
 switch($for){
+    case"paymentpoint":
+        /*
+            {"status":"success","message":"Customer account created successfully. Bank account(s) processed and ready for use.","customer":{"customer_id":"17b041448457465c0e810c9b1675a9e2f8243d83","customer_name":"Akor Victor","customer_email":"akorvictor26@gmail.com","customer_phone_number":"07049626922"},"business":{"business_name":"Imperialmobile enterprise","business_email":"chukwudisamuel669@gmail.com","business_phone_number":"08104911053","business_Id":null},"bankAccounts":[{"bankCode":"20946","accountNumber":"6677946038","accountName":"Imperialmobile enterprise-Ako(Paymentpoint)","bankName":"Palmpay","Reserved_Account_Id":"1048bffc91331256f96691c313d80c236ad1005f"}],"errors":[]}
+        */
+
+        global $wpdb;
+        $hd = $id;
+
+        if(empty($hd)){
+            die("Please Login");
+        }
+        $gateways = "";
+        $secret_key = vp_getoption("paymentpoint_secretkey");
+        $api = vp_getoption("paymentpoint_apikey");
+        $businessid = vp_getoption("paymentpoint_businessid");
+    
+        if(vp_getoption('enable_paymentpoint') == "yes"  && vp_getoption("vtupress_custom_paymentpoint") == "yes"){
+
+
+            $gateways = "PAYMENTPOINT & ";
+            $total = 0;
+                    $userid = $hd;
+
+                    $username = get_userdata($hd)->user_login;
+                    $email = get_userdata($hd)->user_email;
+                    $fun = vp_getuser($hd,"first_name",true);
+                    $lun = vp_getuser($hd,"last_name",true);
+                    $phone = vp_getuser($hd, "vp_phone",true);
+
+
+
+
+                $payload =  [
+                    "name" => $fun." ".$lun,
+                    "email" => $email,
+                    "bankCode"=> ["20946"],
+                    "businessId"=> $businessid,
+                    "phoneNumber" => $phone
+
+                ];
+            
+
+
+            $url = "https://api.paymentpoint.co/api/v1/createVirtualAccount";
+
+
+
+            $curl = curl_init();
+
+            curl_setopt_array($curl, [
+            CURLOPT_URL =>  $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS =>json_encode($payload,JSON_UNESCAPED_SLASHES),
+            CURLOPT_HTTPHEADER => [
+                "Authorization: Bearer $secret_key",
+                "api-key: $api",
+                "Content-Type: application/json"
+            ],
+            ]);
+
+            $res = curl_exec($curl);
+            $response = json_decode($res,true); 
+            $err = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($err) {
+
+            $return_account = new stdClass;
+            $return_account->status = 'failed';
+            $return_account->message = $err;
+
+            $msg = json_encode($return_account);
+            error_log($msg);
+            die($msg);
+
+            } else {
+
+                    if(!isset($response["status"])){
+                        die($res);
+                    }
+
+                    if($response["status"] != "success"){
+                        die($res);
+                    }
+
+                    if(!isset($response["bankAccounts"][0]["accountNumber"])){
+                        die($res);
+                    }
+
+                    $account = $response["bankAccounts"][0];
+
+
+                vp_updateuser($hd,"paymentpoint_accountnumber",$account["accountNumber"]);
+                vp_updateuser($hd,"paymentpoint_accountname",$account["accountName"]);
+
+
+            }
+
+
+
+
+
+            die("100");
+
+        }
+        else{
+            die("Please enable PaymentPoint");
+        }
+
+
+
+
+
+    break;
     case"billstack":
         global $wpdb;
         $hd = $id;

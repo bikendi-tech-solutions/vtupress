@@ -109,6 +109,19 @@ if(vp_getoption("vtupress_custom_payvessel") == "yes"){
   vp_updateoption('enable_payvessel', $_POST['enable_payvessel']);
 
 }
+
+
+if(vp_getoption("vtupress_custom_paymentpoint") == "yes"){
+
+  vp_updateoption('paymentpoint_apikey', $_POST['paymentpoint_apikey']);
+  vp_updateoption('paymentpoint_secretkey', $_POST['paymentpoint_seckey']);
+  vp_updateoption('paymentpoint_businessid', $_POST['paymentpoint_biz']);
+  vp_updateoption('paymentpoint_admin_bvn', $_POST['paymentpoint_admin_bvn']);
+  vp_updateoption('paymentpoint_charge_method', $_POST['paymentpoint_charge_method']);
+  vp_updateoption('paymentpoint_charge_back', $_POST['paymentpoint_charge_back']);
+  vp_updateoption('enable_paymentpoint', $_POST['enable_paymentpoint']);
+
+}
     
 
 

@@ -659,6 +659,117 @@ vp_updateuser($userid,"vpayAccountName",$customer_firstN);
 
 
         break;
+        case"mrundan_paymentpoint":
+            global $wpdb;
+            $hid = explode(",", $ddid);
+
+            $gateways = "";
+            $secret_key = vp_getoption("paymentpoint_secretkey");
+            $api = vp_getoption("paymentpoint_apikey");
+            $businessid = vp_getoption("paymentpoint_businessid");
+
+            if(vp_getoption('enable_paymentpoint') != "yes"  && vp_getoption("vtupress_custom_paymentpoint") != "yes"){
+                    die("Enable Paymentpoint");
+            }
+
+            foreach($hid as $hd){
+                if(!empty($hd)){
+                    $userid = $hd;
+
+
+                        $total = 0;
+                        $userid = $hd;
+
+                            $username = get_userdata($hd)->user_login;
+                            $email = get_userdata($hd)->user_email;
+                            $fun = vp_getuser($hd,"first_name",true);
+                            $lun = vp_getuser($hd,"last_name",true);
+                            $phone = vp_getuser($hd, "vp_phone",true);
+
+
+
+
+                        $payload =  [
+                            "name" => $fun." ".$lun,
+                            "email" => $email,
+                            "bankCode"=> ["20946"],
+                            "businessId"=> $businessid,
+                            "phoneNumber" => $phone
+                        ];
+                    
+
+
+                        $url = "https://api.paymentpoint.co/api/v1/createVirtualAccount";
+
+
+
+                        $curl = curl_init();
+
+                        curl_setopt_array($curl, [
+                        CURLOPT_URL =>  $url,
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_ENCODING => "",
+                        CURLOPT_MAXREDIRS => 10,
+                        CURLOPT_TIMEOUT => 30,
+                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                        CURLOPT_CUSTOMREQUEST => "POST",
+                            CURLOPT_POSTFIELDS =>json_encode($payload,JSON_UNESCAPED_SLASHES),
+                        CURLOPT_HTTPHEADER => [
+                            "Authorization: Bearer $secret_key",
+                            "api-key: $api",
+                            "Content-Type: application/json"
+                        ],
+                        ]);
+
+                        $res = curl_exec($curl);
+                        $response = json_decode($res,true); 
+                        $err = curl_error($curl);
+
+                        curl_close($curl);
+
+                        if ($err) {
+
+                            $return_account = new stdClass;
+                            $return_account->status = 'failed';
+                            $return_account->message = $err;
+
+                            $msg = json_encode($return_account);
+                            error_log($msg);
+                            die($msg);
+
+                        } else {
+
+                                if(!isset($response["status"])){
+                                    die($res);
+                                }
+
+                                if($response["status"] != "success"){
+                                    die($res);
+                                }
+
+                                if(!isset($response["bankAccounts"][0]["accountNumber"])){
+                                    die($res);
+                                }
+
+                                $account = $response["bankAccounts"][0];
+
+
+                            vp_updateuser($hd,"paymentpoint_accountnumber",$account["accountNumber"]);
+                            vp_updateuser($hd,"paymentpoint_accountname",$account["accountName"]);
+
+
+                        }
+
+
+
+
+                }
+
+            }
+
+
+
+        break;
         case"mrundan_billstack":
             global $wpdb;
             $hid = explode(",", $ddid);

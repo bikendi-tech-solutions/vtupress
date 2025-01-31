@@ -27,6 +27,11 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
     ";
 
     
+    if(vp_getoption("vtupress_custom_paymentpoint") == "yes"){
+      echo"
+      <option value='paymentpoint'>Paymentpoint</option>";
+    }
+
     if(vp_getoption("vtupress_custom_payvessel") == "yes"){
       echo"
       <option value='payvessel'>Payvessel</option>";
@@ -180,6 +185,48 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
     <label for='enable_payvessel'>Enable Payvessel: </label> <br>
     <select name='enable_payvessel'>
       <option value='".vp_getoption('enable_payvessel')."' >".strtoupper(vp_getoption('enable_payvessel'))."</option>
+      <option value='yes' >YES</option>
+      <option value='no' >NO</option>
+    </select>
+    </div>
+</div>
+
+
+
+
+<!--PAYVESSEL-->
+<div class='paymentpoint'>
+    <div class='mb-3'>
+    <label for='paymentpointbiz' class='form-label'>Paymentpoint Business Id.</label><br>
+    <input type='text' class='form-control' name='paymentpoint_biz' value='".vp_getoption('paymentpoint_businessid')."'><br>
+
+    <label for='paymentpointbiz' class='form-label mt-2'>Paymentpoint Admin Bvn.</label><br>
+    <input type='text' class='form-control' name='paymentpoint_admin_bvn' value='".vp_getoption('paymentpoint_admin_bvn')."'><br>
+
+
+    <label for='paymentpointapi' class='form-label mt-2'>Paymentpoint Api Key.</label><br>
+    <input type='text' class='form-control' name='paymentpoint_apikey' value='".vp_getoption('paymentpoint_apikey')."'><br>
+
+    <label for='paymentpointsec' class='form-label mt-2'>Paymentpoint Secret Key.</label><br>
+    <input type='text' class='form-control' name='paymentpoint_seckey' value='".vp_getoption('paymentpoint_secretkey')."'><br>
+
+
+    <div class='input-group  mb-2'>
+      <span class='input-group-text' id='basic-addon1'>Wallet Funding Charge</span>
+      <select name='paymentpoint_charge_method' class='form-control paymentpoint_charge_method '>
+      <option value='".vp_getoption('paymentpoint_charge_method')."'>".vp_getoption('paymentpoint_charge_method')."</option>
+      <option value='percentage'>Percentage[%]</option>
+      <option value='fixed'>Fixed[NGN]</option>
+      </select>
+      <input class='form-control paymentpoint_charge_back ' name='paymentpoint_charge_back' value='".floatval(vp_getoption('paymentpoint_charge_back'))."'>
+    </div>
+    
+
+
+    <br>
+    <label for='enable_paymentpoint'>Enable Paymentpoint: </label> <br>
+    <select name='enable_paymentpoint'>
+      <option value='".vp_getoption('enable_paymentpoint')."' >".strtoupper(vp_getoption('enable_paymentpoint'))."</option>
       <option value='yes' >YES</option>
       <option value='no' >NO</option>
     </select>
@@ -413,6 +460,7 @@ function selectGateway(){
       jQuery(".ncwallet").hide();
       jQuery(".billstack").hide();
       jQuery(".payvessel").hide();
+      jQuery(".paymentpoint").hide();
 
     }
     else if(popt == "monnify"){
@@ -423,6 +471,7 @@ function selectGateway(){
       jQuery(".ncwallet").hide();
       jQuery(".billstack").hide();
       jQuery(".payvessel").hide();
+      jQuery(".paymentpoint").hide();
       jQuery(".squadco").hide();
     }
     else if(popt == "squadco"){
@@ -434,6 +483,7 @@ function selectGateway(){
       jQuery(".ncwallet").hide();
       jQuery(".billstack").hide();
       jQuery(".payvessel").hide();
+      jQuery(".paymentpoint").hide();
 
 
       
@@ -447,6 +497,7 @@ function selectGateway(){
       jQuery(".kuda").show();
       jQuery(".billstack").hide();
       jQuery(".payvessel").hide();
+      jQuery(".paymentpoint").hide();
 
 
     }
@@ -459,6 +510,7 @@ function selectGateway(){
       jQuery(".kuda").hide();
       jQuery(".billstack").hide();
       jQuery(".payvessel").hide();
+      jQuery(".paymentpoint").hide();
 
 
     }
@@ -471,6 +523,7 @@ function selectGateway(){
       jQuery(".ncwallet").show();
       jQuery(".billstack").hide();
       jQuery(".payvessel").hide();
+      jQuery(".paymentpoint").hide();
 
 
     }
@@ -483,6 +536,7 @@ function selectGateway(){
       jQuery(".ncwallet").hide();
       jQuery(".billstack").show();
       jQuery(".payvessel").hide();
+      jQuery(".paymentpoint").hide();
 
 
 
@@ -496,6 +550,21 @@ function selectGateway(){
       jQuery(".ncwallet").hide();
       jQuery(".billstack").hide();
       jQuery(".payvessel").show();
+      jQuery(".paymentpoint").hide();
+
+
+
+    }
+    else if(popt == "paymentpoint"){
+      jQuery(".vpay").hide();
+      jQuery(".monnify").hide();
+      jQuery(".paystack").hide();
+      jQuery(".squadco").hide();
+      jQuery(".kuda").hide();
+      jQuery(".ncwallet").hide();
+      jQuery(".billstack").hide();
+      jQuery(".payvessel").hide();
+      jQuery(".paymentpoint").show();
 
 
 
