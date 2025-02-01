@@ -120,6 +120,11 @@ if ( is_wp_error( $userid ) ) {
   }
 
 
+
+
+
+
+
 vp_updateuser($userid,'vp_pin_set','yes');
 vp_updateuser($userid, 'vp_phone', $phone);
 vp_updateuser($userid, 'vp_pin', $pin);
@@ -136,6 +141,110 @@ $user = $wpdb->prefix."users";
 $arr = ['vp_bal' => "0", 'vp_ban' => "access" ];
 $where = ['ID' => $userid];
 $updated = $wpdb->update($user, $arr, $where);
+
+
+
+
+
+global $wpdb;
+$hd = $userid;
+
+if(empty($hd)){
+    die("Empty Id");
+}
+$gateways = "";
+
+$secret_key = vp_getoption("paymentpoint_secretkey");
+$api = vp_getoption("paymentpoint_apikey");
+$businessid = vp_getoption("paymentpoint_businessid");
+
+if(vp_getoption('enable_paymentpoint') == "yes"  && vp_getoption("vtupress_custom_paymentpoint") == "yes" && !empty($secret_key) && $secret_key != "false" && !empty($api) && $api != "false" && !empty($businessid) && $businessid != "false" ){
+
+
+    $gateways = "PAYMENTPOINT & ";
+    $total = 0;
+            $userid = $hd;
+
+            $username = get_userdata($hd)->user_login;
+            $email = get_userdata($hd)->user_email;
+
+
+
+
+        $payload =  [
+            "name" => $fun." ".$lun,
+            "email" => $email,
+            "bankCode"=> ["20946"],
+            "businessId"=> $businessid,
+            "phoneNumber" => $phone
+
+        ];
+    
+
+
+    $url = "https://api.paymentpoint.co/api/v1/createVirtualAccount";
+
+
+
+    $curl = curl_init();
+
+    curl_setopt_array($curl, [
+    CURLOPT_URL =>  $url,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => "",
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 30,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => "POST",
+        CURLOPT_POSTFIELDS =>json_encode($payload,JSON_UNESCAPED_SLASHES),
+    CURLOPT_HTTPHEADER => [
+        "Authorization: Bearer $secret_key",
+        "api-key: $api",
+        "Content-Type: application/json"
+    ],
+    ]);
+
+    $res = curl_exec($curl);
+    $response = json_decode($res,true); 
+    $err = curl_error($curl);
+
+    curl_close($curl);
+
+    if ($err) {
+
+    $return_account = new stdClass;
+    $return_account->status = 'failed';
+    $return_account->message = $err;
+
+    $msg = json_encode($return_account);
+    error_log($msg);
+    //die($msg);
+
+    } else {
+
+            if(!isset($response["status"])){
+              // die($res);
+            }
+            
+            if($response["status"] != "success"){
+               // die($res);
+            }
+
+            if(!isset($response["bankAccounts"][0]["accountNumber"])){
+               // die($res);
+            }
+
+            if(isset($response["bankAccounts"][0]["accountNumber"])):
+                $account = $response["bankAccounts"][0];
+                vp_updateuser($hd,"paymentpoint_accountnumber",$account["accountNumber"]);
+                vp_updateuser($hd,"paymentpoint_accountname",$account["accountName"]);
+            endif;
+
+
+    }
+
+}
+
 
 vp_updateuser($userid, 'vp_who_ref' , $ref); //who referred me
 vp_updateuser($userid, 'vp_tot_ref' , 0); //number of my direct referrs
@@ -229,7 +338,7 @@ function create_email($numberOfEmails = 1){
   }
   
   return  $the_email;
-  }
+}
 
  /*
   if(vp_getoption('enablekuda') == "yes"  && vp_getoption("vtupress_custom_kuda") == "yes"){
