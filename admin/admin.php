@@ -610,11 +610,16 @@ if(current_user_can("vtupress_access_history")){
                 >
                 <!--////////////////////////////AIRTIME ----------------->
     <ul aria-expanded="false" class="collapse first-level ">
-    <a href="?page=vtupanel&adminpage=history&subpage=wallet" class="sidebar-link"
-                      ><i class="fas fa-clipboard-list"></i
-                      ><span class="hide-menu">Funds History</span></a
+                  <a href="?page=vtupanel&adminpage=history&subpage=wallet" class="sidebar-link">
+                      <i class="fas fa-clipboard-list"></i>
+                      <span class="hide-menu">Funds History</span>
+                  </a>
+            <?php if(vp_getoption("vtupress_custom_transfer") == "yes"):?>
+                  <a href="?page=vtupanel&adminpage=history&subpage=bank_transfer" class="sidebar-link"
+                      ><i class="fas fa-clipboard-list"></i>
+                      <span class="hide-menu">Bank Transfer</span></a
                     >
-                  </li>
+            <?php endif;?>
        <li class="sidebar-item bg bg-success">   
                   <a
                   class="sidebar-link has-arrow waves-effect waves-dark"

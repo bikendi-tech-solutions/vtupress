@@ -439,7 +439,21 @@ elseif(($server_ip == "54.173.229.200" || $server_ip == "54.175.230.252" || $ser
 }
 elseif(array_key_exists('http_paymentpoint_signature', $_XERVER)){
     /*
-    {"notification_status":"payment_successful","transaction_id":"fe976992ac3418a32e74863cbac1071ce6d4429b","amount_paid":100,"settlement_amount":99.5,"settlement_fee":0.5,"transaction_status":"success","sender":{"name":"VICTOR OJOGBANE AKOR","account_number":"****6922","bank":"OPAY"},"receiver":{"name":"Imperialmobile enterprise-Ako(Paymentpoint)","account_number":"6677946038","bank":"PalmPay"},"customer":{"name":"Akor Victor","email":"akorvictor26@gmail.com","phone":null,"customer_id":"17b041448457465c0e810c9b1675a9e2f8243d83"},"description":"Your payment has been successfully processed.","timestamp":"2025-01-31T20:15:37.639947Z"}
+    {
+        "notification_status":"payment_successful",
+        "transaction_id":"fe976992ac3418a32e74863cbac1071ce6d4429b",
+        "amount_paid":100,
+        "settlement_amount":99.5,
+        "settlement_fee":0.5,
+        "transaction_status":"success",
+        "sender":{"name":"VICTOR OJOGBANE AKOR","account_number":"****6922","bank":"OPAY"},
+        "receiver":{"name":"Imperialmobile enterprise-Ako(Paymentpoint)",
+        "account_number":"6677946038",
+        "bank":"PalmPay"},
+        "customer":{"name":"Akor Victor","email":"akorvictor26@gmail.com","phone":null,"customer_id":"17b041448457465c0e810c9b1675a9e2f8243d83"},
+        "description":"Your payment has been successfully processed.",
+        "timestamp":"2025-01-31T20:15:37.639947Z"
+    }
     */
 
     $signatureHeader = $_SERVER['HTTP_PAYMENTPOINT_SIGNATURE'];

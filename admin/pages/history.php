@@ -127,6 +127,9 @@ elseif($_GET["subpage"] == "transaction" && $_GET["type"] == "unrecorded"){
 elseif($_GET["subpage"] == "wallet"){
   include_once(ABSPATH .'wp-content/plugins/vtupress/admin/pages/history/wallets.php');
 }
+elseif($_GET["subpage"] == "bank_transfer"){
+  include_once(ABSPATH .'wp-content/plugins/vtupress/admin/pages/history/bank-transfer.php');
+}
 do_action("vtupress_history_condition");
 ?>
 
