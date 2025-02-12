@@ -24,7 +24,7 @@ $id = get_current_user_id();
 
 
 
-if(vp_getoption('allow_to_bank') != "yes"){
+if(vp_getoption('allow_to_bank') != "yes" || vp_getoption("vtupress_custom_transfer") != "yes"){
     die("Enable Bank To Bank transfer");
 }
 
