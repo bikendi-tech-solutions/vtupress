@@ -922,7 +922,7 @@ vp_updateuser($userid,"vpayAccountName",$customer_firstN);
                 if(empty($admin_bvn) || $admin_bvn == "false"){
                     $payload =  [
                         "account_name" => $fun." ".$lun,
-                        "bank_code" => "providus",
+                        "bank_code" => "bankly",
                         "account_type" => "static",
                         "email" => $email,
                         "validation_type" => "BVN",
@@ -933,7 +933,7 @@ vp_updateuser($userid,"vpayAccountName",$customer_firstN);
                 }else{
                     $payload =  [
                         "account_name" => $fun." ".$lun,
-                        "bank_code" => "providus",
+                        "bank_code" => "bankly",
                         "account_type" => "static",
                         "email" => $email,
                         "validation_type" => "BVN",

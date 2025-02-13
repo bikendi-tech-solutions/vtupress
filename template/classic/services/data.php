@@ -513,6 +513,7 @@ else{
 		jQuery(".data-network").on("change",function(){
 			jQuery("#amt").val(0);
 			jQuery(".data-plan").val("none");
+			jQuery(".datasOpt").hide();
 			var network_value = jQuery(".data-network option:selected").text();
 			switch(network_value){
 				case"MTN":
