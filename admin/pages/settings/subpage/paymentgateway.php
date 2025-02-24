@@ -62,7 +62,11 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
 
     if(vp_getoption("vtupress_custom_kuda") == "yes"){
       echo"
-    <option value='kuda'>Kuda</option>";
+      <option value='kuda'>Kuda</option>";
+    }
+    if(vp_getoption("vtupress_custom_auto_manual") == "yes"){
+      echo"
+      <option value='auto_manual'>Auto Manual</option>";
     }
 
 
@@ -227,6 +231,56 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
     <label for='enable_paymentpoint'>Enable Paymentpoint: </label> <br>
     <select name='enable_paymentpoint'>
       <option value='".vp_getoption('enable_paymentpoint')."' >".strtoupper(vp_getoption('enable_paymentpoint'))."</option>
+      <option value='yes' >YES</option>
+      <option value='no' >NO</option>
+    </select>
+    </div>
+</div>
+
+<!--PAYVESSEL-->
+<div class='auto_manual'>
+    <div class='mb-3'>
+
+    <label for='auto_manualapi' class='form-label mt-2'>Paymentpoint Api Key.</label><br>
+    <input type='text' class='form-control' name='auto_manual_apikey' value='".vp_getoption('auto_manual_apikey')."'><br>
+
+
+    <div class='row'>
+    ";
+
+    for($i = 1; $i <= 3; $i++){
+      echo "
+        <div class='col-12 col-md-4 p-md-2 border'>
+          <label for='bank$i'> Account Number </label>
+          <input type='number' class='form-control' name='auto_manual_account_number$i' value='".vp_getoption('auto_manual_account_number'.$i)."'>
+          <label for='bank$i'> Bank Name </label>
+          <input type='text' class='form-control' name='auto_manual_bank_name$i' value='".vp_getoption('auto_manual_bank_name'.$i)."'>
+          <label for='bank$i'> Account Name </label>
+          <input type='text' class='form-control' name='auto_manual_account_name$i' value='".vp_getoption('auto_manual_account_name'.$i)."'>
+        </div>
+      ";
+    }
+
+    echo "
+    </div>
+
+
+    <div class='input-group  mb-2'>
+      <span class='input-group-text' id='basic-addon1'>Wallet Funding Charge</span>
+      <select name='auto_manual_charge_method' class='form-control auto_manual_charge_method '>
+      <option value='".vp_getoption('auto_manual_charge_method')."'>".vp_getoption('auto_manual_charge_method')."</option>
+      <option value='percentage'>Percentage[%]</option>
+      <option value='fixed'>Fixed[NGN]</option>
+      </select>
+      <input class='form-control auto_manual_charge_back ' name='auto_manual_charge_back' value='".floatval(vp_getoption('auto_manual_charge_back'))."'>
+    </div>
+    
+
+
+    <br>
+    <label for='enable_auto_manual'>Enable Auto Manual: </label> <br>
+    <select name='enable_auto_manual'>
+      <option value='".vp_getoption('enable_auto_manual')."' >".strtoupper(vp_getoption('enable_auto_manual'))."</option>
       <option value='yes' >YES</option>
       <option value='no' >NO</option>
     </select>
@@ -461,6 +515,7 @@ function selectGateway(){
       jQuery(".billstack").hide();
       jQuery(".payvessel").hide();
       jQuery(".paymentpoint").hide();
+      jQuery(".auto_manual").hide();
 
     }
     else if(popt == "monnify"){
@@ -473,6 +528,8 @@ function selectGateway(){
       jQuery(".payvessel").hide();
       jQuery(".paymentpoint").hide();
       jQuery(".squadco").hide();
+      jQuery(".auto_manual").hide();
+
     }
     else if(popt == "squadco"){
       jQuery(".monnify").hide();
@@ -484,6 +541,7 @@ function selectGateway(){
       jQuery(".billstack").hide();
       jQuery(".payvessel").hide();
       jQuery(".paymentpoint").hide();
+      jQuery(".auto_manual").hide();
 
 
       
@@ -498,6 +556,7 @@ function selectGateway(){
       jQuery(".billstack").hide();
       jQuery(".payvessel").hide();
       jQuery(".paymentpoint").hide();
+      jQuery(".auto_manual").hide();
 
 
     }
@@ -511,6 +570,7 @@ function selectGateway(){
       jQuery(".billstack").hide();
       jQuery(".payvessel").hide();
       jQuery(".paymentpoint").hide();
+      jQuery(".auto_manual").hide();
 
 
     }
@@ -524,6 +584,7 @@ function selectGateway(){
       jQuery(".billstack").hide();
       jQuery(".payvessel").hide();
       jQuery(".paymentpoint").hide();
+      jQuery(".auto_manual").hide();
 
 
     }
@@ -537,6 +598,7 @@ function selectGateway(){
       jQuery(".billstack").show();
       jQuery(".payvessel").hide();
       jQuery(".paymentpoint").hide();
+      jQuery(".auto_manual").hide();
 
 
 
@@ -551,6 +613,7 @@ function selectGateway(){
       jQuery(".billstack").hide();
       jQuery(".payvessel").show();
       jQuery(".paymentpoint").hide();
+      jQuery(".auto_manual").hide();
 
 
 
@@ -565,6 +628,22 @@ function selectGateway(){
       jQuery(".billstack").hide();
       jQuery(".payvessel").hide();
       jQuery(".paymentpoint").show();
+      jQuery(".auto_manual").hide();
+
+
+
+    }
+    else if(popt == "auto_manual"){
+      jQuery(".vpay").hide();
+      jQuery(".monnify").hide();
+      jQuery(".paystack").hide();
+      jQuery(".squadco").hide();
+      jQuery(".kuda").hide();
+      jQuery(".ncwallet").hide();
+      jQuery(".billstack").hide();
+      jQuery(".payvessel").hide();
+      jQuery(".paymentpoint").hide();
+      jQuery(".auto_manual").show();
 
 
 

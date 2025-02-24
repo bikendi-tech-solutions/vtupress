@@ -610,6 +610,56 @@ elseif(isset($array["transactionType"])){
     $processor = "KUDA";
 
 }
+elseif(isset($array["data"]["customerReference"]) && isset($array["data"]["response"]["sessionIdOrReference"])){
+    //error_log("Ipayng Got here");
+    $apikey = vp_getoption("auto_manual_apikey");
+    $hashed = computeSHA512TransactionHash($input, $apikey);
+    if(function_exists('getallheaders')){
+        if(isset(getallheaders()["signeddata"])){
+            $signature = getallheaders()["signeddata"];
+           // error_log($signature);
+        }
+        else{
+           // error_log("No signature from ipayng");
+
+        }
+    }else{
+        // error_log("getheaders not exist");
+        die("getallheaders() Not Running On Your Server. Contact US");  
+    }
+
+    if($hashed != $signature){
+    // error_log("Ipayng SIG Mismatch");
+
+        die("Signature Mismatch - IPAYNG");
+    }
+
+    // error_log("Ipayng Sign Match");
+
+    // error_log($input);
+
+
+    $ref = $array["data"]["response"]["sessionIdOrReference"];
+    $amount = $array["data"]["response"]["amount"];
+    $processor = "Ipayng";
+    $total_amount = $amount;
+    $sessionid = $ref;
+
+    $sessionTable = $wpdb->prefix."vp_auto_manual";
+
+
+    $session_exists = $wpdb->get_results($wpdb->prepare("SELECT * FROM $sessionTable WHERE sessionId = %s", $sessionid));
+    if(empty($session_exists)){
+        $status =  "Session Does Not Exist";
+        die($status);
+    }
+    $ipayng = $session_exists[0];
+    $userid = $ipayng->user_id;
+    $userData = get_user_by( 'ID', $userid );
+    $email = $userData->user_email;
+
+
+}
 else{
    error_log("2".$input.print_r($_XERVER,true),0);
 
@@ -708,6 +758,20 @@ $minus = $total_amount - $remove ;
 */
 
 switch(strtolower($processor)){
+    case"ipayng":
+        $charge = floatval(vp_getoption("auto_manual_charge_back"));
+
+        if(vp_getoption("auto_manual_charge_method") == "fixed"){
+            $remove = $charge;
+            $minus = $total_amount - $charge;
+        }
+        else{
+        $remove = ($total_amount *  $charge) / 100;
+        $minus = $total_amount - $remove ;
+        }
+
+
+    break;
     case"paymentpoint":
         $charge = floatval(vp_getoption("paymentpoint_charge_back"));
 
@@ -764,11 +828,11 @@ switch(strtolower($processor)){
         $charge = floatval(vp_getoption("payvessel_charge_back"));
         if(vp_getoption("payvessel_charge_method") == "fixed"){
             $minus = $total_amount - $charge;
-            }
+        }
             else{
             $remove = ($total_amount *  $charge) / 100;
             $minus = $total_amount - $remove ;
-            }
+        }
     break;
     case"vpay":
         $charge = floatval(vp_getoption("vpay_charge_back"));
@@ -832,6 +896,19 @@ else{
     global $wpdb;
     $table_name = $wpdb->prefix."vp_wallet_webhook";
     $wpdb->update($table_name, array("status"=>"failed"), array("referrence"=>$ref));  
+}
+
+if(strtolower($processor) == "ipayng"){
+
+    $sessionTable = $wpdb->prefix."vp_auto_manual";
+    $sessionData = [
+        "charge" => $remove,
+        "amount" => $total_amount,
+        "api_response" => json_encode($array),
+        "status" => "success"
+    ];
+    $wpdb->update($sessionTable, $sessionData,["sessionId" => $ref]);
+
 }
 
 $content = "

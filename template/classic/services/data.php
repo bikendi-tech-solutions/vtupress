@@ -395,7 +395,7 @@ else{
                     Status : <span class="data-status-confirm"></span><br>
 					<div class="input-group form">
 					<span class="input-group-text">PIN</span>
-					<input class="form-control pin" type="number" name="pin">
+					<input class="form-control pin" type="password" name="pin">
 					</div>
                     </div>
                     </div>

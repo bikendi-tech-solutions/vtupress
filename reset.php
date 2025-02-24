@@ -36,7 +36,7 @@ $email = sanitize_email($_POST["email"]);
 $pin = intval($_POST["pin"]);
 $password = $_POST["password"];
 
-if (!is_email($sanitized_email)) {
+if (!is_email($email)) {
     // The email is valid, proceed with further processing
 	die('{"status":"200","message":"Use a valid email"}');
 

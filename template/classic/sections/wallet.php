@@ -1346,24 +1346,185 @@ echo'
  
 <?php
 }
-?>
 
- <div class="accordion-item">
-    <h2 class="accordion-header" id="flush-headingTwo">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-        Manual Bank Transfer
-      </button>
-    </h2>
-    <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
-      <div class="accordion-body dark-white">
-	  
-      <div style="text-align:center; background-color: #6c6cd426;"><?php echo vp_option_array($option_array,'manual_funding');?></div>
 
-	  </div>
-    </div>
+if(vp_option_array($option_array,"vtupress_custom_auto_manual") == "yes" && vp_option_array($option_array,"enable_auto_manual") == "yes" ):
+  ?>
+  
+  <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingTwo">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+            Manual Bank Transfer
+          </button>
+        </h2>
+        <div id="flush-collapseTwo" class="accordion-collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+          <div class="accordion-body dark-white">
+        
+          <div class="row d-flex justify-content-around">
+  
+            <?php for($i = 1; $i <= 3; $i++):
+              if(!is_numeric(trim(vp_option_array($option_array,'auto_manual_account_number'.$i))) || strlen(trim(vp_option_array($option_array,'auto_manual_account_number'.$i))) < 10){
+                continue;
+              }
+              ?>
+              <div class="col-12 col-md-4 border d-flex justify-content-center flex-column align-items-center p-3">
+                  <h4><?php echo trim(vp_option_array($option_array,'auto_manual_bank_name'.$i));?></h4>
+                  <h3><?php echo trim(vp_option_array($option_array,'auto_manual_account_number'.$i));?> 
+                  <!--Copy-->
+                  <i class="fas fa-copy copyAccount" accountNumber="<?php echo trim(vp_option_array($option_array,'auto_manual_account_number'.$i));?>"></i>
+                </h3>
+                  <h4><?php echo trim(vp_option_array($option_array,'auto_manual_account_name'.$i));?></h4>
+                  <button class="madeTransfer btn btn-success rounded my-3" accountNumber="<?php echo trim(vp_option_array($option_array,'auto_manual_account_number'.$i));?>" >I have made payment</button>
+              </div>
+              <!-- data-bs-toggle="modal" data-bs-target="#betexampleModalkk" data-bs-whatever='@getbootstrap'  -->
+            <?php endfor;?>
+  
+  
+          </div>
+          
+          <!--MODAL-->
+          <div class="modal fade" id="betexampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <label>Enter SessionID</label>
+                        <input type="text" class="form-control">
+                        <button class="btn btn-success madeTransferNow my-2">Verify</button>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary  p-2 text-xs font-bold text-black uppercase bg-grey-600 rounded shadow   bet-proceed-cancled" data-bs-dismiss="modal">Cancel</button>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+            <script>
+              var accountNumber = 0;
+              jQuery(".madeTransfer").click(function(){
+                accountNumber = jQuery(this).attr("accountNumber");
+                jQuery("#exampleModalLabel").text("Payment to "+accountNumber);
+                jQuery("#betexampleModal").modal("show");
+              });
+  
+                jQuery(".madeTransferNow").click(function(){
+                  var sessionId = jQuery("#betexampleModal input").val();
+                  if(sessionId.trim().length < 1){
+                    alert("Please enter a Session ID");
+                    return false;
+                  }
+  
+                  jQuery(this).addClass("disabled");
+                  var obj = {sessionID:sessionId,accountNumber:accountNumber};
+                  jQuery("#cover-spin").show();
+
+  
+                  // Perform AJAX request to your server to verify the session ID
+                    jQuery.ajax({
+                      url: "<?php echo plugins_url("vtupress/auto_manual.php");?>",
+                      type: "POST",
+                      data: obj,
+                      error: function(jqXHR, textStatus, errorThrown){
+                        jQuery(".madeTransferNow").removeClass("disabled");
+                        jQuery("#cover-spin").hide();
+                          if(jqXHR.status == "404"){
+                            alert("Page not found");
+                            return false;
+                          }
+                          else if(jqXHR.status == "500"){
+                            alert("Internal Server Error");
+                            return false;
+                          }
+                          else{
+                            alert("An error occurred: "+errorThrown);
+                            return false;
+                          }
+                      },
+                      success: function(response){
+                          jQuery(".madeTransferNow").removeClass("disabled");
+                          jQuery("#cover-spin").hide();
+                         
+                          try {
+                            response = JSON.parse(response);
+                            if(response.status){
+                              swal({
+                                title: "Success!",
+                                text: response.message,
+                                icon: "success",
+                                button: "Okay",
+                              });
+                            }else{
+                              swal({
+                                title: "Oops!",
+                                text: response.message,
+                                icon: "error",
+                                button: "Okay",
+                              });
+                            }
+                            
+                          } catch (error) {
+                            swal({
+                                title: "Oops!",
+                                text: response,
+                                icon: "error",
+                                button: "Okay",
+                              });
+                            
+                          }
+                          
+  
+  
+                      }
+                    });
+                });
+                //copy account number
+                jQuery(".copyAccount").click(function(){
+                  var accountNumber = jQuery(this).attr("accountNumber");
+  
+                    navigator.clipboard.writeText(accountNumber).then(function() {
+                        alert('copied!');
+  
+                    }).catch(function(err) {
+                        alert('error copying!');
+  
+                    });
+  
+                });
+            </script>
+  
+  
+  
+        <!--END-->
+        </div>
+        </div>
   </div>
- 
- <?php
+  
+   
+  <?php
+  else:
+    ?>
+  
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingTwo">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+            Manual Bank Transfer
+          </button>
+        </h2>
+        <div id="flush-collapseTwo" class="accordion-collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+          <div class="accordion-body dark-white">
+        
+          <div style="text-align:center; background-color: #6c6cd426;"><?php echo vp_option_array($option_array,'manual_funding');?></div>
+  
+        </div>
+        </div>
+    </div>
+  
+  
+  <?php
+  
+endif;
  if(vp_option_array($option_array,"airtime_to_cash") == "yes" || vp_option_array($option_array,"airtime_to_wallet") == "yes" && vp_option_array($option_array,"resell") == "yes"){
 ?>
   <div class="accordion-item">
