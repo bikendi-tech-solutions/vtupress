@@ -1359,6 +1359,12 @@ if(vp_option_array($option_array,"vtupress_custom_auto_manual") == "yes" && vp_o
         </h2>
         <div id="flush-collapseTwo" class="accordion-collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
           <div class="accordion-body dark-white">
+
+          <div class="w-100 my-2">
+            <div class="alert alert-info">
+              <?php echo htmlspecialchars(vp_getoption("auto_manual_info"));?>
+            </div>  
+          </div>
         
           <div class="row d-flex justify-content-around">
   
@@ -1391,8 +1397,10 @@ if(vp_option_array($option_array,"vtupress_custom_auto_manual") == "yes" && vp_o
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                       <div class="modal-body">
+                        <label>Enter Amount</label>
+                        <input type="number" class="form-control amt">
                         <label>Enter SessionID</label>
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control session">
                         <button class="btn btn-success madeTransferNow my-2">Verify</button>
                       </div>
                       <div class="modal-footer">
@@ -1410,14 +1418,15 @@ if(vp_option_array($option_array,"vtupress_custom_auto_manual") == "yes" && vp_o
               });
   
                 jQuery(".madeTransferNow").click(function(){
-                  var sessionId = jQuery("#betexampleModal input").val();
-                  if(sessionId.trim().length < 1){
-                    alert("Please enter a Session ID");
+                  var amt = jQuery("#betexampleModal input.amt").val();
+                  var sessionId = jQuery("#betexampleModal input.session").val();
+                  if(sessionId.trim().length < 1 || amt < 50){
+                    alert("Please enter a Session ID and a valid amount");
                     return false;
                   }
   
                   jQuery(this).addClass("disabled");
-                  var obj = {sessionID:sessionId,accountNumber:accountNumber};
+                  var obj = {amount:amt,sessionID:sessionId,accountNumber:accountNumber};
                   jQuery("#cover-spin").show();
 
   

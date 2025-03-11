@@ -585,11 +585,17 @@ jQuery(".notice").hide();
                 ?>
              </li>
              <li class="sidebar-item position-relative">
-                      <a href="?page=vtupanel&adminpage=notifications" class="sidebar-link "
+             <a href="?page=vtupanel&adminpage=notifications" class="sidebar-link "
                       ><i class="mdi mdi-bell "></i>
                       <span class="hide-menu">Notifications</span></a
                     >
+                  <?php  if(vp_getoption("vtupress_custom_weblinksms") == "yes"): ?>
+                    <a href="?page=vtupanel&adminpage=weblinksms" class="sidebar-link "
+                      ><i class="mdi mdi-bell "></i>
+                      <span class="hide-menu">W. Sms Blaster</span></a
+                    >
                     <?php
+                    endif;
                 if(!empty($notifications)){
                   ?>
                 <span title="Notifications" data-bs-toggle="modal" data-bs-target="#balance" class="position-absolute position-absolute top-0 start-0 badge rounded-pill bg-danger" style="z-index:2;"><i class="mdi mdi-bell-ring-outline"></i></span>
@@ -1459,6 +1465,11 @@ elseif($_GET["adminpage"] == "upgrade" ){
 elseif($_GET["adminpage"] == "addons" ){
  
   include_once(ABSPATH .'wp-content/plugins/vtupress/admin/pages/addons.php');
+
+}
+elseif($_GET["adminpage"] == "weblinksms" ){
+ 
+  include_once(ABSPATH .'wp-content/plugins/vtupress/admin/pages/weblink/sms.php');
 
 }
 elseif($_GET["adminpage"] == "orders" ){

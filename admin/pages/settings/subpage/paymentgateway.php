@@ -262,6 +262,8 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
     }
 
     echo "
+      <label class='mt-2'>Enter Message:</label>
+      <textarea class='form-control mb-2' name='auto_manual_info' >".vp_getoption('auto_manual_info')."</textarea>
     </div>
 
 

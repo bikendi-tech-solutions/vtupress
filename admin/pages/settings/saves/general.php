@@ -87,6 +87,13 @@ if(isset($_POST["fset"])){
     vp_updateoption("totcons", trim($_POST["totcons"]));
     vp_updateoption("minimum_amount_fundable", trim($_POST["minimum_amount_fundable"]));
     vp_updateoption("t_header_check", trim($_POST["t_header_check"]));
+
+    if(vp_getoption("vtupress_custom_weblinksms") == "yes"){
+
+         vp_updateoption("sms_transactional", trim($_POST["sms_transactional"]));
+         vp_updateoption("sms_welcome", trim($_POST["sms_welcome"]));
+
+    }
     
     //Emails Nd Auto Refund
     if(is_plugin_active('vprest/vprest.php') && vp_getoption("resell") == "yes" ){

@@ -25,10 +25,11 @@ if(!is_user_logged_in()){
 
 $user_id = get_current_user_id();
 
-if(!isset($_POST["sessionID"])){
+if(!isset($_POST["sessionID"]) || !isset($_POST["amount"])){
     die("NO Session Id");
 }
 
+$amount = trim(intval($_POST["amount"]));
 $sessionid = trim(sanitize_text_field($_POST["sessionID"]));
 $account = trim(sanitize_text_field($_POST["accountNumber"]));
 
@@ -105,7 +106,7 @@ $headers = array(
 $payload = [
     "accountNo" => $account,
     "sessionIdOrReference" => $sessionid,
-    "amount" => "100",
+    "amount" => $amount,
     "reference" => $request_id,
 ];
 

@@ -116,6 +116,8 @@ if(vp_getoption("vtupress_custom_auto_manual") == "yes"){
   vp_updateoption('auto_manual_apikey', $_POST['auto_manual_apikey']);
   vp_updateoption('auto_manual_charge_method', $_POST['auto_manual_charge_method']);
   vp_updateoption('auto_manual_charge_back', $_POST['auto_manual_charge_back']);
+  vp_updateoption('auto_manual_info', $_POST['auto_manual_info']);
+  
   vp_updateoption('enable_auto_manual', $_POST['enable_auto_manual']);
   for($i = 1; $i <= 3; $i++){
     vp_updateoption('auto_manual_account_number'.$i, $_POST['auto_manual_account_number'.$i]);

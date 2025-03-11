@@ -236,6 +236,7 @@ function pagination_history_before($db="",$status="true",$whe=""){
    }
 	  
    global  $wpdb, $transactions;
+   $hideFilter = "";
   if($status == "true"){
    $stat = "status = 'successful'";
    $where = "WHERE $stat ".$whe.$dDate;
@@ -253,6 +254,11 @@ function pagination_history_before($db="",$status="true",$whe=""){
   elseif($status == "approved"){
    $stat = "status = 'approved'";
    $where = "WHERE $stat ".$whe.$dDate;
+  }
+  elseif($status == "nulled"){
+   $stat = "";
+   $where = "".$whe;
+   $hideFilter = "d-none";
   }
   else{
    $stat = "status = 'Failed'";
@@ -320,7 +326,7 @@ if(isset($_GET["transpage"]) && $_GET["transpage"] == $i){
 <div class="col-12 col-md-4">
 
 <div class="input-group">
-<span class="input-group-prepend input-group-text" data-bs-toggle="modal" data-bs-target="#historyFilterModal">
+<span class="input-group-prepend '.$hideFilter.' input-group-text" data-bs-toggle="modal" data-bs-target="#historyFilterModal">
 <i class="fas fa-filter"></i>
 </span>
 <input class="use_trans form-control border-end-0 border rounded-pill search-trans" type="search" placeholder="search" id="example-search-input">

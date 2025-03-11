@@ -588,19 +588,34 @@ function vtupress_db_man(){
    
    
    
-      global $wpdb;
-      $table_name = $wpdb->prefix.'vp_transfer';
-      $charset_collate=$wpdb->get_charset_collate();
-      $sql= "CREATE TABLE IF NOT EXISTS $table_name(
-      id int NOT NULL  AUTO_INCREMENT,
-      tfrom text,
-      tto text,
-      amount text,
-      status text,
-      the_time text,
-      PRIMARY KEY (id))$charset_collate;";
-      require_once(ABSPATH.'wp-admin/includes/upgrade.php');
-      dbDelta($sql);
+     global $wpdb;
+     $table_name = $wpdb->prefix.'vp_transfer';
+     $charset_collate=$wpdb->get_charset_collate();
+     $sql= "CREATE TABLE IF NOT EXISTS $table_name(
+     id int NOT NULL  AUTO_INCREMENT,
+     tfrom text,
+     tto text,
+     amount text,
+     status text,
+     the_time text,
+     PRIMARY KEY (id))$charset_collate;";
+     require_once(ABSPATH.'wp-admin/includes/upgrade.php');
+     dbDelta($sql);
+
+
+     global $wpdb;
+     $table_name = $wpdb->prefix.'vp_smsblaster';
+     $charset_collate=$wpdb->get_charset_collate();
+     $sql= "CREATE TABLE IF NOT EXISTS $table_name(
+     id int NOT NULL  AUTO_INCREMENT,
+     phone text,
+     message text,
+     sent VARCHAR(255) DEFAULT 'no',
+     logged VARCHAR(255) DEFAULT 'no',
+     the_time text,
+     PRIMARY KEY (id))$charset_collate;";
+     require_once(ABSPATH.'wp-admin/includes/upgrade.php');
+     dbDelta($sql);
       
    
 

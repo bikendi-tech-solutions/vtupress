@@ -143,7 +143,7 @@ elseif (  array_key_exists('http_payvessel_http_signature', $_XERVER)) {
     $secret = vp_getoption("payvessel_seckey");
     $hashkey = hash_hmac('sha512', $payload, $secret);
 
-    if ($payvessel_signature == $hashkey && $ip_address == "162.246.254.36") {
+    if ($payvessel_signature == $hashkey && $ip_address == "3.255.23.38") {
 
 
         /*
@@ -611,6 +611,9 @@ elseif(isset($array["transactionType"])){
 
 }
 elseif(isset($array["data"]["customerReference"]) && isset($array["data"]["response"]["sessionIdOrReference"])){
+    if($array["code"] != "200"){
+        die("Not a successful response with 200!");
+    }
     //error_log("Ipayng Got here");
     $apikey = vp_getoption("auto_manual_apikey");
     $hashed = computeSHA512TransactionHash($input, $apikey);

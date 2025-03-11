@@ -678,6 +678,40 @@ echo'
     </div>
 
 
+
+    
+';
+
+if(vp_getoption("vtupress_custom_weblinksms") == "yes"){
+  echo '
+    <div class="border border-secondary mb-3 me-3" >
+      <div id="smsblasts" class="p-2 py-3">Weblink SMS Blaster</div>
+      <div class="p-3"  style="background-color:#f0f0f1;">
+          <div class="mb-2">
+              <div class="input-group">
+                  <span class="input-group-text">Enable Transactional SMS</span>
+                  <select name="sms_transactional" class="sms_transactional updateThis">
+                      <option value="'.vp_getoption("sms_transactional").'">'.vp_getoption("sms_transactional").'</option>
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                  </select>
+              </div>
+              <div class="input-group">
+                  <span class="input-group-text">Enable Welcome Message Sent To Sms</span>
+                  <select name="sms_welcome" class="sms_welcome updateThis">
+                      <option value="'.vp_getoption("sms_welcome").'">'.vp_getoption("sms_welcome").'</option>
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                  </select>
+              </div>
+          <br>
+          </div>
+      </div>
+    </div>
+';
+}
+
+echo '
     <div class="border border-secondary mb-3 me-3" >
 
     <div id="customs" class="p-2 py-3">Customs</div>

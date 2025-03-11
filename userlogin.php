@@ -634,6 +634,20 @@ vp_updateuser($who_reref3, "vp_tot_in_ref3_id", $inrefs3_id."$userid,");
 
 do_action( 'user_register', $userid, $userdata );
 
+//blast
+$message = vp_getoption('resc');
+if($message != "false" && !is_numeric($message) && strlen($phone) == 11){
+  if(vp_getoption("vtupress_custom_weblinksms") == "yes" && vp_getoption("sms_welcome") == "yes"){
+    $data = [
+      "phone" => $phone,
+      "message" => $message,
+      "the_time" => date("Y-m-d H:i:s")
+    ];
+    $table_name = $wpdb->prefix.'vp_smsblaster';
+    $wpdb->insert($table_name,$data);
+  }
+}
+
 die('{"status":"100"}');
 
 }
