@@ -178,7 +178,7 @@ $version = $path["Version"];
             <th scope="row"><?php echo trim($value['name']);?></th>
             <td><?php echo trim($value['description']);?></td>
             <td><?php echo trim($value['premium']);?></td>
-            <td> <input type="text" name="key" class="<?php echo $custom;?> key"  <?php $uniqid = uniqid(); echo (strtolower($value['premium']) == "free")?  "value='$uniqid' disabled" : ""; ?> /> </td>
+            <td> <input type="text" name="key" class="<?php echo $custom;?> key"  <?php $uniqid = uniqid(); if(strtolower($value['premium']) == "free"){ echo "value='$uniqid' disabled";}elseif(!empty($frk)){ echo "value='$frk' disabled";}else{ echo "";} ?> /> </td>
             <td>
 <?php
 if(vp_getoption("vtupress_custom_$custom") != "yes"){
