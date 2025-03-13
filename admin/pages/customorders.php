@@ -142,7 +142,7 @@ endif;
               Beta <cite title="Source Title">In vtuPress</cite>
             </figcaption>
         </figure>
-        <div class="frk">
+        <div class="frk text-center">
           <span class="license_type">License Type: <?php echo $type;?></span>
         </div>
     </div>
