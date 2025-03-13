@@ -157,6 +157,8 @@ $version = $path["Version"];
 		<?php
 		
         if(isset($file)){
+         $frk = (vp_getoption("vtupress_custom_frk") == "yes")? uniqid("frk-",false) : "";
+
 		foreach($file as $key => $value){
 			
 /*				$installed = true;
@@ -186,7 +188,7 @@ if(vp_getoption("vtupress_custom_$custom") != "yes"){
 }
 elseif(strtolower($value["premium"]) == "free" && vp_getoption("vtupress_custom_$custom") != "yes"){
 ?>
-<button class="btn btn-primary custom_order <?php echo $custom;?>" name="custom_order" for="activate" >Activate</button>
+<button class="btn btn-primary custom_order <?php echo $custom;?>" name="custom_order" for="activate" value="<?php echo $frk;?>">Activate</button>
 
 <?php
 }
@@ -211,6 +213,7 @@ obj["custom"] = "<?php echo $custom;?>";
 obj["for"] = jQuery(this).attr('for');
 obj["plan"] = "<?php echo $value["premium"];?>";
 obj["key"] = jQuery(".<?php echo $custom;?>.key").val();
+obj["frk"] = "<?php echo $frk;?>";
 obj["spraycode"] = "<?php echo vp_getoption("spraycode");?>";
 
 <?php

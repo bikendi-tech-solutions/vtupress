@@ -287,7 +287,7 @@ vp_updateuser($userid, 'vp_tot_indir_trans3' , 0); // total amount earned from i
       $uniqid = vp_getuser($userid,"email_verified", true);
   }
   else{
-      $ddid = uniqid("vtu-",false);
+      $ddid = rand(1111,9999);
       vp_updateuser($userid,"email_verified", $ddid);
       $uniqid = vp_getuser($userid,"email_verified", true);
   }
