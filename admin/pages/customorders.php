@@ -225,7 +225,6 @@ obj["custom"] = "<?php echo $custom;?>";
 obj["for"] = jQuery(this).attr('for');
 obj["plan"] = "<?php echo $value["premium"];?>";
 obj["key"] = jQuery(".<?php echo $custom;?>.key").val();
-obj["frk"] = "<?php echo $frk;?>";
 obj["spraycode"] = "<?php echo vp_getoption("spraycode");?>";
 
 <?php
