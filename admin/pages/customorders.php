@@ -114,6 +114,16 @@ $file = json_decode($files,true);
 
 $path = get_plugin_data(ABSPATH ."wp-content/plugins/vtupress/vtupress.php");
 $version = $path["Version"];
+
+$frk = (vp_getoption("vtupress_custom_frk") == "yes")? uniqid("frk-",false) : "";
+$lfrk = (vp_getoption("vtupress_custom_lfrk") == "yes")? uniqid("lfrk-",false) : "";
+$type = "None";
+
+if(!empty($lfrk)):
+  $type = "LFRK";
+elseif(!empty($frk)):
+  $type = "FRK";
+endif;
 ?>
 
 <div class="container">
@@ -124,14 +134,17 @@ $version = $path["Version"];
 
     <div class="row">
       <div class="col">
-    <figure class="text-center">
-  <blockquote class="blockquote">
-    <h1>v <?php echo $path["Version"];?></h2>
-  </blockquote>
-  <figcaption class="blockquote-footer">
-    Beta <cite title="Source Title">In vtuPress</cite>
-  </figcaption>
-</figure>
+        <figure class="text-center">
+            <blockquote class="blockquote">
+              <h1>v <?php echo $path["Version"];?></h2>
+            </blockquote>
+            <figcaption class="blockquote-footer">
+              Beta <cite title="Source Title">In vtuPress</cite>
+            </figcaption>
+        </figure>
+        <div class="frk">
+          <span class="license_type">License Type: <?php echo $type;?></span>
+        </div>
     </div>
     </div>
 
@@ -157,7 +170,6 @@ $version = $path["Version"];
 		<?php
 		
         if(isset($file)){
-         $frk = (vp_getoption("vtupress_custom_frk") == "yes")? uniqid("frk-",false) : "";
 
 		foreach($file as $key => $value){
 			
