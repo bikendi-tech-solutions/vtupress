@@ -1360,10 +1360,12 @@ if(vp_option_array($option_array,"vtupress_custom_auto_manual") == "yes" && vp_o
         <div id="flush-collapseTwo" class="accordion-collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
           <div class="accordion-body dark-white">
 
-          <div class="w-100 my-2">
-            <div class="alert alert-info">
-              <?php echo htmlspecialchars(vp_getoption("auto_manual_info"));?>
-            </div>  
+          <div class="row">
+            <div class="col-12">
+                <div class="alert alert-info d-flex justify-content-center">
+                  <?php echo htmlspecialchars(vp_getoption("auto_manual_info"));?>
+                </div> 
+            </div>
           </div>
         
           <div class="row d-flex justify-content-around">
