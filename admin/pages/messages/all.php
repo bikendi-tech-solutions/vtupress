@@ -8,7 +8,7 @@ error_reporting(0);
 }
 include_once(ABSPATH."wp-load.php");
 include_once(ABSPATH .'wp-content/plugins/vtupress/functions.php');
-include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
+//include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
 include_once(ABSPATH .'wp-content/plugins/vtupress/admin/pages/messages/functions.php');
 global $wpdb;
 $messd = $wpdb->prefix."vp_chat";

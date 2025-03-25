@@ -1,5 +1,5 @@
 <?php
-include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
+//include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
 
 if(current_user_can("vtupress_access_users")){?>
 

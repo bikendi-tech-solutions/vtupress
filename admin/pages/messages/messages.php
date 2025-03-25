@@ -9,7 +9,7 @@ error_reporting(0);
 include_once(ABSPATH."wp-load.php");
 include_once(ABSPATH .'wp-content/plugins/vtupress/functions.php');
 include_once(ABSPATH .'wp-content/plugins/vtupress/admin/pages/history/functions.php');
-include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
+// include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
 if(current_user_can("vtupress_access_users")){
 ?>
 
