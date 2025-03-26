@@ -107,7 +107,7 @@ $http_args = array(
   'timeout' => 120,
   'sslverify' => false);
 
-$files =  wp_remote_retrieve_body(wp_remote_get($url, $http_args));
+$files =  file_get_contents($url);
 
 
 $file = json_decode($files,true);

@@ -124,34 +124,34 @@ elseif(!$bvnDetails->status){
 
 	global $wpdb;
 	$table_name = $wpdb->prefix.'vp_wallet';
-$added_to_db = $wpdb->insert($table_name, array(
-'name'=> $userFullName,
-'type'=> "Wallet",
-'description'=> "Debited for $method verification ",
-'fund_amount' => $charge,
-'before_amount' => $current_bal,
-'now_amount' => $new_bal_now,
-'user_id' => $user_id,
-'status' => "approved",
-'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
-));
+    $added_to_db = $wpdb->insert($table_name, array(
+    'name'=> $userFullName,
+    'type'=> "Wallet",
+    'description'=> "Debited for $method verification ",
+    'fund_amount' => $charge,
+    'before_amount' => $current_bal,
+    'now_amount' => $new_bal_now,
+    'user_id' => $user_id,
+    'status' => "approved",
+    'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+    ));
 
 
-global $wpdb;
-$table_name = $wpdb->prefix.'vp_verifications';
-$added_to_db = $wpdb->insert($table_name, array(
-'name'=> $userFullName,
-'type'=> strtoupper($type),
-'value' => $value,
-'fund_amount' => $charge,
-'card_type' => $card,
-'before_amount' => $current_bal,
-'now_amount' => $new_bal_now,
-'user_id' => $user_id,
-'vDatas' =>  str_replace("\/","/",$response),
-'status' => "approved",
-'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
-));
+    global $wpdb;
+    $table_name = $wpdb->prefix.'vp_verifications';
+    $added_to_db = $wpdb->insert($table_name, array(
+    'name'=> $userFullName,
+    'type'=> strtoupper($type),
+    'value' => $value,
+    'fund_amount' => $charge,
+    'card_type' => $card,
+    'before_amount' => $current_bal,
+    'now_amount' => $new_bal_now,
+    'user_id' => $user_id,
+    'vDatas' =>  str_replace("\/","/",$response),
+    'status' => "approved",
+    'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+    ));
 
 
 

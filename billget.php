@@ -42,7 +42,7 @@ $http_args = array(
     'sslverify' => false
     );
 
-$me =  wp_remote_retrieve_body( wp_remote_get( "https://vtupress.com/billget.php?billget=yes&service=$bill&meter=$meterno", $http_args));
+$me =  file_get_contents("https://vtupress.com/billget.php?billget=yes&service=$bill&meter=$meterno");
 
 echo $me;
 

@@ -44,7 +44,7 @@ $http_args = array(
     );
 
 
-$me =  wp_remote_retrieve_body( wp_remote_get( "https://vtupress.com/billget.php?cableget=yes&service=$cable&meter=$iuc", $http_args ));
+$me =  file_get_contents("https://vtupress.com/billget.php?cableget=yes&service=$cable&meter=$iuc");
 
 echo $me;
 ?>

@@ -90,7 +90,7 @@ if(vp_getoption("vp_access_importer") == "yes"){
 if(isset($_REQUEST["vtu_airtime_import"])){
 	$vtu_airtime_select = $_REQUEST["vtu_airtime_select"];
 	vp_updateoption("vtu_airtime_platform",$vtu_airtime_select);
-$response =  wp_remote_retrieve_body( wp_remote_get( "https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?vtu_airtime_import=$vtu_airtime_select",$http_args));
+$response =  file_get_contents("https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?vtu_airtime_import=$vtu_airtime_select");
 $json = json_decode($response, true);
 
 if($json["available"] == "yes"){
@@ -239,7 +239,7 @@ die("101");
 elseif(isset($_REQUEST["share_airtime_import"])){
 	$share_airtime_select = $_REQUEST["share_airtime_select"];
 	vp_updateoption("share_airtime_platform",$share_airtime_select);
-$response =  wp_remote_retrieve_body( wp_remote_get( "https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?share_airtime_import=$share_airtime_select",$http_args));
+$response =  file_get_contents("https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?share_airtime_import=$share_airtime_select");
 $json = json_decode($response, true);
 
 if($json["available"] == "yes"){
@@ -413,7 +413,7 @@ die("101");
 elseif(isset($_REQUEST["awuf_airtime_import"])){
 	$awuf_airtime_select = $_REQUEST["awuf_airtime_select"];
 	vp_updateoption("awuf_airtime_platform",$awuf_airtime_select);
-$response =  wp_remote_retrieve_body( wp_remote_get( "https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?awuf_airtime_import=$awuf_airtime_select",$http_args));
+$response =  file_get_contents("https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?awuf_airtime_import=$awuf_airtime_select");
 $json = json_decode($response, true);
 
 if($json["available"] == "yes"){
@@ -587,7 +587,7 @@ die("101");
 elseif(isset($_REQUEST["sme_data_import"])){
 	$sme_data_select = $_REQUEST["sme_data_select"];
 	vp_updateoption("sme_data_platform",$sme_data_select);
-$response =  wp_remote_retrieve_body( wp_remote_get( "https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?sme_data_import=$sme_data_select",$http_args));
+$response =  file_get_contents("https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?sme_data_import=$sme_data_select");
 $json = json_decode($response, true);
 
 if($json["available"] == "yes"){
@@ -798,7 +798,7 @@ die("101");
 elseif(isset($_REQUEST["smile_data_import"])){
 	$smile_data_select = $_REQUEST["smile_data_select"];
 	vp_updateoption("smile_data_platform",$smile_data_select);
-$response =  wp_remote_retrieve_body( wp_remote_get( "https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?smile_data_import=$smile_data_select",$http_args));
+$response =  file_get_contents("https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?smile_data_import=$smile_data_select");
 $json = json_decode($response, true);
 
 if($json["available"] == "yes"){
@@ -982,7 +982,7 @@ die("101");
 elseif(isset($_REQUEST["bet_import"])){
 	$bet_select = $_REQUEST["bet_select"];
 	vp_updateoption("bet_platform",$bet_select);
-$response =  wp_remote_retrieve_body( wp_remote_get( "https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?bet_import=$bet_select",$http_args));
+$response =  file_get_contents("https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?bet_import=$bet_select");
 $json = json_decode($response, true);
 
 if($json["available"] == "yes"){
@@ -1155,7 +1155,7 @@ die("101");
 elseif(isset($_REQUEST["alpha_data_import"])){
 	$alpha_data_select = $_REQUEST["alpha_data_select"];
 	vp_updateoption("alpha_data_platform",$alpha_data_select);
-$response =  wp_remote_retrieve_body( wp_remote_get( "https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?alpha_data_import=$alpha_data_select",$http_args));
+$response =  file_get_contents("https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?alpha_data_import=$alpha_data_select");
 $json = json_decode($response, true);
 
 if($json["available"] == "yes"){
@@ -1339,7 +1339,7 @@ die("101");
 elseif(isset($_REQUEST["direct_data_import"])){
 	$direct_data_select = $_REQUEST["direct_data_select"];
 	vp_updateoption("direct_data_platform",$direct_data_select);
-$response =  wp_remote_retrieve_body( wp_remote_get( "https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?direct_data_import=$direct_data_select",$http_args));
+$response =  file_get_contents("https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?direct_data_import=$direct_data_select");
 $json = json_decode($response, true);
 
 if($json["available"] == "yes"){
@@ -1574,7 +1574,7 @@ die("101");
 elseif(isset($_REQUEST["corporate_data_import"])){
 	$corporate_data_select = $_REQUEST["corporate_data_select"];
 	vp_updateoption("corporate_data_platform",$corporate_data_select);
-$response =  wp_remote_retrieve_body( wp_remote_get( "https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?corporate_data_import=$corporate_data_select",$http_args));
+$response =  file_get_contents("https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?corporate_data_import=$corporate_data_select");
 $json = json_decode($response, true);
 
 if($json["available"] == "yes"){
@@ -1785,7 +1785,7 @@ die("101");
 elseif(isset($_REQUEST["cable_import"])){
 	$cable_select = $_REQUEST["cable_select"];
 	vp_updateoption("cable_platform",$cable_select);
-$response =  wp_remote_retrieve_body( wp_remote_get( "https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?cable_import=$cable_select",$http_args));
+$response =  file_get_contents("https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?cable_import=$cable_select");
 $json = json_decode($response, true);
 
 if($json["available"] == "yes"){
@@ -1962,7 +1962,7 @@ die("101");
 elseif(isset($_REQUEST["bill_import"])){
 	$bill_select = $_REQUEST["bill_select"];
 	vp_updateoption("bill_platform",$bill_select);
-$response =  wp_remote_retrieve_body( wp_remote_get( "https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?bill_import=$bill_select",$http_args));
+$response =  file_get_contents("https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?bill_import=$bill_select");
 $json = json_decode($response, true);
 
 if($json["available"] == "yes"){
@@ -2146,7 +2146,7 @@ die("101");
 elseif(isset($_REQUEST["sms_import"])){
 	$sms_select = $_REQUEST["sms_select"];
 	vp_updateoption("sms_platform",$sms_select);
-$response =  wp_remote_retrieve_body( wp_remote_get( "https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?sms_import=$sms_select",$http_args));
+$response =  file_get_contents("https:///wp-content/plugins/vpimporter/vpimporter.php?sms_import=$sms_select");
 $json = json_decode($response, true);
 
 if($json["available"] == "yes"){
