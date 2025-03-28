@@ -111,7 +111,7 @@ elseif(preg_match('/bikendi/',vp_getoption("smilebaseurl"))){
 
     $smile_array = [];
 
-    $url = "https://vtu.bikendi.com/smile/?query=verify";
+    $url = "https://bikendi.com/smile/?query=verify";
 	
 	$the_head =  vp_getoption("smile_head");
 	if($the_head == "not_concatenated"){
