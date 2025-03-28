@@ -1832,457 +1832,125 @@ else{
 	var datachoice = jQuery(".datachoice").val();
 	var datanetwork = jQuery(".data-network option:selected").text();
 	
+	
+	var smedataprices = {};
+	var corpdataprices = {};
+	var giftdataprices = {};
+	var smiledataprices = {};
+
+
+	';
+	$count = $count1 = $count2 =  $count3 = 0;
+	$countc = $countc1 = $countc2 =  $countc3 = 0;
+	$countg = $countg1 = $countg2 = $countg3 = 0;
+	for($i=0; $i<=80; $i++){
+		if($i <= 20){
+			echo'
+				smedataprices["'.vp_option_array($option_array,"cdata".$count).'"] = "'.vp_option_array($option_array,"cdatap".$count).'";
+			';
+			$count++;
+		}
+		elseif($i <= 40){
+			
+
+			echo'
+				smedataprices["'.vp_option_array($option_array,"acdata".$count1).'"] = "'.vp_option_array($option_array,"acdatap".$count1).'";
+			';
+			$count1++;
+		}
+		elseif($i <= 60){
+			$count2 = 0;
+
+			echo'
+				smedataprices["'.vp_option_array($option_array,"9cdata".$count2).'"] = "'.vp_option_array($option_array,"9cdatap".$count2).'";
+			';
+			$count2++;
+		}else{
+			echo'
+				smedataprices["'.vp_option_array($option_array,"gcdata".$count3).'"] = "'.vp_option_array($option_array,"gcdatap".$count3).'";
+			';
+			$count3++;
+		}
+
+	}
+	for($i=0; $i<=80; $i++){
+		if($i <= 20){
+			echo'
+				corpdataprices["'.vp_option_array($option_array,"r2cdata".$countc).'"] = "'.vp_option_array($option_array,"r2cdatap".$countc).'";
+			';
+			$countc++;
+		}
+		elseif($i <= 40){
+			
+
+			echo'
+				corpdataprices["'.vp_option_array($option_array,"r2acdata".$countc1).'"] = "'.vp_option_array($option_array,"r2acdatap".$countc1).'";
+			';
+			$countc1++;
+		}
+		elseif($i <= 60){
+			$countc2 = 0;
+
+			echo'
+				corpdataprices["'.vp_option_array($option_array,"r29cdata".$countc2).'"] = "'.vp_option_array($option_array,"r29cdatap".$countc2).'";
+			';
+			$countc2++;
+		}else{
+			echo'
+				corpdataprices["'.vp_option_array($option_array,"r2gcdata".$countc3).'"] = "'.vp_option_array($option_array,"r2gcdatap".$countc3).'";
+			';
+			$countc3++;
+		}
+
+	}
+	for($i=0; $i<=80; $i++){
+		if($i <= 20){
+			echo'
+				giftdataprices["'.vp_option_array($option_array,"rcdata".$countg).'"] = "'.vp_option_array($option_array,"rcdatap".$countg).'";
+			';
+			$countg++;
+		}
+		elseif($i <= 40){
+			
+
+			echo'
+				giftdataprices["'.vp_option_array($option_array,"racdata".$countg1).'"] = "'.vp_option_array($option_array,"racdatap".$countg1).'";
+			';
+			$countg1++;
+		}
+		elseif($i <= 60){
+			$countg2 = 0;
+
+			echo'
+				giftdataprices["'.vp_option_array($option_array,"r9cdata".$countg2).'"] = "'.vp_option_array($option_array,"r9cdatap".$countg2).'";
+			';
+			$countg2++;
+		}else{
+			echo'
+				giftdataprices["'.vp_option_array($option_array,"rgcdata".$countg3).'"] = "'.vp_option_array($option_array,"rgcdatap".$countg3).'";
+			';
+			$countg3++;
+		}
+
+	}
+	for($i=0; $i<=20; $i++){
+		    echo'
+                smiledataprices["'.vp_option_array($option_array,"csmiledata".$i).'"] = "'.vp_option_array($option_array,"csmiledatap".$i).'";
+            ';
+	}
+	echo'
 	if(datachoice == "sme"){
-	switch(cdat){
-	case "'.vp_option_array($option_array,"cdata0").'":
-	amtd.value = "'.vp_option_array($option_array,"cdatap0").'";
-	break;
-	case "'.vp_option_array($option_array,"cdata1").'":
-	amtd.value = "'.vp_option_array($option_array,"cdatap1").'";
-	break;
-	case "'.vp_option_array($option_array,"cdata2").'":
-	amtd.value = "'.vp_option_array($option_array,"cdatap2").'";
-	break;
-	case "'.vp_option_array($option_array,"cdata3").'":
-	amtd.value = "'.vp_option_array($option_array,"cdatap3").'";
-	break;
-	case "'.vp_option_array($option_array,"cdata4").'":
-	amtd.value = "'.vp_option_array($option_array,"cdatap4").'";
-	break;
-	case "'.vp_option_array($option_array,"cdata5").'":
-	amtd.value = "'.vp_option_array($option_array,"cdatap5").'";
-	break;
-	case "'.vp_option_array($option_array,"cdata6").'":
-	amtd.value = "'.vp_option_array($option_array,"cdatap6").'";
-	break;
-	case "'.vp_option_array($option_array,"cdata7").'":
-	amtd.value = "'.vp_option_array($option_array,"cdatap7").'";
-	break;
-	case "'.vp_option_array($option_array,"cdata8").'":
-	amtd.value = "'.vp_option_array($option_array,"cdatap8").'";
-	break;
-	case "'.vp_option_array($option_array,"cdata9").'":
-	amtd.value = "'.vp_option_array($option_array,"cdatap9").'";
-	break;
-	case "'.vp_option_array($option_array,"cdata10").'":
-	amtd.value = "'.vp_option_array($option_array,"cdatap10").'";
-	break;
-	
-	case "'.vp_option_array($option_array,"acdata0").'":
-	amtd.value = "'.vp_option_array($option_array,"acdatap0").'";
-	break;
-	case "'.vp_option_array($option_array,"acdata1").'":
-	amtd.value = "'.vp_option_array($option_array,"acdatap1").'";
-	break;
-	case "'.vp_option_array($option_array,"acdata2").'":
-	amtd.value = "'.vp_option_array($option_array,"acdatap2").'";
-	break;
-	case "'.vp_option_array($option_array,"acdata3").'":
-	amtd.value = "'.vp_option_array($option_array,"acdatap3").'";
-	break;
-	case "'.vp_option_array($option_array,"acdata4").'":
-	amtd.value = "'.vp_option_array($option_array,"acdatap4").'";
-	break;
-	case "'.vp_option_array($option_array,"acdata5").'":
-	amtd.value = "'.vp_option_array($option_array,"acdatap5").'";
-	break;
-	case "'.vp_option_array($option_array,"acdata6").'":
-	amtd.value = "'.vp_option_array($option_array,"acdatap6").'";
-	break;
-	case "'.vp_option_array($option_array,"acdata7").'":
-	amtd.value = "'.vp_option_array($option_array,"acdatap7").'";
-	break;
-	case "'.vp_option_array($option_array,"acdata8").'":
-	amtd.value = "'.vp_option_array($option_array,"acdatap8").'";
-	break;
-	case "'.vp_option_array($option_array,"acdata9").'":
-	amtd.value = "'.vp_option_array($option_array,"acdatap9").'";
-	break;
-	case "'.vp_option_array($option_array,"acdata10").'":
-	amtd.value = "'.vp_option_array($option_array,"acdatap10").'";
-	break;
-	
-	case "'.vp_option_array($option_array,"9cdata0").'":
-	amtd.value = "'.vp_option_array($option_array,"9cdatap0").'";
-	break;
-	case "'.vp_option_array($option_array,"9cdata1").'":
-	amtd.value = "'.vp_option_array($option_array,"9cdatap1").'";
-	break;
-	case "'.vp_option_array($option_array,"9cdata2").'":
-	amtd.value = "'.vp_option_array($option_array,"9cdatap2").'";
-	break;
-	case "'.vp_option_array($option_array,"9cdata3").'":
-	amtd.value = "'.vp_option_array($option_array,"9cdatap3").'";
-	break;
-	case "'.vp_option_array($option_array,"9cdata4").'":
-	amtd.value = "'.vp_option_array($option_array,"9cdatap4").'";
-	break;
-	case "'.vp_option_array($option_array,"9cdata5").'":
-	amtd.value = "'.vp_option_array($option_array,"9cdatap5").'";
-	break;
-	case "'.vp_option_array($option_array,"9cdata6").'":
-	amtd.value = "'.vp_option_array($option_array,"9cdatap6").'";
-	break;
-	case "'.vp_option_array($option_array,"9cdata7").'":
-	amtd.value = "'.vp_option_array($option_array,"9cdatap7").'";
-	break;
-	case "'.vp_option_array($option_array,"9cdata8").'":
-	amtd.value = "'.vp_option_array($option_array,"9cdatap8").'";
-	break;
-	case "'.vp_option_array($option_array,"9cdata9").'":
-	amtd.value = "'.vp_option_array($option_array,"9cdatap9").'";
-	break;
-	case "'.vp_option_array($option_array,"9cdata10").'":
-	amtd.value = "'.vp_option_array($option_array,"9cdatap10").'";
-	break;
-	case "'.vp_option_array($option_array,"gcdata0").'":
-	amtd.value = "'.vp_option_array($option_array,"gcdatap0").'";
-	break;
-	case "'.vp_option_array($option_array,"gcdata1").'":
-	amtd.value = "'.vp_option_array($option_array,"gcdatap1").'";
-	break;
-	case "'.vp_option_array($option_array,"gcdata2").'":
-	amtd.value = "'.vp_option_array($option_array,"gcdatap2").'";
-	break;
-	case "'.vp_option_array($option_array,"gcdata3").'":
-	amtd.value = "'.vp_option_array($option_array,"gcdatap3").'";
-	break;
-	case "'.vp_option_array($option_array,"gcdata4").'":
-	amtd.value = "'.vp_option_array($option_array,"gcdatap4").'";
-	break;
-	case "'.vp_option_array($option_array,"gcdata5").'":
-	amtd.value = "'.vp_option_array($option_array,"gcdatap5").'";
-	break;
-	case "'.vp_option_array($option_array,"gcdata6").'":
-	amtd.value = "'.vp_option_array($option_array,"gcdatap6").'";
-	break;
-	case "'.vp_option_array($option_array,"gcdata7").'":
-	amtd.value = "'.vp_option_array($option_array,"gcdatap7").'";
-	break;
-	case "'.vp_option_array($option_array,"gcdata8").'":
-	amtd.value = "'.vp_option_array($option_array,"gcdatap8").'";
-	break;
-	case "'.vp_option_array($option_array,"gcdata9").'":
-	amtd.value = "'.vp_option_array($option_array,"gcdatap9").'";
-	break;
-	case "'.vp_option_array($option_array,"gcdata10").'":
-	amtd.value = "'.vp_option_array($option_array,"gcdatap10").'";
-	break;
+			amtd.value = smedataprices[cdat];
 	}
-	}
-	
 	else if(datachoice == "direct"){
-	switch(cdat){
-	case "'.vp_option_array($option_array,"rcdata0").'":
-	amtd.value = "'.vp_option_array($option_array,"rcdatap0").'";
-	break;
-	case "'.vp_option_array($option_array,"rcdata1").'":
-	amtd.value = "'.vp_option_array($option_array,"rcdatap1").'";
-	break;
-	case "'.vp_option_array($option_array,"rcdata2").'":
-	amtd.value = "'.vp_option_array($option_array,"rcdatap2").'";
-	break;
-	case "'.vp_option_array($option_array,"rcdata3").'":
-	amtd.value = "'.vp_option_array($option_array,"rcdatap3").'";
-	break;
-	case "'.vp_option_array($option_array,"rcdata4").'":
-	amtd.value = "'.vp_option_array($option_array,"rcdatap4").'";
-	break;
-	case "'.vp_option_array($option_array,"rcdata5").'":
-	amtd.value = "'.vp_option_array($option_array,"rcdatap5").'";
-	break;
-	case "'.vp_option_array($option_array,"rcdata6").'":
-	amtd.value = "'.vp_option_array($option_array,"rcdatap6").'";
-	break;
-	case "'.vp_option_array($option_array,"rcdata7").'":
-	amtd.value = "'.vp_option_array($option_array,"rcdatap7").'";
-	break;
-	case "'.vp_option_array($option_array,"rcdata8").'":
-	amtd.value = "'.vp_option_array($option_array,"rcdatap8").'";
-	break;
-	case "'.vp_option_array($option_array,"rcdata9").'":
-	amtd.value = "'.vp_option_array($option_array,"rcdatap9").'";
-	break;
-	case "'.vp_option_array($option_array,"rcdata10").'":
-	amtd.value = "'.vp_option_array($option_array,"rcdatap10").'";
-	break;
-	case "'.vp_option_array($option_array,"racdata0").'":
-	amtd.value = "'.vp_option_array($option_array,"racdatap0").'";
-	break;
-	case "'.vp_option_array($option_array,"racdata1").'":
-	amtd.value = "'.vp_option_array($option_array,"racdatap1").'";
-	break;
-	case "'.vp_option_array($option_array,"racdata2").'":
-	amtd.value = "'.vp_option_array($option_array,"racdatap2").'";
-	break;
-	case "'.vp_option_array($option_array,"racdata3").'":
-	amtd.value = "'.vp_option_array($option_array,"racdatap3").'";
-	break;
-	case "'.vp_option_array($option_array,"racdata4").'":
-	amtd.value = "'.vp_option_array($option_array,"racdatap4").'";
-	break;
-	case "'.vp_option_array($option_array,"racdata5").'":
-	amtd.value = "'.vp_option_array($option_array,"racdatap5").'";
-	break;
-	case "'.vp_option_array($option_array,"racdata6").'":
-	amtd.value = "'.vp_option_array($option_array,"racdatap6").'";
-	break;
-	case "'.vp_option_array($option_array,"racdata7").'":
-	amtd.value = "'.vp_option_array($option_array,"racdatap7").'";
-	break;
-	case "'.vp_option_array($option_array,"racdata8").'":
-	amtd.value = "'.vp_option_array($option_array,"racdatap8").'";
-	break;
-	case "'.vp_option_array($option_array,"racdata9").'":
-	amtd.value = "'.vp_option_array($option_array,"racdatap9").'";
-	break;
-	case "'.vp_option_array($option_array,"racdata10").'":
-	amtd.value = "'.vp_option_array($option_array,"racdatap10").'";
-	break;
-	case "'.vp_option_array($option_array,"r9cdata0").'":
-	amtd.value = "'.vp_option_array($option_array,"r9cdatap0").'";
-	break;
-	case "'.vp_option_array($option_array,"r9cdata1").'":
-	amtd.value = "'.vp_option_array($option_array,"r9cdatap1").'";
-	break;
-	case "'.vp_option_array($option_array,"r9cdata2").'":
-	amtd.value = "'.vp_option_array($option_array,"r9cdatap2").'";
-	break;
-	case "'.vp_option_array($option_array,"r9cdata3").'":
-	amtd.value = "'.vp_option_array($option_array,"r9cdatap3").'";
-	break;
-	case "'.vp_option_array($option_array,"r9cdata4").'":
-	amtd.value = "'.vp_option_array($option_array,"r9cdatap4").'";
-	break;
-	case "'.vp_option_array($option_array,"r9cdata5").'":
-	amtd.value = "'.vp_option_array($option_array,"r9cdatap5").'";
-	break;
-	case "'.vp_option_array($option_array,"r9cdata6").'":
-	amtd.value = "'.vp_option_array($option_array,"r9cdatap6").'";
-	break;
-	case "'.vp_option_array($option_array,"r9cdata7").'":
-	amtd.value = "'.vp_option_array($option_array,"r9cdatap7").'";
-	break;
-	case "'.vp_option_array($option_array,"r9cdata8").'":
-	amtd.value = "'.vp_option_array($option_array,"r9cdatap8").'";
-	break;
-	case "'.vp_option_array($option_array,"r9cdata9").'":
-	amtd.value = "'.vp_option_array($option_array,"r9cdatap9").'";
-	break;
-	case "'.vp_option_array($option_array,"r9cdata10").'":
-	amtd.value = "'.vp_option_array($option_array,"r9cdatap10").'";
-	break;
-	case "'.vp_option_array($option_array,"rgcdata0").'":
-	amtd.value = "'.vp_option_array($option_array,"rgcdatap0").'";
-	break;
-	case "'.vp_option_array($option_array,"rgcdata1").'":
-	amtd.value = "'.vp_option_array($option_array,"rgcdatap1").'";
-	break;
-	case "'.vp_option_array($option_array,"rgcdata2").'":
-	amtd.value = "'.vp_option_array($option_array,"rgcdatap2").'";
-	break;
-	case "'.vp_option_array($option_array,"rgcdata3").'":
-	amtd.value = "'.vp_option_array($option_array,"rgcdatap3").'";
-	break;
-	case "'.vp_option_array($option_array,"rgcdata4").'":
-	amtd.value = "'.vp_option_array($option_array,"rgcdatap4").'";
-	break;
-	case "'.vp_option_array($option_array,"rgcdata5").'":
-	amtd.value = "'.vp_option_array($option_array,"rgcdatap5").'";
-	break;
-	case "'.vp_option_array($option_array,"rgcdata6").'":
-	amtd.value = "'.vp_option_array($option_array,"rgcdatap6").'";
-	break;
-	case "'.vp_option_array($option_array,"rgcdata7").'":
-	amtd.value = "'.vp_option_array($option_array,"rgcdatap7").'";
-	break;
-	case "'.vp_option_array($option_array,"rgcdata8").'":
-	amtd.value = "'.vp_option_array($option_array,"rgcdatap8").'";
-	break;
-	case "'.vp_option_array($option_array,"rgcdata9").'":
-	amtd.value = "'.vp_option_array($option_array,"rgcdatap9").'";
-	break;
-	case "'.vp_option_array($option_array,"rgcdata10").'":
-	amtd.value = "'.vp_option_array($option_array,"rgcdatap10").'";
-	break;
-	}
+			amtd.value = giftdataprices[cdat];
 	}
 	else if(datachoice == "corporate"){
-	switch(cdat){
-	case "'.vp_option_array($option_array,"r2cdata0").'":
-	amtd.value = "'.vp_option_array($option_array,"r2cdatap0").'";
-	break;
-	case "'.vp_option_array($option_array,"r2cdata1").'":
-	amtd.value = "'.vp_option_array($option_array,"r2cdatap1").'";
-	break;
-	case "'.vp_option_array($option_array,"r2cdata2").'":
-	amtd.value = "'.vp_option_array($option_array,"r2cdatap2").'";
-	break;
-	case "'.vp_option_array($option_array,"r2cdata3").'":
-	amtd.value = "'.vp_option_array($option_array,"r2cdatap3").'";
-	break;
-	case "'.vp_option_array($option_array,"r2cdata4").'":
-	amtd.value = "'.vp_option_array($option_array,"r2cdatap4").'";
-	break;
-	case "'.vp_option_array($option_array,"r2cdata5").'":
-	amtd.value = "'.vp_option_array($option_array,"r2cdatap5").'";
-	break;
-	case "'.vp_option_array($option_array,"r2cdata6").'":
-	amtd.value = "'.vp_option_array($option_array,"r2cdatap6").'";
-	break;
-	case "'.vp_option_array($option_array,"r2cdata7").'":
-	amtd.value = "'.vp_option_array($option_array,"r2cdatap7").'";
-	break;
-	case "'.vp_option_array($option_array,"r2cdata8").'":
-	amtd.value = "'.vp_option_array($option_array,"r2cdatap8").'";
-	break;
-	case "'.vp_option_array($option_array,"r2cdata9").'":
-	amtd.value = "'.vp_option_array($option_array,"r2cdatap9").'";
-	break;
-	case "'.vp_option_array($option_array,"r2cdata10").'":
-	amtd.value = "'.vp_option_array($option_array,"r2cdatap10").'";
-	break;
-	case "'.vp_option_array($option_array,"r2acdata0").'":
-	amtd.value = "'.vp_option_array($option_array,"r2acdatap0").'";
-	break;
-	case "'.vp_option_array($option_array,"r2acdata1").'":
-	amtd.value = "'.vp_option_array($option_array,"r2acdatap1").'";
-	break;
-	case "'.vp_option_array($option_array,"r2acdata2").'":
-	amtd.value = "'.vp_option_array($option_array,"r2acdatap2").'";
-	break;
-	case "'.vp_option_array($option_array,"r2acdata3").'":
-	amtd.value = "'.vp_option_array($option_array,"r2acdatap3").'";
-	break;
-	case "'.vp_option_array($option_array,"r2acdata4").'":
-	amtd.value = "'.vp_option_array($option_array,"r2acdatap4").'";
-	break;
-	case "'.vp_option_array($option_array,"r2acdata5").'":
-	amtd.value = "'.vp_option_array($option_array,"r2acdatap5").'";
-	break;
-	case "'.vp_option_array($option_array,"r2acdata6").'":
-	amtd.value = "'.vp_option_array($option_array,"r2acdatap6").'";
-	break;
-	case "'.vp_option_array($option_array,"r2acdata7").'":
-	amtd.value = "'.vp_option_array($option_array,"r2acdatap7").'";
-	break;
-	case "'.vp_option_array($option_array,"r2acdata8").'":
-	amtd.value = "'.vp_option_array($option_array,"r2acdatap8").'";
-	break;
-	case "'.vp_option_array($option_array,"r2acdata9").'":
-	amtd.value = "'.vp_option_array($option_array,"r2acdatap9").'";
-	break;
-	case "'.vp_option_array($option_array,"r2acdata10").'":
-	amtd.value = "'.vp_option_array($option_array,"r2acdatap10").'";
-	break;
-	case "'.vp_option_array($option_array,"r29cdata0").'":
-	amtd.value = "'.vp_option_array($option_array,"r29cdatap0").'";
-	break;
-	case "'.vp_option_array($option_array,"r29cdata1").'":
-	amtd.value = "'.vp_option_array($option_array,"r29cdatap1").'";
-	break;
-	case "'.vp_option_array($option_array,"r29cdata2").'":
-	amtd.value = "'.vp_option_array($option_array,"r29cdatap2").'";
-	break;
-	case "'.vp_option_array($option_array,"r29cdata3").'":
-	amtd.value = "'.vp_option_array($option_array,"r29cdatap3").'";
-	break;
-	case "'.vp_option_array($option_array,"r29cdata4").'":
-	amtd.value = "'.vp_option_array($option_array,"r29cdatap4").'";
-	break;
-	case "'.vp_option_array($option_array,"r29cdata5").'":
-	amtd.value = "'.vp_option_array($option_array,"r29cdatap5").'";
-	break;
-	case "'.vp_option_array($option_array,"r29cdata6").'":
-	amtd.value = "'.vp_option_array($option_array,"r29cdatap6").'";
-	break;
-	case "'.vp_option_array($option_array,"r29cdata7").'":
-	amtd.value = "'.vp_option_array($option_array,"r29cdatap7").'";
-	break;
-	case "'.vp_option_array($option_array,"r29cdata8").'":
-	amtd.value = "'.vp_option_array($option_array,"r29cdatap8").'";
-	break;
-	case "'.vp_option_array($option_array,"r29cdata9").'":
-	amtd.value = "'.vp_option_array($option_array,"r29cdatap9").'";
-	break;
-	case "'.vp_option_array($option_array,"r29cdata10").'":
-	amtd.value = "'.vp_option_array($option_array,"r29cdatap10").'";
-	break;
-	case "'.vp_option_array($option_array,"r2gcdata0").'":
-	amtd.value = "'.vp_option_array($option_array,"r2gcdatap0").'";
-	break;
-	case "'.vp_option_array($option_array,"r2gcdata1").'":
-	amtd.value = "'.vp_option_array($option_array,"r2gcdatap1").'";
-	break;
-	case "'.vp_option_array($option_array,"r2gcdata2").'":
-	amtd.value = "'.vp_option_array($option_array,"r2gcdatap2").'";
-	break;
-	case "'.vp_option_array($option_array,"r2gcdata3").'":
-	amtd.value = "'.vp_option_array($option_array,"r2gcdatap3").'";
-	break;
-	case "'.vp_option_array($option_array,"r2gcdata4").'":
-	amtd.value = "'.vp_option_array($option_array,"r2gcdatap4").'";
-	break;
-	case "'.vp_option_array($option_array,"r2gcdata5").'":
-	amtd.value = "'.vp_option_array($option_array,"r2gcdatap5").'";
-	break;
-	case "'.vp_option_array($option_array,"r2gcdata6").'":
-	amtd.value = "'.vp_option_array($option_array,"r2gcdatap6").'";
-	break;
-	case "'.vp_option_array($option_array,"r2gcdata7").'":
-	amtd.value = "'.vp_option_array($option_array,"r2gcdatap7").'";
-	break;
-	case "'.vp_option_array($option_array,"r2gcdata8").'":
-	amtd.value = "'.vp_option_array($option_array,"r2gcdatap8").'";
-	break;
-	case "'.vp_option_array($option_array,"r2gcdata9").'":
-	amtd.value = "'.vp_option_array($option_array,"r2gcdatap9").'";
-	break;
-	case "'.vp_option_array($option_array,"r2gcdata10").'":
-	amtd.value = "'.vp_option_array($option_array,"r2gcdatap10").'";
-	break;
-	default: alert("no price set for this");
-	}
+			amtd.value = corpdataprices[cdat];
+
 	}
 	else if(datanetwork == "SMILE"){
-	
-		switch(cdat){
-			case "'.vp_option_array($option_array,"csmiledata0").'":
-			amtd.value = "'.vp_option_array($option_array,"csmiledatap0").'";
-			break;
-			case "'.vp_option_array($option_array,"csmiledata1").'":
-			amtd.value = "'.vp_option_array($option_array,"csmiledatap1").'";
-			break;
-			case "'.vp_option_array($option_array,"csmiledata2").'":
-			amtd.value = "'.vp_option_array($option_array,"csmiledatap2").'";
-			break;
-			case "'.vp_option_array($option_array,"csmiledata3").'":
-			amtd.value = "'.vp_option_array($option_array,"csmiledatap3").'";
-			break;
-			case "'.vp_option_array($option_array,"csmiledata4").'":
-			amtd.value = "'.vp_option_array($option_array,"csmiledatap4").'";
-			break;
-			case "'.vp_option_array($option_array,"csmiledata5").'":
-			amtd.value = "'.vp_option_array($option_array,"csmiledatap5").'";
-			break;
-			case "'.vp_option_array($option_array,"csmiledata6").'":
-			amtd.value = "'.vp_option_array($option_array,"csmiledatap6").'";
-			break;
-			case "'.vp_option_array($option_array,"csmiledata7").'":
-			amtd.value = "'.vp_option_array($option_array,"csmiledatap7").'";
-			break;
-			case "'.vp_option_array($option_array,"csmiledata8").'":
-			amtd.value = "'.vp_option_array($option_array,"csmiledatap8").'";
-			break;
-			case "'.vp_option_array($option_array,"csmiledata9").'":
-			amtd.value = "'.vp_option_array($option_array,"csmiledatap9").'";
-			break;
-			case "'.vp_option_array($option_array,"csmiledata10").'":
-			amtd.value = "'.vp_option_array($option_array,"csmiledatap10").'";
-			break;
-			default: alert("no price set for this");
-			}
-	
+			amtd.value = smiledataprices[cdat];
 	}
 	
 	
