@@ -478,7 +478,7 @@ for($datapost=1; $datapost<=5; $datapost++){
 <label class="form-label simple">MTN DATA PLAN</label><br>
 
 <?php
-for($i=0; $i<=10; $i++){
+for($i=0; $i<=20; $i++){
 ?>
 
 <div class="input-group mb-3">
@@ -497,7 +497,7 @@ for($i=0; $i<=10; $i++){
 <label class="simple"> AIRTEL DATA PLAN</label><br>
 
 <?php
-for($i=0; $i<=10; $i++){
+for($i=0; $i<=20; $i++){
 ?>
 
 <div class="input-group mb-3">
@@ -516,7 +516,7 @@ for($i=0; $i<=10; $i++){
 <label class="simple"> 9MOBILE DATA PLAN</label><br>
 
 <?php
-for($i=0; $i<=10; $i++){
+for($i=0; $i<=20; $i++){
 ?>
 <div class="input-group mb-3">
 <span class="input-group-text">ID</span>
@@ -535,7 +535,7 @@ for($i=0; $i<=10; $i++){
 <label class="simple"> GLO DATA PLAN</label><br>
 
 <?php
-for($i=0; $i<=10; $i++){
+for($i=0; $i<=20; $i++){
 ?>
 
 <div class="input-group mb-3">

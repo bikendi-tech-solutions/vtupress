@@ -126,25 +126,25 @@ vp_updateoption("r2cvariationattr",$_REQUEST["r2cvariationattr"]);
 vp_updateoption("r2dataphoneattribute",$_REQUEST["r2dataphoneattribute"]);
 vp_updateoption("r2datanetworkattribute",$_REQUEST["r2datanetworkattribute"]);
 
-for($i=0; $i<=10; $i++){
+for($i=0; $i<=20; $i++){
 vp_updateoption("r2cdata".$i,$_REQUEST["r2cdata".$i]);
 vp_updateoption("r2cdatan".$i,$_REQUEST["r2cdatan".$i]);
 vp_updateoption("r2cdatap".$i,$_REQUEST["r2cdatap".$i]);
 }
 
-for($i=0; $i<=10; $i++){
+for($i=0; $i<=20; $i++){
 vp_updateoption("r2acdata".$i,$_REQUEST["r2acdata".$i]);
 vp_updateoption("r2acdatan".$i,$_REQUEST["r2acdatan".$i]);
 vp_updateoption("r2acdatap".$i,$_REQUEST["r2acdatap".$i]);
 }
 
-for($i=0; $i<=10; $i++){
+for($i=0; $i<=20; $i++){
 vp_updateoption("r29cdata".$i,$_REQUEST["r29cdata".$i]);
 vp_updateoption("r29cdatan".$i,$_REQUEST["r29cdatan".$i]);
 vp_updateoption("r29cdatap".$i,$_REQUEST["r29cdatap".$i]);
 }
 
-for($i=0; $i<=10; $i++){
+for($i=0; $i<=20; $i++){
 vp_updateoption("r2gcdata".$i,$_REQUEST["r2gcdata".$i]);
 vp_updateoption("r2gcdatan".$i,$_REQUEST["r2gcdatan".$i]);
 vp_updateoption("r2gcdatap".$i,$_REQUEST["r2gcdatap".$i]);

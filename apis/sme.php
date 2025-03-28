@@ -133,26 +133,26 @@ vp_updateoption("cvariationattr",$_REQUEST["cvariationattr"]);
 vp_updateoption("dataphoneattribute",$_REQUEST["dataphoneattribute"]);
 vp_updateoption("datanetworkattribute",$_REQUEST["datanetworkattribute"]);
 
-for($i=0; $i<=10; $i++){
+for($i=0; $i<=20; $i++){
 vp_updateoption("cdata".$i,$_REQUEST["cdata".$i]);
 vp_updateoption("cdatan".$i,$_REQUEST["cdatan".$i]);
 vp_updateoption("cdatap".$i,$_REQUEST["cdatap".$i]);
 
 }
 
-for($i=0; $i<=10; $i++){
+for($i=0; $i<=20; $i++){
 vp_updateoption("acdata".$i,$_REQUEST["acdata".$i]);
 vp_updateoption("acdatan".$i,$_REQUEST["acdatan".$i]);
 vp_updateoption("acdatap".$i,$_REQUEST["acdatap".$i]);
 }
 
-for($i=0; $i<=10; $i++){
+for($i=0; $i<=20; $i++){
 vp_updateoption("9cdata".$i,$_REQUEST["9cdata".$i]);
 vp_updateoption("9cdatan".$i,$_REQUEST["9cdatan".$i]);
 vp_updateoption("9cdatap".$i,$_REQUEST["9cdatap".$i]);
 }
 
-for($i=0; $i<=10; $i++){
+for($i=0; $i<=20; $i++){
 vp_updateoption("gcdata".$i,$_REQUEST["gcdata".$i]);
 vp_updateoption("gcdatan".$i,$_REQUEST["gcdatan".$i]);
 vp_updateoption("gcdatap".$i,$_REQUEST["gcdatap".$i]);

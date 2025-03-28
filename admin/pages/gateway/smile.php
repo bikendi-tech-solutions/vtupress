@@ -437,7 +437,7 @@ for($smilepost=1; $smilepost<=5; $smilepost++){
 <label class="form-label simple">SMILE DATA PLAN</label><br>
 
 <?php
-for($i=0; $i<=15; $i++){
+for($i=0; $i<=20; $i++){
 ?>
 
 <div class="input-group mb-3">

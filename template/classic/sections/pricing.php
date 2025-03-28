@@ -298,7 +298,7 @@ echo"
 <tbody>
 <?php
 
-for($i = 0; $i <= 10; $i++ ){
+for($i = 0; $i <= 20; $i++ ){
 $api = vp_option_array($option_array,"api$i");
 $disamount = vp_option_array($option_array,"cdatap$i");
 $discount = floatval($level[0]->mtn_sme);
@@ -321,7 +321,7 @@ echo"
 
 }
 
-for($i = 0; $i <= 10; $i++ ){
+for($i = 0; $i <= 20; $i++ ){
 $api = vp_option_array($option_array,"aapi$i");
 $plan = vp_option_array($option_array,"acdata$i");
 $disamount = vp_option_array($option_array,"acdatap$i");
@@ -346,7 +346,7 @@ echo"
 }
 
 
-for($i = 0; $i <= 10; $i++ ){
+for($i = 0; $i <= 20; $i++ ){
 $api = vp_option_array($option_array,"9api$i");
 $plan = vp_option_array($option_array,"9cdata$i");
 $disamount = vp_option_array($option_array,"9cdatap$i");
@@ -371,7 +371,7 @@ echo"
 }
 
 
-for($i = 0; $i <= 10; $i++ ){
+for($i = 0; $i <= 20; $i++ ){
 $api =  vp_option_array($option_array,"gapi$i");
 $plan = vp_option_array($option_array,"gcdata$i");
 $disamount = vp_option_array($option_array,"gcdatap$i");
@@ -395,7 +395,7 @@ echo"
 }
 
 //GIFTING
-for($i = 0; $i <= 10; $i++ ){
+for($i = 0; $i <= 20; $i++ ){
 $api =  vp_option_array($option_array,"api2$i");
 $plan = vp_option_array($option_array,"rcdata$i");
 $disamount = vp_option_array($option_array,"rcdatap$i");
@@ -421,7 +421,7 @@ echo"
 
 }
 
-for($i = 0; $i <= 10; $i++ ){
+for($i = 0; $i <= 20; $i++ ){
 $api =  vp_option_array($option_array,"aapi2$i");
 $plan = vp_option_array($option_array,"racdata$i");
 $disamount =  vp_option_array($option_array,"racdatap$i");
@@ -445,7 +445,7 @@ echo"
 
 
 }
-for($i = 0; $i <= 10; $i++ ){
+for($i = 0; $i <= 20; $i++ ){
 $api =  vp_option_array($option_array,"9api2$i");
 $plan = vp_option_array($option_array,"r9cdata$i");
 $disamount = vp_option_array($option_array,"r9cdatap$i");
@@ -468,7 +468,7 @@ echo"
 }
 
 }
-for($i = 0; $i <= 10; $i++ ){
+for($i = 0; $i <= 20; $i++ ){
 $api =  vp_option_array($option_array,"gapi2$i");
 $plan = vp_option_array($option_array,"rgcdata$i");
 $disamount = vp_option_array($option_array,"rgcdatap$i");
@@ -494,7 +494,7 @@ echo"
 }
 
 //CORPORATE
-for($i = 0; $i <= 10; $i++ ){
+for($i = 0; $i <= 20; $i++ ){
 $api =  vp_option_array($option_array,"api3$i");
 $plan = vp_option_array($option_array,"r2cdata$i");
 $disamount = vp_option_array($option_array,"r2cdatap$i");
@@ -519,7 +519,7 @@ echo"
 
 }
 
-for($i = 0; $i <= 10; $i++ ){
+for($i = 0; $i <= 20; $i++ ){
 $api =  vp_option_array($option_array,"aapi3$i");
 $plan = vp_option_array($option_array,"r2acdata$i");
 $disamount = vp_option_array($option_array,"r2acdatap$i");
@@ -544,7 +544,7 @@ echo"
 
 
 }
-for($i = 0; $i <= 10; $i++ ){
+for($i = 0; $i <= 20; $i++ ){
 $api =  vp_option_array($option_array,"9api3$i");
 $plan = vp_option_array($option_array,"r29cdata$i");
 $disamount = vp_option_array($option_array,"r29cdatap$i");
@@ -568,7 +568,7 @@ echo"
 
 
 }
-for($i = 0; $i <= 10; $i++ ){
+for($i = 0; $i <= 20; $i++ ){
 $api =  vp_option_array($option_array,"gapi3$i");
 $plan = vp_option_array($option_array,"r2gcdata$i");
 $disamount = vp_option_array($option_array,"r2gcdatap$i");
