@@ -31,6 +31,10 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
       echo"
       <option value='paymentpoint'>Paymentpoint</option>";
     }
+    if(vp_getoption("vtupress_custom_nomba") == "yes"){
+      echo"
+      <option value='nomba'>Nomba</option>";
+    }
 
     if(vp_getoption("vtupress_custom_payvessel") == "yes"){
       echo"
@@ -231,6 +235,55 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
     <label for='enable_paymentpoint'>Enable Paymentpoint: </label> <br>
     <select name='enable_paymentpoint'>
       <option value='".vp_getoption('enable_paymentpoint')."' >".strtoupper(vp_getoption('enable_paymentpoint'))."</option>
+      <option value='yes' >YES</option>
+      <option value='no' >NO</option>
+    </select>
+    </div>
+</div>
+
+
+
+
+
+
+
+<!--PAYVESSEL-->
+<div class='nomba'>
+    <div class='mb-3'>
+    <label for='nombabiz' class='form-label'>nomba Client Id.</label><br>
+    <input type='text' class='form-control' name='nomba_biz' value='".vp_getoption('nomba_businessid')."'><br>
+
+    <label for='nombaapi' class='form-label mt-2'>nomba Account Id.</label><br>
+    <input type='text' class='form-control' name='nomba_apikey' value='".vp_getoption('nomba_apikey')."'><br>
+
+    <label for='nombasign' class='form-label mt-2'>Signature</label><br>
+    <input type='text' class='form-control' name='nomba_sign' value='".vp_getoption('nomba_sign')."'><br>
+
+
+    <label for='nombabiz' class='form-label mt-2'>nomba Admin Bvn.</label><br>
+    <input type='text' class='form-control' name='nomba_admin_bvn' value='".vp_getoption('nomba_admin_bvn')."'><br>
+
+
+    <label for='nombasec' class='form-label mt-2'>nomba Secret Key.</label><br>
+    <input type='text' class='form-control' name='nomba_seckey' value='".vp_getoption('nomba_secretkey')."'><br>
+
+
+    <div class='input-group  mb-2'>
+      <span class='input-group-text' id='basic-addon1'>Wallet Funding Charge</span>
+      <select name='nomba_charge_method' class='form-control nomba_charge_method '>
+      <option value='".vp_getoption('nomba_charge_method')."'>".vp_getoption('nomba_charge_method')."</option>
+      <option value='percentage'>Percentage[%]</option>
+      <option value='fixed'>Fixed[NGN]</option>
+      </select>
+      <input class='form-control nomba_charge_back ' name='nomba_charge_back' value='".floatval(vp_getoption('nomba_charge_back'))."'>
+    </div>
+    
+
+
+    <br>
+    <label for='enable_nomba'>Enable nomba: </label> <br>
+    <select name='enable_nomba'>
+      <option value='".vp_getoption('enable_nomba')."' >".strtoupper(vp_getoption('enable_nomba'))."</option>
       <option value='yes' >YES</option>
       <option value='no' >NO</option>
     </select>
@@ -517,6 +570,7 @@ function selectGateway(){
       jQuery(".billstack").hide();
       jQuery(".payvessel").hide();
       jQuery(".paymentpoint").hide();
+      jQuery(".nomba").hide();
       jQuery(".auto_manual").hide();
 
     }
@@ -529,6 +583,7 @@ function selectGateway(){
       jQuery(".billstack").hide();
       jQuery(".payvessel").hide();
       jQuery(".paymentpoint").hide();
+      jQuery(".nomba").hide();
       jQuery(".squadco").hide();
       jQuery(".auto_manual").hide();
 
@@ -543,6 +598,7 @@ function selectGateway(){
       jQuery(".billstack").hide();
       jQuery(".payvessel").hide();
       jQuery(".paymentpoint").hide();
+      jQuery(".nomba").hide();
       jQuery(".auto_manual").hide();
 
 
@@ -558,6 +614,7 @@ function selectGateway(){
       jQuery(".billstack").hide();
       jQuery(".payvessel").hide();
       jQuery(".paymentpoint").hide();
+      jQuery(".nomba").hide();
       jQuery(".auto_manual").hide();
 
 
@@ -572,6 +629,7 @@ function selectGateway(){
       jQuery(".billstack").hide();
       jQuery(".payvessel").hide();
       jQuery(".paymentpoint").hide();
+      jQuery(".nomba").hide();
       jQuery(".auto_manual").hide();
 
 
@@ -586,6 +644,7 @@ function selectGateway(){
       jQuery(".billstack").hide();
       jQuery(".payvessel").hide();
       jQuery(".paymentpoint").hide();
+      jQuery(".nomba").hide();
       jQuery(".auto_manual").hide();
 
 
@@ -600,6 +659,7 @@ function selectGateway(){
       jQuery(".billstack").show();
       jQuery(".payvessel").hide();
       jQuery(".paymentpoint").hide();
+      jQuery(".nomba").hide();
       jQuery(".auto_manual").hide();
 
 
@@ -615,6 +675,7 @@ function selectGateway(){
       jQuery(".billstack").hide();
       jQuery(".payvessel").show();
       jQuery(".paymentpoint").hide();
+      jQuery(".nomba").hide();
       jQuery(".auto_manual").hide();
 
 
@@ -635,6 +696,23 @@ function selectGateway(){
 
 
     }
+    else if(popt == "nomba"){
+      jQuery(".vpay").hide();
+      jQuery(".monnify").hide();
+      jQuery(".paystack").hide();
+      jQuery(".squadco").hide();
+      jQuery(".kuda").hide();
+      jQuery(".ncwallet").hide();
+      jQuery(".billstack").hide();
+      jQuery(".payvessel").hide();
+      jQuery(".paymentpoint").hide();
+      jQuery(".nomba").hide();
+      jQuery(".auto_manual").hide();
+      jQuery(".nomba").show();
+
+
+
+    }
     else if(popt == "auto_manual"){
       jQuery(".vpay").hide();
       jQuery(".monnify").hide();
@@ -646,6 +724,7 @@ function selectGateway(){
       jQuery(".payvessel").hide();
       jQuery(".paymentpoint").hide();
       jQuery(".auto_manual").show();
+      jQuery(".nomba").hide();
 
 
 

@@ -28,6 +28,9 @@ if(vp_getoption('allow_to_bank') != "yes" || vp_getoption("vtupress_custom_trans
     die("Enable Bank To Bank transfer");
 }
 
+if(vp_getoption("enable_nomba") == "yes"){
+  include_once 'transfer-nomba.php';
+}
 $secret_key = vp_getoption('psec'); //get_option('jettrade_paystack_secret');
 
 $name = vp_getuser($userid, 'first_name')." ".vp_getuser($userid, 'last_name');

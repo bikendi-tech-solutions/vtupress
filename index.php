@@ -516,6 +516,95 @@ elseif(array_key_exists('http_paymentpoint_signature', $_XERVER)){
 
 
 }
+elseif(array_key_exists('http_nomba_signature', $_XERVER)){
+
+
+    // error_log("RAW HEADER ".print_r($_SERVER,true));
+    // error_log("RAW PAYLOAD ".$input);
+        $signatureKey = trim(vp_getoption("nomba_sign"));
+
+        // Get the raw POST body
+        $payload = json_decode($input, true);
+
+        // timestamp and signature
+        $timestamp = $_SERVER['HTTP_NOMBA_TIMESTAMP'];
+        $signature = $_SERVER['HTTP_NOMBA_SIG_VALUE'];
+
+        // d payload
+        $hashingPayload = $payload['event_type'] . ':' .
+                        $payload['requestId'] . ':' .
+                        $payload['data']['merchant']['userId'] . ':' .
+                        $payload['data']['merchant']['walletId'] . ':' .
+                        $payload['data']['transaction']['transactionId'] . ':' .
+                        $payload['data']['transaction']['type'] . ':' .
+                        $payload['data']['transaction']['time'] . ':' .
+                        $payload['data']['transaction']['responseCode'];
+
+        // Combine d payload with d timestamp
+        $message = $hashingPayload . ':' . $timestamp;
+
+        // error_log("Combined Message ". $message);
+
+        // Generate HMAC hash using SHA256
+        $calculatedSignature = hash_hmac('sha256', $message, $signatureKey,true);
+
+        // error_log("Raw signature ".$calculatedSignature);
+
+        $encoded_data = base64_encode($calculatedSignature);
+
+        // error_log("Encoded Data ".$encoded_data);
+
+        // error_log("Signature ".$signature);
+
+        // Now compare the signature from header with the calculated one
+        if (hash_equals($encoded_data, $signature)) {
+            error_log("✅ Signature is valid");
+        } else {
+           die("Invalid Signature");
+        }
+
+
+
+            $webhookData = $payload['data']['transaction'];
+    
+    $transactionId = $webhookData['transactionId'] ?? null;
+    $amount = $webhookData['transactionAmount'] ?? null;
+    $status = $payload["event_type"] ?? null;
+    $recipient_number = $webhookData["aliasAccountNumber"] ?? null;
+    
+    // error_log($email);
+
+    // Check if required data is present
+    if (!$transactionId || !$amount || !$status) {
+        http_response_code(400);
+        echo "Missing required data.";
+        exit;
+    }
+    elseif($status != "payment_success"){
+        http_response_code(400);
+        echo "Not Successful";
+        exit;
+    }
+
+    $total_amount = $amount;
+
+        global $wpdb;
+        $usermeta = $wpdb->prefix."usermeta";
+        $userTb = $wpdb->get_results($wpdb->prepare("SELECT * FROM $usermeta WHERE meta_value LIKE %s ","%$recipient_number%"));
+        if($userTb == NULL || empty($userTb)) {
+        die("User With The Account Not Found");
+        }
+    
+        $userid = $userTb[0]->user_id;
+        $email = get_userdata($userid)->user_email;
+
+
+    $ref = $transactionId;
+    $processor = "Nomba";
+
+
+
+}
 elseif(isset($array["transactionType"])){
     if(strtolower($array["transactionType"]) != "credit"){
         die("Not Kuda");

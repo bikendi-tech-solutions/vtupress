@@ -140,6 +140,19 @@ if(vp_getoption("vtupress_custom_paymentpoint") == "yes"){
   vp_updateoption('enable_paymentpoint', $_POST['enable_paymentpoint']);
 
 }
+
+if(vp_getoption("vtupress_custom_nomba") == "yes"){
+
+  vp_updateoption('nomba_apikey', $_POST['nomba_apikey']);
+  vp_updateoption('nomba_secretkey', $_POST['nomba_seckey']);
+  vp_updateoption('nomba_businessid', $_POST['nomba_biz']);
+  vp_updateoption('nomba_sign', $_POST['nomba_sign']);
+  vp_updateoption('nomba_admin_bvn', $_POST['nomba_admin_bvn']);
+  vp_updateoption('nomba_charge_method', $_POST['nomba_charge_method']);
+  vp_updateoption('nomba_charge_back', $_POST['nomba_charge_back']);
+  vp_updateoption('enable_nomba', $_POST['enable_nomba']);
+
+}
     
 
 
