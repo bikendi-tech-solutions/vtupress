@@ -13,7 +13,7 @@
 *Version: 6.6.8
 *Author: Akor Victor
 *Author URI: https://facebook.com/vtupressceo
-*License:      GPL3
+*License: GPL3
 *License URI:  https://www.gnu.org/licenses/gpl.html
 *Domain Path:  /languages
 */
