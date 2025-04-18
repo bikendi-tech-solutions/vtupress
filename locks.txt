@@ -1,0 +1,3 @@
+vend => path
+msorg-main => path
+opay-main => path

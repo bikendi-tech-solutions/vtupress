@@ -83,10 +83,12 @@ function create_s_transaction(){
     now_amount text,
     user_id int ,
     the_time text ,
+    sender text,
     status text,
     PRIMARY KEY (id))$charset_collate;";
     require_once(ABSPATH.'wp-admin/includes/upgrade.php');
     dbDelta($sql);
+    maybe_add_column($stable_name,"sender","ALTER TABLE $stable_name ADD sender VARCHAR(255) NOT NULL DEFAULT 'sender' ");
 
 
     global $wpdb;
@@ -623,9 +625,23 @@ function vtupress_db_man(){
 }
 
 
-$nw_updt = 22;
+$nw_updt = 24;
 
 if(vp_getoption("fix_version") != $nw_updt){
+
+  //create lockfile
+  // add_option("vtupress-vend","default");
+  // add_option("msorg-main","default");
+  // add_option("opay-main","default");
+  // add_option("index","default");
+
+  global $wpdb;
+  $lsd_name = $wpdb->prefix.'vp_wallet';
+  // maybe_add_column($lsd_name,'sender', "ALTER TABLE $lsd_name ADD sender text ");
+  maybe_add_column($lsd_name,"sender","ALTER TABLE $lsd_name ADD sender VARCHAR(255) NOT NULL DEFAULT 'sender' ");
+
+
+
   global $current_timestamp;
 
   $next = date("Y-m-d H:i A",$current_timestamp);

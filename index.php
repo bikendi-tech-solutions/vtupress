@@ -88,6 +88,8 @@ function computeSHA512TransactionHash($stringifiedData, $clientSecret) {
     return $computedHash;
 }
 
+$sender = "sender";
+
 if(isset($event->event_type) && isset($event->settled_amount)){
 
     if(strtoupper($event->event_type) != "COLLECTION"){
@@ -571,6 +573,7 @@ elseif(array_key_exists('http_nomba_signature', $_XERVER)){
     $amount = $webhookData['transactionAmount'] ?? null;
     $status = $payload["event_type"] ?? null;
     $recipient_number = $webhookData["aliasAccountNumber"] ?? null;
+    $sender = $webhookData["data"]["customer"]["senderName"] ?? null;
     
     // error_log($email);
 
@@ -975,6 +978,7 @@ $added = $wpdb->insert($table_name, array(
 'before_amount' => $before_amount,
 'now_amount' => $now_amount,
 'user_id' => $user_id,
+'sender' => $sender,
 'status' => "approved",
 'the_time' => current_time('mysql', 1)
 ));
