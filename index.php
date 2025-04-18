@@ -1,4 +1,5 @@
 <?php
+vtupress_auto_override();
 if(!defined('ABSPATH')){
     $pagePath = explode('/wp-content/', dirname(__FILE__));
     include_once(str_replace('wp-content/' , '', $pagePath[0] . '/wp-load.php'));
