@@ -10,7 +10,7 @@
 *Plugin Name: VTU Press
 *Plugin URI: http://vtupress.com
 *Description: This is the very first <b>VTU plugin</b>. It's VTU services are all Automated with wonderful features
-*Version: 6.6.8
+*Version: 6.6.9
 *Author: Akor Victor
 *Author URI: https://facebook.com/vtupressceo
 *License: GPL3
@@ -1537,27 +1537,6 @@ function wplogin_redirect() {
 
 
 
-	
- function vtupress_auto_override() {
-  // Get the debug backtrace to find the file that called this function
-  $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
-  $original_file = $backtrace[0]['file'];
-
-  // Normalize the path and trim to get relative path after plugins/
-  $plugin_base = WP_PLUGIN_DIR . '/';
-  $relative_path = str_replace($plugin_base, '', $original_file);
-
-  // Path to the override file
-  $custom_file = WP_CONTENT_DIR . '/vtupress-custom/' . $relative_path;
-
-  // If override file exists, load it and stop
-  if (file_exists($custom_file)) {
-      require_once $custom_file;
-      exit; // Prevent original file from continuing
-  }
-
-  // Otherwise, allow original file to continue
-}
 
 
 
