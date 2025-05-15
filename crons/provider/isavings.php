@@ -42,7 +42,7 @@ foreach($results as $result){
 
     if($status != "active"){
         $payload = [
-            "last_check"=>$today;
+            "last_check"=>$today
         ];
         $wpdb->update($savings_table,$payload,["id"=>$id]);
         continue;
@@ -86,7 +86,7 @@ foreach($results as $result){
     }
 
     if(!empty($next)){
-        if($next == $today){
+        if($next <= $today){
             if($bal >= $start_amount ){
 
                 $tot = $bal - $start_amount;

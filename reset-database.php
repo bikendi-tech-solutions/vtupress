@@ -106,7 +106,7 @@ $table_name = $wpdb->prefix . 'fdata';
 $sql = "DROP TABLE IF EXISTS $table_name";
 $wpdb->query($sql);
 
-//$airtime = file_get_contents(esc_url(plugins_url('vtupress/install.php?vpaction=install&slug=vtupress/vtupress.php&link=https://vtupress.com/vtupress.zip')));
+//$airtime = vp_get_contents(esc_url(plugins_url('vtupress/install.php?vpaction=install&slug=vtupress/vtupress.php&link=https://vtupress.com/vtupress.zip')));
 die("100");
 
 }
@@ -134,7 +134,7 @@ $sql = "DROP TABLE IF EXISTS $table_name";
 $wpdb->query($sql);
 
 	
-$bill = file_get_contents(esc_url(plugins_url('vtupress/install.php?vpaction=install&slug=bcmv/bcmv.php&link=https://vtupress.com/bcmv.zip')));
+$bill = vp_get_contents(esc_url(plugins_url('vtupress/install.php?vpaction=install&slug=bcmv/bcmv.php&link=https://vtupress.com/bcmv.zip')));
 
 die("100");
 

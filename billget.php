@@ -42,7 +42,7 @@ $http_args = array(
     'sslverify' => false
     );
 
-$me =  file_get_contents("https://vtupress.com/billget.php?billget=yes&service=$bill&meter=$meterno");
+$me =  vp_get_contents("https://vtupress.com/billget.php?billget=yes&service=$bill&meter=$meterno");
 
 echo $me;
 

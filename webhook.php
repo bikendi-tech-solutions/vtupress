@@ -109,7 +109,7 @@ function harray_key_first_webhook($arr) {
 
 $incomingcontenttype = $_SERVER["Content-Type"];
 if($incomingcontenttype !== "application/json"){
-$content = trim(file_get_contents("php://input"));
+$content = trim(vp_get_contents("php://input"));
 $array = json_decode($content,true);
 
 

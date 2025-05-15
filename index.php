@@ -62,7 +62,7 @@ $_XERVER = convertArrayKeysToLowerCase($_SERVER);
 
 
 
-$input = file_get_contents("php://input");
+$input = vp_get_contents("php://input");
 $payload = $input;
 
 $event = json_decode(str_replace(" ","",$input));
@@ -530,6 +530,7 @@ elseif(array_key_exists('http_nomba_signature', $_XERVER)){
         // Get the raw POST body
         $payload = json_decode($input, true);
 
+
         // timestamp and signature
         $timestamp = $_SERVER['HTTP_NOMBA_TIMESTAMP'];
         $signature = $_SERVER['HTTP_NOMBA_SIG_VALUE'];
@@ -575,7 +576,8 @@ elseif(array_key_exists('http_nomba_signature', $_XERVER)){
     $amount = $webhookData['transactionAmount'] ?? null;
     $status = $payload["event_type"] ?? null;
     $recipient_number = $webhookData["aliasAccountNumber"] ?? null;
-    $sender = $webhookData["data"]["customer"]["senderName"] ?? null;
+    $sender = $payload['data']["customer"]["senderName"]." / ".$payload['data']["customer"]["bankName"]." / ".$payload['data']["customer"]["accountNumber"];
+
     
     // error_log($email);
 
@@ -770,305 +772,307 @@ else{
 
 if(!empty($ref) && !empty($amount) && !empty($total_amount)  && !empty($userid) && !empty($email)  && !empty($processor) ){
 
-    $who_ref_id = vp_getuser($userid, "vp_who_ref", true); //ref id
+            $who_ref_id = vp_getuser($userid, "vp_who_ref", true); //ref id
 
-$plan = vp_getuser( $who_ref_id , "vr_plan", true);
-$table_name = $wpdb->prefix."vp_levels";
-$level = $wpdb->get_results($wpdb->prepare("SELECT * FROM  $table_name WHERE name = %s",$plan));
+        $plan = vp_getuser( $who_ref_id , "vr_plan", true);
+        $table_name = $wpdb->prefix."vp_levels";
+        $level = $wpdb->get_results($wpdb->prepare("SELECT * FROM  $table_name WHERE name = %s",$plan));
 
-if($level != NULL && !empty($level)){
-    $ref_chargeback = $level[0]->charge_back_percentage;
+        if($level != NULL && !empty($level)){
+            $ref_chargeback = $level[0]->charge_back_percentage;
 
-    if($ref_chargeback > 0){
+            if($ref_chargeback > 0){
 
-    
- $ref_remove = ($total_amount *  $ref_chargeback) / 100;
-
-
-$who_ref_bal =  vp_getuser($who_ref_id, "vp_bal", true);
-
-$total_to_add =  $ref_remove;
-
-$add_to_ref_bal = intval($who_ref_bal) + $total_to_add;
-
-//error_log("id = $who_ref_id, plan = $plan, $who_ref_bal + $total_to_add = $add_to_ref_bal",0);
-
-$rname = get_userdata($who_ref_id)->user_login;
-$table_name = $wpdb->prefix.'vp_wallet';
-$added = $wpdb->insert($table_name, array(
-'name'=> "$rname",
-'type'=> 'wallet',
-'description'=> "Got ref bonus from $rname",
-'fund_amount' => $total_to_add,
-'before_amount' => $who_ref_bal ,
-'now_amount' => $add_to_ref_bal,
-'user_id' => $who_ref_id,
-'status' => "approved",
-'the_time' => current_time('mysql', 1)
-));
-
-vp_updateuser($who_ref_id,"vp_bal",$add_to_ref_bal);
-}
-
-}
-else{
-  //  error_log("whoref is $who_ref_id and Level is ".print_r($level,true),0);
-}
-
-global $wpdb;
-$sd_name = $wpdb->prefix.'vp_wallet_webhook';
-$rest = $wpdb->get_results($wpdb->prepare("SELECT * FROM $sd_name WHERE referrence = %s",$ref));
-if(!empty($rest)){
-
-http_response_code(200);
-
-header("HTTP/1.1 200 OK");
-
-    die("This Transaction Has Been Processed Before");
-}
-else{}
-
-$wpdb->insert($sd_name, array(
-'user_id'=> $userid,
-'gateway' => $processor,
-'amount'=> $amount,
-'referrence' => $ref,
-'status' => "pending",
-'response' => " ".esc_html(harray_key_first($input))."",
-'the_time' => date(current_time('mysql').' A')
-));
+            
+        $ref_remove = ($total_amount *  $ref_chargeback) / 100;
 
 
+        $who_ref_bal =  vp_getuser($who_ref_id, "vp_bal", true);
 
-$user_name =  get_user_by( 'email', $email )->user_login;
+        $total_to_add =  $ref_remove;
 
-$ini = vp_getuser($userid, 'vp_bal', true);
+        $add_to_ref_bal = intval($who_ref_bal) + $total_to_add;
 
-/*
-if(vp_getoption("charge_method") == "fixed"){
-$minus = $total_amount - $charge;
-}
-else{
-$remove = ($total_amount *  $charge) / 100;
-$minus = $total_amount - $remove ;
-}
-*/
+        //error_log("id = $who_ref_id, plan = $plan, $who_ref_bal + $total_to_add = $add_to_ref_bal",0);
 
-switch(strtolower($processor)){
-    case"ipayng":
-        $charge = floatval(vp_getoption("auto_manual_charge_back"));
+        $rname = get_userdata($who_ref_id)->user_login;
+        $table_name = $wpdb->prefix.'vp_wallet';
+        $added = $wpdb->insert($table_name, array(
+        'name'=> "$rname",
+        'type'=> 'wallet',
+        'description'=> "Got ref bonus from $rname",
+        'fund_amount' => $total_to_add,
+        'before_amount' => $who_ref_bal ,
+        'now_amount' => $add_to_ref_bal,
+        'user_id' => $who_ref_id,
+        'status' => "approved",
+        'the_time' => current_time('mysql', 1)
+        ));
 
-        if(vp_getoption("auto_manual_charge_method") == "fixed"){
-            $remove = $charge;
-            $minus = $total_amount - $charge;
+        vp_updateuser($who_ref_id,"vp_bal",$add_to_ref_bal);
+        }
+
+        }
+        else{
+        //  error_log("whoref is $who_ref_id and Level is ".print_r($level,true),0);
+        }
+
+        global $wpdb;
+        $sd_name = $wpdb->prefix.'vp_wallet_webhook';
+        $rest = $wpdb->get_results($wpdb->prepare("SELECT * FROM $sd_name WHERE referrence = %s",$ref));
+        if(!empty($rest)){
+
+        http_response_code(200);
+
+        header("HTTP/1.1 200 OK");
+
+            die("This Transaction Has Been Processed Before");
+        }
+        else{}
+
+        $wpdb->insert($sd_name, array(
+        'user_id'=> $userid,
+        'gateway' => $processor,
+        'amount'=> $amount,
+        'referrence' => $ref,
+        'status' => "pending",
+        'response' => " ".esc_html(harray_key_first($input))."",
+        'the_time' => date(current_time('mysql').' A')
+        ));
+
+
+
+        $user_name =  get_user_by( 'email', $email )->user_login;
+
+        $ini = vp_getuser($userid, 'vp_bal', true);
+
+        /*
+        if(vp_getoption("charge_method") == "fixed"){
+        $minus = $total_amount - $charge;
         }
         else{
         $remove = ($total_amount *  $charge) / 100;
         $minus = $total_amount - $remove ;
         }
+        */
+
+        switch(strtolower($processor)){
+            case"ipayng":
+                $charge = floatval(vp_getoption("auto_manual_charge_back"));
+
+                if(vp_getoption("auto_manual_charge_method") == "fixed"){
+                    $remove = $charge;
+                    $minus = $total_amount - $charge;
+                }
+                else{
+                $remove = ($total_amount *  $charge) / 100;
+                $minus = $total_amount - $remove ;
+                }
 
 
-    break;
-    case"paymentpoint":
-        $charge = floatval(vp_getoption("paymentpoint_charge_back"));
+            break;
+            case"paymentpoint":
+                $charge = floatval(vp_getoption("paymentpoint_charge_back"));
 
-        if(vp_getoption("paymentpoint_charge_method") == "fixed"){
-            $minus = $total_amount - $charge;
-            }
-            else{
-            $remove = ($total_amount *  $charge) / 100;
-            $minus = $total_amount - $remove ;
-            }
-    break;
-    case"monnify":
-        $charge = floatval(vp_getoption("charge_back"));
+                if(vp_getoption("paymentpoint_charge_method") == "fixed"){
+                    $minus = $total_amount - $charge;
+                    }
+                    else{
+                    $remove = ($total_amount *  $charge) / 100;
+                    $minus = $total_amount - $remove ;
+                    }
+            break;
+            case"monnify":
+                $charge = floatval(vp_getoption("charge_back"));
 
-        if(vp_getoption("charge_method") == "fixed"){
-            $minus = $total_amount - $charge;
-            }
-            else{
-            $remove = ($total_amount *  $charge) / 100;
-            $minus = $total_amount - $remove ;
-            }
-    break;
-    case"squadco":
-        $charge = floatval(vp_getoption("gtb_charge_back"));
-        if(vp_getoption("gtb_charge_method") == "fixed"){
-            $minus = $total_amount - $charge;
-            }
-            else{
-            $remove = ($total_amount *  $charge) / 100;
-            $minus = $total_amount - $remove ;
-            }
-    break;
-    case"ncwallet":
-        $charge = floatval(vp_getoption("ncwallet_charge_back"));
-        if(vp_getoption("ncwallet_charge_method") == "fixed"){
-            $minus = $total_amount - $charge;
-            }
-            else{
-            $remove = ($total_amount *  $charge) / 100;
-            $minus = $total_amount - $remove ;
-            }
-    break;
-    case"billstack":
-        $charge = floatval(vp_getoption("billstack_charge_back"));
-        if(vp_getoption("billstack_charge_method") == "fixed"){
-            $minus = $total_amount - $charge;
-            }
-            else{
-            $remove = ($total_amount *  $charge) / 100;
-            $minus = $total_amount - $remove ;
-            }
-    break;
-    case"payvessel":
-        $charge = floatval(vp_getoption("payvessel_charge_back"));
-        if(vp_getoption("payvessel_charge_method") == "fixed"){
-            $minus = $total_amount - $charge;
+                if(vp_getoption("charge_method") == "fixed"){
+                    $minus = $total_amount - $charge;
+                    }
+                    else{
+                    $remove = ($total_amount *  $charge) / 100;
+                    $minus = $total_amount - $remove ;
+                    }
+            break;
+            case"squadco":
+                $charge = floatval(vp_getoption("gtb_charge_back"));
+                if(vp_getoption("gtb_charge_method") == "fixed"){
+                    $minus = $total_amount - $charge;
+                    }
+                    else{
+                    $remove = ($total_amount *  $charge) / 100;
+                    $minus = $total_amount - $remove ;
+                    }
+            break;
+            case"ncwallet":
+                $charge = floatval(vp_getoption("ncwallet_charge_back"));
+                if(vp_getoption("ncwallet_charge_method") == "fixed"){
+                    $minus = $total_amount - $charge;
+                    }
+                    else{
+                    $remove = ($total_amount *  $charge) / 100;
+                    $minus = $total_amount - $remove ;
+                    }
+            break;
+            case"billstack":
+                $charge = floatval(vp_getoption("billstack_charge_back"));
+                if(vp_getoption("billstack_charge_method") == "fixed"){
+                    $minus = $total_amount - $charge;
+                    }
+                    else{
+                    $remove = ($total_amount *  $charge) / 100;
+                    $minus = $total_amount - $remove ;
+                    }
+            break;
+            case"payvessel":
+                $charge = floatval(vp_getoption("payvessel_charge_back"));
+                if(vp_getoption("payvessel_charge_method") == "fixed"){
+                    $minus = $total_amount - $charge;
+                }
+                    else{
+                    $remove = ($total_amount *  $charge) / 100;
+                    $minus = $total_amount - $remove ;
+                }
+            break;
+            case"vpay":
+                $charge = floatval(vp_getoption("vpay_charge_back"));
+                if(vp_getoption("vpay_charge_method") == "fixed"){
+                    $minus = $total_amount - $charge;
+                    }
+                    else{
+                    $remove = ($total_amount *  $charge) / 100;
+                    $minus = $total_amount - $remove ;
+                    }
+            break;
+            case"kuda":
+                $charge = floatval(vp_getoption("kuda_charge_back"));
+                if(vp_getoption("kuda_charge_method") == "fixed"){
+                    $minus = $total_amount - $charge;
+                    }
+                    else{
+                    $remove = ($total_amount *  $charge) / 100;
+                    $minus = $total_amount - $remove ;
+                    }
+            break;
+        default:  $minus = $total_amount - 0 ;
         }
-            else{
-            $remove = ($total_amount *  $charge) / 100;
-            $minus = $total_amount - $remove ;
+
+
+        $toti = $ini + $minus;
+
+        vp_updateuser($userid, 'vp_bal', $toti);
+
+        $now = vp_getuser($userid, 'vp_bal', true);
+
+
+        global $wpdb;
+        $name = get_userdata($userid)->user_login;
+        $description = 'Credited By You [Online]';
+        $fund_amount= $minus;
+        $before_amount = $ini;
+        $now_amount = $toti;
+        $user_id = $userid;
+        $the_time = current_time('mysql', 1);
+
+        $table_name = $wpdb->prefix.'vp_wallet';
+        $added = $wpdb->insert($table_name, array(
+        'name'=> $name,
+        'type'=> 'wallet',
+        'description'=> $description,
+        'fund_amount' => $fund_amount,
+        'before_amount' => $before_amount,
+        'now_amount' => $now_amount,
+        'user_id' => $user_id,
+        'sender' => $sender,
+        'status' => "approved",
+        'the_time' => current_time('mysql', 1)
+        ));
+
+        if(is_numeric($added)){
+            global $wpdb;
+            $table_name = $wpdb->prefix."vp_wallet_webhook";
+            $wpdb->update($table_name, array("status"=>"success"), array("referrence"=>$ref));
         }
-    break;
-    case"vpay":
-        $charge = floatval(vp_getoption("vpay_charge_back"));
-        if(vp_getoption("vpay_charge_method") == "fixed"){
-            $minus = $total_amount - $charge;
-            }
-            else{
-            $remove = ($total_amount *  $charge) / 100;
-            $minus = $total_amount - $remove ;
-            }
-    break;
-    case"kuda":
-        $charge = floatval(vp_getoption("kuda_charge_back"));
-        if(vp_getoption("kuda_charge_method") == "fixed"){
-            $minus = $total_amount - $charge;
-            }
-            else{
-            $remove = ($total_amount *  $charge) / 100;
-            $minus = $total_amount - $remove ;
-            }
-    break;
-default:  $minus = $total_amount - 0 ;
-}
+        else{
+            global $wpdb;
+            $table_name = $wpdb->prefix."vp_wallet_webhook";
+            $wpdb->update($table_name, array("status"=>"failed"), array("referrence"=>$ref));  
+        }
+
+        if(strtolower($processor) == "ipayng"){
+
+            $sessionTable = $wpdb->prefix."vp_auto_manual";
+            $sessionData = [
+                "charge" => $remove,
+                "amount" => $total_amount,
+                "api_response" => json_encode($array),
+                "status" => "success"
+            ];
+            $wpdb->update($sessionTable, $sessionData,["sessionId" => $ref]);
+
+        }
+
+        $content = "
+        <!DOCTYPE html>
+        <html>
+        <body>
+        <h3>New Transaction Logged!</h3><br/>
+        <table>
+        <thead>
+        <tr>
+        <th>Details</th>
+        <th>Data</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>Name</td>
+        <td>$user_name</td>
+        </tr>
+        <tr>
+        <td>Email</td>
+        <td>$email</td>
+        </tr>
+        <tr>
+        <td>Previous Balane</td>
+        <td>$ini</td>
+        </tr>
+        <tr>
+        <td>Funded</td>
+        <td>$minus</td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+        <td>Current Balance</td>
+        <td>$toti</td>
+        </tr>
+        </tfoot>
+        </table>
+
+        </body>
+        </html>
 
 
-$toti = $ini + $minus;
+        ";
 
-vp_updateuser($userid, 'vp_bal', $toti);
+        wp_mail($admine, "$user_name Wallet Funding [$processor]", $content, $headers);
+        wp_mail($email, "$user_name Wallet Funding [$processor]", $content, $headers);
+        http_response_code(200);
 
-$now = vp_getuser($userid, 'vp_bal', true);
+        header("HTTP/1.1 200 OK");
 
-
-global $wpdb;
-$name = get_userdata($userid)->user_login;
-$description = 'Credited By You [Online]';
-$fund_amount= $minus;
-$before_amount = $ini;
-$now_amount = $toti;
-$user_id = $userid;
-$the_time = current_time('mysql', 1);
-
-$table_name = $wpdb->prefix.'vp_wallet';
-$added = $wpdb->insert($table_name, array(
-'name'=> $name,
-'type'=> 'wallet',
-'description'=> $description,
-'fund_amount' => $fund_amount,
-'before_amount' => $before_amount,
-'now_amount' => $now_amount,
-'user_id' => $user_id,
-'sender' => $sender,
-'status' => "approved",
-'the_time' => current_time('mysql', 1)
-));
-
-if(is_numeric($added)){
-    global $wpdb;
-    $table_name = $wpdb->prefix."vp_wallet_webhook";
-    $wpdb->update($table_name, array("status"=>"success"), array("referrence"=>$ref));
-}
-else{
-    global $wpdb;
-    $table_name = $wpdb->prefix."vp_wallet_webhook";
-    $wpdb->update($table_name, array("status"=>"failed"), array("referrence"=>$ref));  
-}
-
-if(strtolower($processor) == "ipayng"){
-
-    $sessionTable = $wpdb->prefix."vp_auto_manual";
-    $sessionData = [
-        "charge" => $remove,
-        "amount" => $total_amount,
-        "api_response" => json_encode($array),
-        "status" => "success"
-    ];
-    $wpdb->update($sessionTable, $sessionData,["sessionId" => $ref]);
-
-}
-
-$content = "
-<!DOCTYPE html>
-<html>
-<body>
-<h3>New Transaction Logged!</h3><br/>
-<table>
-<thead>
-<tr>
-<th>Details</th>
-<th>Data</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Name</td>
-<td>$user_name</td>
-</tr>
-<tr>
-<td>Email</td>
-<td>$email</td>
-</tr>
-<tr>
-<td>Previous Balane</td>
-<td>$ini</td>
-</tr>
-<tr>
-<td>Funded</td>
-<td>$minus</td>
-</tr>
-</tbody>
-<tfoot>
-<tr>
-<td>Current Balance</td>
-<td>$toti</td>
-</tr>
-</tfoot>
-</table>
-
-</body>
-</html>
+        //echo "Successful For $processor";
 
 
-";
+        http_response_code(200);
 
-wp_mail($admine, "$user_name Wallet Funding [$processor]", $content, $headers);
-wp_mail($email, "$user_name Wallet Funding [$processor]", $content, $headers);
-http_response_code(200);
-
-header("HTTP/1.1 200 OK");
-
-//echo "Successful For $processor";
-
-
-http_response_code(200);
-
-die("Successful For $processor");
+        die("Successful For $processor");
 
 }
 else{
  //   error_log("A Requirement(s) is/are empty",0);
+ echo $ref." - ".$amount." - ".$total_amount." - ".$userid." - ".$email." - ".$processor;
+ 
     die("A Requirement(s) is/are empty");
 }
 

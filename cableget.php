@@ -44,7 +44,7 @@ $http_args = array(
     );
 
 
-$me =  file_get_contents("https://vtupress.com/billget.php?cableget=yes&service=$cable&meter=$iuc");
+$me =  vp_get_contents("https://vtupress.com/billget.php?cableget=yes&service=$cable&meter=$iuc");
 
 echo $me;
 ?>

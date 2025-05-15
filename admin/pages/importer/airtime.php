@@ -81,7 +81,7 @@ $http_args = array(
   'timeout' => 120,
   'sslverify' => false);
 
-$data =  file_get_contents($url);
+$data =  vp_get_contents($url);
 
 
 $json = json_decode($data, true);
@@ -115,7 +115,7 @@ $http_args = array(
   'timeout' => 120,
   'sslverify' => false);
 
-$data =  file_get_contents($url);
+$data =  vp_get_contents($url);
 
 $json = json_decode($data, true);
 foreach($json as $key => $value){
@@ -149,7 +149,7 @@ $http_args = array(
   'timeout' => 120,
   'sslverify' => false);
 
-$data =  file_get_contents($url);
+$data =  vp_get_contents($url);
 
 $json = json_decode($data, true);
 foreach($json as $key => $value){

@@ -3,6 +3,11 @@ if(!defined('ABSPATH')){
   die("Not Allowed");
 }
 
+
+$nomba = ["090645"=>"Nombank","120001"=>"9PSB","090270"=>"AB Microfinance Bank","418"=>"AG Mortgage Bank","090180"=>"AMJU Microfinance Bank","090001"=>"ASO Savings & Loans","070010"=>"Abbey Mortgage Bank","820"=>"Abucoop MFB","044"=>"Access Bank","100052"=>"Access Yellow","090134"=>"Accion Microfinance Bank","090160"=>"Addosser Microfinance Bank","347"=>"Aella MFB","120004"=>"Airtel Smartcash PSB","100029"=>"Alternative Bank","090529"=>"Ampersand Microfinance Bank","090287"=>"Asset Matrix Microfinance Bank","090264"=>"Auchi Microfinance Bank","895"=>"Avuenegbe MFB","110072"=>"Bank 78","090136"=>"Baobab Microfinance Bank","348"=>"Bestar MFB","50931"=>"Bowen Microfinance Bank","050006"=>"Branch International Financial Services","983"=>"Bud Infrastructure","956"=>"Capricon Digital","100026"=>"Carbon","748"=>"Cash Connect MFB","090490"=>"Chukwunenye Microfinance Bank","023"=>"Citibank Nigeria Limited","100032"=>"Contec Global Infotech Limited","766"=>"Core Step MFB","346"=>"Creditville MFB","453"=>"Crust MFB","50159"=>"DavoDani MFB","090391"=>"Davodani Microfinance Bank","063"=>"Diamond Bank","090470"=>"Dot MFB","999999"=>"E-Settlement Ltd.","050"=>"Ecobank Nigeria","090097"=>"Ekondo Microfinance Bank","090539"=>"Enrich Microfinance Bank","084"=>"Enterprise Bank","400001"=>"FSDH Merchant Bank","090551"=>"Fairmoney Microfinance Bank","070"=>"Fidelity Bank","608"=>"Finatrust MFB","011"=>"First Bank of Nigeria","214"=>"First City Monument Bank","309"=>"First Monnie Wallet","622"=>"Flutterwave","058"=>"GTBank","000027"=>"Globus Bank","090574"=>"Goldman MFB","090495"=>"Good News Microfinance Bank","090599"=>"Greenacres MFB","090195"=>"Grooming MFB","110059"=>"Habari Pay","090147"=>"Hackman Microfinance Bank","090291"=>"Hala Credit Microfinance Bank","030"=>"Heritage Bank","120002"=>"Hope Payment Service Bank","090118"=>"Ibile Microfinance Bank","090536"=>"Ikoyi Osun MFB","301"=>"Jaiz Bank","090602"=>"Kenechukwu Microfinance Bank","082"=>"Key Stone Bank","899"=>"Kolomoni MFB","321"=>"Konga Pay","090380"=>"Kredi Microfinance Bank","090267"=>"Kuda Microfinance Bank","090177"=>"Lapo Microfinance Bank","397"=>"LeadCity MFB","090420"=>"Letshego Microfinance Bank","000029"=>"Lotus Bank","090171"=>"Mainstreet Microfinance Bank","648"=>"Malachy MFB","090455"=>"Mkobo Microfinance Bank","120003"=>"Momo Payment Service Bank","090405"=>"Moniepoint Microfinance Bank","950"=>"Netapps Technology","090194"=>"Nirsal MFB","090645"=>"Nombank","090345"=>"OAU Microfinance Bank","090295"=>"Omiye MFB","327"=>"Paga","070008"=>"Page Financials","100033"=>"Palmpay","000030"=>"Parallex MF Bank","311"=>"Parkway Projects","329"=>"PayAttitude Online","305"=>"Paycom (Opay)","100039"=>"Paystack Titan","076"=>"Polaris Bank","000031"=>"Premium Trust Bank","090499"=>"Pristine Divitis Microfinance Bank","090503"=>"Projetcs Microfinance Bank","50739"=>"Prospa Capital MFB","101"=>"Providus Bank","090496"=>"Randalpha Microfinance Bank","090198"=>"RenMoney Microfinance Bank","090138"=>"Royal Exchange Microfinance Bank","649"=>"Rubies MFB","090286"=>"Safe Haven MFB","090502"=>"Shalom Microfinance Bank","942"=>"Smart Cash PSB","090325"=>"Sparkle","090436"=>"Spectrum MFB","039"=>"Stanbic IBTC Bank","068"=>"Standard Chartered Bank Nigeria","667"=>"Stellas MFB","232"=>"Sterling Bank Plc","100"=>"SunTrust Bank Nigeria Limited","000026"=>"Taj Bank","000025"=>"Titan Trust Bank","090251"=>"UNN Microfinance Bank","672"=>"Uda MFB","090193"=>"Unical MFB","032"=>"Union Bank of Nigeria","033"=>"United Bank for Africa","215"=>"Unity Bank","566"=>"VFD Microfinance Bank Limited","050020"=>"Vale Finance","035"=>"Wema Bank","148"=>"XPress MTS","738"=>"XPress Payments","391"=>"XPress Wallet","964"=>"Yello Digital Services","792"=>"ZWallet","057"=>"Zenith Bank","090504"=>"Zikora Microfinance Bank","306"=>"eTranzact"];
+
+
+
 $action = $_POST["action"];
 
 
@@ -141,10 +146,13 @@ endif;
   
 if(isset($json["data"]["accountName"])):
   $name = $json["data"]["accountName"];
+  $bank_name = $nomba[$bank_code] ? $nomba[$bank_code] :"";
 else:
   $name = "";
   $bank_code = "";
+  $bank_name = $bank_code;
 endif;
+
 
 if(empty($name) || empty($bank_code)):
   die("Invalid bank details");
@@ -245,7 +253,7 @@ if(preg_match("/succ/",$status) || preg_match("/receiv/",$status) || preg_match(
       'amount_before' => $current_balance,
       'amount_now' => $updatedBalance,
       'status' => "success",
-      'bank_details' => $name."-".$accountNo."-".$bank_code,
+      'bank_details' => $name."-".$accountNo."-".$bank_name,
     ];
 
     $wallet = [
@@ -274,7 +282,7 @@ else:
       'amount_before' => $current_balance,
       'amount_now' => $current_balance,
       'status' => "failed",
-      'bank_details' => $name."-".$accountNo."-".$bank_code,
+      'bank_details' => $name."-".$accountNo."-".$bank_name,
     ];
 
     $updatedBalance = $current_balance;

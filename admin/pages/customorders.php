@@ -107,7 +107,7 @@ $http_args = array(
   'timeout' => 120,
   'sslverify' => false);
 
-$files =  file_get_contents($url);
+$files =  vp_get_contents($url);
 
 
 $file = json_decode($files,true);

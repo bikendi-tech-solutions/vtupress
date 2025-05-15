@@ -56,7 +56,7 @@ if(vp_option_array($option_array,"access_user_dashboard") == "true"){
 }
 
 if(vp_option_array($option_array,"access_country") == "true"){
-$details = json_decode(file_get_contents("http://ipinfo.io/{$ip_address}/json"));	
+$details = json_decode(vp_get_contents("http://ipinfo.io/{$ip_address}/json"));	
 	if(strtolower($details->country) != "ng" && !empty($details->country)){	
 	die("ACCESS NOT GRANTED - [NG]");
 	}

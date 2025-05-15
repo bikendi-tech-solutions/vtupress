@@ -214,6 +214,8 @@ switch($for){
                 vp_updateuser($hd,"nomba_accountnumber",$account["bankAccountNumber"]);
                 vp_updateuser($hd,"nomba_accountname",$account["bankAccountName"]);
 
+                // die($hd." new = ".vp_getuser($hd,"nomba_accountnumber"));
+
 
             }
 
@@ -629,7 +631,7 @@ switch($for){
                 if($admin_bvn == "false" || empty($admin_bvn)){
                        $payload =  [
                         "account_name" => $fun." ".$lun,
-                        "bank_code" => "bankly",
+                        "bank_code" => "nomba",
                         "account_type" => "static",
                         "email" => $email,
                         "validation_type" => "BVN",
@@ -640,7 +642,7 @@ switch($for){
                 }else{
                     $payload =  [
                         "account_name" => $fun." ".$lun,
-                        "bank_code" => "bankly",
+                        "bank_code" => "nomba",
                         "account_type" => "static",
                         "email" => $email,
                         "validation_type" => "BVN",
