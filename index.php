@@ -575,7 +575,7 @@ elseif(array_key_exists('http_nomba_signature', $_XERVER)){
     $amount = $webhookData['transactionAmount'] ?? null;
     $status = $payload["event_type"] ?? null;
     $recipient_number = $webhookData["aliasAccountNumber"] ?? null;
-    $sender = $webhookData["data"]["customer"]["senderName"] ?? null;
+    $sender = $payload["data"]["customer"]["senderName"] ?? null;
     
     // error_log($email);
 

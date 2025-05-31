@@ -43,7 +43,8 @@ else{
         pagination_wallet_before("WHERE id = '$id' AND type = 'Transfer' ");
     }
     else{
-        pagination_wallet_before("WHERE type = 'Transfer' ");
+        $id = str_replace("u","",$_GET["trans_id"]);
+        pagination_wallet_before("WHERE user_id = '$id' AND type = 'Transfer'");
     }
 }
 

@@ -47,7 +47,8 @@ else{
         pagination_transfer_before("false","AND id = '$id'");
     }
     else{
-      pagination_transfer_before("false");
+        $id = str_replace("u","",$_GET["trans_id"]);
+        pagination_transfer_before("false","AND user_id = '$id'");
     }
 }
 

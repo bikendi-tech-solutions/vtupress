@@ -10,7 +10,6 @@ include_once(ABSPATH."wp-load.php");
 include_once(ABSPATH .'wp-content/plugins/vtupress/admin/pages/history/functions.php');
 include_once(ABSPATH .'wp-content/plugins/vtupress/functions.php');
 include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
-
 ?>
 
 <div class="row">
@@ -43,7 +42,8 @@ else{
         pagination_wallet_before("WHERE id = '$id' AND type = 'Wallet' OR type = 'Withdrawal'");
     }
     else{
-        pagination_wallet_before("WHERE type = 'Wallet' OR type = 'Withdrawal'");
+        $id = str_replace("u","",$_GET["trans_id"]);
+        pagination_wallet_before("WHERE user_id = '$id' AND type = 'Wallet' OR type = 'Withdrawal'");
     }
 }
 
@@ -79,7 +79,7 @@ global $transactions;
 if($transactions == "null"){
 ?>
     <tr  class="text-center">
-    <td colspan="8">No Fundings</td>
+    <td colspan="8">No Fundings For <?php echo $id;?></td>
     </tr>
 <?php
 }else{

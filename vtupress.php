@@ -10,7 +10,7 @@
 *Plugin Name: VTU Press
 *Plugin URI: http://vtupress.com
 *Description: This is the very first <b>VTU plugin</b>. It's VTU services are all Automated with wonderful features
-*Version: 6.7.2
+*Version: 6.7.3
 *Author: Akor Victor
 *Author URI: https://facebook.com/vtupressceo
 *License: GPL3
@@ -279,8 +279,33 @@ function vtupress_login_session(){
 
 
 
-$update_vtupress_options = 70;
+$update_vtupress_options = 73;
 if(get_option("vtupress_options2") != $update_vtupress_options){
+  global $wpdb;
+  $table_lock = "{$wpdb->prefix}vp_wallet_lock";
+
+  $wpdb->query("
+      CREATE TABLE IF NOT EXISTS {$wpdb->prefix}vp_wallet_lock (
+          user_id BIGINT PRIMARY KEY,
+          locked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      ) ENGINE=InnoDB
+  ");
+
+  $tables = ["sairtime","sdata","scable","sbill","vp_wallet"];
+  foreach($tables as $tab):
+    $table_name = $wpdb->prefix . $tab;
+      // Step 1: Check the table engine
+      $table_status = $wpdb->get_row("SHOW TABLE STATUS WHERE Name = '$table_name'");
+      $engine = isset($table_status->Engine) ? strtoupper($table_status->Engine) : '';
+
+      // Step 2: Convert to InnoDB if needed
+      if ($engine !== 'INNODB') {
+          $wpdb->query("ALTER TABLE {$table_name} ENGINE=InnoDB");
+      }
+
+  endforeach;
+
+
 
   //cut either month or withdrawal
 

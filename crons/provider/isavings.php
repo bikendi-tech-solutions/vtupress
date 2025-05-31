@@ -137,6 +137,7 @@ foreach($results as $result){
 
     }
 
+    $update["last_check"] = $today;
     $wpdb->update($savings_table,$update,["id"=>$id]);
 
     //die("100");

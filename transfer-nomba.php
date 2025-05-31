@@ -82,6 +82,7 @@ $return_account->message = $err;
 
 $msg = json_encode($return_account);
 error_log($msg);
+$wpdb->query('ROLLBACK');
 die($msg);
 
 } else {
@@ -93,6 +94,7 @@ die($msg);
 
         $msg = json_encode($return_account);
         error_log($msg);
+        $wpdb->query('ROLLBACK');
         die($msg);
     }else{
         $token = $response["data"]["access_token"];
@@ -137,9 +139,11 @@ $json = json_decode($result,true);
 
 
 if(!isset($json["description"]) || !isset($json["data"]["accountName"])):
+  $wpdb->query('ROLLBACK');
     die($result);
 else:
     if(strtolower($json["description"]) != "success"){
+      $wpdb->query('ROLLBACK');
         die($result);
     }
 endif;
@@ -155,10 +159,12 @@ endif;
 
 
 if(empty($name) || empty($bank_code)):
+  $wpdb->query('ROLLBACK');
   die("Invalid bank details");
 endif;
 
 if($get_details):
+  $wpdb->query('ROLLBACK');
     die($name);
 endif;
 
@@ -174,10 +180,13 @@ endif;
   $amountWithCharge = ($amount + $charge);
 
   if($current_balance < $amount):
+    $wpdb->query('ROLLBACK');
     die("Insufficient balance [$current_balance]");
   elseif($amount < 100):
+    $wpdb->query('ROLLBACK');
       die("Minimum transfer amount is 100");
   elseif($current_balance < $amountWithCharge):
+    $wpdb->query('ROLLBACK');
     die("Insufficient balance to cover transfer fee [$charge] inclusively");
   else:
   //charge = 
@@ -229,10 +238,12 @@ $json = json_decode($result,true);
 if(isset($json["description"])):
   $status = strtolower($json["description"]);
   if($status != "success"):
+    $wpdb->query('ROLLBACK');
       die($status);
   endif;
 else:
   error_log("running transfer error .. ".$result);
+  $wpdb->query('ROLLBACK');
   die($result);
 endif;
 
@@ -319,5 +330,5 @@ maybe_add_column($table_name,"charge","ALTER TABLE $table_name ADD charge text")
  ));
 
 
-
+$wpdb->query('COMMIT');
 die($return);

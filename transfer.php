@@ -20,13 +20,77 @@ if(!isset($_POST["action"])){
 $action = $_POST["action"];
 
 
+
 $id = get_current_user_id();
+if($id != 1){
+    die("Under Maintenance");
+}
 
 
 
 if(vp_getoption('allow_to_bank') != "yes" || vp_getoption("vtupress_custom_transfer") != "yes"){
     die("Enable Bank To Bank transfer");
 }
+$amount = intval(str_replace("-","",trim($_POST["amount"])));
+
+vp_sessions();
+
+
+
+global $wpdb;
+$table_lock = "{$wpdb->prefix}vp_wallet_lock";
+
+$wpdb->query("
+    CREATE TABLE IF NOT EXISTS {$wpdb->prefix}vp_wallet_lock (
+        user_id BIGINT PRIMARY KEY,
+        locked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB
+");
+
+$wpdb->query('START TRANSACTION');
+
+
+$wpdb->query("INSERT INTO {$wpdb->prefix}vp_wallet_lock (user_id) VALUES ($id)
+              ON DUPLICATE KEY UPDATE user_id = user_id");
+              
+     // Step 3: Lock the user's row in the lock table
+$wpdb->get_row("SELECT user_id FROM $table_lock WHERE user_id = $id FOR UPDATE");
+
+              
+$table_name = $wpdb->prefix.'vp_wallet';
+
+// Step 1: Check the table engine
+$table_status = $wpdb->get_row("SHOW TABLE STATUS WHERE Name = '$table_name'");
+$engine = isset($table_status->Engine) ? strtoupper($table_status->Engine) : '';
+
+// Step 2: Convert to InnoDB if needed
+if ($engine !== 'INNODB') {
+    $wpdb->query("ALTER TABLE {$table_name} ENGINE=InnoDB");
+}
+
+
+
+// Step 4: Lock only the row for the specific user
+$result = $wpdb->get_row("
+    SELECT * 
+    FROM $table_name 
+    WHERE user_id = '{$id}' AND type = 'Transfer'
+    ORDER BY id DESC 
+    LIMIT 1 
+    FOR UPDATE
+");
+
+$current_balance = floatval(vp_getuser($id, 'vp_bal', true));
+//do kyc and other necessity.
+//check previous balances to this one:
+//$wpdb->query('ROLLBACK');
+// 
+$lastRecentNowBal = floatval($result->before_amount);
+if($lastRecentNowBal == $current_balance){
+    vp_block_user("Banned because we discovered an anomality. [$current_balance == $lastRecentNowBal]");
+	die("Banned because we discovered an anomality. [$current_balance == $lastRecentNowBal]");
+}
+
 
 if(vp_getoption("enable_nomba") == "yes"){
   include_once 'transfer-nomba.php';
@@ -37,7 +101,6 @@ $name = vp_getuser($userid, 'first_name')." ".vp_getuser($userid, 'last_name');
 $accountNo = trim($_POST["account_number"]);
 $bank_code = trim($_POST["bank_code"]);
 $currency = "NGN";
-$amount = intval(str_replace("-","",trim($_POST["amount"])));
 $current_balance = intval(vp_getuser($id, 'vp_bal', true));
 
 
@@ -87,8 +150,10 @@ if(isset($json["data"]["recipient_code"])):
 else:
     error_log("create recipient error .. ".$result);
     if(isset($json["message"])):
+      $wpdb->query('ROLLBACK');
         die($json["message"]);
     endif;
+      $wpdb->query('ROLLBACK');
         die("101");
 endif;
   
@@ -102,10 +167,12 @@ else:
 endif;
 
 if(empty($name) || empty($bank_code)):
+  $wpdb->query('ROLLBACK');
   die("Invalid bank details");
 endif;
 
 if($get_details):
+  $wpdb->query('ROLLBACK');
     die($name);
 endif;
 
@@ -119,10 +186,13 @@ else{
 $amountWithCharge = ($amount + $charge);
 
 if($current_balance < $amount):
+  $wpdb->query('ROLLBACK');
   die("Insufficient balance [$current_balance]");
 elseif($amount < 100):
+  $wpdb->query('ROLLBACK');
     die("Minimum transfer amount is 100");
 elseif($current_balance < $amountWithCharge):
+  $wpdb->query('ROLLBACK');
   die("Insufficient balance to cover transfer fee [$charge] inclusively");
 else:
 //charge = 
@@ -172,8 +242,10 @@ if(isset($json["data"]["status"])):
 else:
     error_log("running transfer error .. ".$result);
     if(isset($json["message"])):
+      $wpdb->query('ROLLBACK');
         die($json["message"]);
     endif;
+    $wpdb->query('ROLLBACK');
     die("102");
 endif;
 
@@ -258,5 +330,5 @@ maybe_add_column($table_name,"charge","ALTER TABLE $table_name ADD charge text")
  ));
 
 
-
+$wpdb->query('COMMIT');
 die($return);
