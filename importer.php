@@ -2146,7 +2146,7 @@ die("101");
 elseif(isset($_REQUEST["sms_import"])){
 	$sms_select = $_REQUEST["sms_select"];
 	vp_updateoption("sms_platform",$sms_select);
-$response =  vp_get_contents("https:///wp-content/plugins/vpimporter/vpimporter.php?sms_import=$sms_select");
+$response =  vp_get_contents("https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?sms_import=$sms_select");
 $json = json_decode($response, true);
 
 if($json["available"] == "yes"){
