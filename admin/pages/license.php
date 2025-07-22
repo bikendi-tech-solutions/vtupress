@@ -1,7 +1,7 @@
 <?php
 include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
 
-if(current_user_can("vtupress_access_users")){?>
+if(current_user_can("vtupress_access_license")){?>
 
 <div class="container-fluid license-container">
             <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">

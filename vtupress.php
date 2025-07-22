@@ -10,7 +10,7 @@
 *Plugin Name: VTU Press
 *Plugin URI: http://vtupress.com
 *Description: This is the very first <b>VTU plugin</b>. It's VTU services are all Automated with wonderful features
-*Version: 6.7.5
+*Version: 6.7.6
 *Author: Akor Victor
 *Author URI: https://facebook.com/vtupressceo
 *License: GPL3
@@ -1527,7 +1527,7 @@ function vtupress_roles(){
 	
 }
 // add the example_role
-add_action('init', 'vtupress_roles');
+
 
 
 vp_addoption("wplogin_redirect", "no");
@@ -1599,3 +1599,4 @@ register_activation_hook(__FILE__, 'vtupress_verification');
 
 register_activation_hook(__FILE__, 'vtupress_create_profile');
 register_activation_hook(__FILE__, 'vtupress_create_notification');
+register_activation_hook(__FILE__,  'vtupress_roles');

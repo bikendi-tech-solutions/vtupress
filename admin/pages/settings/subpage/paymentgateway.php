@@ -498,27 +498,34 @@ but its all automated
  
   <div class='monnify'>
     <div class='mb-3'>
-    <label for='ppublickey' class='form-label'>Monnify Api Key: </label><br>
-    <input type='text' class='form-control' name='mapi'value='".vp_getoption('monnifyapikey')."'><br>
-    
-    <label for='psecretkey' class='form-label'>Monnify Secret Key: </label><br>
-    <input type='text' class='form-control' name='msec'value='".vp_getoption('monnifysecretkey')."'><br>
-    
-    <label for='secretkey' class='form-label' >Monnify ContractCode: </label><br>
-    <input type='text' class='form-control' name='mcontract' value='".vp_getoption('monnifycontractcode')."'><br>
+        <label for='ppublickey' class='form-label'>Monnify Api Key: </label><br>
+        <input type='text' class='form-control' name='mapi'value='".vp_getoption('monnifyapikey')."'><br>
+        
+        <label for='psecretkey' class='form-label'>Monnify Secret Key: </label><br>
+        <input type='text' class='form-control' name='msec'value='".vp_getoption('monnifysecretkey')."'><br>
+        
+        <label for='secretkey' class='form-label' >Monnify ContractCode: </label><br>
+        <input type='text' class='form-control' name='mcontract' value='".vp_getoption('monnifycontractcode')."'><br>
       
+        <div class='my-2'>
+          
+          <code>Enter your bvn here to use your bvn to generate an account number. Note: Ignoring will enforce your users to do KYC before they can generate an account number</code>
+          <label>Your BVN:</label>
+          <input type='text' class='form-control monnifybvn' name='monnifybvn'  value='".intval(vp_getoption('monnifybvn'))."'/>
 
-    <div class='input-group  mb-2'>
-      <span class='input-group-text' id='basic-addon1'>Wallet Funding Charge</span>
-      <select name='charge_method' class='form-control charge_method '>
-      <option value='".vp_getoption('charge_method')."'>".vp_getoption('charge_method')."</option>
-      <option value='percentage'>Percentage[%]</option>
-      <option value='fixed'>Fixed[NGN]</option>
-      </select>
-      <input class='form-control charge_back ' name='charge_back' value='".floatval(vp_getoption('charge_back'))."'>
-    </div>
+        </div>
 
-  <br>
+        <div class='input-group  mb-2'>
+          <span class='input-group-text' id='basic-addon1'>Wallet Funding Charge</span>
+          <select name='charge_method' class='form-control charge_method '>
+          <option value='".vp_getoption('charge_method')."'>".vp_getoption('charge_method')."</option>
+          <option value='percentage'>Percentage[%]</option>
+          <option value='fixed'>Fixed[NGN]</option>
+          </select>
+          <input class='form-control charge_back ' name='charge_back' value='".floatval(vp_getoption('charge_back'))."'>
+        </div>
+
+      <br>
 
     <label for='enable_monnify'>Enable Monnify: </label><br>
     <select name='enable_monnify'>

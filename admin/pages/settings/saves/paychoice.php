@@ -70,6 +70,7 @@ if(isset($_POST['updatefl'])){
     vp_updateoption('monnifyapikey', $_POST['mapi']);
     vp_updateoption('monnifysecretkey', $_POST['msec']);
     vp_updateoption('monnifycontractcode', $_POST['mcontract']);
+    vp_updateoption('monnifybvn', $_POST['monnifybvn']);
     vp_updateoption('enable_monnify', $_POST['enable_monnify']);
 
 

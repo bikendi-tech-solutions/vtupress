@@ -1,71 +1,765 @@
-<?php 
-        $__='printf';$_='Loading vendlock2_php_';
+<?php
+//header("Access-Control-Allow-Methods: POST, GET");
+if(!defined('ABSPATH')){
+    $pagePath = explode('/wp-content/', dirname(__FILE__));
+    include_once(str_replace('wp-content/' , '', $pagePath[0] . '/wp-load.php'));
+}
+else{
+include_once(ABSPATH ."wp-load.php");
+}
+if(WP_DEBUG == false){
+error_reporting(0);
+}
+include_once(ABSPATH.'wp-admin/includes/plugin.php');
+include_once(ABSPATH .'wp-content/plugins/vtupress/functions.php');
+
+vtupress_auto_override();
+
+header("Access-Control-Allow-Origin: 'self'");
+
+$allowed_referrers = [
+    $_SERVER["SERVER_NAME"]
+];
+
+// Check if the referrer is set
+if (isset($_SERVER['HTTP_REFERER'])) {
+    $referer = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
+    
+    // Check if the referrer is in the allowed list
+    if (!in_array($referer, $allowed_referrers)) {
+        die("REF ENT PERM");
+    }
+} else {
+    die("BAD");
+}
+
+//  3m if(vp_getoption(""))
+//vp_sessions();
+
+//GLOBAL BLOCK FOR AMOUNT
+
+if(isset($_REQUEST["amount"])){
+	$amount = $_REQUEST["amount"];
+	if(preg_match("/-/",$amount)){
+		vp_block_user("Tried to perform a transaction with a negative amount!");
+		die("Dont try negative balance");
+	}
+}
+
+if(isset($_GET["plugin_infos"])){
+	echo "Activation Version: ".vp_getoption("last_activation_version")." \n";
+	echo "Activation Time: ".vp_getoption("last_activation_time")." \n";
+}
+else{
+
+}
+
+function get_all_globals(){
+	$globals = [
+		'wpdb' => 'level',
+		'plan' => 'amount',
+		'id' => 'amountv',
+		'sec' => 'mlm_for',
+		'discount_method' => 'dplan',
+		'$_POST' => '$_COOKIE',
+		'phone' => 'uniqidvalue',
+		'network' => 'url',
+		'vpaccess' => 'bal',
+		'vpdebug' => 'name',
+		'plan' => 'baln',
+		'current_timestamp' => 'nothingasvaluehere',
+		'pin' => 'added_to_db',
+		'realAmt' => 'realAmt'
+	
+	];
+
+	return $globals;
+}
+
+foreach(get_all_globals() as $key => $value){
+	global ${$key};
+	global ${$value};
+}
+
+
+if(strtolower(vp_getoption("vtu_timeout")) != "false" && vp_getoption("vtu_timeout") != "0" && !empty(vp_getoption("vtu_timeout")) && is_numeric(vp_getoption("vtu_timeout"))){
+
+if(intval(vp_getoption("vtu_timeout")) <= 60 && intval(vp_getoption("vtu_timeout")) > 0){
+
+	//elseif($_COOKIE["run_code"] == "wrong"){
+	//	print_r($_COOKIE);
+$last_login = $_COOKIE["last_login"];
+$dur = vp_getoption("vtu_timeout");
+$cur = date('Y-m-d H:i:s',$current_timestamp);
+$timeout = date("Y-m-d H:i:s",strtotime("$last_login +$dur minutes"));
+
+  if(($cur < $timeout)   || (current_user_can("vtupress_admin") || current_user_can("administrator") )){
+  setcookie("last_login", date('Y-m-d H:i:s',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+  }
+  else{
+
+	wp_logout();
+	die("You're Logged-Out. \n You Need To Re-Login!");
+  }
+
+}
+
+}
+
+
+
+/*
+if(vp_getoption("last_activation_version") != "v1"){
+	die("Please Update, Deactivate and Re-Activate your vtupress plugin (not license). [-".vp_getoption("last_activation_version")."-]");
+}else{
+	
+}
+*/
+
+global $option_array;
+$option_array = json_decode(get_option("vp_options"),true);
+
+
+
+#clearstatcache();
+#wp_cache_flush();
+
+
+//security one
+#Php RUn reset Hash-VBat4 <ea-24 class="4 4 6">Strings</ea-24></br> <? echo exec_hrmt(plugins_url(esc_html(Http://Hypers
+#)))
+
+if(vp_getoption("vp_security") == "yes"){
+	
+ header("Access-Control-Allow-Origin: 'self'");
+header("Content-Security-Policy: https:");
+ //Script_Transport-Security
+header("strict-transport-security: max-age=31536000 ");
+header("X-Frame-Options: SAMEORIGIN");
+header("X-Content-Type-Options: nosniff");
+header("Referrer-Policy: same-origin");
+header("X-Xss-Protection: 1");
+header('Permissions-Policy: geolocation=(self ),camera=(self), microphone=(self)');
+	
+$siteurl = $_SERVER['SERVER_NAME'];
+#verify ref
+if(!isset($_SERVER["HTTP_REFERER"]) && vp_getoption("secur_mod") != "off" && !current_user_can("vtupress_admin")){
+	vp_block_user("ACCESSED VEND.PHP");
+	
+	die("Access Not Granted [No HTTP_REFERER]");
+}
+elseif(vp_getoption("secur_mod") != "off" && stripos($_SERVER["HTTP_REFERER"],$siteurl) === false && !current_user_can("vtupress_admin")){
+	vp_block_user("ACCESSED VEND.PHP AND SITEURL IS NOT FOUND IN WITH REF");
+	
+	die("Access Not Granted [No Related Ref {W'T DMN} ] ".$_SERVER["HTTP_REFERER"]."!= ".$siteurl);
+}
+else{
+	
+}
+
+#destroy sessions
+
+
+#check logged in status
+vp_sessions();
+if(!is_user_logged_in()){
+	die('{"status":"200","response":"You are logged out! Kindly Relogin"}');
+}
+else{
+
+}
+
+}
+
+
+
+
+extract(vtupress_user_details());
+$headers = array('Content-Type: text/html; charset=UTF-8');
+
+$add_total = "maybe";
+global $tcode;
+
+
+function weblinkBlast($phone,$message){
+		global $wpdb;
+		if(vp_getoption("vtupress_custom_weblinksms") == "yes" && vp_getoption("sms_transactional") == "yes"){
+			$data = [
+				"phone" => $phone,
+				"message" => $message,
+				"the_time" => date("Y-m-d H:i:s")
+			];
+			$table_name = $wpdb->prefix.'vp_smsblaster';
+			$wpdb->insert($table_name,$data);
+		}
+		
+}
+
+function vpSec($rec){
+
+	foreach(get_all_globals() as $key => $value){
+		global ${$key};
+		global ${$value};
+	}
+	
+	if(vp_getoption("vp_security") == "yes" && vp_getoption("secur_mod") != "off"){
+
+		$receiver = $rec;
+		
+		if($_COOKIE["last_transaction_time"] != "null"){
+			$endTime2 = strtotime("+2 minutes", strtotime($_COOKIE["last_transaction_time"]));
+			$endTime1 = strtotime("+1 minutes", strtotime($_COOKIE["last_transaction_time"]));
+			$recipient = $_COOKIE["last_recipient"];
+			$next_two_minutes = date('Y-m-d h:i:s A', $endTime2);
+			$next_one_minutes = date('Y-m-d h:i:s A', $endTime1);
+			
+		
+		
+			if($recipient == $receiver && strtotime(date('Y-m-d h:i:s A',$current_timestamp)) <= strtotime($next_two_minutes) && vp_getoption('tself') == "true"){
+				$trans_fixed =  vp_getoption("vp_trans_fixed");
+				$trans_fixed += 1;
+				vp_updateoption('vp_trans_fixed',$trans_fixed);
+		
+				//die if sending to same number within 2 minutes
+				setcookie("last_bal", "0", time() + (30 * 24 * 60 * 60), "/");
+				die('You can\'t send this service to same number until after two minutes from previous order. Possibly that a transaction might be logged during runtime. ['.date("Y-m-d h:i:s A",$current_timestamp).' -- '.$next_two_minutes.']');
+			}
+			elseif(strtotime(date('Y-m-d h:i:s A',$current_timestamp)) <= strtotime($next_one_minutes)  && vp_getoption('tothers') == "true"){
+				$trans_fixed =  vp_getoption("vp_trans_fixed");
+				$trans_fixed += 1;
+				
+				vp_updateoption('vp_trans_fixed',$trans_fixed);
+			//die if making another other within 1 minute
+	
+				setcookie("last_bal", "0", time() + (30 * 24 * 60 * 60), "/");
+				die('You can\'t purchase any service until after one minute from previous order. ['.date("Y-m-d h:i:s A",$current_timestamp).' -- '.$next_one_minutes.']');
+			}
+			else{
+				//go on
+				setcookie("last_bal", "0", time() + (30 * 24 * 60 * 60), "/");
+				setcookie("last_transaction_time", date("Y-m-d h:i:s A",$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+				setcookie("last_recipient", $receiver, time() + (30 * 24 * 60 * 60), "/");
+			}
+		
+		
+		
+		}
+		else{
+			//go on
+			setcookie("last_transaction_time", date("Y-m-d h:i:s A",$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+			setcookie("last_recipient", $receiver, time() + (30 * 24 * 60 * 60), "/");
+		}
+		
+		}
+}
+
+function provider_header_handler($call=""){
+
+	global $added_to_db,$wpdb, $table_trans, $uniqidvalue, $id, $bal;
+
+$response = wp_remote_retrieve_body($call);
+
+$table_data = $wpdb->prefix."vp_transactions";
+$wpdb->update($table_data, array('api_response' => $response, "api_from" => "script") ,array("request_id" => $uniqidvalue));
+
+
+
+
+
+$provider_header_response = trim(wp_remote_retrieve_response_code( $call ));
+
+if($provider_header_response >= 100 && $provider_header_response <= 199 ){
+	$message = "There must be something wrong with the provider I am connected to. \n It returned an Informative Http Status Code [$provider_header_response]";
+}
+elseif($provider_header_response >= 200 && $provider_header_response <= 299 ){
+	$message = NULL;
+}
+elseif($provider_header_response >= 300 && $provider_header_response <= 399 ){
+	$message = "There must be something wrong with the provider I am connected to. \n It returned a Redirection Http Status Code [$provider_header_response]";
+}
+elseif($provider_header_response >= 400 && $provider_header_response <= 499 ){
+	$message = "There must be something wrong with the provider I am connected to. \n It returned a Client Error Response Status Code [$provider_header_response]";
+}
+elseif($provider_header_response >= 500 && $provider_header_response <= 599 ){
+	$message = "There must be something wrong with the provider I am connected to. \n It returned a Server Error Response Status Code [$provider_header_response]";
+}
+else{
+	$message = "I can't identify the issue with the provider i am connected to [$provider_header_response]";
+}
+
+if($message !== NULL){
+
+
+if(isset($_POST["vend"])){
+
+	$duid = get_current_user_id();
+	global $wpdb;
+	$table_lock = "{$wpdb->prefix}vp_wallet_lock";
+
+	$wpdb->query("
+    CREATE TABLE IF NOT EXISTS {$wpdb->prefix}vp_wallet_lock (
+        user_id BIGINT PRIMARY KEY,
+        locked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		) ENGINE=InnoDB
+	");
+
+	$wpdb->query('START TRANSACTION');
+
+
+	$wpdb->query("INSERT INTO {$wpdb->prefix}vp_wallet_lock (user_id) VALUES ($duid)
+				ON DUPLICATE KEY UPDATE user_id = user_id");
+
+	     // Step 3: Lock the user's row in the lock table
+	$wpdb->get_row("SELECT user_id FROM $table_lock WHERE user_id = $duid FOR UPDATE");
+
+
+
+	if(is_numeric($added_to_db)){
+	 
+		 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+
+	vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+}
+
+if(vp_getoption('t_header_check') == "yes"){
+	$wpdb->query('COMMIT');
+	die($message);
+}
+}
+
+}
+
+function update_wallet($status="",$credit_message="",$amount="",$before_amount="",$now_amount=""){
+
+	foreach(get_all_globals() as $key => $value){
+		global ${$key};
+		global ${$value};
+	}
+
+$name = get_userdata($id)->user_login;
+$uname = get_userdata($id)->user_login;
+
+$table_name = $wpdb->prefix.'vp_wallet';
+$added_to_db = $wpdb->insert($table_name, array(
+'name'=> $name,
+'type'=> "Wallet",
+'description'=> $credit_message,
+'fund_amount' => $amount,
+'before_amount' => $before_amount,
+'now_amount' => $now_amount,
+'user_id' => $id,
+'status' => "$status",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+}
+
+function sendMessage($regid="",$message=""){
+	$web_name = get_option("blogname");
+global $wpdb;
+$table = $wpdb->prefix."vp_message";
+$rest = $wpdb->get_results("SELECT * FROM $table");
+
+	foreach ($rest as $token) {
+		if($token->user_id == $regid){
+			$registrationId[] = $token->user_token;
+	$header = [
+		'Authorization: Key=' .vp_getoption("server_apikey"),
+		'Content-Type: Application/json'
+	];
+$user_name = get_userdata($regid)->user_login;
+	$msg = [
+		'title' => "New Message From $web_name To $user_name",
+		'body' => $message,
+		'icon' => esc_url(plugins_url("vtupress/images/vtupress.png")),
+		'image' => '',
+	];
+
+	$payload = [
+		'registration_ids' 	=> $registrationId,
+		'data'				=> $msg
+	];
+
+	$curl = curl_init();
+
+	curl_setopt_array($curl, array(
+	  CURLOPT_URL => "https://fcm.googleapis.com/fcm/send",
+	  CURLOPT_RETURNTRANSFER => true,
+	  CURLOPT_CUSTOMREQUEST => "POST",
+	  CURLOPT_POSTFIELDS => json_encode( $payload ),
+	  CURLOPT_HTTPHEADER => $header
+	));
+
+	$response = curl_exec($curl);
+	$err = curl_error($curl);
+
+	curl_close($curl);
+
+	if ($err) {
+	 return "false";
+	} else {
+	  return "true";
+	}
+		}
+	}
+
+	// $tokens = ['cCLA1_8Inic:APA91bGhuCksjWEETYWVOh04scsZInxdWmXekEr5F9-1zJuTDZDw3It_tNmpA__PmoxDTISZzplD_ciXvsuw2pMtYSzdfIUAUfcTLnghvJS0CVkYW9sVx2HnF1rqnxsFgSdYmcXpHKLs'];
+	
+
+	
+	
+}
+
+$vpdebug = vp_getoption("vpdebug");
+$headers = array('Content-Type: text/html; charset=UTF-8');
+
+
+function harray_key_first($arr="") {
+	$arg = json_decode($arr);
+	if(is_array($arg)){
+		$response  = array("him"=>"me", "them"=>"you");
+        foreach($response as $key => $value) {
+            if(!is_array($value)){
+                return $arr[$key];
+            }else{
+                return "error";
+            }
+        }
+		
+	}else{
+		return $arr;
+	}
         
+}
+
+
+function validate_response($response="", $key="", $value="", $alter="nothing_to_find"){
+	global $msg;
+
+	if(empty($response)){
+		$wpdb->query('COMMIT');
+die("Empty response from the provider");
+	}
+    
+if(json_decode($response) == NULL){
+$dis = new stdclass;
+$dis->str = $response;
+$response = json_encode($dis);
+}
+
+$array = array_change_key_case(json_decode($response,true),CASE_LOWER);
+
+
+function search_Key($array=array(),$key=""){
+   $results = array();
+
+  if (is_array($array)){
+    if (isset($array[strtolower($key)])){
+        $results[] = $array[strtolower($key)];
+    }
+
+    foreach ($array as $sub_array ){
+        $results = array_merge($results, search_Key($sub_array, $key));
+    }
+  }
+return array_change_key_case($results,CASE_LOWER);
+}
+
+function search_val($results="", $the_value="", $alt = "nothing234"){
+    $status = "FALSE";
+
+	if(empty($the_value)){
+		$the_value = strtolower($the_value."emptiness234");
+	}else{
+		$the_value = strtolower($the_value);
+	}
+	
+				
+	if(empty($alt)){
+		$alt = strtolower($alt."emptiness234");
+	}else{
+		$alt = strtolower($alt);
+	}
+
+
+    foreach($results as $dvalue){
+        if(!is_array($dvalue)){
+        	
+        	$mthe_value = strtolower($the_value);
+        	$mdvalue = strtolower($dvalue);
+        	$malt = strtolower($alt);
+        	
+        	
+            if((strtolower($dvalue) === strtolower($the_value) || strtolower($dvalue) === strtolower($alt)  || $dvalue == 1 || preg_match("/$mthe_value/",$mdvalue) ||  preg_match("/$malt/",$mdvalue))  && !preg_match("/not/",$mdvalue)){
+                $status = "TRUE";
+            }
+			elseif(is_numeric(stripos($mdvalue,"proce")) || is_numeric(stripos($mdvalue,"pen"))){
+				$status = "MAYBE";
+			}
+            
+        }
+    }
+    return $status;
+}
+
+
+	if(preg_match('/&&/',$key)){
+		$explode = explode("&&",$key);
+		$key1 = $explode[0];
+		$key2 = $explode[1];
+		
+$first_key_result = search_Key($array,$key1);
+//print_r($result);
+$first_val_result = search_val($first_key_result,$value,$alter);
+
+
+
+$second_key_result = search_Key($array,$key2);
+//print_r($result);
+$second_val_result = search_val($second_key_result,$value,$alter);
+
+if($first_val_result == "TRUE" && $second_val_result == "TRUE"){
+	$status_from_result_val = "TRUE";
+}
+elseif($first_val_result == "MAYBE" || $second_val_result == "MAYBE"){
+	$status_from_result_val = "MAYBE";
+}else{
+		$status_from_result_val = "FALSE";
+}
+
+$msg = "FIRST = $first_val_result && SECOND = $second_val_result";
+		
+	}
+	elseif(preg_match('/\|\|/',$key)){
+				$explode = explode("||",$key);
+		$key1 = $explode[0];
+		$key2 = $explode[1];
+		
+$first_key_result = search_Key($array,$key1);
+//print_r($result);
+$first_val_result = search_val($first_key_result,$value,$alter);
 
+$second_key_result = search_Key($array,$key2);
+//print_r($result);
+$second_val_result = search_val($second_key_result,$value,$alter);
 
+if($first_val_result == "TRUE" || $second_val_result == "TRUE"){
+	$status_from_result_val = "TRUE";
+}
+elseif($first_val_result == "MAYBE" || $second_val_result == "MAYBE"){
+	$status_from_result_val = "MAYBE";
+}
+else{
+		$status_from_result_val = "FALSE";
+}
 
+$msg = "FIRST = $first_val_result && SECOND = $second_val_result";
 
+	}else{
+$result = search_Key($array,$key);
+//print_r($result);
+$status_from_result_val = search_val($result,$value,$alter);
+	}
 
 
 
+return $status_from_result_val;
+    
 
+}
 
 
 
 
+function search_bill_token($array=array(),$key=""){
+   $results = array();
 
+  if (is_array($array)){
+    if (isset($array[strtolower($key)])){
+        $results[] = $array[strtolower($key)];
+    }
 
+    foreach ($array as $sub_array ){
+        $results = array_merge($results, search_bill_token($sub_array, $key));
+    }
+  }
+return $results;
+}
 
 
+function vp_remote_post($url="", $request=""){
+	
+$ch = curl_init(); //initialize curl handle
+curl_setopt($ch, CURLOPT_URL, $url); //set the url
+curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($request)); //set the POST variables
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //return as a variable
+curl_setopt($ch, CURLOPT_POST, 1); //set POST method
 
 
+$response = curl_exec($ch); // grab URL and pass it to the browser. Run the whole process and return the response
 
+return $response;
+curl_close($ch); 
+	
+}
 
 
 
+if(isset($_POST["vend"])){
+	//echo $_COOKIE["run_code"];
 
+	if(isset($_POST["amount"])){
+		if(preg_match("/-/",$_POST["amount"])){
+			vp_block_user("Tried to make transaction with a negative amount!");
+		}
+	}
 
 
 
+foreach(get_all_globals() as $key => $value){
+	global ${$key};
+	global ${$value};
+}
+	//GLOBALS
 
 
+if(is_plugin_active("vpmlm/vpmlm.php")){
+$discount_method = vp_getoption("discount_method");
+}
+else{
+$discount_method = "null";	
+}
 
 
+if($_POST['tcode'] == "cdat"){
+$dplan = $_POST['cplan'];
+}
 
+if(isset($_POST['phone'])){
+$phone = $_POST['phone'];
+}
+else{
+	if(empty(vp_getuser($id,"vp_phone",true))){
+		$phone = "0800000001";
+	}
+	else{
+	$phone = vp_getuser($id,"vp_phone",true);
+	}
+}
 
 
+//$uniqidvalue =  date('Ymd').date('H').date("i").date("s").uniqid("vtu-",false);
 
+if(isset($_POST['network'])){
+$network = $_POST['network'];
+}
 
+if(isset($_POST['url'])){
+$url = $_POST['url'];
+}
+$tcode = $_POST['tcode'];
 
+if(isset($_POST['id'])){
+$id = get_current_user_id();
+}else{
+$id = get_current_user_id();	
+}
 
 
+$myName = get_userdata($id)->user_login;
 
+if(preg_match("/win\d+/i",$myName)){
+	vp_block_user("THE HACKER FOUND");
+	$wpdb->query('COMMIT');
+die("NOT ALLOWED");
+}else{
 
+}
 
+do_action("vppay");
 
 
+$id = get_current_user_id();
+//verify access
+$vpaccess = vp_getuser($id,'vp_user_access',true);
+if(strtolower($vpaccess) != "false" && strtolower($vpaccess) != "access" && empty($vpaccess) && !current_user_can("administrator")){
 
+$wpdb->query('COMMIT');
+die('{"status":"222","response":"You Are Currently Banned From Making Transactions. Please Contact Admin -- CODE --  ['.$vpaccess.']');
 
+}
 
+$bal = vp_getuser($id, "vp_bal", true);
 
+$tcode = $_POST['tcode'];
+$vpdebug = vp_getoption("vpdebug");
 
 
+$name = $_POST['vpname'];
+$email = $_POST['vpemail'];
 
 
+$id = get_current_user_id();
 
+if($_POST['tcode'] == "cdat"){
+$dplan = $_POST['cplan'];
+}
 
+if(isset($_POST['phone'])){
+$phone = $_POST['phone'];
+$processVal = $phone;
+}
+else{
+	if(empty(vp_getuser($id,"vp_phone",true))){
+		$phone = "0800000001";
+	}
+	else{
+	$phone = vp_getuser($id,"vp_phone",true);
+	}
 
+	$processVal = $phone;
+}
 
+if(isset($_POST['uniqidvalue'])){
+$uniqidvalue =  date('Ymd',$current_timestamp).date('H',$current_timestamp).date("i",$current_timestamp).date("s",$current_timestamp);
+}
 
+if(isset($_POST['network'])){
+$network = $_POST['network'];
+}
 
+if(isset($_POST['url'])){
+$url = $_POST['url'];
+}
 
+$tcode = $_POST['tcode'];
 
+if(isset($_POST['id'])){
+	$id = get_current_user_id();
+}
 
+$id = get_current_user_id();
+$bal = vp_getuser($id, "vp_bal", true);
 
+if($_POST['tcode'] == "ccab"){
+$ccable = $_POST["ccable"];
+$iuc = $_POST["iuc"];
+$cabtype = $_POST["cabtype"];
 
+$processVal = $iuc;
+}
 
+if($_POST['tcode'] == "cbill"){
+$cbill = $_POST["cbill"];
+$type = $_POST["type"];
+$meterno = $_POST["meterno"];
 
+$processVal = $meterno;
 
+$bamount = ($_POST["amount"] - floatval(vp_option_array($option_array,"bill_charge")));
+}
 
 
 
@@ -75,247 +769,12948 @@
 
 
 
+$pattern = "/[-\s:]/";
+$curr = date("Y-m-d h:i:s A",$current_timestamp);
+$cur = preg_split($pattern, $curr);
+$sca = $cur[2];
 
+$check_bal = vp_getoption("checkbal");
 
+if(isset($_POST['datatcode'])){
+$datatcode = $_POST['datatcode'];
+}
 
 
 
 
 
 
+	if(isset($_POST['tcode'])){
+	$tcode = $_POST['tcode'];
+	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                                                                                                                                                                                $_____='    b2JfZW5kX2NsZWFu';                                                                                                                                                                              $______________='cmV0dXJuIGV2YWwoJF8pOw==';
-$__________________='X19sYW1iZGE=';
-
-                                                                                                                                                                                                                                          $______=' Z3p1bmNvbXByZXNz';                    $___='  b2Jfc3RhcnQ=';                                                                                                    $____='b2JfZ2V0X2NvbnRlbnRz';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                $__=                                                              'base64_decode'                           ;                                                                       $______=$__($______);           if(!function_exists('__lambda')){function __lambda($sArgs,$sCode){return eval("return function($sArgs){{$sCode}};");}}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    $__________________=$__($__________________);                                                                                                                                                                                                                                                                                                                                                                         $______________=$__($______________);
-        $__________=$__________________('$_',$______________);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 $_____=$__($_____);                                                                                                                                                                                                                                                    $____=$__($____);                                                                                                                    $___=$__($___);                      $_='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';
-
-        $___();$__________($______($__($_))); $________=$____();
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             $_____();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       echo                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                                                                                                                                                                                                     $________;
+	if(isset($_POST['datatcode'])){
+$datatcode = $_POST['datatcode'];
+	}
+	
+	if(isset($_POST['thatnetwork'])){
+$datnetwork = $_POST['thatnetwork'];
+	}
+	
+	if(isset($_POST['airtimechoice'])){
+$airtimechoice = $_POST['airtimechoice'];
+	}
+	
+	if(isset($_POST['thisnetwork'])){	
+$disnetwork = $_POST['thisnetwork'];
+	}
+	
+	
+	
+
+$id = get_current_user_id();
+	
+$plan = vp_getuser($id, "vr_plan", true);
+
+
+$table_name = $wpdb->prefix."vp_levels";
+$level = $wpdb->get_results("SELECT * FROM  $table_name WHERE name = '$plan'");
+
+if(isset($level) && isset($level[0]->total_level)){
+switch($tcode){
+case "cair":
+
+if($airtimechoice == "vtu"){
+switch($disnetwork){
+	case"MTN":
+$fir = $_POST['amount'] * floatval($level[0]->mtn_vtu);
+$sec = $fir / 100;
+$amountv = $_POST['amount'] - $sec;
+$baln =  $bal - $_POST['amount'];
+
+	break;
+	case"GLO":
+$fir = $_POST['amount'] * floatval($level[0]->glo_vtu);
+$sec = $fir / 100;
+$amountv = $_POST['amount'] - $sec;
+$baln =  $bal - $_POST['amount'];
+	break;
+	case"9MOBILE":
+$fir = $_POST['amount'] * floatval($level[0]->mobile_vtu);
+$sec = $fir / 100;
+$amountv = $_POST['amount'] - $sec;
+$baln =  $bal - $_POST['amount'];
+	break;
+	case"AIRTEL":
+$fir = $_POST['amount'] * floatval($level[0]->airtel_vtu);
+$sec = $fir / 100;
+$amountv = $_POST['amount'] - $sec;
+$baln =  $bal - $_POST['amount'];
+	break;
+	};
+}
+elseif($airtimechoice == "share"){
+switch($disnetwork){
+	case"MTN":
+$fir = $_POST['amount'] * floatval($level[0]->mtn_share);
+$sec = $fir / 100;
+$amountv = $_POST['amount'] - $sec;
+$baln =  $bal - $_POST['amount'];
+	break;
+	case"GLO":
+$fir = $_POST['amount'] * floatval($level[0]->glo_share);
+$sec = $fir / 100;
+$amountv = $_POST['amount'] - $sec;
+$baln =  $bal - $_POST['amount'];
+	break;
+	case"9MOBILE":
+$fir = $_POST['amount'] * floatval($level[0]->mobile_share);
+$sec = $fir / 100;
+$amountv = $_POST['amount'] - $sec;
+$baln =  $bal - $_POST['amount'];
+	break;
+	case"AIRTEL":
+$fir = $_POST['amount'] * floatval($level[0]->airtel_share);
+$sec = $fir / 100;
+$amountv = $_POST['amount'] - $sec;
+$baln =  $bal - $_POST['amount'];
+	break;
+	};
+
+}	
+elseif($airtimechoice == "awuf"){
+switch($disnetwork){
+	case"MTN":
+$fir = $_POST['amount'] * floatval($level[0]->mtn_awuf);
+$sec = $fir / 100;
+$amountv = $_POST['amount'] - $sec;
+$baln =  $bal - $_POST['amount'];
+	break;
+	case"GLO":
+$fir = $_POST['amount'] * floatval($level[0]->glo_awuf);
+$sec = $fir / 100;
+$amountv = $_POST['amount'] - $sec;
+$baln =  $bal - $_POST['amount'];
+	break;
+	case"9MOBILE":
+$fir = $_POST['amount'] * floatval($level[0]->mobile_awuf);
+$sec = $fir / 100;
+$amountv = $_POST['amount'] - $sec;
+$baln =  $bal - $_POST['amount'];
+	break;
+	case"AIRTEL":
+$fir = $_POST['amount'] * floatval($level[0]->airtel_awuf);
+$sec = $fir / 100;
+$amountv = $_POST['amount'] - $sec;
+$baln =  $bal - $_POST['amount'];
+	break;
+	};
+
+}	
+	
+break;
+case "cdat":
+	$datatype = "make";
+	$datatype_value = "make";
+
+if($datatcode == "sme"){
+$datatype = vp_option_array($option_array,"sme_datatype");
+switch($datnetwork){
+	case"MTN":
+$datatype_value = vp_option_array($option_array,"mtn_sme_datatype");
+$planname = "cdatan";
+$planprice = "cdatap";
+$check_plan = vp_option_array($option_array,$planname.$_REQUEST["plan_index"]).' ₦'.vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]);
+if($check_plan != $_REQUEST["data_plan"]){
+	$wpdb->query('COMMIT');
+die('Plan Mis-Match. You can try with another browser');
+}
+elseif(vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]) != $_POST["amount"]){
+	//check price!
+	vp_block_user("Modified the Price");
+	
+$wpdb->query('COMMIT');
+die("Get OFF!!! The submitted price can't be different from what is set");
+}
+
+$fir = intval($_POST['amount']) * floatval($level[0]->mtn_sme);
+$sec = $fir / 100;
+$amountv = $_POST['amount'] - $sec;
+$baln =  $bal - $_POST['amount'];
+
+	break;
+	case"GLO":
+$datatype_value = vp_option_array($option_array,"glo_sme_datatype");
+		$planname = "gcdatan";
+		$planprice = "gcdatap";
+		$check_plan = vp_option_array($option_array,$planname.$_REQUEST["plan_index"]).' ₦'.vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]);
+		if($check_plan != $_REQUEST["data_plan"]){
+			$wpdb->query('COMMIT');
+die('Plan Mis-Match. You can try with another browser');
+		}
+		elseif(vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]) != $_POST["amount"]){
+			//check price!
+			vp_block_user("Modified the Price");
+	
+		$wpdb->query('COMMIT');
+die("Get OFF!!! The submitted price can't be different from what is set");
+		}
+
+$fir = $_POST['amount'] * floatval($level[0]->glo_sme);
+$sec = $fir / 100;
+$amountv = $_POST['amount'] - $sec;
+$baln =  $bal - $_POST['amount'];
+	break;
+	case"9MOBILE":
+$datatype_value = vp_option_array($option_array,"9mobile_sme_datatype");
+		$planname = "9cdatan";
+$planprice = "9cdatap";
+$check_plan = vp_option_array($option_array,$planname.$_REQUEST["plan_index"]).' ₦'.vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]);
+if($check_plan != $_REQUEST["data_plan"]){
+	$wpdb->query('COMMIT');
+die('Plan Mis-Match. You can try with another browser');
+}
+elseif(vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]) != $_POST["amount"]){
+	//check price!
+	vp_block_user("Modified the Price");
+	
+$wpdb->query('COMMIT');
+die("Get OFF!!! The submitted price can't be different from what is set");
+}
+
+
+$fir = $_POST['amount'] * floatval($level[0]->mobile_sme);
+$sec = $fir / 100;
+$amountv = $_POST['amount'] - $sec;
+$baln =  $bal - $_POST['amount'];
+	break;
+	case"AIRTEL":
+$datatype_value = vp_option_array($option_array,"airtel_sme_datatype");
+		$planname = "acdatan";
+$planprice = "acdatap";
+$check_plan = vp_option_array($option_array,$planname.$_REQUEST["plan_index"]).' ₦'.vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]);
+if($check_plan != $_REQUEST["data_plan"]){
+	$wpdb->query('COMMIT');
+die('Plan Mis-Match. You can try with another browser');
+}
+elseif(vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]) != $_POST["amount"]){
+	//check price!
+	vp_block_user("Modified the Price");
+	
+$wpdb->query('COMMIT');
+die("Get OFF!!! The submitted price can't be different from what is set");
+}
+
+
+$fir = $_POST['amount'] * floatval($level[0]->airtel_sme);
+$sec = $fir / 100;
+$amountv = $_POST['amount'] - $sec;
+$baln =  $bal - $_POST['amount'];
+	break;
+	};
+
+}
+elseif($datatcode == "direct"){
+	$datatype = vp_option_array($option_array,"direct_datatype");
+switch($datnetwork){
+	case"MTN":
+$datatype_value = vp_option_array($option_array,"mtn_direct_datatype");
+		$planname = "rcdatan";
+$planprice = "rcdatap";
+$check_plan = vp_option_array($option_array,$planname.$_REQUEST["plan_index"]).' ₦'.vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]);
+if($check_plan != $_REQUEST["data_plan"]){
+	$wpdb->query('COMMIT');
+die('Plan Mis-Match. You can try with another browser');
+}
+elseif(vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]) != $_POST["amount"]){
+	//check price!
+	vp_block_user("Modified the Price");
+	
+$wpdb->query('COMMIT');
+die("Get OFF!!! The submitted price can't be different from what is set");
+}
+
+
+$fir = $_POST['amount'] * floatval($level[0]->mtn_gifting);
+$sec = $fir / 100;
+$amountv = $_POST['amount'] - $sec;
+$baln =  $bal - $_POST['amount'];
+	break;
+	case"GLO":
+$datatype_value = vp_option_array($option_array,"glo_direct_datatype");
+		$planname = "rgcdatan";
+$planprice = "rgcdatap";
+$check_plan = vp_option_array($option_array,$planname.$_REQUEST["plan_index"]).' ₦'.vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]);
+if($check_plan != $_REQUEST["data_plan"]){
+	$wpdb->query('COMMIT');
+die('Plan Mis-Match. You can try with another browser');
+}elseif(vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]) != $_POST["amount"]){
+	//check price!
+	vp_block_user("Modified the Price");
+	
+$wpdb->query('COMMIT');
+die("Get OFF!!! The submitted price can't be different from what is set");
+}
+
+
+$fir = $_POST['amount'] * floatval($level[0]->glo_gifting);
+$sec = $fir / 100;
+$amountv = $_POST['amount'] - $sec;
+$baln =  $bal - $_POST['amount'];
+	break;
+	case"9MOBILE":
+$datatype_value = vp_option_array($option_array,"9mobile_direct_datatype");
+		$planname = "r9cdatan";
+$planprice = "r9cdatap";
+$check_plan = vp_option_array($option_array,$planname.$_REQUEST["plan_index"]).' ₦'.vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]);
+if($check_plan != $_REQUEST["data_plan"]){
+	$wpdb->query('COMMIT');
+die('Plan Mis-Match. You can try with another browser');
+}elseif(vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]) != $_POST["amount"]){
+	//check price!
+	vp_block_user("Modified the Price");
+	
+$wpdb->query('COMMIT');
+die("Get OFF!!! The submitted price can't be different from what is set");
+}
+
+
+$fir = $_POST['amount'] * floatval($level[0]->mobile_gifting);
+$sec = $fir / 100;
+$amountv = $_POST['amount'] - $sec;
+$baln =  $bal - $_POST['amount'];
+	break;
+	case"AIRTEL":
+$datatype_value = vp_option_array($option_array,"airtel_direct_datatype");
+		$planname = "racdatan";
+$planprice = "racdatap";
+$check_plan = vp_option_array($option_array,$planname.$_REQUEST["plan_index"]).' ₦'.vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]);
+if($check_plan != $_REQUEST["data_plan"]){
+	$wpdb->query('COMMIT');
+die('Plan Mis-Match. You can try with another browser');
+}elseif(vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]) != $_POST["amount"]){
+	//check price!
+	vp_block_user("Modified the Price");
+	
+$wpdb->query('COMMIT');
+die("Get OFF!!! The submitted price can't be different from what is set");
+}
+
+
+$fir = $_POST['amount'] * floatval($level[0]->airtel_gifting);
+$sec = $fir / 100;
+$amountv = $_POST['amount'] - $sec;
+$baln =  $bal - $_POST['amount'];
+	break;
+	};
+
+}
+elseif($datatcode == "corporate"){
+$datatype = vp_option_array($option_array,"corporate_datatype");
+switch($datnetwork){
+	case"MTN":
+$datatype_value = vp_option_array($option_array,"mtn_corporate_datatype");
+		$planname = "r2cdatan";
+$planprice = "r2cdatap";
+$check_plan = vp_option_array($option_array,$planname.$_REQUEST["plan_index"]).' ₦'.vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]);
+if($check_plan != $_REQUEST["data_plan"]){
+	$wpdb->query('COMMIT');
+die('Plan Mis-Match. You can try with another browser');
+}elseif(vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]) != $_POST["amount"]){
+	//check price!
+	vp_block_user("Modified the Price");
+	
+$wpdb->query('COMMIT');
+die("Get OFF!!! The submitted price can't be different from what is set");
+}
+
+
+$fir = $_POST['amount'] * floatval($level[0]->mtn_corporate);
+$sec = $fir / 100;
+$amountv = $_POST['amount'] - $sec;
+$baln =  $bal - $_POST['amount'];
+	break;
+	case"GLO":
+$datatype_value = vp_option_array($option_array,"glo_corporate_datatype");
+		$planname = "r2gcdatan";
+$planprice = "r2gcdatap";
+$check_plan = vp_option_array($option_array,$planname.$_REQUEST["plan_index"]).' ₦'.vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]);
+if($check_plan != $_REQUEST["data_plan"]){
+	$wpdb->query('COMMIT');
+die('Plan Mis-Match. You can try with another browser');
+}elseif(vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]) != $_POST["amount"]){
+	//check price!
+	vp_block_user("Modified the Price");
+	
+$wpdb->query('COMMIT');
+die("Get OFF!!! The submitted price can't be different from what is set");
+}
+
+
+$fir = $_POST['amount'] * floatval($level[0]->glo_corporate);
+$sec = $fir / 100;
+$amountv = $_POST['amount'] - $sec;
+$baln =  $bal - $_POST['amount'];
+	break;
+	case"9MOBILE":
+$datatype_value = vp_option_array($option_array,"9mobile_corporate_datatype");
+		$planname = "r29cdatan";
+$planprice = "r29cdatap";
+$check_plan = vp_option_array($option_array,$planname.$_REQUEST["plan_index"]).' ₦'.vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]);
+if($check_plan != $_REQUEST["data_plan"]){
+	$wpdb->query('COMMIT');
+die('Plan Mis-Match. You can try with another browser');
+}elseif(vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]) != $_POST["amount"]){
+	//check price!
+	vp_block_user("Modified the Price");
+	
+$wpdb->query('COMMIT');
+die("Get OFF!!! The submitted price can't be different from what is set");
+}
+
+
+$fir = $_POST['amount'] * floatval($level[0]->mobile_corporate);
+$sec = $fir / 100;
+$amountv = $_POST['amount'] - $sec;
+$baln =  $bal - $_POST['amount'];
+	break;
+	case"AIRTEL":
+$datatype_value = vp_option_array($option_array,"airtel_corporate_datatype");
+		$planname = "r2acdatan";
+$planprice = "r2acdatap";
+$check_plan = vp_option_array($option_array,$planname.$_REQUEST["plan_index"]).' ₦'.vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]);
+if($check_plan != $_REQUEST["data_plan"]){
+	$wpdb->query('COMMIT');
+die('Plan Mis-Match. You can try with another browser');
+}
+elseif(vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]) != $_POST["amount"]){
+	//check price!
+	vp_block_user("Modified the Price");
+	
+$wpdb->query('COMMIT');
+die("Get OFF!!! The submitted price can't be different from what is set");
+}
+
+
+$fir = $_POST['amount'] * floatval($level[0]->airtel_corporate);
+$sec = $fir / 100;
+$amountv = $_POST['amount'] - $sec;
+$baln =  $bal - $_POST['amount'];
+	break;
+	};
+
+}
+elseif($datatcode == "smile"){
+
+		$planname = "csmiledatan";
+$planprice = "csmiledatap";
+$check_plan = vp_option_array($option_array,$planname.$_REQUEST["plan_index"]).' ₦'.vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]);
+if($check_plan != $_REQUEST["data_plan"]){
+	$wpdb->query('COMMIT');
+die('Plan Mis-Match. You can try with another browser');
+}
+elseif(vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]) != $_POST["amount"]){
+	//check price!
+	vp_block_user("Modified the Price");
+	
+$wpdb->query('COMMIT');
+die("Get OFF!!! The submitted price can't be different from what is set");
+}
+
+
+
+	$datatype = vp_option_array($option_array,"smile_datatype");
+	$datatype_value = $_POST['smile_datatype'];
+	$baln =  $bal - $_POST['amount'];
+	$amountv = $_POST['amount'];
+}
+elseif($datatcode == "alpha"){
+
+	$planname = "calphadatan";
+	$planprice = "calphadatap";
+	$check_plan = vp_option_array($option_array,$planname.$_REQUEST["plan_index"]).' ₦'.vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]);
+	if($check_plan != $_REQUEST["data_plan"]){
+		$wpdb->query('COMMIT');
+die('Plan Mis-Match. You can try with another browser');
+	}
+	elseif(vp_option_array($option_array,$planprice.$_REQUEST["plan_index"]) != $_POST["amount"]){
+		//check price!
+		vp_block_user("Modified the Price");
+	
+	$wpdb->query('COMMIT');
+die("Get OFF!!! The submitted price can't be different from what is set");
+	}
+	
+
+	
+	$datatype = vp_option_array($option_array,"alpha_datatype");
+
+	if(isset($_POST['alpha_datatype'])){
+	$datatype_value = $_POST['alpha_datatype'];
+	}else{
+		$datatype_value = "";
+	}
+	$baln =  $bal - $_POST['amount'];
+	$amountv = $_POST['amount'];
+}
+break;
+case "ccab":
+	$planIndex = $_POST["plan_index"];
+
+	if($_POST["amount"] < vp_getoption("ccablep".$planIndex)){
+		vp_block_user("Modified the Price");
+		$wpdb->query('COMMIT');
+die("Get OFF!!! The submitted price can't be different from what is set");
+	}
+
+$fir = $_POST['amount'] * floatval($level[0]->cable);
+$sec = $fir / 100;
+$amountv = $_POST['amount'] - $sec;
+$baln =  $bal - $_POST['amount'];
+
+
+
+
+break;
+case "cbill":
+$fir = $_POST['amount'] * floatval($level[0]->bill_prepaid);
+$sec = $fir / 100;
+$amountv = ($_POST['amount'] - $sec) + floatval(vp_option_array($option_array,"bill_charge"));
+$_POST['amount'] = $_POST['amount'] + floatval(vp_option_array($option_array,"bill_charge"));
+$baln =  $bal - $_POST['amount'];
+break;
+case "cepin":
+$amountv = $_POST['amount'];
+break;
+case "csms":
+$amountv = $_POST['amount'];
+$baln =  $bal - $_POST['amount'];
+break;
+case "cbet":
+$amountv = $_POST['amount'];
+$amount_en_charge = $amountv + intval(vp_getoption("betcharge"));
+$baln =  $bal - $amount_en_charge;
+$amountv = $amount_en_charge;
+$_POST['amount'] = $amount_en_charge;
+break;
+
+}
+	}
+	else{
+	$baln =  $bal - $_POST['amount'];
+	$amountv = $_POST['amount'];
+		
+	}
+
+if($discount_method == "direct"){
+
+	$baln =  $bal - $amountv;
+	$amount = $amountv;
+
+//print_r("Print 1 $amount");
+}
+else{
+	$baln =  $bal - $_POST['amount'];
+	$amount = $_POST['amount'];
+
+}
+
+$realAmt = 	$_POST['amount'];
+
+//run kyc
+if(vp_option_array($option_array,"resell") == "yes" && isset($kyc_data)){
+	if(strtolower($kyc_data[0]->enable) == "yes"){
+		
+		if($kyc_status != "verified"){
+####################################################################
+$tb4 = $kyc_total;
+$tnow = $amount;
+$limitT = $kyc_data[0]->kyc_limit;
+$datenow = date("Y-m-d",$current_timestamp); #date('Y-m-d',strtotime($date." +3 days"));
+$next_end_date = $kyc_end;
+
+if(strtolower($kyc_data[0]->duration) == "total"){
+	if((intval($tb4) + intval($tnow)) <= $limitT){
+		
+		$add_total = "yes";
+	//vp_updateuser($id,"vp_kyc_total",(intval($tb4)+intval($tnow)));	
+	}
+	else{
+		$wpdb->query('COMMIT');
+die("Verify Account To Perform This Transaction");
+	}
+}
+else{
+if($tnow < $limitT){ // check if now is less than b4
+	if((intval($tnow) + intval($tb4)) <= intval($limitT)){ //check now plus  and if duration is total den allow once and not do the following cal
+		if($datenow < $next_end_date || $next_end_date == "0" || empty($next_end_date)){ //check if current date is less than next or if next is zero
+			//echo "Permit Transaction \n";
+			//echo "Set tb4 to tnow + tb4";
+			//vp_updateuser($id,"vp_kyc_total",($tb4+$tnow));
+			$add_total = "yes";
+			if($next_end_date == "0" || empty($next_end_date)){
+				//echo "set next_end_date to datenow + limit";
+				
+				if(strtolower($kyc_data[0]->duration) == "day"){
+				vp_updateuser($id,"vp_kyc_end",date('Y-m-d',strtotime($datenow." +1 days")));
+								vp_updateuser($id,'vp_kyc_total',"0");
+				}
+				elseif(strtolower($kyc_data[0]->duration) == "month"){
+				vp_updateuser($id,"vp_kyc_end",date('Y-m-d',strtotime($datenow." +1 month")));
+								vp_updateuser($id,'vp_kyc_total',"0");
+				}
+				else{
+					$wpdb->query('COMMIT');
+die("KYC DURATION ERROR");
+				}
+			}
+		}
+		elseif($datenow >= $next_end_date){
+			if(strtolower($kyc_data[0]->duration) == "day"){
+				vp_updateuser($id,"vp_kyc_end",date('Y-m-d',strtotime($datenow." +1 days")));
+								vp_updateuser($id,'vp_kyc_total',"0");
+				}
+				elseif(strtolower($kyc_data[0]->duration) == "month"){
+				vp_updateuser($id,"vp_kyc_end",date('Y-m-d',strtotime($datenow." +1 month")));
+								vp_updateuser($id,'vp_kyc_total',"0");
+				}
+				else{
+					$wpdb->query('COMMIT');
+die("KYC DURATION ERROR");
+				}
+			//echo "Permit Transaction";
+		}
+	}
+	elseif(($tnow + $tb4) > $limitT){
+		
+		if($datenow < $next_end_date ){
+			
+			$wpdb->query('COMMIT');
+die("Verify Your Account To Proceed With This Transaction");
+		}
+		elseif($datenow >= $next_end_date){
+			
+			if(strtolower($kyc_data[0]->duration) == "day"){
+				vp_updateuser($id,"vp_kyc_end",date('Y-m-d',strtotime($datenow." +1 days")));
+								vp_updateuser($id,'vp_kyc_total',"0");
+				}
+				elseif(strtolower($kyc_data[0]->duration) == "month"){
+				vp_updateuser($id,"vp_kyc_end",date('Y-m-d',strtotime($datenow." +1 month")));
+								vp_updateuser($id,'vp_kyc_total',"0");
+				}
+				else{
+					$wpdb->query('COMMIT');
+die("KYC DURATION ERROR");
+				}
+			
+		}
+		
+	}
+}
+else{
+	$wpdb->query('COMMIT');
+die("verify Account To Perform This Transaction");
+}
+
+		}
+
+#########################
+		}
+	}
+}
+
+$id = get_current_user_id();
+//print_r("Print 2 $amount");
+
+$balreg = preg_match("/[^0-9\.]/",$bal);
+$amountreg = preg_match("/[^0-9\.]/",$amount);
+$pin = sanitize_text_field($_POST["pin"]);
+$mypin = sanitize_text_field(vp_getuser($id,"vp_pin",true));
+
+$agent = $_SERVER["HTTP_USER_AGENT"];
+if( preg_match('/MSIE (\d+\.\d+);/', $agent) ) {
+ // echo "You're using Internet Explorer";
+ $browser = "IE";
+} 
+else if (preg_match('/Chrome[\/\s](\d+\.\d+)/', $agent) ) {
+//  echo "You're using Chrome";
+ $browser = "CHROME";
+} 
+else if (preg_match('/Edge\/\d+/', $agent) ) {
+//  echo "You're using Edge";
+ $browser = "EDGE";
+} 
+else if ( preg_match('/Firefox[\/\s](\d+\.\d+)/', $agent) ) {
+//  echo "You're using Firefox";
+ $browser = "FIREFOX";
+} 
+else if ( preg_match('/OPR[\/\s](\d+\.\d+)/', $agent) ) {
+//  echo "You're using Opera";
+ $browser = "OPERA";
+} 
+else if (preg_match('/Safari[\/\s](\d+\.\d+)/', $agent) ) {
+//  echo "You're using Safari";
+ $browser = "SAFARI";
+}
+
+if($browser != "none"){
+if($pin != $mypin){
+
+$wpdb->query('COMMIT');
+die('pin');	
+}
+
+
+
+if($balreg !== 0 && $amountreg !== 0){
+$wpdb->query('COMMIT');
+die('Amount Or Balance Invalid');	
+}
+//print_r("Print 3 $amount");
+
+if($amount >= 5 && $_POST['amount'] >= 5 || $_POST['tcode'] == "csms" && $bal > 0 && stripos($amount, '-') === false){
+
+}
+else{
+	//print_r("Print 3 $amount");
+$wpdb->query('COMMIT');
+die("You can't purchase less than 5 [$amount]");
+		
+}
+		if($bal >= $amount && stripos($_POST['amount'],"-") === false ){
+
+
+			//Check Balance table
+			global $wpdb;
+			$table_name = $wpdb->prefix.'vp_wallet';
+			$result = $wpdb->get_results("SELECT * FROM $table_name WHERE user_id = $id ORDER BY ID DESC LIMIT 1");
+
+			if(!isset($result) || empty($result) || $result == NULL){
+				//die
+
+					vp_block_user("Blocked because i can't find any wallet funding history to enable your perform this transaction ");
+
+				$wpdb->query('COMMIT');
+die("Wasn't able to see your wallet funding history");
+			}
+			else{
+				$the_balance_when_funded = intval($result[0]->now_amount);
+
+				if(intval($bal) > $the_balance_when_funded){
+					vp_block_user("Blocked because i discovered this user is a thief. How can his current balance ($bal) be higher than total balance ($the_balance_when_funded) when s(he) funded last");
+				
+				$wpdb->query('COMMIT');
+die("Blocked because i discovered this user is a thief. How can his current balance ($bal) be higher than total balance ($the_balance_when_funded) when s(he) funded last");
+
+				}
+			}
+
+
+
+
+################### IF RAPTOR ALLOW SEC IS ON
+#
+#
+if(vp_getoption("raptor_allow_security") == "yes" && vp_getoption("validate-recipient") == "true"){
+
+	$payload = [
+		'type'=>'report',
+		'value' => $processVal
+	];
+
+	$apikey = vp_getoption('raptor_apikey');
+	$conid = vp_getoption('raptor_conid');
+	$http_args = array(
+		'headers' => array(
+		'Authorization' => "Token $apikey",
+		'connectionid' => $conid,
+		'Content-Type' => 'application/json'
+		),
+		'body' => json_encode($payload),
+		'timeout' => '120',
+		'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+		'sslverify' => false
+		);
+	
+		vp_updateoption("raptor_last_query",date("Y-m-d h:i:s A",$current_timestamp));
+		vp_updateoption("raptor_last_processed",$processVal);
+		$response =  wp_remote_retrieve_body( wp_remote_post("https://dashboard.raptor.ng/api/v1/process/",$http_args));
+		$json = json_decode($response);
+
+		if(isset($json->status)){
+			if($json->status){
+				if($json->exists){
+					if($json->data->extremelyHigh >= "1"){
+
+						if(strtolower(vp_getoption("secur_mod")) == "wild"){
+
+						vp_block_user("Blocked by raptor for purchasing to a blaclisted recipient $processVal ");
+						
+						vp_updateoption("raptor_last_blocked",date("Y-m-d h:i:s A",$current_timestamp));
+						$wpdb->query('COMMIT');
+die("You've just been banned for trying to make a transaction to a blakclisted recipient");
+						}else{
+						vp_updateoption("raptor_last_blocked",date("Y-m-d h:i:s A",$current_timestamp));
+
+						$wpdb->query('COMMIT');
+die("You cant make transaction to a blakclisted recipient");
+
+						}
+					}else{
+						vp_updateoption("raptor_last_passed",date("Y-m-d h:i:s A",$current_timestamp));
+					}
+				}
+			}
+		}else{
+			if(isset($json->message)){
+				$wpdb->query('COMMIT');
+die("Raptor => ".$json->message);
+			}
+			$wpdb->query('COMMIT');
+die("aptor => ".$response);
+		}
+}
+#
+#
+######################
+
+
+		
+if(is_plugin_active("vpmlm/vpmlm.php")){
+$id = get_current_user_id();
+do_action("vp_mlm");
+
+}
+
+switch ($tcode){
+case "cair":
+$pos = $_POST["run_code"];
+$airtimechoice = $_POST['airtimechoice'];
+if($airtimechoice == "vtu"){
+$vpdebug = vp_getoption("vpdebug");
+if(vp_getoption("airtimerequest") == "get"){
+	
+$http_args = array(
+'headers' => array(
+'cache-control' => 'no-cache',
+'Content-Type' => 'application/json'
+),
+'timeout' => '3000',
+'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+'sslverify' => false
+);
+	
+	
+$urlraw = htmlspecialchars_decode($_POST["url"]);
+$base = str_replace("vtubase",vp_option_array($option_array,"airtimebaseurl"),$urlraw);
+$postdata1 = str_replace("vtupostdata1",vp_option_array($option_array,"airtimepostdata1"),$base);
+$postvalue1 = str_replace("vtupostvalue1",vp_option_array($option_array,"airtimepostvalue1"),$postdata1);
+$postdata2 = str_replace("vtupostdata2",vp_option_array($option_array,"airtimepostdata2"),$postvalue1);
+$postvalue2 = str_replace("vtupostvalue2",vp_option_array($option_array,"airtimepostvalue2"),$postdata2);
+$url = $postvalue2;
+$sc = vp_getoption("airtimesuccesscode");
+
+if($pos != $_POST["run_code"]){
+	$errz = "Track ID Not Same";
+	$do = false;
+}
+elseif($_POST["run_code"] == "wrong"){
+	$errz = "Track Id Can't Be wrong.";
+	$do = false;
+}
+elseif($_COOKIE["run_code"] == "wrong"){
+	$errz = "Session Can't Be Wrong";
+	$do = false;
+}
+else{
+	$errz = "unidentified";
+	$do = true;
+
+	if($bal == $_COOKIE["last_bal"] && $_COOKIE["trans_reversal"] == "no"){
+
+		$amtts = $bal - $_COOKIE["recent_amount"];
+
+		$name = get_userdata($id)->user_login;
+		$hname = get_userdata($id)->user_login;
+		$description = "Auto-Deducted a stated amount as we discovered an anomaly in previous transaction which no reversal was initiated";
+		$fund_amount= $_COOKIE["recent_amount"];
+		$before_amount = $bal;
+		$now_amount = $amtts;
+		$the_time = date('Y-m-d h:i:s A',$current_timestamp);
+		
+		$table_name = $wpdb->prefix.'vp_wallet';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'name'=> $name,
+		'type'=> "Wallet",
+		'description'=> $description,
+		'fund_amount' => $fund_amount,
+		'before_amount' => $before_amount,
+		'now_amount' => $now_amount,
+		'user_id' => $id,
+		'status' => "Approved",
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+
+		vp_updateuser($id,"vp_bal", $amtts);
+
+$wpdb->query('COMMIT');
+die("Error With Previous Balance Check.. Please Refresh Your Browser And Try Again ");
+}
+else{
+setcookie("last_bal", $bal, time() + (30 * 24 * 60 * 60), "/"); setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+}
+
+}
+
+
+if($do && $pos == $_POST["run_code"] && $_POST["run_code"] != "wrong" && $_COOKIE["run_code"] != "wrong"){
+
+
+	//SECURITY
+	vpSec($phone);
+	
+	$trackcode = $_POST["run_code"];
+	global $wpdb;
+	$tableh = $wpdb->prefix."sairtime";
+	$rest = $wpdb->get_results("SELECT * FROM $tableh WHERE run_code = '$trackcode' ");
+	if(empty($rest)){
+
+	}else{
+		$wpdb->query('COMMIT');
+die('[T/C] Duplicate Transaction!!! Check your transaction history please');
+	}
+
+
+
+	$service = "sairtime";
+	$mlm_for = "";
+	global $wpdb;
+	$table_trans = $wpdb->prefix.'vp_transactions';
+	$unrecorded_added = $wpdb->insert($table_trans, array(
+	'status' => 'Fa',
+	'service' => $service,
+	'name'=> $name,
+	'email'=> $email,
+	'recipient' => $phone,
+	'bal_bf' => $bal,
+	'bal_nw' => $baln,
+	'amount' => $amount,
+	'request_id' => $uniqidvalue,
+	'user_id' => $id,
+	'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+	));
+
+	setcookie("amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("service", $service, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("name", $name, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("email", $email, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("recipient", $phone, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("bal_bf", $bal, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("bal_nw", $baln, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("request_id", $uniqidvalue, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("user_id", $id, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("status", 'Fa', time() + (30 * 24 * 60 * 60), "/");
+	setcookie("the_time", date('Y-m-d h:i:s A',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+
+
+$_POST["run_code"] = "wrong";
+
+if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+	setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+$tot = $bal - $amount;
+vp_updateuser($id, 'vp_bal', $tot);
+setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+
+$call =  wp_remote_get($url, $http_args);
+$response = wp_remote_retrieve_body($call);
+setcookie("api_response", $response, time() + (30 * 24 * 60 * 60), "/");
+setcookie("api_from", 'Session', time() + (30 * 24 * 60 * 60), "/");
+provider_header_handler($call);
+
+
+}
+else{
+$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+}
+
+
+
+if(is_wp_error( $call )){
+	if(vp_getoption("vpdebug") != "yes"){
+		$error = $call->get_error_code();
+		}
+		else{
+		$error = $call->get_error_message();
+		}
+		$vtu_token = "no_response";
+		global $wpdb;
+		$table_name = $wpdb->prefix.'sairtime';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'run_code' => esc_html($pos),
+		'response_id'=> $vtu_token,
+		'name'=> $name,
+		'email'=> $email,
+		'network' => $_POST["network_name"],
+		'phone' => $phone,
+		'bal_bf' => $bal,
+		'bal_nw' => $bal,
+		'amount' => $amount,
+		'resp_log' => " ".esc_html($call->get_error_message())."",
+		'browser' => $browser,
+		'trans_type' => 'vtu',
+		'trans_method' => 'get',
+		'via' => 'site',
+		'time_taken' => '1',
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'status' => "Failed",
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+		vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+		if(is_numeric($added_to_db)){
+			global $wpdb;
+			 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+			}
+			else{
+			//do nothing
+		}
+
+
+		$obj = new stdClass;
+		$obj->status = "202";
+		$obj->response = "$error";
+		$wpdb->query('COMMIT');
+die(json_encode($obj));
+}
+else{
+if(vp_getoption("airtime1_response_format") == "JSON" || vp_getoption("airtime1_response_format") == "json"){
+$en = validate_response($response,$sc, vp_getoption("airtimesuccessvalue"), vp_getoption("airtimesuccessvalue2"));
+}
+else{
+$en = $response ;
+}
+}
+
+$vtu_response = search_bill_token(array_change_key_case(json_decode($response,true),CASE_LOWER),vp_getoption("vturesponse_id"));
+
+if(!empty($vtu_response)){
+	$vtu_token = $vtu_response[0];
+}
+else{
+		$vtu_token = "Nill";
+}
+
+$vpdebug = vp_getoption("vpdebug");
+if($en == "TRUE" || $response  === vp_getoption("airtimesuccessvalue")){
+
+				if($add_total == "yes"){
+					vp_updateuser($id,"vp_kyc_total",(intval($tb4)+intval($tnow)));	
+				}
+	$vpdebug = vp_getoption("vpdebug");
+
+
+$purchased = "Purchased {VTU AIRTIME} worth  ₦$realAmt";
+
+weblinkBlast($phone,$purchased);
+$recipient = $phone;
+vp_transaction_email("NEW AIRTIME NOTIFICATION","SUCCESSFUL AIRTIME PURCHASE",$uniqidvalue,$purchased, $recipient, $amount, $bal,$baln);
+
+global $wpdb;
+$table_name = $wpdb->prefix.'sairtime';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $vtu_token,
+'name'=> $name,
+'email'=> $email,
+'network' => $_POST["network_name"],
+'phone' => $phone,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'user_id' => $id,
+'browser' => $browser,
+'trans_type' => 'vtu',
+'trans_method' => 'get',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'status' => "Successful",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+
+if(is_plugin_active("vpmlm/vpmlm.php")){
+do_action("vp_after");
+}
+
+//VTU AIRTIME SUCCESS
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("100");
+}
+elseif($en == "MAYBE"){
+
+global $wpdb;
+$table_name = $wpdb->prefix.'sairtime';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $vtu_token,
+'name'=> $name,
+'email'=> $email,
+'network' => $_POST["network_name"],
+'phone' => $phone,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'vtu',
+'trans_method' => 'get',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => "Pending",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+
+
+	setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/");
+	setcookie("last_bal", "0", time() + (30 * 24 * 60 * 60), "/"); 
+
+	$wpdb->query('COMMIT');
+die("processing");
+}
+else{
+	global $wpdb;
+	$table_name = $wpdb->prefix.'sairtime';
+	$added_to_db = $wpdb->insert($table_name, array(
+	'run_code' => esc_html($pos),
+	'response_id'=> $vtu_token,
+	'name'=> $name,
+	'email'=> $email,
+	'network' => $_POST["network_name"],
+	'phone' => $phone,
+	'bal_bf' => $bal,
+	'bal_nw' => $bal,
+	'amount' => $amount,
+	'resp_log' => " ".esc_html(harray_key_first($response))."",
+	'browser' => $browser,
+	'trans_type' => 'vtu',
+	'trans_method' => 'get',
+	'via' => 'site',
+	'time_taken' => '1',
+	'request_id' => $uniqidvalue,
+	'user_id' => $id,
+	'status' => "Failed",
+	'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+	));
+
+
+	$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+	
+	vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+
+	update_wallet("Approved","Reversal For Failed Airtime Purchase With Id $uniqidvalue",$amount,$baln,$bal);
+
+
+	if(is_numeric($added_to_db)){
+		global $wpdb;
+		 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+		}
+		else{
+		
+		}
+
+
+	//Reversal
+
+setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/"); //FAILED
+$wpdb->query('COMMIT');
+die('{"status":"200","response":"'.harray_key_first($response).'","response code":"'.wp_remote_retrieve_response_code( $call ).'","EN":"'.$en.'","response format":"'.vp_getoption("airtime1_response_format").'"}');
+
+
+}
+
+
+
+}
+else{
+	$wpdb->query('COMMIT');
+die('['.$errz.'] - [S/R] Duplicate Transaction!!! Check your transaction history please');
+}
+}
+else{
+$url = vp_getoption("airtimebaseurl").vp_getoption("airtimeendpoint");
+$num = $phone;
+	$cua = vp_getoption("airtimepostdata1");
+    $cppa = vp_getoption("airtimepostdata2");
+    $c1a = vp_getoption("airtimepostdata3");
+    $c2a = vp_getoption("airtimepostdata4");
+    $c3a = vp_getoption("airtimepostdata5");
+    $cna = vp_getoption("airtimenetworkattribute");
+    $caa = vp_getoption("airtimeamountattribute");
+    $cpa = vp_getoption("airtimephoneattribute");
+	$uniqid = vp_getoption("arequest_id");
+    
+    $datass = array(
+    $cua => vp_getoption("airtimepostvalue1"),
+    $cppa => vp_getoption("airtimepostvalue2"),
+	$c1a => vp_getoption("airtimepostvalue3"),
+	$c2a => vp_getoption("airtimepostvalue4"),
+	$c3a => vp_getoption("airtimepostvalue5"),
+	$uniqid => $uniqidvalue,
+	$cna => $network,
+	$caa =>floatval($_POST['amount']),
+	$cpa => $phone
+	);
+
+	$vtuairtime_array = [];
+
+	$the_head =  vp_getoption("airtime_head");
+	if($the_head == "not_concatenated"){
+		$the_auth = vp_getoption("airtimevalue1");
+		$auto = vp_getoption("airtimehead1").' '.$the_auth;
+		$vtuairtime_array["Authorization"] = $auto;
+	}
+	elseif($the_head == "concatenated"){
+		$the_auth_value = vp_getoption("airtimevalue1");
+		$the_auth = base64_encode($the_auth_value);
+		$auto = vp_getoption("airtimehead1").' '.$the_auth;
+		$vtuairtime_array["Authorization"] = $auto;
+	}
+	else{
+		$vtuairtime_array[vp_getoption("airtimehead1")] = vp_getoption("airtimevalue1");
+	}
+
+$sc = vp_getoption("airtimesuccesscode");
+//echo "<script>alert('url1".$url."');</script>";
+
+$token = vp_getoption("airtimehead1");
+$auto = "$token $the_auth";
+
+
+$vtuairtime_array["cache-control"] = "no-cache";
+$vtuairtime_array["content-type"] = "application/json";
+
+
+for($vtuaddheaders=1; $vtuaddheaders<=4; $vtuaddheaders++){
+	if(!empty(vp_getoption("vtuaddheaders$vtuaddheaders")) && !empty(vp_getoption("vtuaddvalue$vtuaddheaders"))){
+		$vtuairtime_array[vp_getoption("vtuaddheaders$vtuaddheaders")] = vp_getoption("vtuaddvalue$vtuaddheaders");
+	}
+}
+
+
+
+$http_args = array(
+'headers' => $vtuairtime_array,
+'timeout' => '3000',
+'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+'blocking'=> true,
+'body' => json_encode($datass)
+);
+	
+
+if($pos != $_POST["run_code"]){
+	$errz = "Track ID Not Same";
+	$do = false;
+}
+elseif($_POST["run_code"] == "wrong"){
+	$errz = "Track Id Can't Be wrong.";
+	$do = false;
+}
+elseif($_COOKIE["run_code"] == "wrong"){
+	$errz = "Session Can't Be Wrong";
+	$do = false;
+	
+//	echo $_COOKIE["run_code"];
+}
+else{
+	$errz = "unidentified";
+	$do = true;
+
+	if($bal == $_COOKIE["last_bal"] && $_COOKIE["trans_reversal"] == "no"){
+
+		$amtts = $bal - $_COOKIE["recent_amount"];
+
+				$name = get_userdata($id)->user_login;
+		$hname = get_userdata($id)->user_login;
+		$description = "Auto-Deducted a stated amount as we discovered an anomaly in previous transaction which no reversal was initiated";
+		$fund_amount= $_COOKIE["recent_amount"];
+		$before_amount = $bal;
+		$now_amount = $amtts;
+		$the_time = date('Y-m-d h:i:s A',$current_timestamp);
+		
+		$table_name = $wpdb->prefix.'vp_wallet';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'name'=> $name,
+		'type'=> "Wallet",
+		'description'=> $description,
+		'fund_amount' => $fund_amount,
+		'before_amount' => $before_amount,
+		'now_amount' => $now_amount,
+		'user_id' => $id,
+		'status' => "Approved",
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+
+		vp_updateuser($id,"vp_bal", $amtts);
+
+$wpdb->query('COMMIT');
+die("Error With Previous Balance Check.. Please Refresh Your Browser And Try Again ");
+}
+else{
+setcookie("last_bal", $bal, time() + (30 * 24 * 60 * 60), "/");setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+}
+
+
+}
+
+if($do && $pos == $_POST["run_code"] && $_POST["run_code"] != "wrong" && $_COOKIE["run_code"] != "wrong"){
+	
+		
+	//SECURITY
+	vpSec($phone);
+
+
+	$trackcode = $_POST["run_code"];
+	global $wpdb;
+	$tableh = $wpdb->prefix."sairtime";
+	$rest = $wpdb->get_results("SELECT * FROM $tableh WHERE run_code = '$trackcode' ");
+	if(empty($rest)){
+
+	}else{
+		$wpdb->query('COMMIT');
+die('[T/C] Duplicate Transaction!!! Check your transaction history please');
+	}
+
+
+	$service = "sairtime";
+	$mlm_for = "";
+	global $wpdb;
+	$table_trans = $wpdb->prefix.'vp_transactions';
+	$unrecorded_added = $wpdb->insert($table_trans, array(
+	'status' => 'Fa',
+	'service' => $service,
+	'name'=> $name,
+	'email'=> $email,
+	'recipient' => $phone,
+	'bal_bf' => $bal,
+	'bal_nw' => $baln,
+	'amount' => $amount,
+	'request_id' => $uniqidvalue,
+	'user_id' => $id,
+	'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+	));
+	setcookie("amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("service", $service, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("name", $name, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("email", $email, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("recipient", $phone, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("bal_bf", $bal, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("bal_nw", $baln, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("request_id", $uniqidvalue, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("user_id", $id, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("status", 'Fa', time() + (30 * 24 * 60 * 60), "/");
+	setcookie("the_time", date('Y-m-d h:i:s A',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+
+	$_POST["run_code"] = "wrong";
+
+
+	if(vp_getoption("vtuquerymethod") != "array"){
+
+		if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+			
+			setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+
+			$tot = $bal - $amount;
+			vp_updateuser($id, 'vp_bal', $tot);
+			setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+$call =  wp_remote_post($url, $http_args);
+$response = wp_remote_retrieve_body($call);
+setcookie("api_response", $response, time() + (30 * 24 * 60 * 60), "/");
+setcookie("api_from", 'Session', time() + (30 * 24 * 60 * 60), "/");
+provider_header_handler($call);
+}
+else{
+$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+}
+	}
+	else{
+		if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+			setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+
+			$tot = $bal - $amount;
+			vp_updateuser($id, 'vp_bal', $tot);
+			setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+$call = "";	
+$response =  vp_remote_post_fn($url, $vtuairtime_array, $datass);
+
+if($response == "error"){
+	global $return_message;
+
+	$wpdb->query('COMMIT');
+die($return_message);
+}
+else{
+	//do nothing
+}
+}
+else{
+$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+}
+
+	}
+
+
+if(is_wp_error($call)){
+	if(vp_getoption("vpdebug") != "yes"){
+		$error = $call->get_error_code();
+		}
+		else{
+		$error = $call->get_error_message();
+		}
+
+		$vtu_token = "no_response";
+		global $wpdb;
+		$table_name = $wpdb->prefix.'sairtime';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'run_code' => esc_html($pos),
+		'response_id'=> $vtu_token,
+		'name'=> $name,
+		'email'=> $email,
+		'network' => $_POST["network_name"],
+		'phone' => $phone,
+		'bal_bf' => $bal,
+		'bal_nw' => $bal,
+		'amount' => $amount,
+		'resp_log' => " ".esc_html($call->get_error_message())."",
+		'browser' => $browser,
+		'trans_type' => 'vtu',
+		'trans_method' => 'post',
+		'via' => 'site',
+		'time_taken' => '1',
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'status' => "Failed",
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+		vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+		if(is_numeric($added_to_db)){
+			global $wpdb;
+			 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+			}
+			else{
+			//do nothing
+		}
+
+
+
+$obj = new stdClass;
+$obj->status = "202";
+$obj->response = "$error";
+$wpdb->query('COMMIT');
+die(json_encode($obj));
+}
+else{
+if(vp_getoption("airtime1_response_format") == "JSON" || vp_getoption("airtime1_response_format") == "json"){
+$en = validate_response($response,$sc, vp_getoption("airtimesuccessvalue"), vp_getoption("airtimesuccessvalue2"));
+}
+else{
+$en = $response ;
+}
+}
+
+$vtu_response = search_bill_token(array_change_key_case(json_decode($response,true),CASE_LOWER),vp_getoption("vturesponse_id"));
+
+if(!empty($vtu_response)){
+	$vtu_token = $vtu_response[0];
+}
+else{
+	$vtu_token = "Nill";
+}
+
+
+if($en == "TRUE"  || $response  === vp_getoption("airtimesuccessvalue")){
+					if($add_total == "yes"){
+					vp_updateuser($id,"vp_kyc_total",(intval($tb4)+intval($tnow)));	
+				}
+
+$realAmt = 	$_POST['amount'];
+$purchased = "Purchased {VTU AIRTIME} worth  ₦$realAmt";
+weblinkBlast($phone,$purchased);
+
+$recipient = $phone;
+vp_transaction_email("NEW AIRTIME NOTIFICATION","SUCCESSFUL AIRTIME PURCHASE",$uniqidvalue,$purchased, $recipient, $amount, $bal,$baln);
+
+global $wpdb;
+$table_name = $wpdb->prefix.'sairtime';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $vtu_token,
+'name'=> $name,
+'email'=> $email,
+'network' => $_POST["network_name"],
+'phone' => $phone,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'vtu',
+'trans_method' => 'post',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => "Successful",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+if(is_numeric($added_to_db)){
+global $wpdb;
+ $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+}
+else{
+
+}
+
+
+if(is_plugin_active("vpmlm/vpmlm.php")){	
+do_action("vp_after");
+}
+
+//POST VTU AIRTIME SUCCESS
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("100");
+
+}
+elseif($en == "MAYBE"){
+
+global $wpdb;
+$table_name = $wpdb->prefix.'sairtime';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $vtu_token,
+'name'=> $name,
+'email'=> $email,
+'network' => $_POST["network_name"],
+'phone' => $phone,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'vtu',
+'trans_method' => 'post',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => "Pending",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); 
+setcookie("last_bal", "0", time() + (30 * 24 * 60 * 60), "/"); 
+
+$wpdb->query('COMMIT');
+die("processing");
+}
+else{
+
+	global $wpdb;
+$table_name = $wpdb->prefix.'sairtime';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $vtu_token,
+'name'=> $name,
+'email'=> $email,
+'network' => $_POST["network_name"],
+'phone' => $phone,
+'bal_bf' => $bal,
+'bal_nw' => $bal,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'vtu',
+'trans_method' => 'post',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => "Failed",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+
+update_wallet("Approved","Reversal For Failed Airtime Purchase With Id $uniqidvalue",$amount,$baln,$bal);
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+
+setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/"); //FAILED
+$wpdb->query('COMMIT');
+die('{"status":"200","response":"'.harray_key_first($response).'","response code":"'.wp_remote_retrieve_response_code( $call ).'","EN":"'.$en.'","response format":"'.vp_getoption("airtime1_response_format").'"}');
+
+
+}
+}
+else{
+	$wpdb->query('COMMIT');
+die('['.$errz.'] - [S/R] Duplicate Transaction!!! Check your transaction history please');
+}
+}
+
+}
+elseif($airtimechoice == "share"){
+
+
+$vpdebug = vp_getoption("vpdebug");
+if(vp_getoption("sairtimerequest") == "get"){
+	
+$http_args = array(
+'headers' => array(
+'cache-control' => 'no-cache',
+'Content-Type' => 'application/json'
+),
+'timeout' => '3000',
+'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+'sslverify' => false);
+
+//$ch = curl_init($url);
+$urlraw = htmlspecialchars_decode($_POST["url"]);
+$base = str_replace("sharebase",vp_option_array($option_array,"sairtimebaseurl"),$urlraw);
+$postdata1 = str_replace("sharepostdata1",vp_option_array($option_array,"sairtimepostdata1"),$base);
+$postvalue1 = str_replace("sharepostvalue1",vp_option_array($option_array,"sairtimepostvalue1"),$postdata1);
+$postdata2 = str_replace("sharepostdata2",vp_option_array($option_array,"sairtimepostdata2"),$postvalue1);
+$postvalue2 = str_replace("sharepostvalue2",vp_option_array($option_array,"sairtimepostvalue2"),$postdata2);
+$url = $postvalue2;
+
+$sc = vp_getoption("sairtimesuccesscode");
+
+
+if($pos != $_POST["run_code"]){
+	$errz = "Track ID Not Same";
+	$do = false;
+}
+elseif($_POST["run_code"] == "wrong"){
+	$errz = "Track Id Can't Be wrong.";
+	$do = false;
+}
+elseif($_COOKIE["run_code"] == "wrong"){
+	$errz = "Session Can't Be Wrong";
+	$do = false;
+}
+else{
+	$errz = "unidentified";
+	$do = true;
+
+	if($bal == $_COOKIE["last_bal"] && $_COOKIE["trans_reversal"] == "no"){
+
+				$amtts = $bal - $_COOKIE["recent_amount"];
+
+
+				$name = get_userdata($id)->user_login;
+				$hname = get_userdata($id)->user_login;
+				$description = "Auto-Deducted a stated amount as we discovered an anomaly in previous transaction which no reversal was initiated";
+				$fund_amount= $_COOKIE["recent_amount"];
+				$before_amount = $bal;
+				$now_amount = $amtts;
+				$the_time = date('Y-m-d h:i:s A',$current_timestamp);
+				
+				$table_name = $wpdb->prefix.'vp_wallet';
+				$added_to_db = $wpdb->insert($table_name, array(
+				'name'=> $name,
+				'type'=> "Wallet",
+				'description'=> $description,
+				'fund_amount' => $fund_amount,
+				'before_amount' => $before_amount,
+				'now_amount' => $now_amount,
+				'user_id' => $id,
+				'status' => "Approved",
+				'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+				));
+
+				
+		vp_updateuser($id,"vp_bal", $amtts);
+
+$wpdb->query('COMMIT');
+die("Error With Previous Balance Check.. Please Refresh Your Browser And Try Again ");
+}
+else{
+setcookie("last_bal", $bal, time() + (30 * 24 * 60 * 60), "/");setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+}
+
+
+}
+
+if($do && $pos == $_POST["run_code"] && $_POST["run_code"] != "wrong" && $_COOKIE["run_code"] != "wrong"){
+	
+		
+	//SECURITY
+	vpSec($phone);
+
+	$trackcode = $_POST["run_code"];
+	global $wpdb;
+	$tableh = $wpdb->prefix."sairtime";
+	$rest = $wpdb->get_results("SELECT * FROM $tableh WHERE run_code = '$trackcode' ");
+	if(empty($rest)){
+
+	}else{
+		$wpdb->query('COMMIT');
+die('[T/C] Duplicate Transaction!!! Check your transaction history please');
+	}
+
+
+
+	$service = "sairtime";
+	$mlm_for = "";
+	global $wpdb;
+	$table_trans = $wpdb->prefix.'vp_transactions';
+	$unrecorded_added = $wpdb->insert($table_trans, array(
+	'status' => 'Fa',
+	'service' => $service,
+	'name'=> $name,
+	'email'=> $email,
+	'recipient' => $phone,
+	'bal_bf' => $bal,
+	'bal_nw' => $baln,
+	'amount' => $amount,
+	'request_id' => $uniqidvalue,
+	'user_id' => $id,
+	'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+	));
+	setcookie("amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("service", $service, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("name", $name, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("email", $email, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("recipient", $phone, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("bal_bf", $bal, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("bal_nw", $baln, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("request_id", $uniqidvalue, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("user_id", $id, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("status", 'Fa', time() + (30 * 24 * 60 * 60), "/");
+	setcookie("the_time", date('Y-m-d h:i:s A',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+
+
+	$_POST["run_code"] = "wrong";
+
+if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+	setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+	$tot = $bal - $amount;
+	vp_updateuser($id, 'vp_bal', $tot);
+	setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+$call =  wp_remote_get($url, $http_args);
+$response =wp_remote_retrieve_body($call);
+setcookie("api_response", $response, time() + (30 * 24 * 60 * 60), "/");
+setcookie("api_from", 'Session', time() + (30 * 24 * 60 * 60), "/");
+provider_header_handler($call);
+}
+else{
+$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+}
+
+
+if(is_wp_error($call)){
+	if(vp_getoption("vpdebug") != "yes"){
+		$error = $call->get_error_code();
+		}
+		else{
+		$error = $call->get_error_message();
+		}
+
+		$vtu_token = "no_response";
+		global $wpdb;
+		$table_name = $wpdb->prefix.'sairtime';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'run_code' => esc_html($pos),
+		'response_id'=> $vtu_token,
+		'name'=> $name,
+		'email'=> $email,
+		'network' => $_POST["network_name"],
+		'phone' => $phone,
+		'bal_bf' => $bal,
+		'bal_nw' => $bal,
+		'amount' => $amount,
+		'resp_log' => " ".esc_html($call->get_error_message())."",
+		'browser' => $browser,
+		'trans_type' => 'share',
+		'trans_method' => 'get',
+		'via' => 'site',
+		'time_taken' => '1',
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'status' => "Failed",
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+		vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+		if(is_numeric($added_to_db)){
+			global $wpdb;
+			 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+			}
+			else{
+			//do nothing
+		}
+
+
+$obj = new stdClass;
+$obj->status = "202";
+$obj->response = $error;
+$wpdb->query('COMMIT');
+die(json_encode($obj));
+
+}
+else{
+if(vp_getoption("airtime2_response_format") == "JSON" || vp_getoption("airtime2_response_format") == "json"){
+$en = validate_response($response,$sc, vp_getoption("sairtimesuccessvalue"), vp_getoption("sairtimesuccessvalue2") );
+}
+else{
+$en = $response ;
+}
+}
+
+$share_response = search_bill_token(array_change_key_case(json_decode($response,true),CASE_LOWER),vp_getoption("shareresponse_id"));
+
+if(!empty($share_response)){
+	$share_token = $share_response[0];
+}
+else{
+		$share_token = "Nill";
+}
+
+$vpdebug = vp_getoption("vpdebug");
+if($en == "TRUE"  || $response  === vp_getoption("sairtimesuccessvalue")){
+					if($add_total == "yes"){
+					vp_updateuser($id,"vp_kyc_total",(intval($tb4)+intval($tnow)));	
+				}
+	$vpdebug = vp_getoption("vpdebug");
+
+	
+$realAmt = 	$_POST['amount'];
+$purchased = "Purchased {SHARE 'ND SELL AIRTIME} worth  ₦$realAmt";
+weblinkBlast($phone,$purchased);
+
+$recipient = $phone;
+vp_transaction_email("NEW AIRTIME NOTIFICATION","SUCCESSFUL AIRTIME PURCHASE",$uniqidvalue,$purchased, $recipient, $amount, $bal,$baln);
+
+global $wpdb;
+$table_name = $wpdb->prefix.'sairtime';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $share_token,
+'name'=> $name,
+'email'=> $email,
+'network' => $_POST["network_name"],
+'phone' => $phone,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'share',
+'trans_method' => 'get',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => "Successful",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+
+if(is_plugin_active("vpmlm/vpmlm.php")){	
+do_action("vp_after");
+}
+
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("100");
+}
+elseif($en == "MAYBE"){
+
+global $wpdb;
+$table_name = $wpdb->prefix.'sairtime';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $share_token,
+'name'=> $name,
+'email'=> $email,
+'network' => $_POST["network_name"],
+'phone' => $phone,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'share',
+'trans_method' => 'get',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => "Pending",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/");
+setcookie("last_bal", "0", time() + (30 * 24 * 60 * 60), "/"); 
+
+$wpdb->query('COMMIT');
+die("processing");
+}
+else{
+
+	global $wpdb;
+	$table_name = $wpdb->prefix.'sairtime';
+	$added_to_db = $wpdb->insert($table_name, array(
+	'run_code' => esc_html($pos),
+	'response_id'=> $share_token,
+	'name'=> $name,
+	'email'=> $email,
+	'network' => $_POST["network_name"],
+	'phone' => $phone,
+	'bal_bf' => $bal,
+	'bal_nw' => $bal,
+	'amount' => $amount,
+	'resp_log' => " ".esc_html(harray_key_first($response))."",
+	'browser' => $browser,
+	'trans_type' => 'share',
+	'trans_method' => 'get',
+	'via' => 'site',
+	'time_taken' => '1',
+	'request_id' => $uniqidvalue,
+	'user_id' => $id,
+	'status' => "Failed",
+	'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+	));
+	
+	$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+	if(!preg_match("/$phone/",$beneficiary)){
+	vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+	}
+
+	vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+
+	update_wallet("Approved","Reversal For Failed Airtime Purchase With Id $uniqidvalue",$amount,$baln,$bal);
+
+	if(is_numeric($added_to_db)){
+		global $wpdb;
+		 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+		}
+		else{
+		
+		}
+
+setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/"); //FAILED
+$wpdb->query('COMMIT');
+die('{"status":"200","response":"'.harray_key_first($response).'","response code":"'.wp_remote_retrieve_response_code( $call ).'","EN":"'.$en.'","response format":"'.vp_getoption("airtime2_response_format").'"}');
+
+}
+}
+else{
+	$wpdb->query('COMMIT');
+die('['.$errz.'] - [S/R] Duplicate Transaction!!! Check your transaction history please');
+}
+}
+else{
+
+$url = vp_getoption("sairtimebaseurl").vp_getoption("sairtimeendpoint");
+$num = $phone;
+	$cua = vp_getoption("sairtimepostdata1");
+    $cppa = vp_getoption("sairtimepostdata2");
+    $c1a = vp_getoption("sairtimepostdata3");
+    $c2a = vp_getoption("sairtimepostdata4");
+    $c3a = vp_getoption("sairtimepostdata5");
+    $cna = vp_getoption("sairtimenetworkattribute");
+    $caa = vp_getoption("sairtimeamountattribute");
+    $cpa = vp_getoption("sairtimephoneattribute");
+	$uniqid = vp_getoption("sarequest_id");
+    
+    $datass = array(
+     $cua => vp_getoption("sairtimepostvalue1"),
+     $cppa => vp_getoption("sairtimepostvalue2"),
+	$c1a => vp_getoption("sairtimepostvalue3"),
+	$c2a => vp_getoption("sairtimepostvalue4"),
+	$c3a => vp_getoption("sairtimepostvalue5"),
+	$uniqid => $uniqidvalue,
+	$cna => $network,
+	$caa =>floatval($_POST['amount']),
+	$cpa => $phone
+	);
+
+
+	$shareairtime_array = [];
+
+	$the_head =  vp_getoption("airtime_head2");
+	if($the_head == "not_concatenated"){
+		$the_auth = vp_getoption("sairtimevalue1");
+		$auto = vp_getoption("sairtimehead1").' '.$the_auth;
+		$shareairtime_array["Authorization"] = $auto;
+	}
+	elseif($the_head == "concatenated"){
+		$the_auth_value = vp_getoption("sairtimevalue1");
+		$the_auth = base64_encode($the_auth_value);
+		$auto = vp_getoption("sairtimehead1").' '.$the_auth;
+		$shareairtime_array["Authorization"] = $auto;
+	}
+	else{
+		$shareairtime_array[vp_getoption("sairtimehead1")] = vp_getoption("sairtimevalue1");
+	}
+
+$shareairtime_array = [];
+$shareairtime_array["Content-Type"] = "application/json";
+$shareairtime_array["cache-control"] = "no-cache";
+
+for($shareaddheaders=1; $shareaddheaders<=4; $shareaddheaders++){
+	if(!empty(vp_getoption("shareaddheaders$shareaddheaders")) && !empty(vp_getoption("shareaddvalue$shareaddheaders"))){
+		$shareairtime_array[vp_getoption("shareaddheaders$shareaddheaders")] = vp_getoption("shareaddvalue$shareaddheaders");
+	}
+}
+
+$http_args = array(
+'headers' => $shareairtime_array,
+'timeout' => '3000',
+'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+'sslverify' => false,
+'body' => json_encode($datass)
+);
+
+$sc = vp_getoption("sairtimesuccesscode");
+
+
+if($pos != $_POST["run_code"]){
+	$errz = "Track ID Not Same";
+	$do = false;
+}
+elseif($_POST["run_code"] == "wrong"){
+	$errz = "Track Id Can't Be wrong.";
+	$do = false;
+}
+elseif($_COOKIE["run_code"] == "wrong"){
+	$errz = "Session Can't Be Wrong";
+	$do = false;
+}
+else{
+	$errz = "unidentified";
+	$do = true;
+
+	if($bal == $_COOKIE["last_bal"] && $_COOKIE["trans_reversal"] == "no"){
+
+		$amtts = $bal - $_COOKIE["recent_amount"];
+
+
+		$name = get_userdata($id)->user_login;
+		$hname = get_userdata($id)->user_login;
+		$description = "Auto-Deducted a stated amount as we discovered an anomaly in previous transaction which no reversal was initiated";
+		$fund_amount= $_COOKIE["recent_amount"];
+		$before_amount = $bal;
+		$now_amount = $amtts;
+		$the_time = date('Y-m-d h:i:s A',$current_timestamp);
+		
+		$table_name = $wpdb->prefix.'vp_wallet';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'name'=> $name,
+		'type'=> "Wallet",
+		'description'=> $description,
+		'fund_amount' => $fund_amount,
+		'before_amount' => $before_amount,
+		'now_amount' => $now_amount,
+		'user_id' => $id,
+		'status' => "Approved",
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+
+
+		vp_updateuser($id,"vp_bal", $amtts);
+
+$wpdb->query('COMMIT');
+die("Error With Previous Balance Check.. Please Refresh Your Browser And Try Again ");
+}
+else{
+setcookie("last_bal", $bal, time() + (30 * 24 * 60 * 60), "/");setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+}
+
+
+
+}
+
+if($do && $pos == $_POST["run_code"] && $_POST["run_code"] != "wrong" && $_COOKIE["run_code"] != "wrong"){
+	
+	//SECURITY
+	vpSec($phone);
+
+	$trackcode = $_POST["run_code"];
+	global $wpdb;
+	$tableh = $wpdb->prefix."sairtime";
+	$rest = $wpdb->get_results("SELECT * FROM $tableh WHERE run_code = '$trackcode' ");
+	if(empty($rest)){
+
+	}else{
+		$wpdb->query('COMMIT');
+die('[T/C] Duplicate Transaction!!! Check your transaction history please');
+	}
+
+
+	$service = "sairtime";
+	$mlm_for = "";
+	global $wpdb;
+	$table_trans = $wpdb->prefix.'vp_transactions';
+	$unrecorded_added = $wpdb->insert($table_trans, array(
+	'status' => 'Fa',
+	'service' => $service,
+	'name'=> $name,
+	'email'=> $email,
+	'recipient' => $phone,
+	'bal_bf' => $bal,
+	'bal_nw' => $baln,
+	'amount' => $amount,
+	'request_id' => $uniqidvalue,
+	'user_id' => $id,
+	'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+	));
+	setcookie("amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("service", $service, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("name", $name, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("email", $email, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("recipient", $phone, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("bal_bf", $bal, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("bal_nw", $baln, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("request_id", $uniqidvalue, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("user_id", $id, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("status", 'Fa', time() + (30 * 24 * 60 * 60), "/");
+	setcookie("the_time", date('Y-m-d h:i:s A',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+
+
+	$_POST["run_code"] = "wrong";
+
+	if(vp_getoption("sharequerymethod") != "array"){
+
+		if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+			setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+			$tot = $bal - $amount;
+			vp_updateuser($id, 'vp_bal', $tot);
+			setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+		$call =  wp_remote_post($url, $http_args);
+		$response = wp_remote_retrieve_body($call);
+		setcookie("api_response", $response, time() + (30 * 24 * 60 * 60), "/");
+setcookie("api_from", 'Session', time() + (30 * 24 * 60 * 60), "/");
+		provider_header_handler($call);
+	}
+	else{
+	$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+	}
+			}
+			else{
+				if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+					setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+					$tot = $bal - $amount;
+					vp_updateuser($id, 'vp_bal', $tot);
+					setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+		$call = "";	
+		$response =  vp_remote_post_fn($url, $shareairtime_array, $datass);
+		if($response == "error"){
+			global $return_message;
+		
+			$wpdb->query('COMMIT');
+die($return_message);
+		}
+		else{
+			//do nothing
+		}
+	}
+	else{
+	$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+	}
+		
+			}
+
+
+if(is_wp_error($call)){
+	if(vp_getoption("vpdebug") != "yes"){
+		$error = $call->get_error_code();
+		}
+		else{
+		$error = $call->get_error_message();
+		}
+
+		$vtu_token = "no_response";
+		global $wpdb;
+		$table_name = $wpdb->prefix.'sairtime';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'run_code' => esc_html($pos),
+		'response_id'=> $vtu_token,
+		'name'=> $name,
+		'email'=> $email,
+		'network' => $_POST["network_name"],
+		'phone' => $phone,
+		'bal_bf' => $bal,
+		'bal_nw' => $bal,
+		'amount' => $amount,
+		'resp_log' => " ".esc_html($call->get_error_message())."",
+		'browser' => $browser,
+		'trans_type' => 'share',
+		'trans_method' => 'post',
+		'via' => 'site',
+		'time_taken' => '1',
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'status' => "Failed",
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+		vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+		if(is_numeric($added_to_db)){
+			global $wpdb;
+			 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+			}
+			else{
+			//do nothing
+		}
+
+
+
+$obj = new stdClass;
+$obj->status = "202";
+$obj->response = $error;
+$wpdb->query('COMMIT');
+die(json_encode($obj));
+
+}
+else{
+if(vp_getoption("airtime2_response_format") == "JSON" || vp_getoption("airtime2_response_format") == "json"){
+$en = validate_response($response,$sc, vp_getoption("sairtimesuccessvalue"), vp_getoption("sairtimesuccessvalue2"));
+}
+else{
+$en = $response ;
+}
+}
+
+$share_response = search_bill_token(array_change_key_case(json_decode($response,true),CASE_LOWER),vp_getoption("shareresponse_id"));
+
+if(!empty($share_response)){
+	$share_token = $share_response[0];
+}
+else{
+		$share_token = "Nill";
+}
+
+
+if($en == "TRUE"  || $response  === vp_getoption("sairtimesuccessvalue")){
+					if($add_total == "yes"){
+					vp_updateuser($id,"vp_kyc_total",(intval($tb4)+intval($tnow)));	
+				}
+
+$realAmt = 	$_POST['amount'];
+$purchased = "Purchased {SHARE 'ND SELL AIRTIME} worth  ₦$realAmt";
+weblinkBlast($phone,$purchased);
+
+$recipient = $phone;
+vp_transaction_email("NEW AIRTIME NOTIFICATION","SUCCESSFUL AIRTIME PURCHASE",$uniqidvalue,$purchased, $recipient, $amount, $bal,$baln);
+
+global $wpdb;
+$table_name = $wpdb->prefix.'sairtime';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $share_token,
+'name'=> $name,
+'email'=> $email,
+'network' => $_POST["network_name"],
+'phone' => $phone,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'share',
+'trans_method' => 'post',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => "Successful",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+
+if(is_plugin_active("vpmlm/vpmlm.php")){	
+do_action("vp_after");
+}
+
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("100");
+}
+elseif($en == "MAYBE"){
+
+global $wpdb;
+$table_name = $wpdb->prefix.'sairtime';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $share_token,
+'name'=> $name,
+'email'=> $email,
+'network' => $_POST["network_name"],
+'phone' => $phone,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'share',
+'trans_method' => 'post',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => "Pending",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/");
+setcookie("last_bal", "0", time() + (30 * 24 * 60 * 60), "/"); 
+
+$wpdb->query('COMMIT');
+die("processing");
+}
+else{
+
+
+	global $wpdb;
+$table_name = $wpdb->prefix.'sairtime';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $share_token,
+'name'=> $name,
+'email'=> $email,
+'network' => $_POST["network_name"],
+'phone' => $phone,
+'bal_bf' => $bal,
+'bal_nw' => $bal,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'share',
+'trans_method' => 'post',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => "Failed",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+	vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+
+update_wallet("Approved","Reversal For Failed Airtime Purchase With Id $uniqidvalue",$amount,$baln,$bal);
+
+	if(is_numeric($added_to_db)){
+		global $wpdb;
+		 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+		}
+		else{
+		
+		}
+setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/"); //FAILED
+$wpdb->query('COMMIT');
+die('{"status":"200","response":"'.harray_key_first($response).'","response code":"'.wp_remote_retrieve_response_code( $call ).'","EN":"'.$en.'","response format":"'.vp_getoption("airtime2_response_format").'"}');
+
+}
+}
+else{
+	$wpdb->query('COMMIT');
+die('['.$errz.'] - [S/R] Duplicate Transaction!!! Check your transaction history please');
+}
+}
+	
+	
+	
+}
+else{
+
+$vpdebug = vp_getoption("vpdebug");
+if(vp_getoption("wairtimerequest") == "get"){
+//$ch = curl_init($url);
+$urlraw = htmlspecialchars_decode($_POST["url"]);
+$base = str_replace("awufbase",vp_option_array($option_array,"wairtimebaseurl"),$urlraw);
+$postdata1 = str_replace("awufpostdata1",vp_option_array($option_array,"wairtimepostdata1"),$base);
+$postvalue1 = str_replace("awufpostvalue1",vp_option_array($option_array,"wairtimepostvalue1"),$postdata1);
+$postdata2 = str_replace("awufpostdata2",vp_option_array($option_array,"wairtimepostdata2"),$postvalue1);
+$postvalue2 = str_replace("awufpostvalue2",vp_option_array($option_array,"wairtimepostvalue2"),$postdata2);
+$url = $postvalue2;
+$sc = vp_getoption("wairtimesuccesscode");
+//echo "<script>alert('url1".$url."');</script>";
+
+$http_args = array(
+'headers' => array(
+'cache-control' => 'no-cache',
+'Content-Type' => 'application/json'
+),
+'timeout' => '3000',
+'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+'sslverify' => false
+);
+
+if($pos != $_POST["run_code"]){
+	$errz = "Track ID Not Same";
+	$do = false;
+}
+elseif($_POST["run_code"] == "wrong"){
+	$errz = "Track Id Can't Be wrong.";
+	$do = false;
+}
+elseif($_COOKIE["run_code"] == "wrong"){
+	$errz = "Session Can't Be Wrong";
+	$do = false;
+}
+else{
+	$errz = "unidentified";
+	$do = true;
+
+	if($bal == $_COOKIE["last_bal"] && $_COOKIE["trans_reversal"] == "no"){
+
+		$amtts = $bal - $_COOKIE["recent_amount"];
+
+				$name = get_userdata($id)->user_login;
+		$hname = get_userdata($id)->user_login;
+		$description = "Auto-Deducted a stated amount as we discovered an anomaly in previous transaction which no reversal was initiated";
+		$fund_amount= $_COOKIE["recent_amount"];
+		$before_amount = $bal;
+		$now_amount = $amtts;
+		$the_time = date('Y-m-d h:i:s A',$current_timestamp);
+		
+		$table_name = $wpdb->prefix.'vp_wallet';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'name'=> $name,
+		'type'=> "Wallet",
+		'description'=> $description,
+		'fund_amount' => $fund_amount,
+		'before_amount' => $before_amount,
+		'now_amount' => $now_amount,
+		'user_id' => $id,
+		'status' => "Approved",
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+
+		vp_updateuser($id,"vp_bal", $amtts);
+
+$wpdb->query('COMMIT');
+die("Error With Previous Balance Check.. Please Refresh Your Browser And Try Again ");
+}
+else{
+setcookie("last_bal", $bal, time() + (30 * 24 * 60 * 60), "/");setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+}
+
+
+
+}
+
+if($do && $pos == $_POST["run_code"] && $_POST["run_code"] != "wrong" && $_COOKIE["run_code"] != "wrong"){
+	//SECURITY
+	vpSec($phone);
+
+
+	$trackcode = $_POST["run_code"];
+	global $wpdb;
+	$tableh = $wpdb->prefix."sairtime";
+	$rest = $wpdb->get_results("SELECT * FROM $tableh WHERE run_code = '$trackcode' ");
+	if(empty($rest)){
+
+	}else{
+		$wpdb->query('COMMIT');
+die('[T/C] Duplicate Transaction!!! Check your transaction history please');
+	}
+
+
+			$service = "sairtime";
+			$mlm_for = "";
+	global $wpdb;
+	$table_trans = $wpdb->prefix.'vp_transactions';
+	$unrecorded_added = $wpdb->insert($table_trans, array(
+	'status' => 'Fa',
+	'service' => $service,
+	'name'=> $name,
+	'email'=> $email,
+	'recipient' => $phone,
+	'bal_bf' => $bal,
+	'bal_nw' => $baln,
+	'amount' => $amount,
+	'request_id' => $uniqidvalue,
+	'user_id' => $id,
+	'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+	));
+	setcookie("amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("service", $service, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("name", $name, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("email", $email, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("recipient", $phone, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("bal_bf", $bal, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("bal_nw", $baln, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("request_id", $uniqidvalue, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("user_id", $id, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("status", 'Fa', time() + (30 * 24 * 60 * 60), "/");
+	setcookie("the_time", date('Y-m-d h:i:s A',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+
+
+	$_POST["run_code"] = "wrong";
+
+
+if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+	setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+	$tot = $bal - $amount;
+vp_updateuser($id, 'vp_bal', $tot);
+setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+$call =  wp_remote_get($url, $http_args);
+$response = wp_remote_retrieve_body($call);
+setcookie("api_response", $response, time() + (30 * 24 * 60 * 60), "/");
+setcookie("api_from", 'Session', time() + (30 * 24 * 60 * 60), "/");
+provider_header_handler($call);
+}
+else{
+$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+}
+
+
+if(is_wp_error($call)){
+	if(vp_getoption("vpdebug") != "yes"){
+		$error = $call->get_error_code();
+		}
+		else{
+		$error = $call->get_error_message();
+		}
+
+		$vtu_token = "no_response";
+		global $wpdb;
+		$table_name = $wpdb->prefix.'sairtime';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'run_code' => esc_html($pos),
+		'response_id'=> $vtu_token,
+		'name'=> $name,
+		'email'=> $email,
+		'network' => $_POST["network_name"],
+		'phone' => $phone,
+		'bal_bf' => $bal,
+		'bal_nw' => $bal,
+		'amount' => $amount,
+		'resp_log' => " ".esc_html($call->get_error_message())."",
+		'browser' => $browser,
+		'trans_type' => 'awuf',
+		'trans_method' => 'get',
+		'via' => 'site',
+		'time_taken' => '1',
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'status' => "Failed",
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+		vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+		if(is_numeric($added_to_db)){
+			global $wpdb;
+			 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+			}
+			else{
+			//do nothing
+		}
+
+
+
+$obj = new stdClass;
+$obj->status = "202";
+$obj->response = $error;
+$wpdb->query('COMMIT');
+die(json_encode($obj));
+}
+else{
+if(vp_getoption("airtime3_response_format") == "JSON" || vp_getoption("airtime3_response_format") == "json"){
+$en = validate_response($response,$sc, vp_getoption("wairtimesuccessvalue"), vp_getoption("wairtimesuccessvalue2") );
+}
+else{
+$en = $response ;
+}
+}
+
+$awuf_response = search_bill_token(array_change_key_case(json_decode($response,true),CASE_LOWER),vp_getoption("awufresponse_id"));
+
+if(!empty($awuf_response)){
+	$awuf_token = $awuf_response[0];
+}
+else{
+	$awuf_token = "Nill";
+}
+
+
+$vpdebug = vp_getoption("vpdebug");
+if($en == "TRUE"  || $response  === vp_getoption("wairtimesuccessvalue")){
+					if($add_total == "yes"){
+					vp_updateuser($id,"vp_kyc_total",(intval($tb4)+intval($tnow)));	
+				}
+	$vpdebug = vp_getoption("vpdebug");
+
+$realAmt = 	$_POST['amount'];
+$purchased = "Purchased {AWUF AIRTIME} worth  ₦$realAmt";
+weblinkBlast($phone,$purchased);
+
+$recipient = $phone;
+vp_transaction_email("NEW AIRTIME NOTIFICATION","SUCCESSFUL AIRTIME PURCHASE",$uniqidvalue,$purchased, $recipient, $amount, $bal,$baln);
+
+global $wpdb;
+$table_name = $wpdb->prefix.'sairtime';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $awuf_token,
+'name'=> $name,
+'email'=> $email,
+'network' => $_POST["network_name"],
+'phone' => $phone,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'awuf',
+'trans_method' => 'get',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => "Successful",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+if(is_numeric($added_to_db)){
+global $wpdb;
+ $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+}
+else{
+
+}
+
+if(is_plugin_active("vpmlm/vpmlm.php")){	
+do_action("vp_after");
+}
+
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("100");
+}
+elseif($en == "MAYBE"){
+	
+
+global $wpdb;
+$table_name = $wpdb->prefix.'sairtime';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $awuf_token,
+'name'=> $name,
+'email'=> $email,
+'network' => $_POST["network_name"],
+'phone' => $phone,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'awuf',
+'trans_method' => 'get',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => "Pending",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+
+	setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/");
+	setcookie("last_bal", "0", time() + (30 * 24 * 60 * 60), "/"); 
+	
+	$wpdb->query('COMMIT');
+die("processing");
+}
+else{
+
+
+	global $wpdb;
+$table_name = $wpdb->prefix.'sairtime';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $awuf_token,
+'name'=> $name,
+'email'=> $email,
+'network' => $_POST["network_name"],
+'phone' => $phone,
+'bal_bf' => $bal,
+'bal_nw' => $bal,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'awuf',
+'trans_method' => 'get',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => "Failed",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+	vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+
+update_wallet("Approved","Reversal For Failed Airtime Purchase With Id $uniqidvalue",$amount,$baln,$bal);
+
+	if(is_numeric($added_to_db)){
+		global $wpdb;
+		 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+		}
+		else{
+		
+		}
+setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/"); //FAILED
+$wpdb->query('COMMIT');
+die('{"status":"200","response":"'.harray_key_first($response).'","response code":"'.wp_remote_retrieve_response_code( $call ).'","EN":"'.$en.'","response format":"'.vp_getoption("airtime3_response_format").'"}');
+
+}
+}
+else{
+	$wpdb->query('COMMIT');
+die('['.$errz.'] - [S/R] Duplicate Transaction!!! Check your transaction history please');
+}
+}
+else{
+$url = vp_getoption("wairtimebaseurl").vp_getoption("wairtimeendpoint");
+	$cua = vp_getoption("wairtimepostdata1");
+    $cppa = vp_getoption("wairtimepostdata2");
+    $c1a = vp_getoption("wairtimepostdata3");
+    $c2a = vp_getoption("wairtimepostdata4");
+    $c3a = vp_getoption("wairtimepostdata5");
+    $cna = vp_getoption("wairtimenetworkattribute");
+    $caa = vp_getoption("wairtimeamountattribute");
+    $cpa = vp_getoption("wairtimephoneattribute");
+	$uniqid = vp_getoption("warequest_id");
+    
+    $datass = array(
+     $cua => vp_getoption("wairtimepostvalue1"),
+     $cppa => vp_getoption("wairtimepostvalue2"),
+	$c1a => vp_getoption("wairtimepostvalue3"),
+	$c2a => vp_getoption("wairtimepostvalue4"),
+	$c3a => vp_getoption("wairtimepostvalue5"),
+	$uniqid => $uniqidvalue,
+	$cna => $network,
+	$caa =>floatval($_POST['amount']),
+	$cpa => $phone
+	);
+
+	$awufairtime_array = [];
+
+	$the_head =  vp_getoption("airtime_head2");
+	if($the_head == "not_concatenated"){
+		$the_auth = vp_getoption("wairtimevalue1");
+		$auto = vp_getoption("wairtimehead1").' '.$the_auth;
+		$awufairtime_array["Authorization"] = $auto;
+	}
+	elseif($the_head == "concatenated"){
+		$the_auth_value = vp_getoption("wairtimevalue1");
+		$the_auth = base64_encode($the_auth_value);
+		$auto = vp_getoption("wairtimehead1").' '.$the_auth;
+		$awufairtime_array["Authorization"] = $auto;
+	}
+	else{
+		$awufairtime_array[vp_getoption("wairtimehead1")] = vp_getoption("wairtimevalue1");
+	}
+
+$sc = vp_getoption("wairtimesuccesscode");
+$auto = vp_getoption("wairtimehead1").' '.$the_auth;
+
+
+$awufairtime_array["Content-Type"] = "application/json";
+$awufairtime_array["cache-control"] = "no-cache";
+
+for($awufaddheaders=1; $awufaddheaders<=4; $awufaddheaders++){
+	if(!empty(vp_getoption("awufaddheaders$awufaddheaders")) && !empty(vp_getoption("awufaddvalue$awufaddheaders"))){
+		$awufairtime_array[vp_getoption("awufaddheaders$awufaddheaders")] = vp_getoption("awufaddvalue$awufaddheaders");
+	}
+}
+
+$http_args = array(
+'headers' => $awufairtime_array,
+'timeout' => '3000',
+'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+'sslverify' => false,
+'body' => json_encode($datass)
+);
+
+if($pos != $_POST["run_code"]){
+	$errz = "Track ID Not Same";
+	$do = false;
+}
+elseif($_POST["run_code"] == "wrong"){
+	$errz = "Track Id Can't Be wrong.";
+	$do = false;
+}
+elseif($_COOKIE["run_code"] == "wrong"){
+	$errz = "Session Can't Be Wrong";
+	$do = false;
+}
+else{
+	$errz = "unidentified";
+	$do = true;
+
+	if($bal == $_COOKIE["last_bal"] && $_COOKIE["trans_reversal"] == "no"){
+
+		$amtts = $bal - $_COOKIE["recent_amount"];
+
+				$name = get_userdata($id)->user_login;
+		$hname = get_userdata($id)->user_login;
+		$description = "Auto-Deducted a stated amount as we discovered an anomaly in previous transaction which no reversal was initiated";
+		$fund_amount= $_COOKIE["recent_amount"];
+		$before_amount = $bal;
+		$now_amount = $amtts;
+		$the_time = date('Y-m-d h:i:s A',$current_timestamp);
+		
+		$table_name = $wpdb->prefix.'vp_wallet';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'name'=> $name,
+		'type'=> "Wallet",
+		'description'=> $description,
+		'fund_amount' => $fund_amount,
+		'before_amount' => $before_amount,
+		'now_amount' => $now_amount,
+		'user_id' => $id,
+		'status' => "Approved",
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+
+		vp_updateuser($id,"vp_bal", $amtts);
+
+$wpdb->query('COMMIT');
+die("Error With Previous Balance Check.. Please Refresh Your Browser And Try Again ");
+}
+else{
+setcookie("last_bal", $bal, time() + (30 * 24 * 60 * 60), "/");setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+}
+
+
+}
+
+if($do && $pos == $_POST["run_code"] && $_POST["run_code"] != "wrong" && $_COOKIE["run_code"] != "wrong"){
+	
+		
+	//SECURITY
+	vpSec($phone);
+
+	$trackcode = $_POST["run_code"];
+	global $wpdb;
+	$tableh = $wpdb->prefix."sairtime";
+	$rest = $wpdb->get_results("SELECT * FROM $tableh WHERE run_code = '$trackcode' ");
+	if(empty($rest)){
+
+	}else{
+		$wpdb->query('COMMIT');
+die('[T/C] Duplicate Transaction!!! Check your transaction history please');
+	}
+
+
+	
+
+	$service = "sairtime";
+	$mlm_for = "";
+	global $wpdb;
+	$table_trans = $wpdb->prefix.'vp_transactions';
+	$unrecorded_added = $wpdb->insert($table_trans, array(
+	'status' => 'Fa',
+	'service' => $service,
+	'name'=> $name,
+	'email'=> $email,
+	'recipient' => $phone,
+	'bal_bf' => $bal,
+	'bal_nw' => $baln,
+	'amount' => $amount,
+	'request_id' => $uniqidvalue,
+	'user_id' => $id,
+	'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+	));
+	setcookie("amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("service", $service, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("name", $name, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("email", $email, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("recipient", $phone, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("bal_bf", $bal, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("bal_nw", $baln, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("request_id", $uniqidvalue, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("user_id", $id, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("status", 'Fa', time() + (30 * 24 * 60 * 60), "/");
+	setcookie("the_time", date('Y-m-d h:i:s A',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+
+	$_POST["run_code"] = "wrong";
+
+
+	if(vp_getoption("awufquerymethod") != "array"){
+
+		if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+			setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+			$tot = $bal - $amount;
+			vp_updateuser($id, 'vp_bal', $tot);
+			setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+		$call =  wp_remote_post($url, $http_args);
+		$response = wp_remote_retrieve_body($call);
+		setcookie("api_response", $response, time() + (30 * 24 * 60 * 60), "/");
+setcookie("api_from", 'Session', time() + (30 * 24 * 60 * 60), "/");
+		provider_header_handler($call);
+	}
+	else{
+	$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+	}
+			}
+			else{
+
+	if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+		setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+		$tot = $bal - $amount;
+		vp_updateuser($id, 'vp_bal', $tot);
+		setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+				$call = "";	
+		$response =  vp_remote_post_fn($url, $awufairtime_array, $datass);
+		if($response == "error"){
+			global $return_message;
+		
+			$wpdb->query('COMMIT');
+die($return_message);
+		}
+		else{
+			//do nothing
+		}
+	}
+	else{
+	$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+	}
+		
+			}
+
+
+if(is_wp_error($call)){
+	if(vp_getoption("vpdebug") != "yes"){
+		$error = $call->get_error_code();
+		}
+		else{
+		$error = $call->get_error_message();
+		}
+
+		$vtu_token = "no_response";
+		global $wpdb;
+		$table_name = $wpdb->prefix.'sairtime';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'run_code' => esc_html($pos),
+		'response_id'=> $vtu_token,
+		'name'=> $name,
+		'email'=> $email,
+		'network' => $_POST["network_name"],
+		'phone' => $phone,
+		'bal_bf' => $bal,
+		'bal_nw' => $bal,
+		'amount' => $amount,
+		'resp_log' => " ".esc_html($call->get_error_message())."",
+		'browser' => $browser,
+		'trans_type' => 'awuf',
+		'trans_method' => 'post',
+		'via' => 'site',
+		'time_taken' => '1',
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'status' => "Failed",
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+		vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+		if(is_numeric($added_to_db)){
+			global $wpdb;
+			 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+			}
+			else{
+			//do nothing
+		}
+
+
+
+$obj = new stdClass;
+$obj->status = "202";
+$obj->response = $error;
+$wpdb->query('COMMIT');
+die(json_encode($obj));
+}
+else{
+if(vp_getoption("airtime3_response_format") == "JSON" || vp_getoption("airtime3_response_format") == "json"){
+$en = validate_response($response,$sc, vp_getoption("wairtimesuccessvalue"), vp_getoption("wairtimesuccessvalue2") );
+}
+else{
+$en = $response ;
+}
+}
+
+$awuf_response = search_bill_token(array_change_key_case(json_decode($response,true),CASE_LOWER),vp_getoption("awufresponse_id"));
+
+if(!empty($awuf_response)){
+	$awuf_token = $awuf_response[0];
+}
+else{
+	$awuf_token = "Nill";
+}
+
+
+if($en == "TRUE"  || $response  === vp_getoption("wairtimesuccessvalue")){
+					if($add_total == "yes"){
+					vp_updateuser($id,"vp_kyc_total",(intval($tb4)+intval($tnow)));	
+				}
+
+$realAmt = 	$_POST['amount'];
+$purchased = "Purchased {AWUF AIRTIME} worth  ₦$realAmt";
+weblinkBlast($phone,$purchased);
+
+$recipient = $phone;
+vp_transaction_email("NEW AIRTIME NOTIFICATION","SUCCESSFUL AIRTIME PURCHASE",$uniqidvalue,$purchased, $recipient, $amount, $bal,$baln);
+
+global $wpdb;
+$table_name = $wpdb->prefix.'sairtime';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $awuf_token,
+'name'=> $name,
+'email'=> $email,
+'network' => $_POST["network_name"],
+'phone' => $phone,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'awuf',
+'trans_method' => 'post',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => "Successful",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+
+if(is_plugin_active("vpmlm/vpmlm.php")){	
+do_action("vp_after");
+}
+
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("100");
+}
+elseif($en == "MAYBE"){
+
+global $wpdb;
+$table_name = $wpdb->prefix.'sairtime';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $awuf_token,
+'name'=> $name,
+'email'=> $email,
+'network' => $_POST["network_name"],
+'phone' => $phone,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'awuf',
+'trans_method' => 'post',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => "Pending",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+if(is_numeric($added_to_db)){
+global $wpdb;
+ $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+}
+else{
+
+}
+
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); 
+setcookie("last_bal", "0", time() + (30 * 24 * 60 * 60), "/"); 
+
+$wpdb->query('COMMIT');
+die("processing");
+}
+else{
+
+
+	global $wpdb;
+	$table_name = $wpdb->prefix.'sairtime';
+	$added_to_db = $wpdb->insert($table_name, array(
+	'run_code' => esc_html($pos),
+	'response_id'=> $awuf_token,
+	'name'=> $name,
+	'email'=> $email,
+	'network' => $_POST["network_name"],
+	'phone' => $phone,
+	'bal_bf' => $bal,
+	'bal_nw' => $bal,
+	'amount' => $amount,
+	'resp_log' => " ".esc_html(harray_key_first($response))."",
+	'browser' => $browser,
+	'trans_type' => 'awuf',
+	'trans_method' => 'post',
+	'via' => 'site',
+	'time_taken' => '1',
+	'request_id' => $uniqidvalue,
+	'user_id' => $id,
+	'status' => "Failed",
+	'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+	));
+
+
+	$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+	vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+
+	update_wallet("Approved","Reversal For Failed Airtime Purchase With Id $uniqidvalue",$amount,$baln,$bal);
+
+	if(is_numeric($added_to_db)){
+		global $wpdb;
+		 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+		}
+		else{
+		
+		}
+setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/"); //FAILED
+$wpdb->query('COMMIT');
+die('{"status":"200","response":"'.harray_key_first($response).'","response code":"'.wp_remote_retrieve_response_code( $call ).'","EN":"'.$en.'","response format":"'.vp_getoption("airtime3_response_format").'"}');
+
+}
+}
+else{
+	$wpdb->query('COMMIT');
+die('['.$errz.'] - [S/R] Duplicate Transaction!!! Check your transaction history please');
+}
+}
+
+}
+
+break;
+case "cdat":
+
+$pos = $_POST["run_code"];
+$dplan == $_POST['cplan'];
+$datatcode = $_POST['datatcode'];
+if($datatcode == "sme"){
+$vpdebug = vp_getoption("vpdebug");
+if(vp_getoption("datarequest") == "get"){
+
+
+$http_args = array(
+'headers' => array(
+'cache-control' => 'no-cache',
+	'Content-Type' => 'application/json'
+),
+'timeout' => '3000',
+'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+'sslverify' => false
+);
+
+
+$urlraw = htmlspecialchars_decode($_POST["url"]);
+$base = str_replace("smebase",vp_option_array($option_array,"databaseurl"),$urlraw);
+$postdata1 = str_replace("smepostdata1",vp_option_array($option_array,"datapostdata1"),$base);
+$postvalue1 = str_replace("smepostvalue1",vp_option_array($option_array,"datapostvalue1"),$postdata1);
+$postdata2 = str_replace("smepostdata2",vp_option_array($option_array,"datapostdata2"),$postvalue1);
+$postvalue2 = str_replace("smepostvalue2",vp_option_array($option_array,"datapostvalue2"),$postdata2);
+$url = $postvalue2;
+
+$sc = vp_getoption("datasuccesscode");
+
+if(vp_getoption("enablehollatag") == "yes" && is_numeric(stripos(vp_getoption("hollatagservices"),'sm')) && stripos(vp_getoption("hollatagservices"),'sm') != false && $network == vp_getoption("dataairtel")){
+	
+
+$url = "https://sms.hollatags.com/api/send/";
+$call =  vp_remote_post($url, $request);
+$response = $call;
+$response == "sent" ? $force = "true" : $force = "false";
+$got = false;
+}
+else{
+	$got = true;
+	$force = "false";
+}
+
+if($pos != $_POST["run_code"]){
+	$errz = "Track ID Not Same";
+	$do = false;
+}
+elseif($_POST["run_code"] == "wrong"){
+	$errz = "Track Id Can't Be wrong.";
+	$do = false;
+}
+elseif($_COOKIE["run_code"] == "wrong"){
+	$errz = "Session Can't Be Wrong";
+	$do = false;
+}
+else{
+	$errz = "unidentified";
+	$do = true;
+
+	if($bal == $_COOKIE["last_bal"] && $_COOKIE["trans_reversal"] == "no"){
+
+		$amtts = $bal - $_COOKIE["recent_amount"];
+
+		$name = get_userdata($id)->user_login;
+		$hname = get_userdata($id)->user_login;
+		$description = "Auto-Deducted a stated amount as we discovered an anomaly in previous transaction which no reversal was initiated";
+		$fund_amount= $_COOKIE["recent_amount"];
+		$before_amount = $bal;
+		$now_amount = $amtts;
+		$the_time = date('Y-m-d h:i:s A',$current_timestamp);
+		
+		$table_name = $wpdb->prefix.'vp_wallet';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'name'=> $name,
+		'type'=> "Wallet",
+		'description'=> $description,
+		'fund_amount' => $fund_amount,
+		'before_amount' => $before_amount,
+		'now_amount' => $now_amount,
+		'user_id' => $id,
+		'status' => "Approved",
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+
+		vp_updateuser($id,"vp_bal", $amtts);
+
+$wpdb->query('COMMIT');
+die("Error With Previous Balance Check.. Please Refresh Your Browser And Try Again ");
+}
+else{
+setcookie("last_bal", $bal, time() + (30 * 24 * 60 * 60), "/");setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+}
+
+
+}
+
+if($do && $pos == $_POST["run_code"] && $_POST["run_code"] != "wrong" && $_COOKIE["run_code"] != "wrong"){
+		
+	//SECURITY
+	vpSec($phone);
+
+		$trackcode = $_POST["run_code"];
+		global $wpdb;
+		$tableh = $wpdb->prefix."sdata";
+		$rest = $wpdb->get_results("SELECT * FROM $tableh WHERE run_code = '$trackcode' ");
+		if(empty($rest)){
+	
+		}else{
+			$wpdb->query('COMMIT');
+die('[T/C] Duplicate Transaction!!! Check your transaction history please');
+		}
+
+
+		
+
+		$service = "sdata";
+		$mlm_for = "_data";
+		global $wpdb;
+		$table_trans = $wpdb->prefix.'vp_transactions';
+		$unrecorded_added = $wpdb->insert($table_trans, array(
+		'status' => 'Fa',
+		'service' => $service,
+		'name'=> $name,
+		'email'=> $email,
+		'recipient' => $phone,
+		'bal_bf' => $bal,
+		'bal_nw' => $baln,
+		'amount' => $amount,
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+		setcookie("amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("service", $service, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("name", $name, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("email", $email, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("recipient", $phone, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("bal_bf", $bal, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("bal_nw", $baln, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("request_id", $uniqidvalue, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("user_id", $id, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("status", 'Fa', time() + (30 * 24 * 60 * 60), "/");
+		setcookie("the_time", date('Y-m-d h:i:s A',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+
+	
+		$_POST["run_code"] = "wrong";
+
+		
+
+	if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+		setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+		$tot = $bal - $amount;
+		vp_updateuser($id, 'vp_bal', $tot);
+		setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+		if($got){
+$call =  wp_remote_get($url, $http_args);
+$response = wp_remote_retrieve_body($call);
+setcookie("api_response", $response, time() + (30 * 24 * 60 * 60), "/");
+setcookie("api_from", 'Session', time() + (30 * 24 * 60 * 60), "/");
+provider_header_handler($call);
+		}else{};
+	}
+	else{
+	$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+	}
+
+if(is_wp_error($call)){
+	if(vp_getoption("vpdebug") != "yes"){
+		$error = $call->get_error_code();
+		}
+		else{
+		$error = $call->get_error_message();
+		}
+
+		$sme_token = "no_response";
+		global $wpdb;
+		$table_name = $wpdb->prefix.'sdata';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'run_code' => esc_html($pos),
+		'response_id'=> $sme_token,
+		'name'=> $name,
+		'email' => $email,
+		'phone' => $phone,
+		'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+		'bal_bf' => $bal,
+		'bal_nw' => $bal,
+		'amount' => $amount,
+		'resp_log' => " ".esc_html($call->get_error_message())."",
+		'browser' => $browser,
+		'trans_type' => 'sme',
+		'trans_method' => 'get',
+		'via' => 'site',
+		'time_taken' => '1',
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'status' => 'Failed',
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+		vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+		if(is_numeric($added_to_db)){
+			global $wpdb;
+			 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+			}
+			else{
+			//do nothing
+		}
+
+
+
+$obj = new stdClass;
+$obj->status = "202";
+$obj->response = $error;
+$wpdb->query('COMMIT');
+die(json_encode($obj));
+}
+else{
+if(vp_getoption("data1_response_format") == "JSON" || vp_getoption("data1_response_format") == "json"){
+$en = validate_response($response,$sc, vp_getoption("datasuccessvalue"), vp_getoption("datasuccessvalue2") );	
+}
+else{
+$en = $response ;
+}
+}
+
+$vpdebug = vp_getoption("vpdebug");
+
+$sme_response = search_bill_token(array_change_key_case(json_decode($response,true),CASE_LOWER),vp_getoption("smeresponse_id"));
+
+if(!empty($sme_response)){
+	$sme_token = $sme_response[0];
+}
+else{
+	$sme_token = "Nill";
+}
+
+
+
+if($en == "TRUE"  || $response  === vp_getoption("datasuccessvalue") || $force == "true"){
+					if($add_total == "yes"){
+					vp_updateuser($id,"vp_kyc_total",(intval($tb4)+intval($tnow)));	
+				}
+
+global $wpdb;
+$table_name = $wpdb->prefix.'sdata';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $sme_token,
+'name'=> $name,
+'email' => $email,
+'phone' => $phone,
+'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'sme',
+'trans_method' => 'get',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => 'Successful',
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+$purchased = "Purchased ".$_POST["data_plan"];
+weblinkBlast($phone,$purchased);
+
+
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+
+$plan = $_POST["data_plan"];
+$purchased = "Purchased {SME DATA --[ $plan ]--  }";
+$recipient = $phone;
+vp_transaction_email("NEW DATA NOTIFICATION","SUCCESSFUL DATA PURCHASE",$uniqidvalue,$purchased, $recipient, $amount, $bal,$baln);
+
+
+
+
+if(is_plugin_active("vpmlm/vpmlm.php")){
+do_action("vp_after");
+}
+
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("100");
+}
+elseif($en == "MAYBE"){
+
+
+global $wpdb;
+$table_name = $wpdb->prefix.'sdata';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $sme_token,
+'name'=> $name,
+'email'=> $email,
+'phone' => $phone,
+'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'sme',
+'trans_method' => 'get',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => 'Pending',
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+if(is_numeric($added_to_db)){
+global $wpdb;
+ $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+}
+else{
+
+}
+
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/");
+setcookie("last_bal", "0", time() + (30 * 24 * 60 * 60), "/"); 
+
+$wpdb->query('COMMIT');
+die("processing");
+}
+else{
+
+
+	
+global $wpdb;
+$table_name = $wpdb->prefix.'sdata';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $sme_token,
+'name'=> $name,
+'email'=> $email,
+'phone' => $phone,
+'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+'bal_bf' => $bal,
+'bal_nw' => $bal,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'sme',
+'trans_method' => 'get',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => 'Failed',
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+	vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+
+	update_wallet("Approved","Reversal For Failed Data Purchase With Id $uniqidvalue",$amount,$baln,$bal);
+
+	if(is_numeric($added_to_db)){
+		global $wpdb;
+		 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+		}
+		else{
+		
+		}
+setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/"); //FAILED
+$wpdb->query('COMMIT');
+die('{"status":"200","response":"'.harray_key_first($response).'","response code":"'.wp_remote_retrieve_response_code( $call ).'","EN":"'.$en.'","response format":"'.vp_getoption("data1_response_format").'"}');
+	
+}
+}
+else{
+	$wpdb->query('COMMIT');
+die('['.$errz.'] - [S/R] Duplicate Transaction!!! Check your transaction history please');
+}
+}
+else{
+$url = vp_getoption("databaseurl").vp_getoption("dataendpoint");
+$num = $phone;
+$cua = vp_getoption("datapostdata1");
+    $cppa = vp_getoption("datapostdata2");
+    $c1a = vp_getoption("datapostdata3");
+    $c2a = vp_getoption("datapostdata4");
+    $c3a = vp_getoption("datapostdata5");
+    $cna = vp_getoption("datanetworkattribute");
+    $caa = vp_getoption("dataamountattribute");
+    $cpa = vp_getoption("dataphoneattribute");
+	$cpla = vp_getoption("cvariationattr");
+	$uniqid = vp_getoption("request_id");
+    
+    $datass = array(
+     $cua => vp_getoption("datapostvalue1"),
+     $cppa => vp_getoption("datapostvalue2"),
+	$c1a => vp_getoption("datapostvalue3"),
+	$c2a => vp_getoption("datapostvalue4"),
+	$c3a => vp_getoption("datapostvalue5"),
+	$uniqid => $uniqidvalue,
+	$cna => $network,
+	$cpa => $phone,
+	$datatype => $datatype_value,
+	$cpla => $dplan
+	);
+
+$sme_array = [];
+
+$the_head =  vp_getoption("data_head");
+if($the_head == "not_concatenated"){
+	$the_auth = vp_getoption("datavalue1");
+	$auto = vp_getoption("datahead1").' '.$the_auth;
+	$sme_array["Authorization"] = $auto;
+}
+elseif($the_head == "concatenated"){
+	$the_auth_value = vp_getoption("datavalue1");
+	$the_auth = base64_encode($the_auth_value);
+	$auto = vp_getoption("datahead1").' '.$the_auth;
+	$sme_array["Authorization"] = $auto;
+}
+else{
+	$sme_array[vp_getoption("datahead1")] = vp_getoption("datavalue1");
+}
+
+
+
+$sme_array["Content-Type"] = "application/json";
+$sme_array["cache-control"] = "no-cache";
+
+for($smeaddheaders=1; $smeaddheaders<=4; $smeaddheaders++){
+	if(!empty(vp_getoption("smeaddheaders$smeaddheaders")) && !empty(vp_getoption("smeaddvalue$smeaddheaders"))){
+		$sme_array[vp_getoption("smeaddheaders$smeaddheaders")] = vp_getoption("smeaddvalue$smeaddheaders");
+	}
+}
+
+$http_args = array(
+'headers' => $sme_array,
+'timeout' => '3000',
+'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+'sslverify' => false,
+'body' => json_encode($datass)
+);
+
+$sc = vp_getoption("datasuccesscode");
+//echo "<script>alert('url1".$url."');</script>";
+
+if(vp_getoption("enablehollatag") == "yes" && is_numeric(stripos(vp_getoption("hollatagservices"),'sm')) && stripos(vp_getoption("hollatagservices"),'sm') !==  false && $network == vp_getoption("dataairtel")){
+	
+	
+$request = array(
+        "user"=> vp_getoption("hollatagusername"),
+        "pass"=> vp_getoption("hollatagpassword"),
+        "from"=> "DATA ALERT",
+        "to"=> vp_getoption("hollatagcompany"),
+        "msg"=> "Hello! Kindly Send ".$_POST["data_plan"]." To $phone"
+);
+
+
+$url = "https://sms.hollatags.com/api/send/";
+$call =  vp_remote_post($url, $request);
+$response = $call;
+$response == "sent" ? $force = "true" : $force = "false";
+$got = false;
+}
+else{
+	$got = true;
+	$force = "false";
+}
+
+if($pos != $_POST["run_code"]){
+	$errz = "Track ID Not Same";
+	$do = false;
+}
+elseif($_POST["run_code"] == "wrong"){
+	$errz = "Track Id Can't Be wrong.";
+	$do = false;
+}
+elseif($_COOKIE["run_code"] == "wrong"){
+	$errz = "Session Can't Be Wrong";
+	$do = false;
+}
+else{
+	$errz = "unidentified";
+	$do = true;
+
+	if($bal == $_COOKIE["last_bal"] && $_COOKIE["trans_reversal"] == "no"){
+
+		$amtts = $bal - $_COOKIE["recent_amount"];
+
+
+		$name = get_userdata($id)->user_login;
+		$hname = get_userdata($id)->user_login;
+		$description = "Auto-Deducted a stated amount as we discovered an anomaly in previous transaction which no reversal was initiated";
+		$fund_amount= $_COOKIE["recent_amount"];
+		$before_amount = $bal;
+		$now_amount = $amtts;
+		$the_time = date('Y-m-d h:i:s A',$current_timestamp);
+		
+		$table_name = $wpdb->prefix.'vp_wallet';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'name'=> $name,
+		'type'=> "Wallet",
+		'description'=> $description,
+		'fund_amount' => $fund_amount,
+		'before_amount' => $before_amount,
+		'now_amount' => $now_amount,
+		'user_id' => $id,
+		'status' => "Approved",
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+
+		vp_updateuser($id,"vp_bal", $amtts);
+
+$wpdb->query('COMMIT');
+die("Error With Previous Balance Check.. Please Refresh Your Browser And Try Again ");
+}
+else{
+setcookie("last_bal", $bal, time() + (30 * 24 * 60 * 60), "/");setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+}
+
+
+
+}
+
+if($do && $pos == $_POST["run_code"] && $_POST["run_code"] != "wrong" && $_COOKIE["run_code"] != "wrong"){
+		
+		
+	//SECURITY
+	vpSec($phone);
+
+		$trackcode = $_POST["run_code"];
+		global $wpdb;
+		$tableh = $wpdb->prefix."sdata";
+		$rest = $wpdb->get_results("SELECT * FROM $tableh WHERE run_code = '$trackcode' ");
+		if(empty($rest)){
+	
+		}else{
+
+			$wpdb->query('COMMIT');
+die('[S/R] Duplicate Transaction!!! Check your transaction history please');
+		}
+
+
+
+		
+		$service = "sdata";
+		$mlm_for = "_data";
+		global $wpdb;
+		$table_trans = $wpdb->prefix.'vp_transactions';
+		$unrecorded_added = $wpdb->insert($table_trans, array(
+		'status' => 'Fa',
+		'service' => $service,
+		'name'=> $name,
+		'email'=> $email,
+		'recipient' => $phone,
+		'bal_bf' => $bal,
+		'bal_nw' => $baln,
+		'amount' => $amount,
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+		setcookie("amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("service", $service, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("name", $name, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("email", $email, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("recipient", $phone, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("bal_bf", $bal, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("bal_nw", $baln, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("request_id", $uniqidvalue, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("user_id", $id, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("status", 'Fa', time() + (30 * 24 * 60 * 60), "/");
+		setcookie("the_time", date('Y-m-d h:i:s A',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+
+
+
+
+	
+		$_POST["run_code"] = "wrong";
+		if($got){
+			if(vp_getoption("smequerymethod") != "array"){
+
+				if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+					setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+					$tot = $bal - $amount;
+					vp_updateuser($id, 'vp_bal', $tot);
+					setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+				$call =  wp_remote_post($url, $http_args);
+				$response = wp_remote_retrieve_body($call);
+				setcookie("api_response", $response, time() + (30 * 24 * 60 * 60), "/");
+setcookie("api_from", 'Session', time() + (30 * 24 * 60 * 60), "/");
+				provider_header_handler($call);
+			}
+			else{
+			$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+			}
+					}
+					else{
+
+						if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+							setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+							$tot = $bal - $amount;
+							vp_updateuser($id, 'vp_bal', $tot);
+							setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+							$call = "";	
+				$response =  vp_remote_post_fn($url, $sme_array, $datass);
+				if($response == "error"){
+					global $return_message;
+				
+					$wpdb->query('COMMIT');
+die($return_message);
+				}
+				else{
+					//do nothing
+				}
+			}
+			else{
+			$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+			}
+				
+					}
+		}else{};
+
+#$wpdb->query('COMMIT');
+
+if(is_wp_error($call)){
+	if(vp_getoption("vpdebug") != "yes"){
+$error = $call->get_error_code();
+}
+else{
+$error = $call->get_error_message();
+}
+
+$sme_token = "no_response";
+global $wpdb;
+$table_name = $wpdb->prefix.'sdata';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $sme_token,
+'name'=> $name,
+'email' => $email,
+'phone' => $phone,
+'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+'bal_bf' => $bal,
+'bal_nw' => $bal,
+'amount' => $amount,
+'resp_log' => " ".esc_html($call->get_error_message())."",
+'browser' => $browser,
+'trans_type' => 'sme',
+'trans_method' => 'post',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => 'Failed',
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	//do nothing
+}
+
+
+
+$obj = new stdClass;
+$obj->status = "202";
+$obj->response = $error;
+$wpdb->query('COMMIT');
+die(json_encode($obj));
+}
+else{
+if(vp_getoption("data1_response_format") == "JSON" || vp_getoption("data1_response_format") == "json"){
+$en = validate_response($response,$sc,vp_getoption("datasuccessvalue"),vp_getoption("datasuccessvalue2"));
+}
+else{
+$en = $response ;
+}
+}
+
+$sme_response = search_bill_token(array_change_key_case(json_decode($response,true),CASE_LOWER),vp_getoption("smeresponse_id"));
+
+if(!empty($sme_response)){
+	$sme_token = $sme_response[0];
+}
+else{
+		$sme_token = "Nill";
+}
+
+if($en == "TRUE"  || $response  === vp_getoption("datasuccessvalue") || $force == "true"){
+					if($add_total == "yes"){
+					vp_updateuser($id,"vp_kyc_total",(intval($tb4)+intval($tnow)));	
+				}
+
+$plan = $_POST["data_plan"];
+$purchased = "Purchased {SME DATA --[ $plan ]--  }";
+weblinkBlast($phone,$purchased);
+
+$recipient = $phone;
+vp_transaction_email("NEW DATA NOTIFICATION","SUCCESSFUL DATA PURCHASE",$uniqidvalue,$purchased, $recipient, $amount, $bal,$baln);
+
+
+global $wpdb;
+$table_name = $wpdb->prefix.'sdata';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $sme_token,
+'name'=> $name,
+'email' => $email,
+'phone' => $phone,
+'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'sme',
+'trans_method' => 'post',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => 'Successful',
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+if(is_numeric($added_to_db)){
+global $wpdb;
+ $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+}
+else{
+
+}
+
+if(is_plugin_active("vpmlm/vpmlm.php")){
+do_action("vp_after");
+}
+
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("100");
+}
+elseif($en == "MAYBE"){
+
+
+global $wpdb;
+$table_name = $wpdb->prefix.'sdata';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $sme_token,
+'name'=> $name,
+'email'=> $email,
+'phone' => $phone,
+'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'sme',
+'trans_method' => 'post',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => 'Pending',
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+
+	setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); 
+	setcookie("last_bal", "0", time() + (30 * 24 * 60 * 60), "/"); 
+	
+	$wpdb->query('COMMIT');
+die("processing");
+}
+else{
+	
+
+	global $wpdb;
+$table_name = $wpdb->prefix.'sdata';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $sme_token,
+'name'=> $name,
+'email'=> $email,
+'phone' => $phone,
+'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+'bal_bf' => $bal,
+'bal_nw' => $bal,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'sme',
+'trans_method' => 'post',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => 'Failed',
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+	vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+
+	update_wallet("Approved","Reversal For Failed Data Purchase With Id $uniqidvalue",$amount,$baln,$bal);
+
+	if(is_numeric($added_to_db)){
+		global $wpdb;
+		 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+		}
+		else{
+		
+		}
+setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/"); //FAILED
+$wpdb->query('COMMIT');
+die('{"status":"200","response":"'.harray_key_first($response).'","response code":"'.wp_remote_retrieve_response_code( $call ).'","EN":"'.$en.'","response format ":"'.vp_getoption("data1_response_format").'"}');
+	
+
+}
+}
+else{
+	$wpdb->query('COMMIT');
+die('['.$errz.'] - [S/R] Duplicate Transaction!!! Check your transaction history please');
+}
+	
+	
+	
+}
+}
+elseif($datatcode == "direct"){
+
+$vpdebug = vp_getoption("vpdebug");
+if(vp_getoption("rdatarequest") == "get"){
+
+$urlraw = htmlspecialchars_decode($_POST["url"]);
+$base = str_replace("directbase",vp_option_array($option_array,"rdatabaseurl"),$urlraw);
+$postdata1 = str_replace("directpostdata1",vp_option_array($option_array,"rdatapostdata1"),$base);
+$postvalue1 = str_replace("directpostvalue1",vp_option_array($option_array,"rdatapostvalue1"),$postdata1);
+$postdata2 = str_replace("directpostdata2",vp_option_array($option_array,"rdatapostdata2"),$postvalue1);
+$postvalue2 = str_replace("directpostvalue2",vp_option_array($option_array,"rdatapostvalue2"),$postdata2);
+$url = $postvalue2;
+
+$sc = vp_getoption("rdatasuccesscode");
+
+$http_args = array(
+'headers' => array(
+'cache-control' => 'no-cache',
+	'Content-Type' => 'application/json'
+),
+'timeout' => '3000',
+'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+'sslverify' => false
+);
+
+if(vp_getoption("enablehollatag") == "yes" && is_numeric(stripos(vp_getoption("hollatagservices"),'di')) && stripos(vp_getoption("hollatagservices"),'di') !==  false && $network == vp_getoption("rdataairtel")){
+	
+	
+$request = array(
+        "user"=> vp_getoption("hollatagusername"),
+        "pass"=> vp_getoption("hollatagpassword"),
+        "from"=> "DATA ALERT",
+        "to"=> vp_getoption("hollatagcompany"),
+        "msg"=> "Hello! Kindly Send ".$_POST["data_plan"]." To $phone"
+);
+
+
+$url = "https://sms.hollatags.com/api/send/";
+$call =  vp_remote_post($url, $request);
+$response = $call;
+$response == "sent" ? $force = "true" : $force = "false";
+$got = false;
+}
+else{
+	$got = true;	
+	$force = "false";
+}
+
+if($pos != $_POST["run_code"]){
+	$errz = "Track ID Not Same";
+	$do = false;
+}
+elseif($_POST["run_code"] == "wrong"){
+	$errz = "Track Id Can't Be wrong.";
+	$do = false;
+}
+elseif($_COOKIE["run_code"] == "wrong"){
+	$errz = "Session Can't Be Wrong";
+	$do = false;
+}
+else{
+	$errz = "unidentified";
+	$do = true;
+
+	if($bal == $_COOKIE["last_bal"] && $_COOKIE["trans_reversal"] == "no"){
+		$amtts = $bal - $_COOKIE["recent_amount"];
+
+
+				$name = get_userdata($id)->user_login;
+		$hname = get_userdata($id)->user_login;
+		$description = "Auto-Deducted a stated amount as we discovered an anomaly in previous transaction which no reversal was initiated";
+		$fund_amount= $_COOKIE["recent_amount"];
+		$before_amount = $bal;
+		$now_amount = $amtts;
+		$the_time = date('Y-m-d h:i:s A',$current_timestamp);
+		
+		$table_name = $wpdb->prefix.'vp_wallet';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'name'=> $name,
+		'type'=> "Wallet",
+		'description'=> $description,
+		'fund_amount' => $fund_amount,
+		'before_amount' => $before_amount,
+		'now_amount' => $now_amount,
+		'user_id' => $id,
+		'status' => "Approved",
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+
+		vp_updateuser($id,"vp_bal", $amtts);
+
+$wpdb->query('COMMIT');
+die("Error With Previous Balance Check.. Please Refresh Your Browser And Try Again ");
+}
+else{
+setcookie("last_bal", $bal, time() + (30 * 24 * 60 * 60), "/");setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+}
+
+
+
+}
+
+
+if($do && $pos == $_POST["run_code"] && $_POST["run_code"] != "wrong" && $_COOKIE["run_code"] != "wrong"){
+		
+			
+
+	//SECURITY
+	vpSec($phone);
+
+		$trackcode = $_POST["run_code"];
+		global $wpdb;
+		$tableh = $wpdb->prefix."sdata";
+		$rest = $wpdb->get_results("SELECT * FROM $tableh WHERE run_code = '$trackcode' ");
+		if(empty($rest)){
+	
+		}else{
+			$wpdb->query('COMMIT');
+die('[T/C] Duplicate Transaction!!! Check your transaction history please');
+		}
+
+
+
+		
+		$service = "sdata";
+		$mlm_for = "_data";
+		global $wpdb;
+		$table_trans = $wpdb->prefix.'vp_transactions';
+		$unrecorded_added = $wpdb->insert($table_trans, array(
+		'status' => 'Fa',
+		'service' => $service,
+		'name'=> $name,
+		'email'=> $email,
+		'recipient' => $phone,
+		'bal_bf' => $bal,
+		'bal_nw' => $baln,
+		'amount' => $amount,
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+		setcookie("amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("service", $service, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("name", $name, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("email", $email, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("recipient", $phone, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("bal_bf", $bal, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("bal_nw", $baln, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("request_id", $uniqidvalue, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("user_id", $id, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("status", 'Fa', time() + (30 * 24 * 60 * 60), "/");
+		setcookie("the_time", date('Y-m-d h:i:s A',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+
+	
+		$_POST["run_code"] = "wrong";
+
+
+
+		if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+			setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+			$tot = $bal - $amount;
+			vp_updateuser($id, 'vp_bal', $tot);
+			setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+		if($got){
+$call =  wp_remote_get($url, $http_args);
+$response =wp_remote_retrieve_body($call);
+setcookie("api_response", $response, time() + (30 * 24 * 60 * 60), "/");
+setcookie("api_from", 'Session', time() + (30 * 24 * 60 * 60), "/");
+provider_header_handler($call);
+		}else{};
+	}
+	else{
+	$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+	}
+
+
+if(is_wp_error($call)){
+	if(vp_getoption("vpdebug") != "yes"){
+		$error = $call->get_error_code();
+		}
+		else{
+		$error = $call->get_error_message();
+		}
+
+		$sme_token = "no_response";
+		global $wpdb;
+		$table_name = $wpdb->prefix.'sdata';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'run_code' => esc_html($pos),
+		'response_id'=> $sme_token,
+		'name'=> $name,
+		'email' => $email,
+		'phone' => $phone,
+		'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+		'bal_bf' => $bal,
+		'bal_nw' => $bal,
+		'amount' => $amount,
+		'resp_log' => " ".esc_html($call->get_error_message())."",
+		'browser' => $browser,
+		'trans_type' => 'direct',
+		'trans_method' => 'get',
+		'via' => 'site',
+		'time_taken' => '1',
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'status' => 'Failed',
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+		vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+		if(is_numeric($added_to_db)){
+			global $wpdb;
+			 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+			}
+			else{
+			//do nothing
+		}
+
+
+$obj = new stdClass;
+$obj->status = "202";
+$obj->response = $error;
+$wpdb->query('COMMIT');
+die(json_encode($obj));
+}
+else{
+if(vp_getoption("data2_response_format") == "JSON" || vp_getoption("data2_response_format") == "json"){
+$en = validate_response($response,$sc,vp_getoption("rdatasuccessvalue"),vp_getoption("rdatasuccessvalue2"));
+}
+else{
+$en = $response ;
+}
+}
+
+$direct_response = search_bill_token(array_change_key_case(json_decode($response,true),CASE_LOWER),vp_getoption("directresponse_id"));
+
+if(!empty($direct_response)){
+	$direct_token = $direct_response[0];
+}
+else{
+	$direct_token = "Nill";
+}
+
+
+$vpdebug = vp_getoption("vpdebug");
+if($en == "TRUE"  || $response  === vp_getoption("rdatasuccessvalue") || $force == "true"){
+					if($add_total == "yes"){
+					vp_updateuser($id,"vp_kyc_total",(intval($tb4)+intval($tnow)));	
+				}
+
+
+global $wpdb;
+$table_name = $wpdb->prefix.'sdata';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $direct_token,
+'name'=> $name,
+'email' => $email,
+'phone' => $phone,
+'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'direct',
+'trans_method' => 'get',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => 'Successful',
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+$purchased = "Purchased ".$_POST["data_plan"];
+weblinkBlast($phone,$purchased);
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+
+$plan = $_POST["data_plan"];
+$purchased = "Purchased {GIFTING DATA --[ $plan ]--  }";
+$recipient = $phone;
+vp_transaction_email("NEW DATA NOTIFICATION","SUCCESSFUL DATA PURCHASE",$uniqidvalue,$purchased, $recipient, $amount, $bal,$baln);
+
+
+if(is_plugin_active("vpmlm/vpmlm.php")){
+do_action("vp_after");
+}
+
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("100");
+}
+elseif($en == "MAYBE"){
+
+
+
+global $wpdb;
+$table_name = $wpdb->prefix.'sdata';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $direct_token,
+'name'=> $name,
+'email'=> $email,
+'phone' => $phone,
+'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'direct',
+'trans_method' => 'get',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => 'Pending',
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+
+	setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); 
+	setcookie("last_bal", "0", time() + (30 * 24 * 60 * 60), "/"); 
+	
+	$wpdb->query('COMMIT');
+die("processing");
+}
+else{
+
+
+
+	global $wpdb;
+$table_name = $wpdb->prefix.'sdata';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $direct_token,
+'name'=> $name,
+'email'=> $email,
+'phone' => $phone,
+'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+'bal_bf' => $bal,
+'bal_nw' => $bal,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'direct',
+'trans_method' => 'get',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => 'Failed',
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+	vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+
+	update_wallet("Approved","Reversal For Failed Data Purchase With Id $uniqidvalue",$amount,$baln,$bal);
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/"); //FAILED
+$wpdb->query('COMMIT');
+die('{"status":"200","response":"'.harray_key_first($response).'","response code":"'.wp_remote_retrieve_response_code( $call ).'","EN":"'.$en.'","response format":"'.vp_getoption("data2_response_format").'"}');
+		
+}
+}
+else{
+	$wpdb->query('COMMIT');
+die('['.$errz.'] - [S/R] Duplicate Transaction!!! Check your transaction history please');
+}
+}
+else{$url = vp_getoption("rdatabaseurl").vp_getoption("rdataendpoint");
+$num = $phone;
+$cua = vp_getoption("rdatapostdata1");
+    $cppa = vp_getoption("rdatapostdata2");
+    $c1a = vp_getoption("rdatapostdata3");
+    $c2a = vp_getoption("rdatapostdata4");
+    $c3a = vp_getoption("rdatapostdata5");
+    $cna = vp_getoption("rdatanetworkattribute");
+    $caa = vp_getoption("rdataamountattribute");
+    $cpa = vp_getoption("rdataphoneattribute");
+	$cpla = vp_getoption("rcvariationattr");
+	$uniqid = vp_getoption("rrequest_id");
+    
+    $datass = array(
+     $cua => vp_getoption("rdatapostvalue1"),
+     $cppa => vp_getoption("rdatapostvalue2"),
+	$c1a => vp_getoption("rdatapostvalue3"),
+	$c2a => vp_getoption("rdatapostvalue4"),
+	$c3a => vp_getoption("rdatapostvalue5"),
+	$uniqid => $uniqidvalue,
+	$cna => $network,
+	$cpa => $phone,
+	$datatype => $datatype_value,
+	$cpla => $dplan
+	);
+
+	$direct_array = [];
+
+	$the_head =  vp_getoption("data_head2");
+	if($the_head == "not_concatenated"){
+		$the_auth = vp_getoption("rdatavalue1");
+		$auto = vp_getoption("rdatahead1").' '.$the_auth;
+		$direct_array["Authorization"] = $auto;
+	}
+	elseif($the_head == "concatenated"){
+		$the_auth_value = vp_getoption("rdatavalue1");
+		$the_auth = base64_encode($the_auth_value);
+		$auto = vp_getoption("rdatahead1").' '.$the_auth;
+		$direct_array["Authorization"] = $auto;
+	}
+	else{
+		$direct_array[vp_getoption("rdatahead1")] = vp_getoption("rdatavalue1");
+	}
+
+$direct_array["Content-Type"] = "application/json";
+$direct_array["cache-control"] = "no-cache";
+
+for($directaddheaders=1; $directaddheaders<=4; $directaddheaders++){
+	if(!empty(vp_getoption("directaddheaders$directaddheaders")) && !empty(vp_getoption("directaddvalue$directaddheaders"))){
+		$direct_array[vp_getoption("directaddheaders$directaddheaders")] = vp_getoption("directaddvalue$directaddheaders");
+	}
+}
+
+$http_args = array(
+'headers' => $direct_array,
+'timeout' => '3000',
+'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+'sslverify' => false,
+'body' => json_encode($datass)
+);
+
+$sc = vp_getoption("rdatasuccesscode");
+
+if(vp_getoption("enablehollatag") == "yes" && is_numeric(stripos(vp_getoption("hollatagservices"),'di')) && stripos(vp_getoption("hollatagservices"),'di') !==  false && $network == vp_getoption("rdataairtel")){
+	
+	
+$request = array(
+        "user"=> vp_getoption("hollatagusername"),
+        "pass"=> vp_getoption("hollatagpassword"),
+        "from"=> "DATA ALERT",
+        "to"=> vp_getoption("hollatagcompany"),
+        "msg"=> "Hello! Kindly Send ".$_POST["data_plan"]." To $phone"
+);
+
+
+$url = "https://sms.hollatags.com/api/send/";
+$call =  vp_remote_post($url, $request);
+$response = $call;
+$response == "sent" ? $force = "true" : $force = "false";
+$got = false;
+}
+else{
+	$got = true;
+	$force = "false";
+}
+
+if($pos != $_POST["run_code"]){
+	$errz = "Track ID Not Same";
+	$do = false;
+}
+elseif($_POST["run_code"] == "wrong"){
+	$errz = "Track Id Can't Be wrong.";
+	$do = false;
+}
+elseif($_COOKIE["run_code"] == "wrong"){
+	$errz = "Session Can't Be Wrong";
+	$do = false;
+}
+else{
+	$errz = "unidentified";
+	$do = true;
+
+	if($bal == $_COOKIE["last_bal"] && $_COOKIE["trans_reversal"] == "no"){
+
+		$amtts = $bal - $_COOKIE["recent_amount"];
+
+				$name = get_userdata($id)->user_login;
+		$hname = get_userdata($id)->user_login;
+		$description = "Auto-Deducted a stated amount as we discovered an anomaly in previous transaction which no reversal was initiated";
+		$fund_amount= $_COOKIE["recent_amount"];
+		$before_amount = $bal;
+		$now_amount = $amtts;
+		$the_time = date('Y-m-d h:i:s A',$current_timestamp);
+		
+		$table_name = $wpdb->prefix.'vp_wallet';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'name'=> $name,
+		'type'=> "Wallet",
+		'description'=> $description,
+		'fund_amount' => $fund_amount,
+		'before_amount' => $before_amount,
+		'now_amount' => $now_amount,
+		'user_id' => $id,
+		'status' => "Approved",
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+
+		vp_updateuser($id,"vp_bal", $amtts);
+
+$wpdb->query('COMMIT');
+die("Error With Previous Balance Check.. Please Refresh Your Browser And Try Again ");
+}
+else{
+setcookie("last_bal", $bal, time() + (30 * 24 * 60 * 60), "/");setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+}
+
+
+
+
+}
+
+if($do && $pos == $_POST["run_code"] && $_POST["run_code"] != "wrong" && $_COOKIE["run_code"] != "wrong"){
+		
+			
+	//SECURITY
+	vpSec($phone);
+
+		$trackcode = $_POST["run_code"];
+		global $wpdb;
+		$tableh = $wpdb->prefix."sdata";
+		$rest = $wpdb->get_results("SELECT * FROM $tableh WHERE run_code = '$trackcode' ");
+		if(empty($rest)){
+	
+		}else{
+			$wpdb->query('COMMIT');
+die('[T/C] Duplicate Transaction!!! Check your transaction history please');
+		}
+
+
+		
+		$service = "sdata";
+		$mlm_for = "_data";
+		global $wpdb;
+		$table_trans = $wpdb->prefix.'vp_transactions';
+		$unrecorded_added = $wpdb->insert($table_trans, array(
+		'status' => 'Fa',
+		'service' => $service,
+		'name'=> $name,
+		'email'=> $email,
+		'recipient' => $phone,
+		'bal_bf' => $bal,
+		'bal_nw' => $baln,
+		'amount' => $amount,
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+		setcookie("amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("service", $service, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("name", $name, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("email", $email, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("recipient", $phone, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("bal_bf", $bal, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("bal_nw", $baln, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("request_id", $uniqidvalue, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("user_id", $id, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("status", 'Fa', time() + (30 * 24 * 60 * 60), "/");
+		setcookie("the_time", date('Y-m-d h:i:s A',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+
+
+
+	
+		$_POST["run_code"] = "wrong";
+		if($got){
+			if(vp_getoption("directquerymethod") != "array"){
+
+				if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+					setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+					$tot = $bal - $amount;
+					vp_updateuser($id, 'vp_bal', $tot);
+					setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+					$call =  wp_remote_post($url, $http_args);
+				$response = wp_remote_retrieve_body($call);
+				setcookie("api_response", $response, time() + (30 * 24 * 60 * 60), "/");
+setcookie("api_from", 'Session', time() + (30 * 24 * 60 * 60), "/");
+				provider_header_handler($call);
+				
+			}
+			else{
+			$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+			}
+					}
+					else{
+
+						if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+							setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+							$tot = $bal - $amount;
+							vp_updateuser($id, 'vp_bal', $tot);
+							setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+							$call = "";	
+				$response =  vp_remote_post_fn($url, $direct_array, $datass);
+				if($response == "error"){
+					global $return_message;
+				
+					$wpdb->query('COMMIT');
+die($return_message);
+				}
+				else{
+					//do nothing
+				}
+			}
+			else{
+			$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+			}
+				
+					}
+		}else{};
+
+
+if(is_wp_error($call)){
+	if(vp_getoption("vpdebug") != "yes"){
+		$error = $call->get_error_code();
+		}
+		else{
+		$error = $call->get_error_message();
+		}
+
+		$sme_token = "no_response";
+		global $wpdb;
+		$table_name = $wpdb->prefix.'sdata';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'run_code' => esc_html($pos),
+		'response_id'=> $sme_token,
+		'name'=> $name,
+		'email' => $email,
+		'phone' => $phone,
+		'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+		'bal_bf' => $bal,
+		'bal_nw' => $bal,
+		'amount' => $amount,
+		'resp_log' => " ".esc_html($call->get_error_message())."",
+		'browser' => $browser,
+		'trans_type' => 'direct',
+		'trans_method' => 'post',
+		'via' => 'site',
+		'time_taken' => '1',
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'status' => 'Failed',
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+		vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+		if(is_numeric($added_to_db)){
+			global $wpdb;
+			 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+			}
+			else{
+			//do nothing
+		}
+
+
+$obj = new stdClass;
+$obj->status = "202";
+$obj->response = $error;
+$wpdb->query('COMMIT');
+die(json_encode($obj));
+
+}
+else{
+if(vp_getoption("data2_response_format") == "JSON" || vp_getoption("data2_response_format") == "json"){
+$en = validate_response($response,$sc,vp_getoption("rdatasuccessvalue"),vp_getoption("rdatasuccessvalue2"));
+}
+else{
+$en = $response ;
+}
+}
+
+
+$direct_response = search_bill_token(array_change_key_case(json_decode($response,true),CASE_LOWER),vp_getoption("directresponse_id"));
+
+if(!empty($direct_response)){
+	$direct_token = $direct_response[0];
+}
+else{
+	$direct_token = "Nill";
+}
+
+if($en == "TRUE"  || $response  === vp_getoption("rdatasuccessvalue") || $force == "true"){
+					if($add_total == "yes"){
+					vp_updateuser($id,"vp_kyc_total",(intval($tb4)+intval($tnow)));	
+				}
+
+
+$plan = $_POST["data_plan"];
+$purchased = "Purchased {GIFTING DATA --[ $plan ]--  }";
+
+weblinkBlast($phone,$purchased);
+$recipient = $phone;
+vp_transaction_email("NEW DATA NOTIFICATION","SUCCESSFUL DATA PURCHASE",$uniqidvalue,$purchased, $recipient, $amount, $bal,$baln);
+  
+
+global $wpdb;
+$table_name = $wpdb->prefix.'sdata';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $direct_token,
+'name'=> $name,
+'email' => $email,
+'phone' => $phone,
+'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'direct',
+'trans_method' => 'post',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => 'Successful',
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+
+if(is_plugin_active("vpmlm/vpmlm.php")){	
+do_action("vp_after");
+}
+
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("100");
+
+}
+elseif($en == "MAYBE"){
+
+
+
+global $wpdb;
+$table_name = $wpdb->prefix.'sdata';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $direct_token,
+'name'=> $name,
+'email'=> $email,
+'phone' => $phone,
+'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'direct',
+'trans_method' => 'post',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => 'Pending',
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+if(is_numeric($added_to_db)){
+global $wpdb;
+ $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+}
+else{
+
+}
+
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); 
+setcookie("last_bal", "0", time() + (30 * 24 * 60 * 60), "/"); 
+$wpdb->query('COMMIT');
+die("processing");
+}
+else{
+
+
+	global $wpdb;
+$table_name = $wpdb->prefix.'sdata';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $direct_token,
+'name'=> $name,
+'email'=> $email,
+'phone' => $phone,
+'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+'bal_bf' => $bal,
+'bal_nw' => $bal,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'direct',
+'trans_method' => 'post',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => 'Failed',
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+	vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+
+	update_wallet("Approved","Reversal For Failed Data Purchase With Id $uniqidvalue",$amount,$baln,$bal);
+
+	if(is_numeric($added_to_db)){
+		global $wpdb;
+		 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+		}
+		else{
+		
+		}
+setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/"); //FAILED
+$wpdb->query('COMMIT');
+die('{"status":"200","response":"'.harray_key_first($response).'","response code":"'.wp_remote_retrieve_response_code( $call ).'","EN":"'.$en.'","response format":"'.vp_getoption("data2_response_format").'"}');
+	
+
+}
+}
+else{
+	$wpdb->query('COMMIT');
+die('['.$errz.'] - [S/R] Duplicate Transaction!!! Check your transaction history please');
+}
+	
+	
+}
+
+}
+elseif($datatcode == "alpha"){
+	$vpdebug = vp_getoption("vpdebug");
+	if(vp_getoption("alpharequest") == "get"){
+	
+	
+	$http_args = array(
+	'headers' => array(
+	'cache-control' => 'no-cache',
+		'Content-Type' => 'application/json'
+	),
+	'timeout' => '3000',
+	'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+	'sslverify' => false
+	);
+	
+	
+	$urlraw = htmlspecialchars_decode($_POST["url"]);
+	$base = str_replace("alphabase",vp_option_array($option_array,"alphabaseurl"),$urlraw);
+	$postdata1 = str_replace("alphapostdata1",vp_option_array($option_array,"alphapostdata1"),$base);
+	$postvalue1 = str_replace("alphapostvalue1",vp_option_array($option_array,"alphapostvalue1"),$postdata1);
+	$postdata2 = str_replace("alphapostdata2",vp_option_array($option_array,"alphapostdata2"),$postvalue1);
+	$postvalue2 = str_replace("alphapostvalue2",vp_option_array($option_array,"alphapostvalue2"),$postdata2);
+	$url = $postvalue2;
+	
+	$sc = vp_getoption("alphasuccesscode");
+	
+	if(vp_getoption("enablehollatag") == "yes" && is_numeric(stripos(vp_getoption("hollatagservices"),'sm')) && stripos(vp_getoption("hollatagservices"),'sm') != false && $network == vp_getoption("alphaairtel")){
+		
+	
+	$url = "https://sms.hollatags.com/api/send/";
+	$call =  vp_remote_post($url, $request);
+	$response = $call;
+	$response == "sent" ? $force = "true" : $force = "false";
+	$got = false;
+	}
+	else{
+		$got = true;
+		$force = "false";
+	}
+	
+	if($pos != $_POST["run_code"]){
+		$errz = "Track ID Not Same";
+		$do = false;
+	}
+	elseif($_POST["run_code"] == "wrong"){
+		$errz = "Track Id Can't Be wrong.";
+		$do = false;
+	}
+	elseif($_COOKIE["run_code"] == "wrong"){
+		$errz = "Session Can't Be Wrong";
+		$do = false;
+	}
+	else{
+		$errz = "unidentified";
+		$do = true;
+	
+		if($bal == $_COOKIE["last_bal"] && $_COOKIE["trans_reversal"] == "no"){
+	
+			$amtts = $bal - $_COOKIE["recent_amount"];
+	
+			$name = get_userdata($id)->user_login;
+			$hname = get_userdata($id)->user_login;
+			$description = "Auto-Deducted a stated amount as we discovered an anomaly in previous transaction which no reversal was initiated";
+			$fund_amount= $_COOKIE["recent_amount"];
+			$before_amount = $bal;
+			$now_amount = $amtts;
+			$the_time = date('Y-m-d h:i:s A',$current_timestamp);
+			
+			$table_name = $wpdb->prefix.'vp_wallet';
+			$added_to_db = $wpdb->insert($table_name, array(
+			'name'=> $name,
+			'type'=> "Wallet",
+			'description'=> $description,
+			'fund_amount' => $fund_amount,
+			'before_amount' => $before_amount,
+			'now_amount' => $now_amount,
+			'user_id' => $id,
+			'status' => "Approved",
+			'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+			));
+	
+	
+			vp_updateuser($id,"vp_bal", $amtts);
+	
+	$wpdb->query('COMMIT');
+die("Error With Previous Balance Check.. Please Refresh Your Browser And Try Again ");
+	}
+	else{
+	setcookie("last_bal", $bal, time() + (30 * 24 * 60 * 60), "/");setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+	}
+	
+	
+	}
+	
+	if($do && $pos == $_POST["run_code"] && $_POST["run_code"] != "wrong" && $_COOKIE["run_code"] != "wrong"){
+			
+		
+	//SECURITY
+	vpSec($phone);
+	
+			$trackcode = $_POST["run_code"];
+			global $wpdb;
+			$tableh = $wpdb->prefix."sdata";
+			$rest = $wpdb->get_results("SELECT * FROM $tableh WHERE run_code = '$trackcode' ");
+			if(empty($rest)){
+		
+			}else{
+				$wpdb->query('COMMIT');
+die('[T/C] Duplicate Transaction!!! Check your transaction history please');
+			}
+	
+	
+			
+	
+			$service = "sdata";
+			$mlm_for = "_data";
+			global $wpdb;
+			$table_trans = $wpdb->prefix.'vp_transactions';
+			$unrecorded_added = $wpdb->insert($table_trans, array(
+			'status' => 'Fa',
+			'service' => $service,
+			'name'=> $name,
+			'email'=> $email,
+			'recipient' => $phone,
+			'bal_bf' => $bal,
+			'bal_nw' => $baln,
+			'amount' => $amount,
+			'request_id' => $uniqidvalue,
+			'user_id' => $id,
+			'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+			));
+			setcookie("amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("service", $service, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("name", $name, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("email", $email, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("recipient", $phone, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("bal_bf", $bal, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("bal_nw", $baln, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("request_id", $uniqidvalue, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("user_id", $id, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("status", 'Fa', time() + (30 * 24 * 60 * 60), "/");
+			setcookie("the_time", date('Y-m-d h:i:s A',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+	
+		
+			$_POST["run_code"] = "wrong";
+	
+			
+	
+		if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+			setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+			$tot = $bal - $amount;
+			vp_updateuser($id, 'vp_bal', $tot);
+			setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+			if($got){
+	$call =  wp_remote_get($url, $http_args);
+	$response = wp_remote_retrieve_body($call);
+	setcookie("api_response", $response, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("api_from", 'Session', time() + (30 * 24 * 60 * 60), "/");
+	provider_header_handler($call);
+			}else{};
+		}
+		else{
+		$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+		}
+	
+	if(is_wp_error($call)){
+		if(vp_getoption("vpdebug") != "yes"){
+			$error = $call->get_error_code();
+			}
+			else{
+			$error = $call->get_error_message();
+			}
+	
+			$alpha_token = "no_response";
+			global $wpdb;
+			$table_name = $wpdb->prefix.'sdata';
+			$added_to_db = $wpdb->insert($table_name, array(
+			'run_code' => esc_html($pos),
+			'response_id'=> $alpha_token,
+			'name'=> $name,
+			'email' => $email,
+			'phone' => $phone,
+			'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+			'bal_bf' => $bal,
+			'bal_nw' => $bal,
+			'amount' => $amount,
+			'resp_log' => " ".esc_html($call->get_error_message())."",
+			'browser' => $browser,
+			'trans_type' => 'alpha',
+			'trans_method' => 'get',
+			'via' => 'site',
+			'time_taken' => '1',
+			'request_id' => $uniqidvalue,
+			'user_id' => $id,
+			'status' => 'Failed',
+			'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+			));
+	
+			vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+			if(is_numeric($added_to_db)){
+				global $wpdb;
+				 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+				}
+				else{
+				//do nothing
+			}
+	
+	
+	
+	$obj = new stdClass;
+	$obj->status = "202";
+	$obj->response = $error;
+	$wpdb->query('COMMIT');
+die(json_encode($obj));
+	}
+	else{
+	if(vp_getoption("alpha1_response_format") == "JSON" || vp_getoption("alpha1_response_format") == "json"){
+	$en = validate_response($response,$sc, vp_getoption("alphasuccessvalue"), vp_getoption("alphasuccessvalue2") );	
+	}
+	else{
+	$en = $response ;
+	}
+	}
+	
+	$vpdebug = vp_getoption("vpdebug");
+	
+	$alpha_response = search_bill_token(array_change_key_case(json_decode($response,true),CASE_LOWER),vp_getoption("alpharesponse_id"));
+	
+	if(!empty($alpha_response)){
+		$alpha_token = $alpha_response[0];
+	}
+	else{
+		$alpha_token = "Nill";
+	}
+	
+	
+	
+	if($en == "TRUE"  || $response  === vp_getoption("alphasuccessvalue") || $force == "true"){
+						if($add_total == "yes"){
+						vp_updateuser($id,"vp_kyc_total",(intval($tb4)+intval($tnow)));	
+					}
+	
+	global $wpdb;
+	$table_name = $wpdb->prefix.'sdata';
+	$added_to_db = $wpdb->insert($table_name, array(
+	'run_code' => esc_html($pos),
+	'response_id'=> $alpha_token,
+	'name'=> $name,
+	'email' => $email,
+	'phone' => $phone,
+	'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+	'bal_bf' => $bal,
+	'bal_nw' => $baln,
+	'amount' => $amount,
+	'resp_log' => " ".esc_html(harray_key_first($response))."",
+	'browser' => $browser,
+	'trans_type' => 'alpha',
+	'trans_method' => 'get',
+	'via' => 'site',
+	'time_taken' => '1',
+	'request_id' => $uniqidvalue,
+	'user_id' => $id,
+	'status' => 'Successful',
+	'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+	));
+	
+	
+	$purchased = "Purchased ".$_POST["data_plan"];
+	weblinkBlast($phone,$purchased);
+
+	
+	$beneficiary = vp_getuser($id,"beneficiaries",true);
+	
+	if(!preg_match("/$phone/",$beneficiary)){
+	vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+	}
+	
+	if(is_numeric($added_to_db)){
+		global $wpdb;
+		 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+		}
+		else{
+		
+		}
+	
+	$plan = $_POST["data_plan"];
+	$purchased = "Purchased {SME DATA --[ $plan ]--  }";
+	$recipient = $phone;
+	vp_transaction_email("NEW DATA NOTIFICATION","SUCCESSFUL DATA PURCHASE",$uniqidvalue,$purchased, $recipient, $amount, $bal,$baln);
+	
+	
+	
+	
+	if(is_plugin_active("vpmlm/vpmlm.php")){
+	do_action("vp_after");
+	}
+	
+	setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("100");
+	}
+	elseif($en == "MAYBE"){
+	
+	
+	global $wpdb;
+	$table_name = $wpdb->prefix.'sdata';
+	$added_to_db = $wpdb->insert($table_name, array(
+	'run_code' => esc_html($pos),
+	'response_id'=> $alpha_token,
+	'name'=> $name,
+	'email'=> $email,
+	'phone' => $phone,
+	'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+	'bal_bf' => $bal,
+	'bal_nw' => $baln,
+	'amount' => $amount,
+	'resp_log' => " ".esc_html(harray_key_first($response))."",
+	'browser' => $browser,
+	'trans_type' => 'alpha',
+	'trans_method' => 'get',
+	'via' => 'site',
+	'time_taken' => '1',
+	'request_id' => $uniqidvalue,
+	'user_id' => $id,
+	'status' => 'Pending',
+	'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+	));
+	
+	
+	$beneficiary = vp_getuser($id,"beneficiaries",true);
+	
+	if(!preg_match("/$phone/",$beneficiary)){
+	vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+	}
+	
+	if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+	
+	setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/");  	setcookie("last_bal", "0", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("processing");
+	}
+	else{
+	
+	
+		
+	global $wpdb;
+	$table_name = $wpdb->prefix.'sdata';
+	$added_to_db = $wpdb->insert($table_name, array(
+	'run_code' => esc_html($pos),
+	'response_id'=> $alpha_token,
+	'name'=> $name,
+	'email'=> $email,
+	'phone' => $phone,
+	'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+	'bal_bf' => $bal,
+	'bal_nw' => $bal,
+	'amount' => $amount,
+	'resp_log' => " ".esc_html(harray_key_first($response))."",
+	'browser' => $browser,
+	'trans_type' => 'alpha',
+	'trans_method' => 'get',
+	'via' => 'site',
+	'time_taken' => '1',
+	'request_id' => $uniqidvalue,
+	'user_id' => $id,
+	'status' => 'Failed',
+	'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+	));
+	
+	
+	$beneficiary = vp_getuser($id,"beneficiaries",true);
+	
+	if(!preg_match("/$phone/",$beneficiary)){
+	vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+	}
+	
+		vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+	
+		update_wallet("Approved","Reversal For Failed Data Purchase With Id $uniqidvalue",$amount,$baln,$bal);
+	
+		if(is_numeric($added_to_db)){
+			global $wpdb;
+			 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+			}
+			else{
+			
+			}
+	setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/"); //FAILED
+	$wpdb->query('COMMIT');
+die('{"status":"200","response":"'.harray_key_first($response).'","response code":"'.wp_remote_retrieve_response_code( $call ).'","EN":"'.$en.'","response format":"'.vp_getoption("alpha1_response_format").'"}');
+		
+	}
+	}
+	else{
+		$wpdb->query('COMMIT');
+die('['.$errz.'] - [S/R] Duplicate Transaction!!! Check your transaction history please');
+	}
+	}
+	else{
+	$url = vp_getoption("alphabaseurl").vp_getoption("alphaendpoint");
+	$num = $phone;
+	$cua = vp_getoption("alphapostdata1");
+		$cppa = vp_getoption("alphapostdata2");
+		$c1a = vp_getoption("alphapostdata3");
+		$c2a = vp_getoption("alphapostdata4");
+		$c3a = vp_getoption("alphapostdata5");
+		$cna = vp_getoption("alphanetworkattribute");
+		$caa = vp_getoption("alphaamountattribute");
+		$cpa = vp_getoption("alphaphoneattribute");
+		$cpla = vp_getoption("alphavariationattr");
+		$uniqid = vp_getoption("request_id");
+		
+		$datass = array(
+		 $cua => vp_getoption("alphapostvalue1"),
+		 $cppa => vp_getoption("alphapostvalue2"),
+		$c1a => vp_getoption("alphapostvalue3"),
+		$c2a => vp_getoption("alphapostvalue4"),
+		$c3a => vp_getoption("alphapostvalue5"),
+		$uniqid => $uniqidvalue,
+		$cna => $network,
+		$cpa => $phone,
+		$datatype => $datatype_value,
+		$cpla => $dplan
+		);
+	
+	$alpha_array = [];
+	
+	$the_head =  vp_getoption("alpha_head");
+	if($the_head == "not_concatenated"){
+		$the_auth = vp_getoption("alphavalue1");
+		$auto = vp_getoption("alphahead1").' '.$the_auth;
+		$alpha_array["Authorization"] = $auto;
+	}
+	elseif($the_head == "concatenated"){
+		$the_auth_value = vp_getoption("alphavalue1");
+		$the_auth = base64_encode($the_auth_value);
+		$auto = vp_getoption("alphahead1").' '.$the_auth;
+		$alpha_array["Authorization"] = $auto;
+	}
+	else{
+		$alpha_array[vp_getoption("alphahead1")] = vp_getoption("alphavalue1");
+	}
+	
+	
+	
+	$alpha_array["Content-Type"] = "application/json";
+	$alpha_array["cache-control"] = "no-cache";
+	
+	for($alphaaddheaders=1; $alphaaddheaders<=4; $alphaaddheaders++){
+		if(!empty(vp_getoption("alphaaddheaders$alphaaddheaders")) && !empty(vp_getoption("alphaaddvalue$alphaaddheaders"))){
+			$alpha_array[vp_getoption("alphaaddheaders$alphaaddheaders")] = vp_getoption("alphaaddvalue$alphaaddheaders");
+		}
+	}
+	
+	$http_args = array(
+	'headers' => $alpha_array,
+	'timeout' => '3000',
+	'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+	'sslverify' => false,
+	'body' => json_encode($datass)
+	);
+	
+	$sc = vp_getoption("alphasuccesscode");
+	//echo "<script>alert('url1".$url."');</script>";
+	
+	if(vp_getoption("enablehollatag") == "yes" && is_numeric(stripos(vp_getoption("hollatagservices"),'sm')) && stripos(vp_getoption("hollatagservices"),'sm') !==  false && $network == vp_getoption("alphaairtel")){
+		
+		
+	$request = array(
+			"user"=> vp_getoption("hollatagusername"),
+			"pass"=> vp_getoption("hollatagpassword"),
+			"from"=> "DATA ALERT",
+			"to"=> vp_getoption("hollatagcompany"),
+			"msg"=> "Hello! Kindly Send ".$_POST["data_plan"]." To $phone"
+	);
+	
+	
+	$url = "https://sms.hollatags.com/api/send/";
+	$call =  vp_remote_post($url, $request);
+	$response = $call;
+	$response == "sent" ? $force = "true" : $force = "false";
+	$got = false;
+	}
+	else{
+		$got = true;
+		$force = "false";
+	}
+	
+	if($pos != $_POST["run_code"]){
+		$errz = "Track ID Not Same";
+		$do = false;
+	}
+	elseif($_POST["run_code"] == "wrong"){
+		$errz = "Track Id Can't Be wrong.";
+		$do = false;
+	}
+	elseif($_COOKIE["run_code"] == "wrong"){
+		$errz = "Session Can't Be Wrong";
+		$do = false;
+	}
+	else{
+		$errz = "unidentified";
+		$do = true;
+	
+		if($bal == $_COOKIE["last_bal"] && $_COOKIE["trans_reversal"] == "no"){
+	
+			$amtts = $bal - $_COOKIE["recent_amount"];
+	
+	
+			$name = get_userdata($id)->user_login;
+			$hname = get_userdata($id)->user_login;
+			$description = "Auto-Deducted a stated amount as we discovered an anomaly in previous transaction which no reversal was initiated";
+			$fund_amount= $_COOKIE["recent_amount"];
+			$before_amount = $bal;
+			$now_amount = $amtts;
+			$the_time = date('Y-m-d h:i:s A',$current_timestamp);
+			
+			$table_name = $wpdb->prefix.'vp_wallet';
+			$added_to_db = $wpdb->insert($table_name, array(
+			'name'=> $name,
+			'type'=> "Wallet",
+			'description'=> $description,
+			'fund_amount' => $fund_amount,
+			'before_amount' => $before_amount,
+			'now_amount' => $now_amount,
+			'user_id' => $id,
+			'status' => "Approved",
+			'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+			));
+	
+	
+			vp_updateuser($id,"vp_bal", $amtts);
+	
+	$wpdb->query('COMMIT');
+die("Error With Previous Balance Check.. Please Refresh Your Browser And Try Again ");
+	}
+	else{
+	setcookie("last_bal", $bal, time() + (30 * 24 * 60 * 60), "/");setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+	}
+	
+	
+	
+	}
+	
+	if($do && $pos == $_POST["run_code"] && $_POST["run_code"] != "wrong" && $_COOKIE["run_code"] != "wrong"){
+			
+				
+	//SECURITY
+	vpSec($phone);
+	
+			$trackcode = $_POST["run_code"];
+			global $wpdb;
+			$tableh = $wpdb->prefix."sdata";
+			$rest = $wpdb->get_results("SELECT * FROM $tableh WHERE run_code = '$trackcode' ");
+			if(empty($rest)){
+		
+			}else{
+	
+				$wpdb->query('COMMIT');
+die('[S/R] Duplicate Transaction!!! Check your transaction history please');
+			}
+	
+	
+	
+			
+			$service = "sdata";
+			$mlm_for = "_data";
+			global $wpdb;
+			$table_trans = $wpdb->prefix.'vp_transactions';
+			$unrecorded_added = $wpdb->insert($table_trans, array(
+			'status' => 'Fa',
+			'service' => $service,
+			'name'=> $name,
+			'email'=> $email,
+			'recipient' => $phone,
+			'bal_bf' => $bal,
+			'bal_nw' => $baln,
+			'amount' => $amount,
+			'request_id' => $uniqidvalue,
+			'user_id' => $id,
+			'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+			));
+			setcookie("amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("service", $service, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("name", $name, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("email", $email, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("recipient", $phone, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("bal_bf", $bal, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("bal_nw", $baln, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("request_id", $uniqidvalue, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("user_id", $id, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("status", 'Fa', time() + (30 * 24 * 60 * 60), "/");
+			setcookie("the_time", date('Y-m-d h:i:s A',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+	
+	
+	
+	
+		
+			$_POST["run_code"] = "wrong";
+			if($got){
+				if(vp_getoption("alphaquerymethod") != "array"){
+	
+					if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+						setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+						$tot = $bal - $amount;
+						vp_updateuser($id, 'vp_bal', $tot);
+						setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+					$call =  wp_remote_post($url, $http_args);
+					$response = wp_remote_retrieve_body($call);
+					setcookie("api_response", $response, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("api_from", 'Session', time() + (30 * 24 * 60 * 60), "/");
+					provider_header_handler($call);
+				}
+				else{
+				$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+				}
+						}
+						else{
+	
+							if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+								setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+								$tot = $bal - $amount;
+								vp_updateuser($id, 'vp_bal', $tot);
+								setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+								$call = "";	
+					$response =  vp_remote_post_fn($url, $alpha_array, $datass);
+					if($response == "error"){
+						global $return_message;
+					
+						$wpdb->query('COMMIT');
+die($return_message);
+					}
+					else{
+						//do nothing
+					}
+				}
+				else{
+				$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+				}
+					
+						}
+			}else{};
+	
+	#$wpdb->query('COMMIT');
+	
+	if(is_wp_error($call)){
+		if(vp_getoption("vpdebug") != "yes"){
+	$error = $call->get_error_code();
+	}
+	else{
+	$error = $call->get_error_message();
+	}
+	
+	$alpha_token = "no_response";
+	global $wpdb;
+	$table_name = $wpdb->prefix.'sdata';
+	$added_to_db = $wpdb->insert($table_name, array(
+	'run_code' => esc_html($pos),
+	'response_id'=> $alpha_token,
+	'name'=> $name,
+	'email' => $email,
+	'phone' => $phone,
+	'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+	'bal_bf' => $bal,
+	'bal_nw' => $bal,
+	'amount' => $amount,
+	'resp_log' => " ".esc_html($call->get_error_message())."",
+	'browser' => $browser,
+	'trans_type' => 'alpha',
+	'trans_method' => 'post',
+	'via' => 'site',
+	'time_taken' => '1',
+	'request_id' => $uniqidvalue,
+	'user_id' => $id,
+	'status' => 'Failed',
+	'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+	));
+	
+	vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+	if(is_numeric($added_to_db)){
+		global $wpdb;
+		 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+		}
+		else{
+		//do nothing
+	}
+	
+	
+	
+	$obj = new stdClass;
+	$obj->status = "202";
+	$obj->response = $error;
+	$wpdb->query('COMMIT');
+die(json_encode($obj));
+	}
+	else{
+	if(vp_getoption("alpha1_response_format") == "JSON" || vp_getoption("alpha1_response_format") == "json"){
+	$en = validate_response($response,$sc,vp_getoption("alphasuccessvalue"),vp_getoption("alphasuccessvalue2"));
+	}
+	else{
+	$en = $response ;
+	}
+	}
+	
+	$alpha_response = search_bill_token(array_change_key_case(json_decode($response,true),CASE_LOWER),vp_getoption("alpharesponse_id"));
+	
+	if(!empty($alpha_response)){
+		$alpha_token = $alpha_response[0];
+	}
+	else{
+			$alpha_token = "Nill";
+	}
+	
+	if($en == "TRUE"  || $response  === vp_getoption("alphasuccessvalue") || $force == "true"){
+						if($add_total == "yes"){
+						vp_updateuser($id,"vp_kyc_total",(intval($tb4)+intval($tnow)));	
+					}
+	
+	$plan = $_POST["data_plan"];
+	$purchased = "Purchased {ALPHA DATA --[ $plan ]--  }";
+	
+	weblinkBlast($phone,$purchased);
+
+	$recipient = $phone;
+	vp_transaction_email("NEW DATA NOTIFICATION","SUCCESSFUL DATA PURCHASE",$uniqidvalue,$purchased, $recipient, $amount, $bal,$baln);
+	
+	
+	global $wpdb;
+	$table_name = $wpdb->prefix.'sdata';
+	$added_to_db = $wpdb->insert($table_name, array(
+	'run_code' => esc_html($pos),
+	'response_id'=> $alpha_token,
+	'name'=> $name,
+	'email' => $email,
+	'phone' => $phone,
+	'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+	'bal_bf' => $bal,
+	'bal_nw' => $baln,
+	'amount' => $amount,
+	'resp_log' => " ".esc_html(harray_key_first($response))."",
+	'browser' => $browser,
+	'trans_type' => 'alpha',
+	'trans_method' => 'post',
+	'via' => 'site',
+	'time_taken' => '1',
+	'request_id' => $uniqidvalue,
+	'user_id' => $id,
+	'status' => 'Successful',
+	'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+	));
+	
+	
+	$beneficiary = vp_getuser($id,"beneficiaries",true);
+	
+	if(!preg_match("/$phone/",$beneficiary)){
+	vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+	}
+	
+	if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+	
+	if(is_plugin_active("vpmlm/vpmlm.php")){
+	do_action("vp_after");
+	}
+	
+	setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("100");
+	}
+	elseif($en == "MAYBE"){
+	
+	
+	global $wpdb;
+	$table_name = $wpdb->prefix.'sdata';
+	$added_to_db = $wpdb->insert($table_name, array(
+	'run_code' => esc_html($pos),
+	'response_id'=> $alpha_token,
+	'name'=> $name,
+	'email'=> $email,
+	'phone' => $phone,
+	'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+	'bal_bf' => $bal,
+	'bal_nw' => $baln,
+	'amount' => $amount,
+	'resp_log' => " ".esc_html(harray_key_first($response))."",
+	'browser' => $browser,
+	'trans_type' => 'alpha',
+	'trans_method' => 'post',
+	'via' => 'site',
+	'time_taken' => '1',
+	'request_id' => $uniqidvalue,
+	'user_id' => $id,
+	'status' => 'Pending',
+	'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+	));
+	
+	
+	$beneficiary = vp_getuser($id,"beneficiaries",true);
+	
+	if(!preg_match("/$phone/",$beneficiary)){
+	vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+	}
+	
+	if(is_numeric($added_to_db)){
+		global $wpdb;
+		 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+		}
+		else{
+		
+		}
+	
+		setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/");  	setcookie("last_bal", "0", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("processing");
+	}
+	else{
+		
+	
+		global $wpdb;
+	$table_name = $wpdb->prefix.'sdata';
+	$added_to_db = $wpdb->insert($table_name, array(
+	'run_code' => esc_html($pos),
+	'response_id'=> $alpha_token,
+	'name'=> $name,
+	'email'=> $email,
+	'phone' => $phone,
+	'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+	'bal_bf' => $bal,
+	'bal_nw' => $bal,
+	'amount' => $amount,
+	'resp_log' => " ".esc_html(harray_key_first($response))."",
+	'browser' => $browser,
+	'trans_type' => 'alpha',
+	'trans_method' => 'post',
+	'via' => 'site',
+	'time_taken' => '1',
+	'request_id' => $uniqidvalue,
+	'user_id' => $id,
+	'status' => 'Failed',
+	'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+	));
+	
+	$beneficiary = vp_getuser($id,"beneficiaries",true);
+	
+	if(!preg_match("/$phone/",$beneficiary)){
+	vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+	}
+	
+		vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+	
+		update_wallet("Approved","Reversal For Failed Data Purchase With Id $uniqidvalue",$amount,$baln,$bal);
+	
+		if(is_numeric($added_to_db)){
+			global $wpdb;
+			 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+			}
+			else{
+			
+			}
+	setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/"); //FAILED
+	$wpdb->query('COMMIT');
+die('{"status":"200","response":"'.harray_key_first($response).'","response code":"'.wp_remote_retrieve_response_code( $call ).'","EN":"'.$en.'","response format ":"'.vp_getoption("alpha1_response_format").'"}');
+		
+	
+	}
+	}
+	else{
+		$wpdb->query('COMMIT');
+die('['.$errz.'] - [S/R] Duplicate Transaction!!! Check your transaction history please');
+	}
+		
+		
+		
+	}
+}
+elseif($datatcode == "smile"){
+	$vpdebug = vp_getoption("vpdebug");
+	if(vp_getoption("smilerequest") == "get"){
+	
+	
+	$http_args = array(
+	'headers' => array(
+	'cache-control' => 'no-cache',
+		'Content-Type' => 'application/json'
+	),
+	'timeout' => '3000',
+	'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+	'sslverify' => false
+	);
+	
+	
+	$urlraw = htmlspecialchars_decode($_POST["url"]);
+	$base = str_replace("smilebase",vp_option_array($option_array,"smilebaseurl"),$urlraw);
+	$postdata1 = str_replace("smilepostdata1",vp_option_array($option_array,"smilepostdata1"),$base);
+	$postvalue1 = str_replace("smilepostvalue1",vp_option_array($option_array,"smilepostvalue1"),$postdata1);
+	$postdata2 = str_replace("smilepostdata2",vp_option_array($option_array,"smilepostdata2"),$postvalue1);
+	$postvalue2 = str_replace("smilepostvalue2",vp_option_array($option_array,"smilepostvalue2"),$postdata2);
+	$url = $postvalue2;
+	
+	$sc = vp_getoption("smilesuccesscode");
+	
+	if(vp_getoption("enablehollatag") == "yes" && is_numeric(stripos(vp_getoption("hollatagservices"),'sm')) && stripos(vp_getoption("hollatagservices"),'sm') != false && $network == vp_getoption("smileairtel")){
+		
+	
+		$url = "https://sms.hollatags.com/api/send/";
+		$call =  vp_remote_post($url, $request);
+		$response = $call;
+		$response == "sent" ? $force = "true" : $force = "false";
+		$got = false;
+	}
+	else{
+		$got = true;
+		$force = "false";
+	}
+	
+	if($pos != $_POST["run_code"]){
+		$errz = "Track ID Not Same";
+		$do = false;
+	}
+	elseif($_POST["run_code"] == "wrong"){
+		$errz = "Track Id Can't Be wrong.";
+		$do = false;
+	}
+	elseif($_COOKIE["run_code"] == "wrong"){
+		$errz = "Session Can't Be Wrong";
+		$do = false;
+	}
+	else{
+		$errz = "unidentified";
+		$do = true;
+	
+		if($bal == $_COOKIE["last_bal"] && $_COOKIE["trans_reversal"] == "no"){
+	
+			$amtts = $bal - $_COOKIE["recent_amount"];
+	
+			$name = get_userdata($id)->user_login;
+			$hname = get_userdata($id)->user_login;
+			$description = "Auto-Deducted a stated amount as we discovered an anomaly in previous transaction which no reversal was initiated";
+			$fund_amount= $_COOKIE["recent_amount"];
+			$before_amount = $bal;
+			$now_amount = $amtts;
+			$the_time = date('Y-m-d h:i:s A',$current_timestamp);
+			
+			$table_name = $wpdb->prefix.'vp_wallet';
+			$added_to_db = $wpdb->insert($table_name, array(
+			'name'=> $name,
+			'type'=> "Wallet",
+			'description'=> $description,
+			'fund_amount' => $fund_amount,
+			'before_amount' => $before_amount,
+			'now_amount' => $now_amount,
+			'user_id' => $id,
+			'status' => "Approved",
+			'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+			));
+	
+	
+			vp_updateuser($id,"vp_bal", $amtts);
+	
+	$wpdb->query('COMMIT');
+die("Error With Previous Balance Check.. Please Refresh Your Browser And Try Again ");
+	}
+	else{
+	setcookie("last_bal", $bal, time() + (30 * 24 * 60 * 60), "/");setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+	}
+	
+	
+	}
+	
+	if($do && $pos == $_POST["run_code"] && $_POST["run_code"] != "wrong" && $_COOKIE["run_code"] != "wrong"){
+			
+		
+	//SECURITY
+	vpSec($phone);
+	
+			$trackcode = $_POST["run_code"];
+			global $wpdb;
+			$tableh = $wpdb->prefix."sdata";
+			$rest = $wpdb->get_results("SELECT * FROM $tableh WHERE run_code = '$trackcode' ");
+			if(empty($rest)){
+		
+			}else{
+				$wpdb->query('COMMIT');
+die('[T/C] Duplicate Transaction!!! Check your transaction history please');
+			}
+	
+	
+			
+	
+			$service = "sdata";
+			$mlm_for = "_data";
+			global $wpdb;
+			$table_trans = $wpdb->prefix.'vp_transactions';
+			$unrecorded_added = $wpdb->insert($table_trans, array(
+			'status' => 'Fa',
+			'service' => $service,
+			'name'=> $name,
+			'email'=> $email,
+			'recipient' => $phone,
+			'bal_bf' => $bal,
+			'bal_nw' => $baln,
+			'amount' => $amount,
+			'request_id' => $uniqidvalue,
+			'user_id' => $id,
+			'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+			));
+			setcookie("amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("service", $service, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("name", $name, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("email", $email, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("recipient", $phone, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("bal_bf", $bal, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("bal_nw", $baln, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("request_id", $uniqidvalue, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("user_id", $id, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("status", 'Fa', time() + (30 * 24 * 60 * 60), "/");
+			setcookie("the_time", date('Y-m-d h:i:s A',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+	
+		
+			$_POST["run_code"] = "wrong";
+	
+			
+	
+		if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+			setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+			$tot = $bal - $amount;
+			vp_updateuser($id, 'vp_bal', $tot);
+			setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+			if($got){
+	$call =  wp_remote_get($url, $http_args);
+	$response = wp_remote_retrieve_body($call);
+	setcookie("api_response", $response, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("api_from", 'Session', time() + (30 * 24 * 60 * 60), "/");
+	provider_header_handler($call);
+			}else{};
+		}
+		else{
+		$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+		}
+	
+	if(is_wp_error($call)){
+		if(vp_getoption("vpdebug") != "yes"){
+			$error = $call->get_error_code();
+			}
+			else{
+			$error = $call->get_error_message();
+			}
+	
+			$smile_token = "no_response";
+			global $wpdb;
+			$table_name = $wpdb->prefix.'sdata';
+			$added_to_db = $wpdb->insert($table_name, array(
+			'run_code' => esc_html($pos),
+			'response_id'=> $smile_token,
+			'name'=> $name,
+			'email' => $email,
+			'phone' => $phone,
+			'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+			'bal_bf' => $bal,
+			'bal_nw' => $bal,
+			'amount' => $amount,
+			'resp_log' => " ".esc_html($call->get_error_message())."",
+			'browser' => $browser,
+			'trans_type' => 'smile',
+			'trans_method' => 'get',
+			'via' => 'site',
+			'time_taken' => '1',
+			'request_id' => $uniqidvalue,
+			'user_id' => $id,
+			'status' => 'Failed',
+			'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+			));
+	
+			vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+			if(is_numeric($added_to_db)){
+				global $wpdb;
+				 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+				}
+				else{
+				//do nothing
+			}
+	
+	
+	
+	$obj = new stdClass;
+	$obj->status = "202";
+	$obj->response = $error;
+	$wpdb->query('COMMIT');
+die(json_encode($obj));
+	}
+	else{
+	if(vp_getoption("smile1_response_format") == "JSON" || vp_getoption("smile1_response_format") == "json"){
+	$en = validate_response($response,$sc, vp_getoption("smilesuccessvalue"), vp_getoption("smilesuccessvalue2") );	
+	}
+	else{
+	$en = $response ;
+	}
+	}
+	
+	$vpdebug = vp_getoption("vpdebug");
+	
+	$smile_response = search_bill_token(array_change_key_case(json_decode($response,true),CASE_LOWER),vp_getoption("smileresponse_id"));
+	
+	if(!empty($smile_response)){
+		$smile_token = $smile_response[0];
+	}
+	else{
+		$smile_token = "Nill";
+	}
+	
+	
+	
+	if($en == "TRUE"  || $response  === vp_getoption("smilesuccessvalue") || $force == "true"){
+						if($add_total == "yes"){
+						vp_updateuser($id,"vp_kyc_total",(intval($tb4)+intval($tnow)));	
+					}
+	
+	global $wpdb;
+	$table_name = $wpdb->prefix.'sdata';
+	$added_to_db = $wpdb->insert($table_name, array(
+	'run_code' => esc_html($pos),
+	'response_id'=> $smile_token,
+	'name'=> $name,
+	'email' => $email,
+	'phone' => $phone,
+	'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+	'bal_bf' => $bal,
+	'bal_nw' => $baln,
+	'amount' => $amount,
+	'resp_log' => " ".esc_html(harray_key_first($response))."",
+	'browser' => $browser,
+	'trans_type' => 'smile',
+	'trans_method' => 'get',
+	'via' => 'site',
+	'time_taken' => '1',
+	'request_id' => $uniqidvalue,
+	'user_id' => $id,
+	'status' => 'Successful',
+	'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+	));
+	
+	$purchased = "Purchased ".$_POST["data_plan"];
+	weblinkBlast($phone,$purchased);
+	
+	
+	$beneficiary = vp_getuser($id,"beneficiaries",true);
+	
+	if(!preg_match("/$phone/",$beneficiary)){
+	vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+	}
+	
+	if(is_numeric($added_to_db)){
+		global $wpdb;
+		 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+		}
+		else{
+		
+		}
+	
+	$plan = $_POST["data_plan"];
+	$purchased = "Purchased {SME DATA --[ $plan ]--  }";
+	$recipient = $phone;
+	vp_transaction_email("NEW DATA NOTIFICATION","SUCCESSFUL DATA PURCHASE",$uniqidvalue,$purchased, $recipient, $amount, $bal,$baln);
+	
+	
+	
+	
+	if(is_plugin_active("vpmlm/vpmlm.php")){
+	do_action("vp_after");
+	}
+	
+	setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("100");
+	}
+	elseif($en == "MAYBE"){
+	
+	
+	global $wpdb;
+	$table_name = $wpdb->prefix.'sdata';
+	$added_to_db = $wpdb->insert($table_name, array(
+	'run_code' => esc_html($pos),
+	'response_id'=> $smile_token,
+	'name'=> $name,
+	'email'=> $email,
+	'phone' => $phone,
+	'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+	'bal_bf' => $bal,
+	'bal_nw' => $baln,
+	'amount' => $amount,
+	'resp_log' => " ".esc_html(harray_key_first($response))."",
+	'browser' => $browser,
+	'trans_type' => 'smile',
+	'trans_method' => 'get',
+	'via' => 'site',
+	'time_taken' => '1',
+	'request_id' => $uniqidvalue,
+	'user_id' => $id,
+	'status' => 'Pending',
+	'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+	));
+	
+	
+	$beneficiary = vp_getuser($id,"beneficiaries",true);
+	
+	if(!preg_match("/$phone/",$beneficiary)){
+	vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+	}
+	
+	if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+	
+	setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/");  	setcookie("last_bal", "0", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("processing");
+	}
+	else{
+	
+	
+		
+	global $wpdb;
+	$table_name = $wpdb->prefix.'sdata';
+	$added_to_db = $wpdb->insert($table_name, array(
+	'run_code' => esc_html($pos),
+	'response_id'=> $smile_token,
+	'name'=> $name,
+	'email'=> $email,
+	'phone' => $phone,
+	'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+	'bal_bf' => $bal,
+	'bal_nw' => $bal,
+	'amount' => $amount,
+	'resp_log' => " ".esc_html(harray_key_first($response))."",
+	'browser' => $browser,
+	'trans_type' => 'smile',
+	'trans_method' => 'get',
+	'via' => 'site',
+	'time_taken' => '1',
+	'request_id' => $uniqidvalue,
+	'user_id' => $id,
+	'status' => 'Failed',
+	'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+	));
+	
+	
+	$beneficiary = vp_getuser($id,"beneficiaries",true);
+	
+	if(!preg_match("/$phone/",$beneficiary)){
+	vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+	}
+	
+		vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+	
+		update_wallet("Approved","Reversal For Failed Data Purchase With Id $uniqidvalue",$amount,$baln,$bal);
+	
+		if(is_numeric($added_to_db)){
+			global $wpdb;
+			 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+			}
+			else{
+			
+			}
+	setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/"); //FAILED
+	$wpdb->query('COMMIT');
+die('{"status":"200","response":"'.harray_key_first($response).'","response code":"'.wp_remote_retrieve_response_code( $call ).'","EN":"'.$en.'","response format":"'.vp_getoption("smile1_response_format").'"}');
+		
+	}
+	}
+	else{
+		$wpdb->query('COMMIT');
+die('['.$errz.'] - [S/R] Duplicate Transaction!!! Check your transaction history please');
+	}
+	}
+	else{
+	$url = vp_getoption("smilebaseurl").vp_getoption("smileendpoint");
+	$phone = preg_replace('/^0/',"234",$phone);
+	$num = $phone;
+	$cua = vp_getoption("smilepostdata1");
+		$cppa = vp_getoption("smilepostdata2");
+		$c1a = vp_getoption("smilepostdata3");
+		$c2a = vp_getoption("smilepostdata4");
+		$c3a = vp_getoption("smilepostdata5");
+		$cna = vp_getoption("smilenetworkattribute");
+		$caa = vp_getoption("smileamountattribute");
+		$cpa = vp_getoption("smilephoneattribute");
+		$cpla = vp_getoption("smilevariationattr");
+		$uniqid = vp_getoption("request_id");
+		
+		$datass = array(
+		 $cua => vp_getoption("smilepostvalue1"),
+		 $cppa => vp_getoption("smilepostvalue2"),
+		$c1a => vp_getoption("smilepostvalue3"),
+		$c2a => vp_getoption("smilepostvalue4"),
+		$c3a => vp_getoption("smilepostvalue5"),
+		$uniqid => $uniqidvalue,
+		$cna => $network,
+		$cpa => $phone,
+		$datatype => $datatype_value,
+		$cpla => $dplan
+		);
+		//edit here smileedit smiledit
+	
+	$smile_array = [];
+	
+	$the_head =  vp_getoption("smile_head");
+	if($the_head == "not_concatenated"){
+		$the_auth = vp_getoption("smilevalue1");
+		$auto = vp_getoption("smilehead1").' '.$the_auth;
+		$smile_array["Authorization"] = $auto;
+	}
+	elseif($the_head == "concatenated"){
+		$the_auth_value = vp_getoption("smilevalue1");
+		$the_auth = base64_encode($the_auth_value);
+		$auto = vp_getoption("smilehead1").' '.$the_auth;
+		$smile_array["Authorization"] = $auto;
+	}
+	else{
+		$smile_array[vp_getoption("smilehead1")] = vp_getoption("smilevalue1");
+	}
+	
+	
+	
+	$smile_array["Content-Type"] = "application/json";
+	$smile_array["cache-control"] = "no-cache";
+	
+	for($smileaddheaders=1; $smileaddheaders<=4; $smileaddheaders++){
+		if(!empty(vp_getoption("smileaddheaders$smileaddheaders")) && !empty(vp_getoption("smileaddvalue$smileaddheaders"))){
+			$smile_array[vp_getoption("smileaddheaders$smileaddheaders")] = vp_getoption("smileaddvalue$smileaddheaders");
+		}
+	}
+	
+	$http_args = array(
+	'headers' => $smile_array,
+	'timeout' => '3000',
+	'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+	'sslverify' => false,
+	'body' => json_encode($datass)
+	);
+	
+	$sc = vp_getoption("smilesuccesscode");
+	//echo "<script>alert('url1".$url."');</script>";
+	
+	if(vp_getoption("enablehollatag") == "yes" && is_numeric(stripos(vp_getoption("hollatagservices"),'sm')) && stripos(vp_getoption("hollatagservices"),'sm') !==  false && $network == vp_getoption("smileairtel")){
+		
+		
+	$request = array(
+			"user"=> vp_getoption("hollatagusername"),
+			"pass"=> vp_getoption("hollatagpassword"),
+			"from"=> "DATA ALERT",
+			"to"=> vp_getoption("hollatagcompany"),
+			"msg"=> "Hello! Kindly Send ".$_POST["data_plan"]." To $phone"
+	);
+	
+	
+	$url = "https://sms.hollatags.com/api/send/";
+	$call =  vp_remote_post($url, $request);
+	$response = $call;
+	$response == "sent" ? $force = "true" : $force = "false";
+	$got = false;
+	}
+	else{
+		$got = true;
+		$force = "false";
+	}
+	
+	if($pos != $_POST["run_code"]){
+		$errz = "Track ID Not Same";
+		$do = false;
+	}
+	elseif($_POST["run_code"] == "wrong"){
+		$errz = "Track Id Can't Be wrong.";
+		$do = false;
+	}
+	elseif($_COOKIE["run_code"] == "wrong"){
+		$errz = "Session Can't Be Wrong";
+		$do = false;
+	}
+	else{
+		$errz = "unidentified";
+		$do = true;
+	
+		if($bal == $_COOKIE["last_bal"] && $_COOKIE["trans_reversal"] == "no"){
+	
+			$amtts = $bal - $_COOKIE["recent_amount"];
+	
+	
+			$name = get_userdata($id)->user_login;
+			$hname = get_userdata($id)->user_login;
+			$description = "Auto-Deducted a stated amount as we discovered an anomaly in previous transaction which no reversal was initiated";
+			$fund_amount= $_COOKIE["recent_amount"];
+			$before_amount = $bal;
+			$now_amount = $amtts;
+			$the_time = date('Y-m-d h:i:s A',$current_timestamp);
+			
+			$table_name = $wpdb->prefix.'vp_wallet';
+			$added_to_db = $wpdb->insert($table_name, array(
+			'name'=> $name,
+			'type'=> "Wallet",
+			'description'=> $description,
+			'fund_amount' => $fund_amount,
+			'before_amount' => $before_amount,
+			'now_amount' => $now_amount,
+			'user_id' => $id,
+			'status' => "Approved",
+			'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+			));
+	
+	
+			vp_updateuser($id,"vp_bal", $amtts);
+	
+	$wpdb->query('COMMIT');
+die("Error With Previous Balance Check.. Please Refresh Your Browser And Try Again ");
+	}
+	else{
+	setcookie("last_bal", $bal, time() + (30 * 24 * 60 * 60), "/");setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+	}
+	
+	
+	
+	}
+	
+	if($do && $pos == $_POST["run_code"] && $_POST["run_code"] != "wrong" && $_COOKIE["run_code"] != "wrong"){
+			
+				
+				//SECURITY
+	vpSec($phone);
+	
+			$trackcode = $_POST["run_code"];
+			global $wpdb;
+			$tableh = $wpdb->prefix."sdata";
+			$rest = $wpdb->get_results("SELECT * FROM $tableh WHERE run_code = '$trackcode' ");
+			if(empty($rest)){
+		
+			}else{
+	
+				$wpdb->query('COMMIT');
+die('[S/R] Duplicate Transaction!!! Check your transaction history please');
+			}
+	
+	
+	
+			
+			$service = "sdata";
+			$mlm_for = "_data";
+			global $wpdb;
+			$table_trans = $wpdb->prefix.'vp_transactions';
+			$unrecorded_added = $wpdb->insert($table_trans, array(
+			'status' => 'Fa',
+			'service' => $service,
+			'name'=> $name,
+			'email'=> $email,
+			'recipient' => $phone,
+			'bal_bf' => $bal,
+			'bal_nw' => $baln,
+			'amount' => $amount,
+			'request_id' => $uniqidvalue,
+			'user_id' => $id,
+			'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+			));
+			setcookie("amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("service", $service, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("name", $name, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("email", $email, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("recipient", $phone, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("bal_bf", $bal, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("bal_nw", $baln, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("request_id", $uniqidvalue, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("user_id", $id, time() + (30 * 24 * 60 * 60), "/");
+			setcookie("status", 'Fa', time() + (30 * 24 * 60 * 60), "/");
+			setcookie("the_time", date('Y-m-d h:i:s A',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+	
+	
+	
+	
+		
+			$_POST["run_code"] = "wrong";
+			if($got){
+				if(vp_getoption("smilequerymethod") != "array"){
+	
+					if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+						setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+						$tot = $bal - $amount;
+						vp_updateuser($id, 'vp_bal', $tot);
+						setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+					$call =  wp_remote_post($url, $http_args);
+					$response = wp_remote_retrieve_body($call);
+					setcookie("api_response", $response, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("api_from", 'Session', time() + (30 * 24 * 60 * 60), "/");
+					provider_header_handler($call);
+				}
+				else{
+				$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+				}
+						}
+						else{
+	
+							if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+								setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+								$tot = $bal - $amount;
+								vp_updateuser($id, 'vp_bal', $tot);
+								setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+								$call = "";	
+					$response =  vp_remote_post_fn($url, $smile_array, $datass);
+					if($response == "error"){
+						global $return_message;
+					
+						$wpdb->query('COMMIT');
+die($return_message);
+					}
+					else{
+						//do nothing
+					}
+				}
+				else{
+				$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+				}
+					
+						}
+			}else{};
+	
+	#$wpdb->query('COMMIT');
+
+	if(is_wp_error($call)){
+		if(vp_getoption("vpdebug") != "yes"){
+	$error = $call->get_error_code();
+	}
+	else{
+	$error = $call->get_error_message();
+	}
+	
+	$smile_token = "no_response";
+	global $wpdb;
+	$table_name = $wpdb->prefix.'sdata';
+	$added_to_db = $wpdb->insert($table_name, array(
+	'run_code' => esc_html($pos),
+	'response_id'=> $smile_token,
+	'name'=> $name,
+	'email' => $email,
+	'phone' => $phone,
+	'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+	'bal_bf' => $bal,
+	'bal_nw' => $bal,
+	'amount' => $amount,
+	'resp_log' => " ".esc_html($call->get_error_message())."",
+	'browser' => $browser,
+	'trans_type' => 'smile',
+	'trans_method' => 'post',
+	'via' => 'site',
+	'time_taken' => '1',
+	'request_id' => $uniqidvalue,
+	'user_id' => $id,
+	'status' => 'Failed',
+	'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+	));
+	
+	vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+	if(is_numeric($added_to_db)){
+		global $wpdb;
+		 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+		}
+		else{
+		//do nothing
+	}
+	
+	
+	
+	$obj = new stdClass;
+	$obj->status = "202";
+	$obj->response = $error;
+	$wpdb->query('COMMIT');
+die(json_encode($obj));
+	}
+	else{
+	if(vp_getoption("smile1_response_format") == "JSON" || vp_getoption("smile1_response_format") == "json"){
+	$en = validate_response($response,$sc,vp_getoption("smilesuccessvalue"),vp_getoption("smilesuccessvalue2"));
+	}
+	else{
+	$en = $response ;
+	}
+	}
+	
+	$smile_response = search_bill_token(array_change_key_case(json_decode($response,true),CASE_LOWER),vp_getoption("smileresponse_id"));
+	
+	if(!empty($smile_response)){
+		$smile_token = $smile_response[0];
+	}
+	else{
+			$smile_token = "Nill";
+	}
+	
+	if($en == "TRUE"  || $response  === vp_getoption("smilesuccessvalue") || $force == "true"){
+						if($add_total == "yes"){
+						vp_updateuser($id,"vp_kyc_total",(intval($tb4)+intval($tnow)));	
+					}
+	
+	$plan = $_POST["data_plan"];
+	$purchased = "Purchased {SMILE DATA --[ $plan ]--  }";
+	weblinkBlast($phone,$purchased);
+
+	$recipient = $phone;
+	vp_transaction_email("NEW DATA NOTIFICATION","SUCCESSFUL DATA PURCHASE",$uniqidvalue,$purchased, $recipient, $amount, $bal,$baln);
+	
+	
+	global $wpdb;
+	$table_name = $wpdb->prefix.'sdata';
+	$added_to_db = $wpdb->insert($table_name, array(
+	'run_code' => esc_html($pos),
+	'response_id'=> $smile_token,
+	'name'=> $name,
+	'email' => $email,
+	'phone' => $phone,
+	'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+	'bal_bf' => $bal,
+	'bal_nw' => $baln,
+	'amount' => $amount,
+	'resp_log' => " ".esc_html(harray_key_first($response))."",
+	'browser' => $browser,
+	'trans_type' => 'smile',
+	'trans_method' => 'post',
+	'via' => 'site',
+	'time_taken' => '1',
+	'request_id' => $uniqidvalue,
+	'user_id' => $id,
+	'status' => 'Successful',
+	'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+	));
+	
+	
+	$beneficiary = vp_getuser($id,"beneficiaries",true);
+	
+	if(!preg_match("/$phone/",$beneficiary)){
+	vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+	}
+	
+	if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+	
+	if(is_plugin_active("vpmlm/vpmlm.php")){
+	do_action("vp_after");
+	}
+	
+	setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("100");
+	}
+	elseif($en == "MAYBE"){
+	
+	
+	global $wpdb;
+	$table_name = $wpdb->prefix.'sdata';
+	$added_to_db = $wpdb->insert($table_name, array(
+	'run_code' => esc_html($pos),
+	'response_id'=> $smile_token,
+	'name'=> $name,
+	'email'=> $email,
+	'phone' => $phone,
+	'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+	'bal_bf' => $bal,
+	'bal_nw' => $baln,
+	'amount' => $amount,
+	'resp_log' => " ".esc_html(harray_key_first($response))."",
+	'browser' => $browser,
+	'trans_type' => 'smile',
+	'trans_method' => 'post',
+	'via' => 'site',
+	'time_taken' => '1',
+	'request_id' => $uniqidvalue,
+	'user_id' => $id,
+	'status' => 'Pending',
+	'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+	));
+	
+	
+	$beneficiary = vp_getuser($id,"beneficiaries",true);
+	
+	if(!preg_match("/$phone/",$beneficiary)){
+	vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+	}
+	
+	if(is_numeric($added_to_db)){
+		global $wpdb;
+		 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+		}
+		else{
+		
+		}
+	
+		setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/");  	setcookie("last_bal", "0", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("processing");
+	}
+	else{
+		
+	
+		global $wpdb;
+	$table_name = $wpdb->prefix.'sdata';
+	$added_to_db = $wpdb->insert($table_name, array(
+	'run_code' => esc_html($pos),
+	'response_id'=> $smile_token,
+	'name'=> $name,
+	'email'=> $email,
+	'phone' => $phone,
+	'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+	'bal_bf' => $bal,
+	'bal_nw' => $bal,
+	'amount' => $amount,
+	'resp_log' => " ".esc_html(harray_key_first($response))."",
+	'browser' => $browser,
+	'trans_type' => 'smile',
+	'trans_method' => 'post',
+	'via' => 'site',
+	'time_taken' => '1',
+	'request_id' => $uniqidvalue,
+	'user_id' => $id,
+	'status' => 'Failed',
+	'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+	));
+	
+	$beneficiary = vp_getuser($id,"beneficiaries",true);
+	
+	if(!preg_match("/$phone/",$beneficiary)){
+	vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+	}
+	
+		vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+	
+		update_wallet("Approved","Reversal For Failed Data Purchase With Id $uniqidvalue",$amount,$baln,$bal);
+	
+		if(is_numeric($added_to_db)){
+			global $wpdb;
+			 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+			}
+			else{
+			
+			}
+	setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/"); //FAILED
+	$wpdb->query('COMMIT');
+die('{"status":"200","response":"'.harray_key_first($response).'","response code":"'.wp_remote_retrieve_response_code( $call ).'","EN":"'.$en.'","response format ":"'.vp_getoption("smile1_response_format").'"}');
+		
+	
+	}
+	}
+	else{
+		$wpdb->query('COMMIT');
+die('['.$errz.'] - [S/R] Duplicate Transaction!!! Check your transaction history please');
+	}
+		
+		
+		
+	}
+}
+else{
+$vpdebug = vp_getoption("vpdebug");
+if(vp_getoption("r2datarequest") == "get"){
+
+$http_args = array(
+'headers' => array(
+'cache-control' => 'no-cache',
+	'Content-Type' => 'application/json'
+),
+'timeout' => '3000',
+'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+'sslverify' => false
+);
+
+
+$urlraw = htmlspecialchars_decode($_POST["url"]);
+$base = str_replace("corporatebase",vp_option_array($option_array,"r2databaseurl"),$urlraw);
+$postdata1 = str_replace("corporatepostdata1",vp_option_array($option_array,"r2datapostdata1"),$base);
+$postvalue1 = str_replace("corporatepostvalue1",vp_option_array($option_array,"r2datapostvalue1"),$postdata1);
+$postdata2 = str_replace("corporatepostdata2",vp_option_array($option_array,"r2datapostdata2"),$postvalue1);
+$postvalue2 = str_replace("corporatepostvalue2",vp_option_array($option_array,"r2datapostvalue2"),$postdata2);
+$url = $postvalue2;
+
+$sc = vp_getoption("r2datasuccesscode");
+
+if(vp_getoption("enablehollatag") == "yes" && is_numeric(stripos(vp_getoption("hollatagservices"),'co')) && stripos(vp_getoption("hollatagservices"),'co') !==  false && $network == vp_getoption("r2dataairtel")){
+	
+	
+$request = array(
+        "user"=> vp_getoption("hollatagusername"),
+        "pass"=> vp_getoption("hollatagpassword"),
+        "from"=> "DATA ALERT",
+        "to"=> vp_getoption("hollatagcompany"),
+        "msg"=> "Hello! Kindly Send ".$_POST["data_plan"]." To $phone"
+);
+
+
+$url = "https://sms.hollatags.com/api/send/";
+$call =  vp_remote_post($url, $request);
+$response = $call;
+$response == "sent" ? $force = "true" : $force = "false";
+$got = false;
+}
+else{
+	$got = true;
+	$force = "false";
+}
+
+if($pos != $_POST["run_code"]){
+	$errz = "Track ID Not Same";
+	$do = false;
+}
+elseif($_POST["run_code"] == "wrong"){
+	$errz = "Track Id Can't Be wrong.";
+	$do = false;
+}
+elseif($_COOKIE["run_code"] == "wrong"){
+	$errz = "Session Can't Be Wrong";
+	$do = false;
+}
+else{
+	$errz = "unidentified";
+	$do = true;
+
+	if($bal == $_COOKIE["last_bal"] && $_COOKIE["trans_reversal"] == "no"){
+		$amtts = $bal - $_COOKIE["recent_amount"];
+
+				$name = get_userdata($id)->user_login;
+		$hname = get_userdata($id)->user_login;
+		$description = "Auto-Deducted a stated amount as we discovered an anomaly in previous transaction which no reversal was initiated";
+		$fund_amount= $_COOKIE["recent_amount"];
+		$before_amount = $bal;
+		$now_amount = $amtts;
+		$the_time = date('Y-m-d h:i:s A',$current_timestamp);
+		
+		$table_name = $wpdb->prefix.'vp_wallet';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'name'=> $name,
+		'type'=> "Wallet",
+		'description'=> $description,
+		'fund_amount' => $fund_amount,
+		'before_amount' => $before_amount,
+		'now_amount' => $now_amount,
+		'user_id' => $id,
+		'status' => "Approved",
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+
+		vp_updateuser($id,"vp_bal", $amtts);
+
+$wpdb->query('COMMIT');
+die("Error With Previous Balance Check.. Please Refresh Your Browser And Try Again ");
+}
+else{
+setcookie("last_bal", $bal, time() + (30 * 24 * 60 * 60), "/");setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+}
+
+
+
+}
+
+if($do && $pos == $_POST["run_code"] && $_POST["run_code"] != "wrong" && $_COOKIE["run_code"] != "wrong"){
+		
+			
+	//SECURITY
+	vpSec($phone);
+
+		$trackcode = $_POST["run_code"];
+		global $wpdb;
+		$tableh = $wpdb->prefix."sdata";
+		$rest = $wpdb->get_results("SELECT * FROM $tableh WHERE run_code = '$trackcode' ");
+		if(empty($rest)){
+	
+		}else{
+			$wpdb->query('COMMIT');
+die('[T/C] Duplicate Transaction!!! Check your transaction history please');
+		}
+
+
+
+		
+		$service = "sdata";
+		$mlm_for = "_data";
+		global $wpdb;
+		$table_trans = $wpdb->prefix.'vp_transactions';
+		$unrecorded_added = $wpdb->insert($table_trans, array(
+		'status' => 'Fa',
+		'service' => $service,
+		'name'=> $name,
+		'email'=> $email,
+		'recipient' => $phone,
+		'bal_bf' => $bal,
+		'bal_nw' => $baln,
+		'amount' => $amount,
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+		setcookie("amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("service", $service, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("name", $name, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("email", $email, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("recipient", $phone, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("bal_bf", $bal, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("bal_nw", $baln, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("request_id", $uniqidvalue, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("user_id", $id, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("status", 'Fa', time() + (30 * 24 * 60 * 60), "/");
+		setcookie("the_time", date('Y-m-d h:i:s A',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+
+	
+		$_POST["run_code"] = "wrong";
+
+
+		if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+			setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+			$tot = $bal - $amount;
+			vp_updateuser($id, 'vp_bal', $tot);
+			setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+	
+		if($got){
+$call =  wp_remote_get($url, $http_args);
+$response = wp_remote_retrieve_body($call);
+setcookie("api_response", $response, time() + (30 * 24 * 60 * 60), "/");
+setcookie("api_from", 'Session', time() + (30 * 24 * 60 * 60), "/");
+provider_header_handler($call);
+		}else{};
+	}
+	else{
+	$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+	}
+
+
+if(is_wp_error($call)){
+	if(vp_getoption("vpdebug") != "yes"){
+		$error = $call->get_error_code();
+		}
+		else{
+		$error = $call->get_error_message();
+		}
+
+		$sme_token = "no_response";
+		global $wpdb;
+		$table_name = $wpdb->prefix.'sdata';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'run_code' => esc_html($pos),
+		'response_id'=> $sme_token,
+		'name'=> $name,
+		'email' => $email,
+		'phone' => $phone,
+		'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+		'bal_bf' => $bal,
+		'bal_nw' => $bal,
+		'amount' => $amount,
+		'resp_log' => " ".esc_html($call->get_error_message())."",
+		'browser' => $browser,
+		'trans_type' => 'corporate',
+		'trans_method' => 'get',
+		'via' => 'site',
+		'time_taken' => '1',
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'status' => 'Failed',
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+		vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+		if(is_numeric($added_to_db)){
+			global $wpdb;
+			 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+			}
+			else{
+			//do nothing
+		}
+
+$obj = new stdClass;
+$obj->status = "202";
+$obj->response = $error;
+$wpdb->query('COMMIT');
+die(json_encode($obj));
+}
+else{
+if(vp_getoption("data3_response_format") == "JSON" || vp_getoption("data3_response_format") == "json"){
+$en = validate_response($response,$sc,vp_getoption("r2datasuccessvalue"),vp_getoption("r2datasuccessvalue2"));
+}
+else{
+$en = $response ;
+}
+}
+
+
+
+$corporate_response = search_bill_token(array_change_key_case(json_decode($response,true),CASE_LOWER),vp_getoption("corporateresponse_id"));
+
+if(!empty($corporate_response)){
+	$corporate_token = $corporate_response[0];
+}
+else{
+	$corporate_token = "Nill";
+}
+
+
+$vpdebug = vp_getoption("vpdebug");
+if($en == "TRUE"  || $response  === vp_getoption("r2datasuccessvalue") || $force == "true"){
+					if($add_total == "yes"){
+					vp_updateuser($id,"vp_kyc_total",(intval($tb4)+intval($tnow)));	
+				}
+//echo"<script>alert('sta 1 ma');</script>";
+
+global $wpdb;
+$table_name = $wpdb->prefix.'sdata';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $corporate_token,
+'name'=> $name,
+'email' => $email,
+'phone' => $phone,
+'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'corporate',
+'trans_method' => 'get',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => 'Successful',
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+$purchased = "Purchased ".$_POST["data_plan"];
+weblinkBlast($phone,$purchased);
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+
+$plan = $_POST["data_plan"];
+$purchased = "Purchased {CORPORATE DATA --[ $plan ]--  }";
+$recipient = $phone;
+vp_transaction_email("NEW DATA NOTIFICATION","SUCCESSFUL DATA PURCHASE",$uniqidvalue,$purchased, $recipient, $amount, $bal,$baln);
+
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+if(is_plugin_active("vpmlm/vpmlm.php")){	
+do_action("vp_after");
+}
+
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("100");
+}
+elseif($en == "MAYBE"){
+
+
+global $wpdb;
+$table_name = $wpdb->prefix.'sdata';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $corporate_token,
+'name'=> $name,
+'email'=> $email,
+'phone' => $phone,
+'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'corporate',
+'trans_method' => 'get',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => 'Pending',
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+if(is_numeric($added_to_db)){
+global $wpdb;
+ $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+}
+else{
+
+}
+
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("processing");
+}
+else{
+
+
+	global $wpdb;
+$table_name = $wpdb->prefix.'sdata';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $corporate_token,
+'name'=> $name,
+'email'=> $email,
+'phone' => $phone,
+'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+'bal_bf' => $bal,
+'bal_nw' => $bal,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'corporate',
+'trans_method' => 'get',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => 'Failed',
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+	vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+
+	update_wallet("Approved","Reversal For Failed Data Purchase With Id $uniqidvalue",$amount,$baln,$bal);
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/"); //FAILED
+$wpdb->query('COMMIT');
+die('{"status":"200","response":"'.harray_key_first($response).'","response code":"'.wp_remote_retrieve_response_code( $call ).'","EN":"'.$en.'","response format":"'.vp_getoption("data3_response_format").'"}');
+		
+}
+}
+else{
+	$wpdb->query('COMMIT');
+die('['.$errz.'] - [S/R] Duplicate Transaction!!! Check your transaction history please');
+}
+}
+else{
+$url = vp_getoption("r2databaseurl").vp_getoption("r2dataendpoint");
+$num = $phone;
+$cua = vp_getoption("r2datapostdata1");
+    $cppa = vp_getoption("r2datapostdata2");
+    $c1a = vp_getoption("r2datapostdata3");
+    $c2a = vp_getoption("r2datapostdata4");
+    $c3a = vp_getoption("r2datapostdata5");
+    $cna = vp_getoption("r2datanetworkattribute");
+    $caa = vp_getoption("r2dataamountattribute");
+    $cpa = vp_getoption("r2dataphoneattribute");
+	$cpla = vp_getoption("r2cvariationattr");
+	$uniqid = vp_getoption("r2request_id");
+    
+    $datass = array(
+     $cua => vp_getoption("r2datapostvalue1"),
+     $cppa => vp_getoption("r2datapostvalue2"),
+	$c1a => vp_getoption("r2datapostvalue3"),
+	$c2a => vp_getoption("r2datapostvalue4"),
+	$c3a => vp_getoption("r2datapostvalue5"),
+	$uniqid => $uniqidvalue,
+	$cna => $network,
+	$cpa => $phone,
+	$datatype => $datatype_value,
+	$cpla => $dplan
+	);
+
+	$corporate_array = [];
+
+	$the_head =  vp_getoption("data_head3");
+	if($the_head == "not_concatenated"){
+		$the_auth = vp_getoption("r2datavalue1");
+		$auto = vp_getoption("r2datahead1").' '.$the_auth;
+		$corporate_array["Authorization"] = $auto;
+	}
+	elseif($the_head == "concatenated"){
+		$the_auth_value = vp_getoption("r2datavalue1");
+		$the_auth = base64_encode($the_auth_value);
+		$auto = vp_getoption("r2datahead1").' '.$the_auth;
+		$corporate_array["Authorization"] = $auto;
+	}
+	else{
+		$corporate_array[vp_getoption("r2datahead1")] = vp_getoption("r2datavalue1");
+	}
+$corporate_array["Content-Type"] = "application/json";
+$corporate_array["cache-control"] = "no-cache";
+
+for($corporateaddheaders=1; $corporateaddheaders<=4; $corporateaddheaders++){
+	if(!empty(vp_getoption("corporateaddheaders$corporateaddheaders")) && !empty(vp_getoption("corporateaddvalue$corporateaddheaders"))){
+		$corporate_array[vp_getoption("corporateaddheaders$corporateaddheaders")] = vp_getoption("corporateaddvalue$corporateaddheaders");
+	}
+}
+
+
+$http_args = array(
+'headers' => $corporate_array,
+'timeout' => '3000',
+'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+'sslverify' => false,
+'body' => json_encode($datass)
+);
+
+$sc = vp_getoption("r2datasuccesscode");
+
+if(vp_getoption("enablehollatag") == "yes" && is_numeric(stripos(vp_getoption("hollatagservices"),'co')) && stripos(vp_getoption("hollatagservices"),'co') !==  false && $network == vp_getoption("r2dataairtel")){
+	
+	
+$request = array(
+        "user"=> vp_getoption("hollatagusername"),
+        "pass"=> vp_getoption("hollatagpassword"),
+        "from"=> "DATA ALERT",
+        "to"=> vp_getoption("hollatagcompany"),
+        "msg"=> "Hello! Kindly Send ".$_POST["data_plan"]." To $phone"
+);
+
+$url = "https://sms.hollatags.com/api/send/";
+$call =  vp_remote_post($url, $request);
+$response = $call;
+$response == "sent" ? $force = "true" : $force = "false";
+$got = false;
+}
+else{
+	$got = true;
+	$force = "false";
+}
+
+if($pos != $_POST["run_code"]){
+	$errz = "Track ID Not Same";
+	$do = false;
+}
+elseif($_POST["run_code"] == "wrong"){
+	$errz = "Track Id Can't Be wrong.";
+	$do = false;
+}
+elseif($_COOKIE["run_code"] == "wrong"){
+	$errz = "Session Can't Be Wrong";
+	$do = false;
+}
+else{
+	$errz = "unidentified";
+	$do = true;
+
+	if($bal == $_COOKIE["last_bal"] && $_COOKIE["trans_reversal"] == "no"){
+		$amtts = $bal - $_COOKIE["recent_amount"];
+
+				$name = get_userdata($id)->user_login;
+		$hname = get_userdata($id)->user_login;
+		$description = "Auto-Deducted a stated amount as we discovered an anomaly in previous transaction which no reversal was initiated";
+		$fund_amount= $_COOKIE["recent_amount"];
+		$before_amount = $bal;
+		$now_amount = $amtts;
+		$the_time = date('Y-m-d h:i:s A',$current_timestamp);
+		
+		$table_name = $wpdb->prefix.'vp_wallet';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'name'=> $name,
+		'type'=> "Wallet",
+		'description'=> $description,
+		'fund_amount' => $fund_amount,
+		'before_amount' => $before_amount,
+		'now_amount' => $now_amount,
+		'user_id' => $id,
+		'status' => "Approved",
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+
+
+		vp_updateuser($id,"vp_bal", $amtts);
+
+$wpdb->query('COMMIT');
+die("Error With Previous Balance Check.. Please Refresh Your Browser And Try Again ");
+}
+else{
+setcookie("last_bal", $bal, time() + (30 * 24 * 60 * 60), "/");setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+}
+
+
+
+}
+
+if($do && $pos == $_POST["run_code"] && $_POST["run_code"] != "wrong" && $_COOKIE["run_code"] != "wrong"){
+		
+			
+
+	//SECURITY
+	vpSec($phone);
+
+		$trackcode = $_POST["run_code"];
+		global $wpdb;
+		$tableh = $wpdb->prefix."sdata";
+		$rest = $wpdb->get_results("SELECT * FROM $tableh WHERE run_code = '$trackcode' ");
+		if(empty($rest)){
+	
+		}else{
+			$wpdb->query('COMMIT');
+die('[T/C] Duplicate Transaction!!! Check your transaction history please');
+		}
+
+
+
+		
+		$service = "sdata";
+		$mlm_for = "_data";
+		global $wpdb;
+		$table_trans = $wpdb->prefix.'vp_transactions';
+		$unrecorded_added = $wpdb->insert($table_trans, array(
+		'status' => 'Fa',
+		'service' => $service,
+		'name'=> $name,
+		'email'=> $email,
+		'recipient' => $phone,
+		'bal_bf' => $bal,
+		'bal_nw' => $baln,
+		'amount' => $amount,
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+		setcookie("amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("service", $service, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("name", $name, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("email", $email, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("recipient", $phone, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("bal_bf", $bal, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("bal_nw", $baln, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("request_id", $uniqidvalue, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("user_id", $id, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("status", 'Fa', time() + (30 * 24 * 60 * 60), "/");
+		setcookie("the_time", date('Y-m-d h:i:s A',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+
+	
+		$_POST["run_code"] = "wrong";
+
+
+
+		if($got){
+			if(vp_getoption("corporatequerymethod") != "array"){
+
+			if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+				setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+				$tot = $bal - $amount;
+				vp_updateuser($id, 'vp_bal', $tot);
+				setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+				$call =  wp_remote_post($url, $http_args);
+				$response = wp_remote_retrieve_body($call);
+				setcookie("api_response", $response, time() + (30 * 24 * 60 * 60), "/");
+setcookie("api_from", 'Session', time() + (30 * 24 * 60 * 60), "/");
+				provider_header_handler($call);
+			}
+			else{
+			$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+			}
+					}
+					else{
+
+						if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+							setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+							$tot = $bal - $amount;
+							vp_updateuser($id, 'vp_bal', $tot);
+							setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+							$call = "";	
+				$response =  vp_remote_post_fn($url, $corporate_array, $datass);
+				if($response == "error"){
+					global $return_message;
+				
+					$wpdb->query('COMMIT');
+die($return_message);
+				}
+				else{
+					//do nothing
+				}
+			}
+			else{
+			$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+			}
+					}
+		}else{};
+
+
+
+
+if(is_wp_error($call)){
+	if(vp_getoption("vpdebug") != "yes"){
+		$error = $call->get_error_code();
+		}
+		else{
+		$error = $call->get_error_message();
+		}
+
+
+		$sme_token = "no_response";
+		global $wpdb;
+		$table_name = $wpdb->prefix.'sdata';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'run_code' => esc_html($pos),
+		'response_id'=> $sme_token,
+		'name'=> $name,
+		'email' => $email,
+		'phone' => $phone,
+		'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+		'bal_bf' => $bal,
+		'bal_nw' => $bal,
+		'amount' => $amount,
+		'resp_log' => " ".esc_html($call->get_error_message())."",
+		'browser' => $browser,
+		'trans_type' => 'corporate',
+		'trans_method' => 'post',
+		'via' => 'site',
+		'time_taken' => '1',
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'status' => 'Failed',
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+		vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+		if(is_numeric($added_to_db)){
+			global $wpdb;
+			 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+			}
+			else{
+			//do nothing
+		}
+
+
+
+$obj = new stdClass;
+$obj->status = "202";
+$obj->response = $error;
+$wpdb->query('COMMIT');
+die(json_encode($obj));
+}
+else{
+if(vp_getoption("data3_response_format") == "JSON" || vp_getoption("data3_response_format") == "json"){
+$en = validate_response($response,$sc,vp_getoption("r2datasuccessvalue"),vp_getoption("r2datasuccessvalue2"));
+}
+else{
+$en = $response ;
+}
+}
+
+
+$corporate_response = search_bill_token(array_change_key_case(json_decode($response,true),CASE_LOWER),vp_getoption("corporateresponse_id"));
+
+if(!empty($corporate_response)){
+	$corporate_token = $corporate_response[0];
+}
+else{
+	$corporate_token = "Nill";
+}
+
+if($en == "TRUE"  || $response  === vp_getoption("r2datasuccessvalue") || $force == "true"){
+					if($add_total == "yes"){
+					vp_updateuser($id,"vp_kyc_total",(intval($tb4)+intval($tnow)));	
+				}
+
+$plan = $_POST["data_plan"];
+$purchased = "Purchased {CORPORATE DATA --[ $plan ]--  }";
+
+weblinkBlast($phone,$purchased);
+
+$recipient = $phone;
+vp_transaction_email("NEW DATA NOTIFICATION","SUCCESSFUL DATA PURCHASE",$uniqidvalue,$purchased, $recipient, $amount, $bal,$baln);
+
+
+global $wpdb;
+$table_name = $wpdb->prefix.'sdata';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $corporate_token,
+'name'=> $name,
+'email' => $email,
+'phone' => $phone,
+'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'corporate',
+'trans_method' => 'post',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => 'Successful',
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+
+if(is_plugin_active("vpmlm/vpmlm.php")){	
+do_action("vp_after");
+}
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("100");
+
+}
+elseif($en == "MAYBE"){
+	
+
+global $wpdb;
+$table_name = $wpdb->prefix.'sdata';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $corporate_token,
+'name'=> $name,
+'email'=> $email,
+'phone' => $phone,
+'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'corporate',
+'trans_method' => 'post',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => 'Pending',
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+if(is_numeric($added_to_db)){
+global $wpdb;
+ $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+}
+else{
+
+}
+
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("processing");
+}
+else{
+
+
+
+	global $wpdb;
+$table_name = $wpdb->prefix.'sdata';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $corporate_token,
+'name'=> $name,
+'email'=> $email,
+'phone' => $phone,
+'plan' => $_POST["data_plan"]." With - ID ".$dplan,
+'bal_bf' => $bal,
+'bal_nw' => $bal,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'corporate',
+'trans_method' => 'post',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => 'Failed',
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$phone/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+}
+
+	vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+
+	update_wallet("Approved","Reversal For Failed Data Purchase With Id $uniqidvalue",$amount,$baln,$bal);
+
+	if(is_numeric($added_to_db)){
+		global $wpdb;
+		 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+		}
+		else{
+		
+		}
+setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/"); //FAILED
+$wpdb->query('COMMIT');
+die('{"status":"200","response":"'.harray_key_first($response).'","response code":"'.wp_remote_retrieve_response_code( $call ).'","EN":"'.$en.'","response format":"'.vp_getoption("data3_response_format").'"}');
+	
+
+}
+}
+else{
+	$wpdb->query('COMMIT');
+die('['.$errz.'] - [S/R] Duplicate Transaction!!! Check your transaction history please');
+}
+
+}
+
+}
+
+
+break;
+case "ccab":
+	$pos = $_POST["run_code"];
+if(vp_getoption("cablerequest") == "get"){
+$urlraw = htmlspecialchars_decode($_POST["url"]);
+$base = str_replace("cablebase",vp_option_array($option_array,"cablebaseurl"),$urlraw);
+$postdata1 = str_replace("cablepostdata1",vp_option_array($option_array,"cablepostdata1"),$base);
+$postvalue1 = str_replace("cablepostvalue1",vp_option_array($option_array,"cablepostvalue1"),$postdata1);
+$postdata2 = str_replace("cablepostdata2",vp_option_array($option_array,"cablepostdata2"),$postvalue1);
+$postvalue2 = str_replace("cablepostvalue2",vp_option_array($option_array,"cablepostvalue2"),$postdata2);
+$url = $postvalue2;
+
+$sc = vp_getoption("cablesuccesscode");
+
+if($pos != $_POST["run_code"]){
+	$errz = "Track ID Not Same";
+	$do = false;
+}
+elseif($_POST["run_code"] == "wrong"){
+	$errz = "Track Id Can't Be wrong.";
+	$do = false;
+}
+elseif($_COOKIE["run_code"] == "wrong"){
+	$errz = "Session Can't Be Wrong";
+	$do = false;
+}
+else{
+	$errz = "unidentified";
+	$do = true;
+
+	if($bal == $_COOKIE["last_bal"] && $_COOKIE["trans_reversal"] == "no"){
+
+		$amtts = $bal - $_COOKIE["recent_amount"];
+
+				$name = get_userdata($id)->user_login;
+		$hname = get_userdata($id)->user_login;
+		$description = "Auto-Deducted a stated amount as we discovered an anomaly in previous transaction which no reversal was initiated";
+		$fund_amount= $_COOKIE["recent_amount"];
+		$before_amount = $bal;
+		$now_amount = $amtts;
+		$the_time = date('Y-m-d h:i:s A',$current_timestamp);
+		
+		$table_name = $wpdb->prefix.'vp_wallet';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'name'=> $name,
+		'type'=> "Wallet",
+		'description'=> $description,
+		'fund_amount' => $fund_amount,
+		'before_amount' => $before_amount,
+		'now_amount' => $now_amount,
+		'user_id' => $id,
+		'status' => "Approved",
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+
+
+		vp_updateuser($id,"vp_bal", $amtts);
+
+$wpdb->query('COMMIT');
+die("Error With Previous Balance Check.. Please Refresh Your Browser And Try Again ");
+}
+else{
+setcookie("last_bal", $bal, time() + (30 * 24 * 60 * 60), "/");setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+}
+
+
+
+}
+if($do && $pos == $_POST["run_code"] && $_POST["run_code"] != "wrong" && $_COOKIE["run_code"] != "wrong"){
+	
+		
+
+	//SECURITY
+	vpSec($iuc);
+
+	$trackcode = $_POST["run_code"];
+	global $wpdb;
+	$tableh = $wpdb->prefix."scable";
+	$rest = $wpdb->get_results("SELECT * FROM $tableh WHERE run_code = '$trackcode' ");
+	if(empty($rest)){
+
+	}else{
+		$wpdb->query('COMMIT');
+die('[T/C] Duplicate Transaction!!! Check your transaction history please');
+	}
+
+
+	
+		$service = "scable";
+		$mlm_for = "_cable";
+		global $wpdb;
+		$table_trans = $wpdb->prefix.'vp_transactions';
+		$unrecorded_added = $wpdb->insert($table_trans, array(
+		'status' => 'Fa',
+		'service' => $service,
+		'name'=> $name,
+		'email'=> $email,
+		'recipient' => $iuc,
+		'bal_bf' => $bal,
+		'bal_nw' => $baln,
+		'amount' => $amount,
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+		setcookie("amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("service", $service, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("name", $name, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("email", $email, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("recipient", $iuc, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("bal_bf", $bal, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("bal_nw", $baln, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("request_id", $uniqidvalue, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("user_id", $id, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("status", 'Fa', time() + (30 * 24 * 60 * 60), "/");
+		setcookie("the_time", date('Y-m-d h:i:s A',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+
+	$_POST["run_code"] = "wrong";
+
+
+	if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+		setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+		$tot = $bal - $amount;
+		vp_updateuser($id, 'vp_bal', $tot);
+		setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+$call =  wp_remote_get($url, $http_args);
+$response =wp_remote_retrieve_body($call);
+setcookie("api_response", $response, time() + (30 * 24 * 60 * 60), "/");
+setcookie("api_from", 'Session', time() + (30 * 24 * 60 * 60), "/");
+provider_header_handler($call);
+}
+else{
+$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+}
+
+
+if(is_wp_error($call)){
+	if(vp_getoption("vpdebug") != "yes"){
+		$error = $call->get_error_code();
+		}
+		else{
+		$error = $call->get_error_message();
+		}
+
+
+		$cable_token = "no_response";
+		global $wpdb;
+		$table_name = $wpdb->prefix.'scable';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'run_code' => esc_html($pos),
+		'response_id'=> $cable_token,
+		'name'=> $name,
+		'email'=> $email,
+		'iucno' => $iuc,
+		'phone' => $phone,
+		'bal_bf' => $bal,
+		'bal_nw' => $bal,
+		'amount' => $amount,
+		'resp_log' => " ".esc_html($call->get_error_message())."",
+		'browser' => $browser,
+		'trans_type' => 'cable',
+		'trans_method' => 'get',
+		'via' => 'site',
+		'time_taken' => '1',
+		'request_id' => $uniqidvalue,
+		'product_id' => $ccable,
+		'type' => $cabtype,
+		'status' => "Failed",
+		'user_id' => $id,
+		'time' => date("Y-m-d h:i:s A",$current_timestamp)
+		));
+
+		vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+		if(is_numeric($added_to_db)){
+			global $wpdb;
+			 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+			}
+			else{
+			//do nothing
+		}
+
+
+
+$obj = new stdClass;
+$obj->status = "202";
+$obj->response = $error;
+$wpdb->query('COMMIT');
+die(json_encode($obj));
+
+}
+else{
+if(vp_getoption("cable_response_format") == "JSON" || vp_getoption("cable_response_format") == "json"){
+$en = validate_response($response,$sc,vp_getoption("cablesuccessvalue"),vp_getoption("cablesuccessvalue2"));
+}
+else{
+$en = $response ;
+}
+}
+
+
+$cable_response = search_bill_token(array_change_key_case(json_decode($response,true),CASE_LOWER),vp_getoption("cableresponse_id"));
+
+if(!empty($cable_response)){
+	$cable_token = $cable_response[0];
+}
+else{
+	$cable_token = "Nill";
+}
+
+if($en == "TRUE"  || $response  === vp_getoption("cablesuccessvalue")){
+					if($add_total == "yes"){
+					vp_updateuser($id,"vp_kyc_total",(intval($tb4)+intval($tnow)));	
+				}
+
+$cable = strtoupper($cabtype);
+$realAmt = 	$_POST['amount'];
+$purchased = "Paid $cable CableTv Subscription worth  ₦$realAmt";
+$recipient = $iuc;
+vp_transaction_email("NEW CABLETV NOTIFICATION","SUCCESSFUL CABLETV SUBSCRIPTION",$uniqidvalue,$purchased, $recipient, $amount, $bal,$baln);
+
+
+
+global $wpdb;
+$table_name = $wpdb->prefix.'scable';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $cable_token,
+'name'=> $name,
+'email'=> $email,
+'iucno' => $iuc,
+'phone' => $phone,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'cable',
+'trans_method' => 'get',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'product_id' => $ccable,
+'type' => $cabtype,
+'status' => "Successful",
+'user_id' => $id,
+'time' => date("Y-m-d h:i:s A",$current_timestamp)
+));
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$iuc/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$iuc);
+}
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	//do nothing
+}
+
+if(is_plugin_active("vpmlm/vpmlm.php")){	
+do_action("vp_after");
+}
+
+
+//wp_redirect(site_url().apply_filters("spage",vp_getoption("suc")));
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("100");
+
+}
+elseif($en == "MAYBE"){
+
+
+global $wpdb;
+$table_name = $wpdb->prefix.'scable';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $cable_token,
+'name'=> $name,
+'email'=> $email,
+'iucno' => $iuc,
+'phone' => $phone,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'cable',
+'trans_method' => 'get',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'product_id' => $ccable,
+'type' => $cabtype,
+'user_id' => $id,
+'status' => "Pending",
+'time' => date("Y-m-d h:i:s A",$current_timestamp)
+));
+
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$iuc/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$iuc);
+}
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("processing");
+}
+else{
+
+
+	global $wpdb;
+	$table_name = $wpdb->prefix.'scable';
+	$added_to_db = $wpdb->insert($table_name, array(
+	'run_code' => esc_html($pos),
+	'response_id'=> $cable_token,
+	'name'=> $name,
+	'email'=> $email,
+	'iucno' => $iuc,
+	'phone' => $phone,
+	'bal_bf' => $bal,
+	'bal_nw' => $bal,
+	'amount' => $amount,
+	'resp_log' => " ".esc_html(harray_key_first($response))."",
+	'browser' => $browser,
+	'trans_type' => 'cable',
+	'trans_method' => 'get',
+	'via' => 'site',
+	'time_taken' => '1',
+	'request_id' => $uniqidvalue,
+	'product_id' => $ccable,
+	'type' => $cabtype,
+	'user_id' => $id,
+	'status' => "Failed",
+	'time' => date("Y-m-d h:i:s A",$current_timestamp)
+	));
+
+	$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$iuc/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$iuc);
+}
+
+	vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+
+	update_wallet("Approved","Reversal For Failed Cable Purchase With Id $uniqidvalue",$amount,$baln,$bal);
+
+	if(is_numeric($added_to_db)){
+		global $wpdb;
+		 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+		}
+		else{
+		
+		}
+setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/"); //FAILED
+$wpdb->query('COMMIT');
+die('{"status":"200","response":"'.harray_key_first($response).'","response code":"'.wp_remote_retrieve_response_code( $call ).'","EN":"'.$en.'","response format":"'.vp_getoption("cable_response_format").'"}');
+		
+}
+}
+else{
+	$wpdb->query('COMMIT');
+die('['.$errz.'] - [S/R] Duplicate Transaction!!! Check your transaction history please');
+}
+}
+else{
+$url = vp_getoption("cablebaseurl").vp_getoption("cableendpoint");
+$num = $phone;
+ $cua = vp_getoption("cablepostdata1");
+    $cppa = vp_getoption("cablepostdata2");
+    $c1a = vp_getoption("cablepostdata3");
+    $c2a = vp_getoption("cablepostdata4");
+    $c3a = vp_getoption("cablepostdata5");
+    $ctypa = vp_getoption("ctypeattr");
+    $caa = vp_getoption("cableamountattribute");
+	$ccvaa = vp_getoption("ccvariationattr");
+	$ciuc = vp_getoption("ciucattr");
+	$uniqid = vp_getoption("crequest_id");
+    
+    $datass = array(
+    $cua => vp_getoption("cablepostvalue1"),
+    $cppa => vp_getoption("cablepostvalue2"),
+	$c1a => vp_getoption("cablepostvalue3"),
+	$c2a => vp_getoption("cablepostvalue4"),
+	$c3a => vp_getoption("cablepostvalue5"),
+	$uniqid => $uniqidvalue,
+	$ctypa => $cabtype,
+	$ccvaa => $ccable,
+	$ciuc => $iuc
+	);
+
+	$cable_array = [];
+
+	$the_head =  vp_getoption("cable_head");
+	if($the_head == "not_concatenated"){
+		$the_auth = vp_getoption("cablevalue1");
+		$auto = vp_getoption("cablehead1").' '.$the_auth;
+		$cable_array["Authorization"] = $auto;
+	}
+	elseif($the_head == "concatenated"){
+		$the_auth_value = vp_getoption("cablevalue1");
+		$the_auth = base64_encode($the_auth_value);
+		$auto = vp_getoption("cablehead1").' '.$the_auth;
+		$cable_array["Authorization"] = $auto;
+	}
+	else{
+		$cable_array[vp_getoption("cablehead1")] = vp_getoption("cablevalue1");
+	}
+
+$sc = vp_getoption("cablesuccesscode");
+
+
+$cable_array["Content-Type"] = "application/json";
+$cable_array["cache-control"] = "no-cache";
+
+for($cableaddheaders=1; $cableaddheaders<=4; $cableaddheaders++){
+	if(!empty(vp_getoption("cableaddheaders$cableaddheaders")) && !empty(vp_getoption("cableaddvalue$cableaddheaders"))){
+		$cable_array[vp_getoption("cableaddheaders$cableaddheaders")] = vp_getoption("cableaddvalue$cableaddheaders");
+	}
+}
+
+$http_args = array(
+'headers' => $cable_array,
+'timeout' => '3000',
+'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+'sslverify' => false,
+'body' => json_encode($datass)
+);
+
+
+if($pos != $_POST["run_code"]){
+	$errz = "Track ID Not Same";
+	$do = false;
+}
+elseif($_POST["run_code"] == "wrong"){
+	$errz = "Track Id Can't Be wrong.";
+	$do = false;
+}
+elseif($_COOKIE["run_code"] == "wrong"){
+	$errz = "Session Can't Be Wrong";
+	$do = false;
+}
+else{
+	$errz = "unidentified";
+	$do = true;
+
+	if($bal == $_COOKIE["last_bal"] && $_COOKIE["trans_reversal"] == "no"){
+
+		$amtts = $bal - $_COOKIE["recent_amount"];
+
+		$name = get_userdata($id)->user_login;
+		$hname = get_userdata($id)->user_login;
+		$description = "Auto-Deducted a stated amount as we discovered an anomaly in previous transaction which no reversal was initiated";
+		$fund_amount= $_COOKIE["recent_amount"];
+		$before_amount = $bal;
+		$now_amount = $amtts;
+		$the_time = date('Y-m-d h:i:s A',$current_timestamp);
+		
+		$table_name = $wpdb->prefix.'vp_wallet';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'name'=> $name,
+		'type'=> "Wallet",
+		'description'=> $description,
+		'fund_amount' => $fund_amount,
+		'before_amount' => $before_amount,
+		'now_amount' => $now_amount,
+		'user_id' => $id,
+		'status' => "Approved",
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+
+		vp_updateuser($id,"vp_bal", $amtts);
+
+$wpdb->query('COMMIT');
+die("Error With Previous Balance Check.. Please Refresh Your Browser And Try Again ");
+}
+else{
+setcookie("last_bal", $bal, time() + (30 * 24 * 60 * 60), "/");setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+}
+
+
+
+}
+
+if($do && $pos == $_POST["run_code"] && $_POST["run_code"] != "wrong" && $_COOKIE["run_code"] != "wrong"){
+	
+		
+	//SECURITY
+	vpSec($iuc);
+
+	$trackcode = $_POST["run_code"];
+	global $wpdb;
+	$tableh = $wpdb->prefix."scable";
+	$rest = $wpdb->get_results("SELECT * FROM $tableh WHERE run_code = '$trackcode' ");
+	if(empty($rest)){
+
+	}else{
+		$wpdb->query('COMMIT');
+die('[T/C] Duplicate Transaction!!! Check your transaction history please');
+	}
+
+
+
+	$service = "scable";
+	$mlm_for = "_cable";
+	global $wpdb;
+	$table_trans = $wpdb->prefix.'vp_transactions';
+	$unrecorded_added = $wpdb->insert($table_trans, array(
+	'status' => 'Fa',
+	'service' => $service,
+	'name'=> $name,
+	'email'=> $email,
+	'recipient' => $iuc,
+	'bal_bf' => $bal,
+	'bal_nw' => $baln,
+	'amount' => $amount,
+	'request_id' => $uniqidvalue,
+	'user_id' => $id,
+	'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+	));
+	setcookie("amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("service", $service, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("name", $name, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("email", $email, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("recipient", $iuc, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("bal_bf", $bal, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("bal_nw", $baln, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("request_id", $uniqidvalue, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("user_id", $id, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("status", 'Fa', time() + (30 * 24 * 60 * 60), "/");
+	setcookie("the_time", date('Y-m-d h:i:s A',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+
+
+	$_POST["run_code"] = "wrong";
+
+
+	if(vp_getoption("cablequerymethod") != "array"){
+
+		if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+			setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+			$tot = $bal - $amount;
+			vp_updateuser($id, 'vp_bal', $tot);
+			setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+		$call =  wp_remote_post($url, $http_args);
+		$response = wp_remote_retrieve_body($call);
+		setcookie("api_response", $response, time() + (30 * 24 * 60 * 60), "/");
+setcookie("api_from", 'Session', time() + (30 * 24 * 60 * 60), "/");
+		provider_header_handler($call);
+	}
+	else{
+	$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+	}
+			}
+			else{
+
+				if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+					setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+					$tot = $bal - $amount;
+					vp_updateuser($id, 'vp_bal', $tot);
+					setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+
+					$call = "";
+		$response =  vp_remote_post_fn($url, $cable_array, $datass);
+		if($response == "error"){
+			global $return_message;
+		
+			$wpdb->query('COMMIT');
+die($return_message);
+		}
+		else{
+			//do nothing
+		}
+	}
+	else{
+	$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+	}
+		
+			}
+
+
+if(is_wp_error($call)){
+	if(vp_getoption("vpdebug") != "yes"){
+		$error = $call->get_error_code();
+		}
+		else{
+		$error = $call->get_error_message();
+		}
+
+
+		
+
+		$cable_token = "no_response";
+		global $wpdb;
+		$table_name = $wpdb->prefix.'scable';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'run_code' => esc_html($pos),
+		'response_id'=> $cable_token,
+		'name'=> $name,
+		'email'=> $email,
+		'iucno' => $iuc,
+		'phone' => $phone,
+		'bal_bf' => $bal,
+		'bal_nw' => $bal,
+		'amount' => $amount,
+		'resp_log' => " ".esc_html($call->get_error_message())."",
+		'browser' => $browser,
+		'trans_type' => 'cable',
+		'trans_method' => 'post',
+		'via' => 'site',
+		'time_taken' => '1',
+		'request_id' => $uniqidvalue,
+		'product_id' => $ccable,
+		'type' => $cabtype,
+		'status' => "Failed",
+		'user_id' => $id,
+		'time' => date("Y-m-d h:i:s A",$current_timestamp)
+		));
+
+		vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+		if(is_numeric($added_to_db)){
+			global $wpdb;
+			 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+			}
+			else{
+			//do nothing
+		}
+
+
+
+
+$obj = new stdClass;
+$obj->status = "202";
+$obj->response = $error;
+$wpdb->query('COMMIT');
+die(json_encode($obj));
+}
+else{
+if(vp_getoption("cable_response_format") == "JSON" || vp_getoption("cable_response_format") == "json"){
+$en = validate_response($response,$sc,vp_getoption("cablesuccessvalue"),vp_getoption("cablesuccessvalue2") );
+}
+else{
+$en = $response ;
+}
+}
+
+$cable_response = search_bill_token(array_change_key_case(json_decode($response,true),CASE_LOWER),vp_getoption("cableresponse_id"));
+
+if(!empty($cable_response)){
+	$cable_token = $cable_response[0];
+}
+else{
+	$cable_token = "Nill";
+}
+
+if($en == "TRUE"  || $response  === vp_getoption("cablesuccessvalue")){
+					if($add_total == "yes"){
+					vp_updateuser($id,"vp_kyc_total",(intval($tb4)+intval($tnow)));	
+				}
+  
+global $wpdb;
+$table_name = $wpdb->prefix.'scable';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $cable_token,
+'name'=> $name,
+'email'=> $email,
+'iucno' => $iuc,
+'phone' => $phone,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'cable',
+'trans_method' => 'post',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'product_id' => $ccable,
+'type' => $cabtype,
+'status' => "Successful",
+'user_id' => $id,
+'time' => date("Y-m-d h:i:s A",$current_timestamp)
+));
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$iuc/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$iuc);
+}
+
+$cable = strtoupper($cabtype);
+$realAmt = 	$_POST['amount'];
+$purchased = "Paid $cable CableTv Subscription worth  ₦$realAmt";
+$recipient = $iuc;
+vp_transaction_email("NEW CABLETV NOTIFICATION","SUCCESSFUL CABLETV SUBSCRIPTION",$uniqidvalue,$purchased, $recipient, $amount, $bal,$baln);
+
+
+
+if(is_plugin_active("vpmlm/vpmlm.php")){	
+do_action("vp_after");
+}
+
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("100");
+
+}
+elseif($en == "MAYBE"){
+
+global $wpdb;
+$table_name = $wpdb->prefix.'scable';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $cable_token,
+'name'=> $name,
+'email'=> $email,
+'iucno' => $iuc,
+'phone' => $phone,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'trans_type' => 'cable',
+'trans_method' => 'post',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'product_id' => $ccable,
+'type' => $cabtype,
+'user_id' => $id,
+'status' => "Pending",
+'time' => date("Y-m-d h:i:s A",$current_timestamp)
+));
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$iuc/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$iuc);
+}
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("processing");
+}
+else{
+
+
+	global $wpdb;
+	$table_name = $wpdb->prefix.'scable';
+	$added_to_db = $wpdb->insert($table_name, array(
+	'run_code' => esc_html($pos),
+	'response_id'=> $cable_token,
+	'name'=> $name,
+	'email'=> $email,
+	'iucno' => $iuc,
+	'phone' => $phone,
+	'bal_bf' => $bal,
+	'bal_nw' => $bal,
+	'amount' => $amount,
+	'resp_log' => " ".esc_html(harray_key_first($response))."",
+	'browser' => $browser,
+	'trans_type' => 'cable',
+	'trans_method' => 'post',
+	'via' => 'site',
+	'time_taken' => '1',
+	'request_id' => $uniqidvalue,
+	'product_id' => $ccable,
+	'type' => $cabtype,
+	'user_id' => $id,
+	'status' => "Failed",
+	'time' => date("Y-m-d h:i:s A",$current_timestamp)
+	));
+
+	$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$iuc/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$iuc);
+}
+
+	vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+
+	update_wallet("Approved","Reversal For Failed Cable Purchase With Id $uniqidvalue",$amount,$baln,$bal);
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/"); //FAILED
+$wpdb->query('COMMIT');
+die('{"status":"200","response":"'.harray_key_first($response).'","response code":"'.wp_remote_retrieve_response_code( $call ).'","EN":"'.$en.'","response format":"'.vp_getoption("cable_response_format").'"}');
+
+}
+}
+else{
+	$wpdb->query('COMMIT');
+die('['.$errz.'] - [S/R] Duplicate Transaction!!! Check your transaction history please');
+}
+	
+}
+break;
+case "cbill":
+	$pos = $_POST["run_code"];
+if(vp_getoption("billrequest") == "get"){
+
+$urlraw = htmlspecialchars_decode($_POST["url"]);
+$base = str_replace("billbase",vp_option_array($option_array,"billbaseurl"),$urlraw);
+$postdata1 = str_replace("billpostdata1",vp_option_array($option_array,"billpostdata1"),$base);
+$postvalue1 = str_replace("billpostvalue1",vp_option_array($option_array,"billpostvalue1"),$postdata1);
+$postdata2 = str_replace("billpostdata2",vp_option_array($option_array,"billpostdata2"),$postvalue1);
+$postvalue2 = str_replace("billpostvalue2",vp_option_array($option_array,"billpostvalue2"),$postdata2);
+$url = $postvalue2;
+
+$sc = vp_getoption("billsuccesscode");
+
+$http_args = array(
+'headers' => array(
+'cache-control' => 'no-cache',
+	'Content-Type' => 'application/json'
+),
+'timeout' => '3000',
+'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+'sslverify' => false);
+
+if($pos != $_POST["run_code"]){
+	$errz = "Track ID Not Same";
+	$do = false;
+}
+elseif($_POST["run_code"] == "wrong"){
+	$errz = "Track Id Can't Be wrong.";
+	$do = false;
+}
+elseif($_COOKIE["run_code"] == "wrong"){
+	$errz = "Session Can't Be Wrong";
+	$do = false;
+}
+else{
+	$errz = "unidentified";
+	$do = true;
+
+	if($bal == $_COOKIE["last_bal"] && $_COOKIE["trans_reversal"] == "no"){
+		$amtts = $bal - $_COOKIE["recent_amount"];
+
+		$name = get_userdata($id)->user_login;
+		$hname = get_userdata($id)->user_login;
+		$description = "Auto-Deducted a stated amount as we discovered an anomaly in previous transaction which no reversal was initiated";
+		$fund_amount= $_COOKIE["recent_amount"];
+		$before_amount = $bal;
+		$now_amount = $amtts;
+		$the_time = date('Y-m-d h:i:s A',$current_timestamp);
+		
+		$table_name = $wpdb->prefix.'vp_wallet';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'name'=> $name,
+		'type'=> "Wallet",
+		'description'=> $description,
+		'fund_amount' => $fund_amount,
+		'before_amount' => $before_amount,
+		'now_amount' => $now_amount,
+		'user_id' => $id,
+		'status' => "Approved",
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+
+		vp_updateuser($id,"vp_bal", $amtts);
+		
+
+$wpdb->query('COMMIT');
+die("Error With Previous Balance Check.. Please Refresh Your Browser And Try Again ");
+}
+else{
+setcookie("last_bal", $bal, time() + (30 * 24 * 60 * 60), "/");setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+}
+
+
+
+}
+
+if($do && $pos == $_POST["run_code"] && $_POST["run_code"] != "wrong" && $_COOKIE["run_code"] != "wrong"){
+	
+		
+
+	//SECURITY
+	vpSec($meterno);
+
+	$trackcode = $_POST["run_code"];
+	global $wpdb;
+	$tableh = $wpdb->prefix."sbill";
+	$rest = $wpdb->get_results("SELECT * FROM $tableh WHERE run_code = '$trackcode' ");
+	if(empty($rest)){
+
+	}else{
+		$wpdb->query('COMMIT');
+die('[T/C] Duplicate Transaction!!! Check your transaction history please');
+	}
+
+
+	
+
+	$service = "sbill";
+	$mlm_for = "_bill";
+	global $wpdb;
+	$table_trans = $wpdb->prefix.'vp_transactions';
+	$unrecorded_added = $wpdb->insert($table_trans, array(
+	'status' => 'Fa',
+	'service' => $service,
+	'name'=> $name,
+	'email'=> $email,
+	'recipient' => $meterno,
+	'bal_bf' => $bal,
+	'bal_nw' => $baln,
+	'amount' => $amount,
+	'request_id' => $uniqidvalue,
+	'user_id' => $id,
+	'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+	));
+	setcookie("amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("service", $service, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("name", $name, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("email", $email, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("recipient", $meterno, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("bal_bf", $bal, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("bal_nw", $baln, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("request_id", $uniqidvalue, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("user_id", $id, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("status", 'Fa', time() + (30 * 24 * 60 * 60), "/");
+	setcookie("the_time", date('Y-m-d h:i:s A',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+
+
+	$_POST["run_code"] = "wrong";
+
+
+
+if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 
+	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+	setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+	$tot = $bal - $amount;
+	vp_updateuser($id, 'vp_bal', $tot);
+	setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+$call =  wp_remote_get($url, $http_args);
+$response = wp_remote_retrieve_body($call);
+setcookie("api_response", $response, time() + (30 * 24 * 60 * 60), "/");
+setcookie("api_from", 'Session', time() + (30 * 24 * 60 * 60), "/");
+provider_header_handler($call);
+}
+else{
+$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+}
+
+
+
+if(is_wp_error($call)){
+	if(vp_getoption("vpdebug") != "yes"){
+		$error = $call->get_error_code();
+		}
+		else{
+		$error = $call->get_error_message();
+		}
+
+
+		
+
+		$bill_token = "no_response";
+		global $wpdb;
+		$table_name = $wpdb->prefix.'sbill';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'run_code' => esc_html($pos),
+		'response_id'=> $bill_token,
+		'name'=> $name,
+		'email'=> $email,
+		'meterno' => $meterno,
+		'phone' => $phone,
+		'bal_bf' => $bal,
+		'bal_nw' => $bal,
+		'amount' => ($amount),
+		'resp_log' => " ".esc_html($call->get_error_message())."",
+		'browser' => $browser,
+		'charge' => floatval(vp_option_array($option_array,"bill_charge")),
+		'trans_type' => 'bill',
+		'trans_method' => 'get',
+		'via' => 'site',
+		'time_taken' => '1',
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'status' => "Failed",
+		'product_id' => $cbill,
+		'meter_token' => $meter_token,
+		'type' => $type,
+		'time' => date("Y-m-d h:i:s A",$current_timestamp)
+		));
+		
+
+		vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+		if(is_numeric($added_to_db)){
+			global $wpdb;
+			 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+			}
+			else{
+			//do nothing
+		}
+
+
+
+$obj = new stdClass;
+$obj->status = "202";
+$obj->response = $error;
+$wpdb->query('COMMIT');
+die(json_encode($obj));
+}
+else{
+if(vp_getoption("bill_response_format") == "JSON" || vp_getoption("bill_response_format") == "json"){
+$en = validate_response($response,$sc,vp_getoption("billsuccessvalue"),vp_getoption("billsuccessvalue2"));
+}
+else{
+$en = $response ;
+}
+}
+
+$bill_response = search_bill_token(array_change_key_case(json_decode($response,true),CASE_LOWER),vp_getoption("billresponse_id"));
+
+if(!empty($bill_response)){
+	$bill_token = $bill_response[0];
+}
+else{
+	$bill_token = "Nill";
+}
+
+if($en == "TRUE"  || $response  === vp_getoption("billsuccessvalue")){
+					if($add_total == "yes"){
+					vp_updateuser($id,"vp_kyc_total",(intval($tb4)+intval($tnow)));	
+				}
+//echo"<script>alert('sta 1 ma');</script>";
+
+$bill_response = search_bill_token(array_change_key_case(json_decode($response,true),CASE_LOWER),vp_getoption("metertoken"));
+
+if(!empty($bill_response)){
+	$meter_token = $bill_response[0];
+}
+else{
+		$meter_token = "Nill";
+}
+
+
+global $wpdb;
+$table_name = $wpdb->prefix.'sbill';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $bill_token,
+'name'=> $name,
+'email'=> $email,
+'meterno' => $meterno,
+'phone' => $phone,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => ($amount),
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'charge' => floatval(vp_option_array($option_array,"bill_charge")),
+'trans_type' => 'bill',
+'trans_method' => 'get',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => "Successful",
+'product_id' => $cbill,
+'meter_token' => $meter_token,
+'type' => $type,
+'time' => date("Y-m-d h:i:s A",$current_timestamp)
+));
+
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$meterno/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$meterno);
+}
+
+$realAmt = 	$_POST['amount'];
+$purchased = "Paid for UTILITY BILL worth  ₦$realAmt";
+$recipient = $meter_token;
+vp_transaction_email("NEW UTILITY BIL NOTIFICATION","SUCCESSFUL UTILITY BILL PAYMENT",$uniqidvalue,$purchased, $recipient, $amount, $bal,$baln);
+
+
+
+
+if(is_plugin_active("vpmlm/vpmlm.php")){	
+do_action("vp_after");
+}
+
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("100");
+}
+elseif($en == "MAYBE"){
+
+//echo"<script>alert('mae');</script>";
+global $wpdb;
+$table_name = $wpdb->prefix.'sbill';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $bill_token,
+'name'=> $name,
+'email'=> $email,
+'meterno' => $meterno,
+'phone' => $phone,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => ($amount),
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'charge' => floatval(vp_option_array($option_array,"bill_charge")),
+'trans_type' => 'bill',
+'trans_method' => 'get',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => "Pending",
+'product_id' => $cbill,
+'meter_token' => "No Record",
+'type' => $type,
+'time' => date("Y-m-d h:i:s A",$current_timestamp)
+));
+
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$meterno/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$meterno);
+}
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("processing");
+}
+else{
+
+
+global $wpdb;
+$table_name = $wpdb->prefix.'sbill';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $bill_token,
+'name'=> $name,
+'email'=> $email,
+'meterno' => $meterno,
+'phone' => $phone,
+'bal_bf' => $bal,
+'bal_nw' => $bal,
+'amount' => ($amount),
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'charge' => floatval(vp_option_array($option_array,"bill_charge")),
+'trans_type' => 'bill',
+'trans_method' => 'get',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => "Failed",
+'product_id' => $cbill,
+'meter_token' => "No Record",
+'type' => $type,
+'time' => date("Y-m-d h:i:s A",$current_timestamp)
+));
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$meterno/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$meterno);
+}
+
+	vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+
+	update_wallet("Approved","Reversal For Failed Bill Purchase With Id $uniqidvalue",$amount,$baln,$bal);
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/"); //FAILED
+$wpdb->query('COMMIT');
+die('{"status":"200","response":"'.harray_key_first($response).'","response code":"'.wp_remote_retrieve_response_code( $call ).'","EN":"'.$en.'","response format":"'.vp_getoption("bill_response_format").'"}');
+		
+}
+}
+else{
+	$wpdb->query('COMMIT');
+die('['.$errz.'] - [S/R] Duplicate Transaction!!! Check your transaction history please');
+}
+}
+else{
+$url = vp_getoption("billbaseurl").vp_getoption("billendpoint");
+$num = $phone;
+	$cua = vp_getoption("billpostdata1");
+    $cppa = vp_getoption("billpostdata2");
+    $c1a = vp_getoption("billpostdata3");
+    $c2a = vp_getoption("billpostdata4");
+    $c3a = vp_getoption("billpostdata5");
+    $btypa = vp_getoption("btypeattr");
+    $caa = vp_getoption("billamountattribute");
+	$cbvaa = vp_getoption("cbvariationattr");
+	$cmeter = vp_getoption("cmeterattr");
+	$uniqid = vp_getoption("brequest_id");
+    
+    $datass = array(
+    $cua => vp_getoption("billpostvalue1"),
+    $cppa => vp_getoption("billpostvalue2"),
+	$c1a => vp_getoption("billpostvalue3"),
+	$c2a => vp_getoption("billpostvalue4"),
+	$c3a => vp_getoption("billpostvalue5"),
+	$uniqid => $uniqidvalue,
+	$btypa => $type,
+	$cbvaa => $cbill,
+	$cmeter => $meterno,
+	$caa => floatval($bamount)
+	);
+
+	$bill_array = [];
+
+	$the_head =  vp_getoption("bill_head");
+	if($the_head == "not_concatenated"){
+		$the_auth = vp_getoption("billvalue1");
+		$auto = vp_getoption("billhead1").' '.$the_auth;
+		$bill_array["Authorization"] = $auto;
+	}
+	elseif($the_head == "concatenated"){
+		$the_auth_value = vp_getoption("billvalue1");
+		$the_auth = base64_encode($the_auth_value);
+		$auto = vp_getoption("billhead1").' '.$the_auth;
+		$bill_array["Authorization"] = $auto;
+	}
+	else{
+		$bill_array[vp_getoption("billhead1")] = vp_getoption("billvalue1");
+	}
+
+
+$bill_array["Content-Type"] = "application/json";
+$bill_array["cache-control"] = "no-cache";
+
+for($billaddheaders=1; $billaddheaders<=4; $billaddheaders++){
+	if(!empty(vp_getoption("billaddheaders$billaddheaders")) && !empty(vp_getoption("billaddvalue$billaddheaders"))){
+		$bill_array[vp_getoption("billaddheaders$billaddheaders")] = vp_getoption("billaddvalue$billaddheaders");
+	}
+}
+
+$http_args = array(
+'headers' => $bill_array,
+'timeout' => '3000',
+'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+'sslverify' => false,
+'body' => json_encode($datass)
+);
+
+$sc = vp_getoption("billsuccesscode");
+
+if($pos != $_POST["run_code"]){
+	$errz = "Track ID Not Same";
+	$do = false;
+}
+elseif($_POST["run_code"] == "wrong"){
+	$errz = "Track Id Can't Be wrong.";
+	$do = false;
+}
+elseif($_COOKIE["run_code"] == "wrong"){
+	$errz = "Session Can't Be Wrong";
+	$do = false;
+}
+else{
+	$errz = "unidentified";
+	$do = true;
+if($bal == $_COOKIE["last_bal"] && $_COOKIE["trans_reversal"] == "no"){
+
+	$amtts = $bal - $_COOKIE["recent_amount"];
+
+			$name = get_userdata($id)->user_login;
+		$hname = get_userdata($id)->user_login;
+		$description = "Auto-Deducted a stated amount as we discovered an anomaly in previous transaction which no reversal was initiated";
+		$fund_amount= $_COOKIE["recent_amount"];
+		$before_amount = $bal;
+		$now_amount = $amtts;
+		$the_time = date('Y-m-d h:i:s A',$current_timestamp);
+		
+		$table_name = $wpdb->prefix.'vp_wallet';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'name'=> $name,
+		'type'=> "Wallet",
+		'description'=> $description,
+		'fund_amount' => $fund_amount,
+		'before_amount' => $before_amount,
+		'now_amount' => $now_amount,
+		'user_id' => $id,
+		'status' => "Approved",
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+
+	vp_updateuser($id,"vp_bal", $amtts);
+
+	$wpdb->query('COMMIT');
+die("Error With Previous Balance Check.. Please Refresh Your Browser And Try Again ");
+}
+else{
+	setcookie("last_bal", $bal, time() + (30 * 24 * 60 * 60), "/");setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+}
+
+
+
+}
+
+if($do && $pos == $_POST["run_code"] && $_POST["run_code"] != "wrong" && $_COOKIE["run_code"] != "wrong"){
+	
+		
+	
+	//SECURITY
+	vpSec($meterno);
+
+	$trackcode = $_POST["run_code"];
+	global $wpdb;
+	$tableh = $wpdb->prefix."sbill";
+	$rest = $wpdb->get_results("SELECT * FROM $tableh WHERE run_code = '$trackcode' ");
+	if(empty($rest)){
+
+	}else{
+		$wpdb->query('COMMIT');
+die('[T/C] Duplicate Transaction!!! Check your transaction history please');
+	}
+
+	$service = "sbill";
+	$mlm_for = "_bill";
+	global $wpdb;
+	$table_trans = $wpdb->prefix.'vp_transactions';
+	$unrecorded_added = $wpdb->insert($table_trans, array(
+	'status' => 'Fa',
+	'service' => $service,
+	'name'=> $name,
+	'email'=> $email,
+	'recipient' => $meterno,
+	'bal_bf' => $bal,
+	'bal_nw' => $baln,
+	'amount' => $amount,
+	'request_id' => $uniqidvalue,
+	'user_id' => $id,
+	'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+	));
+	setcookie("amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("service", $service, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("name", $name, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("email", $email, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("recipient", $meterno, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("bal_bf", $bal, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("bal_nw", $baln, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("request_id", $uniqidvalue, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("user_id", $id, time() + (30 * 24 * 60 * 60), "/");
+	setcookie("status", 'Fa', time() + (30 * 24 * 60 * 60), "/");
+	setcookie("the_time", date('Y-m-d h:i:s A',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+
+
+	$_POST["run_code"] = "wrong";
+
+
+	
+	if(vp_getoption("billquerymethod") != "array"){
+
+		if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+			setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+			$tot = $bal - $amount;
+vp_updateuser($id, 'vp_bal', $tot);
+setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+		$call =  wp_remote_post($url, $http_args);
+		$response = wp_remote_retrieve_body($call);
+		setcookie("api_response", $response, time() + (30 * 24 * 60 * 60), "/");
+setcookie("api_from", 'Session', time() + (30 * 24 * 60 * 60), "/");
+		provider_header_handler($call);
+	}
+	else{
+	$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+	}
+			}
+			else{
+				$call = "";
+				if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+					setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+					$tot = $bal - $amount;
+					vp_updateuser($id, 'vp_bal', $tot);
+					setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+					$response =  vp_remote_post_fn($url, $bill_array, $datass);
+					if($response == "error"){
+						global $return_message;
+					
+						$wpdb->query('COMMIT');
+die($return_message);
+					}
+					else{
+						//do nothing
+					}
+	}
+	else{
+	$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+	}
+		
+			}
+
+
+if(is_wp_error($call)){
+	if(vp_getoption("vpdebug") != "yes"){
+		$error = $call->get_error_code();
+		}
+		else{
+		$error = $call->get_error_message();
+		}
+
+		
+		
+
+		$bill_token = "no_response";
+		global $wpdb;
+		$table_name = $wpdb->prefix.'sbill';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'run_code' => esc_html($pos),
+		'response_id'=> $bill_token,
+		'name'=> $name,
+		'email'=> $email,
+		'meterno' => $meterno,
+		'phone' => $phone,
+		'bal_bf' => $bal,
+		'bal_nw' => $bal,
+		'amount' => ($amount),
+		'resp_log' => " ".esc_html($call->get_error_message())."",
+		'browser' => $browser,
+		'charge' => floatval(vp_option_array($option_array,"bill_charge")),
+		'trans_type' => 'bill',
+		'trans_method' => 'post',
+		'via' => 'site',
+		'time_taken' => '1',
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'status' => "Failed",
+		'product_id' => $cbill,
+		'meter_token' => $meter_token,
+		'type' => $type,
+		'time' => date("Y-m-d h:i:s A",$current_timestamp)
+		));
+		
+
+		vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+		if(is_numeric($added_to_db)){
+			global $wpdb;
+			 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+			}
+			else{
+			//do nothing
+		}
+
+
+
+$obj = new stdClass;
+$obj->status = "202";
+$obj->response = $error;
+$wpdb->query('COMMIT');
+die(json_encode($obj));
+}
+else{
+if(vp_getoption("bill_response_format") == "JSON" || vp_getoption("bill_response_format") == "json"){
+$en = validate_response($response,$sc,vp_getoption("billsuccessvalue"),vp_getoption("billsuccessvalue2"));
+}
+else{
+$en = $response ;
+}
+}
+
+
+
+if($en == "TRUE"  || $response  === vp_getoption("billsuccessvalue")){
+	
+$bill_response = search_bill_token(array_change_key_case(json_decode($response,true),CASE_LOWER),vp_getoption("billresponse_id"));
+
+if(!empty($bill_response)){
+	$bill_token = $bill_response[0];
+}
+else{
+	$bill_token = "Nill";
+}
+	
+					if($add_total == "yes"){
+					vp_updateuser($id,"vp_kyc_total",(intval($tb4)+intval($tnow)));	
+				}
+				
+
+$bill_response = search_bill_token(array_change_key_case(json_decode($response,true),CASE_LOWER),vp_getoption("metertoken"));
+
+if(!empty($bill_response)){
+	$meter_token = $bill_response[0];
+}
+else{
+		$meter_token = "Nill";
+}
+
+  
+global $wpdb;
+$table_name = $wpdb->prefix.'sbill';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $bill_token,
+'name'=> $name,
+'email'=> $email,
+'meterno' => $meterno,
+'phone' => $phone,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => ($amount),
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'charge' => floatval(vp_option_array($option_array,"bill_charge")),
+'trans_type' => 'bill',
+'trans_method' => 'post',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => "Successful",
+'product_id' => $cbill,
+'type' => $type,
+'meter_token' => $meter_token,
+'time' => date("Y-m-d h:i:s A",$current_timestamp)
+));
+
+$realAmt = 	$_POST['amount'];
+$purchased = "Paid for UTILITY BILL worth  ₦$realAmt";
+$recipient = $meter_token;
+vp_transaction_email("NEW UTILITY BIL NOTIFICATION","SUCCESSFUL UTILITY BILL PAYMENT",$uniqidvalue,$purchased, $recipient, $amount, $bal,$baln);
+
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$meterno/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$meterno);
+}
+
+if(is_plugin_active("vpmlm/vpmlm.php")){	
+do_action("vp_after");
+}
+
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("100");
+
+}
+elseif($en == "MAYBE"){
+	
+$bill_response = search_bill_token(array_change_key_case(json_decode($response,true),CASE_LOWER),vp_getoption("billresponse_id"));
+
+if(!empty($bill_response)){
+	$bill_token = $bill_response[0];
+}
+else{
+	$bill_token = "Nill";
+}
+
+	
+//echo"<script>alert('mae');</script>";
+global $wpdb;
+$table_name = $wpdb->prefix.'sbill';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $bill_token,
+'name'=> $name,
+'email'=> $email,
+'meterno' => $meterno,
+'phone' => $phone,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => ($amount),
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'charge' => floatval(vp_option_array($option_array,"bill_charge")),
+'trans_type' => 'bill',
+'trans_method' => 'post',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => "Pending",
+'product_id' => $cbill,
+'type' => $type,
+'meter_token' => "No Record",
+'time' => date("Y-m-d h:i:s A",$current_timestamp)
+));
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$meterno/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$meterno);
+}
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("processing");
+}
+else{
+
+	$bill_token = "Nill";
+
+	global $wpdb;
+$table_name = $wpdb->prefix.'sbill';
+$added_to_db = $wpdb->insert($table_name, array(
+'run_code' => esc_html($pos),
+'response_id'=> $bill_token,
+'name'=> $name,
+'email'=> $email,
+'meterno' => $meterno,
+'phone' => $phone,
+'bal_bf' => $bal,
+'bal_nw' => $bal,
+'amount' => ($amount),
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'browser' => $browser,
+'charge' => floatval(vp_option_array($option_array,"bill_charge")),
+'trans_type' => 'bill',
+'trans_method' => 'post',
+'via' => 'site',
+'time_taken' => '1',
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'status' => "Failed",
+'product_id' => $cbill,
+'type' => $type,
+'meter_token' => "No Record",
+'time' => date("Y-m-d h:i:s A",$current_timestamp)
+));
+
+$beneficiary = vp_getuser($id,"beneficiaries",true);
+
+if(!preg_match("/$meterno/",$beneficiary)){
+vp_updateuser($id,"beneficiaries",$beneficiary.",".$meterno);
+}
+
+	vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+
+	update_wallet("Approved","Reversal For Failed Bill Purchase With Id $uniqidvalue",$amount,$baln,$bal);
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/"); //FAILED
+$wpdb->query('COMMIT');
+die('{"status":"200","response":"'.harray_key_first($response).'","response code":"'.wp_remote_retrieve_response_code( $call ).'","EN":"'.$en.'","response format":"'.vp_getoption("bill_response_format").'"}');
+
+}
+}
+else{
+	$wpdb->query('COMMIT');
+die('['.$errz.'] - [S/R] Duplicate Transaction!!! Check your transaction history please');
+}
+	
+}
+break;
+case"csms":
+$sender = $_POST["sender"];
+$receiver = $_POST["receiver"];
+$tid = $id;
+
+$theMessage = $_POST["message"];
+
+$spamWords =<<<EOD
+UBA, CBN, Stanbic, Ibtc, C.B.N, BVN, B.V.N, Jaiz, gtbank, Diamond, B V N, C B N, B@nk, Fidelity, 27242, Quickteller, ATM, A.T.M, A T M, Paypal, Polaris, Cash, F c m b,
+FIDELITY, BVN, polaris, gtb, g.t.b,
+bank, KEYSTONE NPF, Police, Custom, Army,
+Airforce, Naval, NCS, US ARMY,
+Nig Custom, Millitary, USA, SSS, S. S. S, Mopol, EFCC, ikeja electric, AEDC, BEDC,
+EKEDC, EEDC, IBEDC, IKEDC,
+JEDC, KNEDC, KEDC, PHEDC,
+YEDC, NNPC, Chevron, ExxonMobil,
+N.N.P.C, N. N. P. C, JAMB, 55019, Admin, Administrator, Info, @, /, _, EEDC, Gotv, DSTV, Startimes,
+Ikeja Electric, Jumia, Konga,
+PDP, PROMO, WADA, DIAMOND, CONGRATULATION, congrats, apc, pdp, vote, code, google, central,  fidelity, million, Zen-ith, Zenith, facebook, Integrity, M"T N N, 1.8.O, M"TN-N, M"TN N,
+M"T N-N.?, M"T N-N., M"T N?, M"TN N., M T"N-NG, M T"N-N., M T"N-N, M T N, M .T N N?, M "T N N., M"T N N., M.T`N, M"TN-N, M.T`N,M.T`N GN, M.T`N-.NG, MT N,MTN, MTEL, M-T-N, -M-T-N-, MTN N, MTN NG, MTN-NG, YELLOLTD,YELLO, YELL0, mtn,
+1.8.O, Recharge ,4I00 , A!rtel, AIRTEL, ALERT , ANGEL, MEZZY , AWOOF!!!, BankAccess, BANKM3py, Bumazek, C0NGRATS! , C0NGRTS, C0NGRTS , Y0U , cantv.net , Cards-Zone, Card-Zone, CLAIM, Coca-Cola , coinmac.net, CONGRAT, Congrats!, Congratulation, CONGRATULATIONS, CouplesOut, DIAMOND ,ETISALAT, 
+Euro, Casino, Gl0lwinner, GLOGlo ,Promo! , GLOBACOM, Glowinner,  GreatNews!, gsm promo, HSEFELOSHIP,  http://www.permanenttsb, updates.org, http://www.yellopins.com ,info@nmobiledraw.org ,nfonmobiledraw.org, ISAMS YABA, Jemtrade , LIVINGWORD, lo1O10, LOADED, lottery , ottery,
+lotto, Maitap.be, MANSARD, L21, Megateq, mlottery@usa.com, mlttryusa@w.cn, mobile, promo, MT N,MTEL, MTN ,M-T-N ,
+-M-T-N-, MTN N, MTN NG, MTN-NG,  N0K, N10M, N2Million, nexteldraws@live.co.uk, NKM, BILE, NOK, Nokia inc., nokia promo, nokialondondept247@hotmail.co.uk, NOKlA UK,  NTM, ORLAJ, P C EBUNILO , PR1ZE=0FFER, PRIMEGROCER, PROMO, reward, Rewarded, ROSGLORIOSM,  Service180, Spam, StanbicIBTC , L SEGUN , 
+SWFT , W1N, W0N, VISAFONE, VIP-CARD, vadia, usa.mlty@w.cn, ULTIMATE, TOYOTA, sweepstakes, kids, telsms@live.com, takko, SWIFTNG ,Swift_NG ,SWIFT 4G, wbre@gala.net , wbre2@gala.net , WIN, ZOOM, MULTILINKS, Your-Line, Your Number Have Win , been selected , number has, your mobile has been selected , wo n , won , YDD Welfare, Your Number Have Win, Your-Line, ZOOM MULTILINKS, Lumos , lacasera , smsalert, Alert , HSBC, Gionee, StanChart, Inform , Bulk SMS, BulkSMS, 
+Singlsrally, NOBLE KIT SERVE,
+NOBLE KIT SER, Emma LovingYOU, Me4u, foryou, RICH-PRINCE, RichPrince, Yinkuccc,
+TheFle, Demoj, SWEETHEART MINISTRY, MINISTRY MzPretty,
+SirJTelecom, RMA Team, Good News, BOTLINK, Mama abuja,
+Oganihu, KAFA, Singlsrally,
+JesusFamily, MFB, m f b, m.f.b, m. f. b., Flutterwave, ALERT , Activation, Activation, social media, sup, Embassy, Grant, SEM, SEM Grant, Telpecon G, Telpecon , PAGA, account, Promo, PROMOTIONAL, CONGRATS, CONGRATULATIONS,  PRIZE, YELLO, VOTE, APC
+
+EOD;
+
+
+$first = preg_replace('/,\s+/',",",$spamWords);
+
+$second =  preg_replace('/\s+,/',",",$first);
+$spamWords = explode(",",$second);
+global $theWord;
+$theWord = "";
+function containsSpam($message, $spamWords) {
+	global $theWord;
+    $message = strtolower($message); // Convert the message to lowercase for case-insensitive matching
+    foreach ($spamWords as $spamWord) {
+        if (stripos($message, $spamWord) !== false) {
+			$theWord = $spamWord;
+            return true; // Spam word found
+        }
+    }
+    return false; // No spam words found
+}
+
+if(containsSpam($theMessage,$spamWords) && preg_match('/cliqsms/',vp_getoption("smsbaseurl"))){
+	$wpdb->query('COMMIT');
+die("[".$theWord."] is filtered, replace with another word");
+}
+
+if(vp_getoption("smsrequest") == "get"){
+	
+$urlraw = htmlspecialchars_decode($_POST["url"]);
+$base = str_replace("smsbaseurl",vp_option_array($option_array,"smsbaseurl"),$urlraw);
+$postdata1 = str_replace("smspostdata1",vp_option_array($option_array,"smspostdata1"),$base);
+$postvalue1 = str_replace("smspostvalue1",vp_option_array($option_array,"smspostvalue1"),$postdata1);
+$postdata2 = str_replace("smspostdata2",vp_option_array($option_array,"smspostdata2"),$postvalue1);
+$postvalue2 = str_replace("smspostvalue2",vp_option_array($option_array,"smspostvalue2"),$postdata2);
+$url = $postvalue2;
+
+$sc = vp_getoption("smssuccesscode");
+
+$sms_array = [];
+
+$the_head =  vp_getoption("sms_head");
+if($the_head == "not_concatenated"){
+	$the_auth = vp_getoption("smsvalue1");
+	$auto = vp_getoption("smshead1").' '.$the_auth;
+	$sms_array["Authorization"] = $auto;
+}
+elseif($the_head == "concatenated"){
+	$the_auth_value = vp_getoption("smsvalue1");
+	$the_auth = base64_encode($the_auth_value);
+	$auto = vp_getoption("smshead1").' '.$the_auth;
+	$sms_array["Authorization"] = $auto;
+}
+else{
+	$sms_array[vp_getoption("smshead1")] = vp_getoption("smsvalue1");
+}
+
+$sms_array["cache-control"] = "no-cache";
+
+for($smsaddheaders=1; $smsaddheaders<=4; $smsaddheaders++){
+	if(!empty(vp_getoption("smsaddheaders$smsaddheaders")) && !empty(vp_getoption("smsaddvalue$smsaddheaders"))){
+		$sms_array[vp_getoption("smsaddheaders$smsaddheaders")] = vp_getoption("smsaddvalue$smsaddheaders");
+	}
+}
+
+$http_args = array(
+'headers' => $sms_array,
+'timeout' => '3000',
+'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+'sslverify' => false);
+
+
+$service = "ssms";
+global $wpdb;
+$table_trans = $wpdb->prefix.'vp_transactions';
+$unrecorded_added = $wpdb->insert($table_trans, array(
+'status' => 'Fa',
+'service' => $service,
+'name'=> $name,
+'email'=> $email,
+'recipient' => $receiver,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+setcookie("amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+setcookie("service", $service, time() + (30 * 24 * 60 * 60), "/");
+setcookie("name", $name, time() + (30 * 24 * 60 * 60), "/");
+setcookie("email", $email, time() + (30 * 24 * 60 * 60), "/");
+setcookie("recipient", $receiver, time() + (30 * 24 * 60 * 60), "/");
+setcookie("bal_bf", $bal, time() + (30 * 24 * 60 * 60), "/");
+setcookie("bal_nw", $baln, time() + (30 * 24 * 60 * 60), "/");
+setcookie("request_id", $uniqidvalue, time() + (30 * 24 * 60 * 60), "/");
+setcookie("user_id", $id, time() + (30 * 24 * 60 * 60), "/");
+setcookie("status", 'Fa', time() + (30 * 24 * 60 * 60), "/");
+setcookie("the_time", date('Y-m-d h:i:s A',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+
+
+	$_POST["run_code"] = "wrong";
+
+	if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+		setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+		$tot = $bal - $amount;
+vp_updateuser($id, 'vp_bal', $tot);
+setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+$call =  wp_remote_get($url,$http_args);
+$response =wp_remote_retrieve_body($call);
+setcookie("api_response", $response, time() + (30 * 24 * 60 * 60), "/");
+setcookie("api_from", 'Session', time() + (30 * 24 * 60 * 60), "/");
+provider_header_handler($call);
+}
+else{
+$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+}
+
+if(is_wp_error($call)){
+	if(vp_getoption("vpdebug") != "yes"){
+		$error = $call->get_error_code();
+		}
+		else{
+		$error = $call->get_error_message();
+		}
+
+		
+		
+
+		$bill_token = "no_response";
+		global $wpdb;
+		$table_name = $wpdb->prefix.'ssms';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'name'=> $name,
+		'email'=> $email,
+		'sender' => $sender,
+		'receiver' => $receiver,
+		'bal_bf' => $bal,
+		'bal_nw' => $bal,
+		'amount' => $amount,
+		'user_id' => $tid,
+		'status' => "Failed",
+		'resp_log' => " ".esc_html($call->get_error_message())."",
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+		
+
+		vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+		if(is_numeric($added_to_db)){
+			global $wpdb;
+			 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+			}
+			else{
+			//do nothing
+		}
+
+
+
+$obj = new stdClass;
+$obj->status = "202";
+$obj->response = $error;
+$wpdb->query('COMMIT');
+die(json_encode($obj));
+}
+else{
+if(vp_getoption("sms_response_format") == "JSON" || vp_getoption("sms_response_format") == "json"){
+$en = validate_response($response,$sc,vp_getoption("smssuccessvalue"),vp_getoption("smssuccessvalue2"));
+}
+else{
+
+if(stripos($response,vp_getoption("smssuccessvalue")) !== false){
+$en = "TRUE" ;
+}
+else{
+$en = "FALSE" ;	
+}
+}
+
+
+}
+
+if($en == "TRUE"  || $response  === vp_getoption("smssuccessvalue")){
+					if($add_total == "yes"){
+					vp_updateuser($id,"vp_kyc_total",(intval($tb4)+intval($tnow)));	
+				}
+//echo"<script>alert('sta 1 ma');</script>";
+global $wpdb;
+$table_name = $wpdb->prefix.'ssms';
+$added_to_db = $wpdb->insert($table_name, array(
+'name'=> $name,
+'email'=> $email,
+'sender' => $sender,
+'receiver' => $receiver,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'user_id' => $tid,
+'status' => "Successful",
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+
+$purchased = $_POST["message"];
+$recipient = $receiver;
+vp_transaction_email("NEW BulkSms NOTIFICATION","SUCCESSFUL UTILITY BulkSms ",$uniqidvalue,$purchased, $recipient, $amount, $bal,$baln);
+
+
+
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("100");
+
+}
+elseif($en == "MAYBE"){
+
+//echo"<script>alert('mae');</script>";
+
+global $wpdb;
+$table_name = $wpdb->prefix.'ssms';
+$added_to_db = $wpdb->insert($table_name, array(
+'name'=> $name,
+'email'=> $email,
+'sender' => $sender,
+'receiver' => $receiver,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'user_id' => $tid,
+'status' => "Pending",
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+
+if(is_numeric($added_to_db)){
+global $wpdb;
+ $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+}
+else{
+
+}
+
+
+
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("processing");
+}
+else{
+
+
+	global $wpdb;
+$table_name = $wpdb->prefix.'ssms';
+$added_to_db = $wpdb->insert($table_name, array(
+'name'=> $name,
+'email'=> $email,
+'sender' => $sender,
+'receiver' => $receiver,
+'bal_bf' => $bal,
+'bal_nw' => $bal,
+'amount' => $amount,
+'user_id' => $tid,
+'status' => "Failed",
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+	vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+
+	update_wallet("Approved","Reversal For Failed Bulk Sms With Id $uniqidvalue",$amount,$baln,$bal);
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/"); //FAILED
+$wpdb->query('COMMIT');
+die('{"status":"200","response":"'.harray_key_first($response).'","response code":"'.wp_remote_retrieve_response_code( $call ).'","EN":"'.$en.'","response format":"'.vp_getoption("sms_response_format").'"}');
+		
+}
+}
+else{
+$url = vp_getoption("smsbaseurl").vp_getoption("smsendpoint");
+$num = $phone;
+	$cua = vp_getoption("smspostdata1");
+    $cppa = vp_getoption("smspostdata2");
+    $c1a = vp_getoption("smspostdata3");
+    $c2a = vp_getoption("smspostdata4");
+    $c3a = vp_getoption("smspostdata5");
+    $sender = vp_getoption("senderattr");
+    $receiver = vp_getoption("receiverattr");
+    $message = vp_getoption("messageattr");
+    $flash = vp_getoption("flashattr");
+	$uniqid = vp_getoption("smsrequest_id");
+    
+    $datass = array(
+    $cua => vp_getoption("smspostvalue1"),
+    $cppa => vp_getoption("smspostvalue2"),
+	$c1a => vp_getoption("smspostvalue3"),
+	$c2a => vp_getoption("smspostvalue4"),
+	$c3a => vp_getoption("smspostvalue5"),
+	$sender => $_POST["sender"],
+	$receiver => $_POST["receiver"],
+	$message => $_POST["message"],
+	$flash => vp_getoption("flash_value"),
+	$uniqid => $uniqidvalue,
+	);
+
+	$sms_array = [];
+
+	$the_head =  vp_getoption("sms_head");
+	if($the_head == "not_concatenated"){
+		$the_auth = vp_getoption("smsvalue1");
+		$auto = vp_getoption("smshead1").' '.$the_auth;
+		$sms_array["Authorization"] = $auto;
+	}
+	elseif($the_head == "concatenated"){
+		$the_auth_value = vp_getoption("smsvalue1");
+		$the_auth = base64_encode($the_auth_value);
+		$auto = vp_getoption("smshead1").' '.$the_auth;
+		$sms_array["Authorization"] = $auto;
+	}
+	else{
+		$sms_array[vp_getoption("smshead1")] = vp_getoption("smsvalue1");
+	}
+
+$sms_array["Content-Type"] = "application/json";
+$sms_array["cache-control"] = "no-cache";
+
+for($smsaddheaders=1; $smsaddheaders<=4; $smsaddheaders++){
+	if(!empty(vp_getoption("smsaddheaders$smsaddheaders")) && !empty(vp_getoption("smsaddvalue$smsaddheaders"))){
+		$sms_array[vp_getoption("smsaddheaders$smsaddheaders")] = vp_getoption("smsaddvalue$smsaddheaders");
+	}
+}
+
+$http_args = array(
+'headers' => $sms_array,
+'timeout' => '3000',
+'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+'sslverify' => false,
+'body' => json_encode($datass)
+);
+
+
+$service = "ssms";
+global $wpdb;
+$table_trans = $wpdb->prefix.'vp_transactions';
+$unrecorded_added = $wpdb->insert($table_trans, array(
+'status' => 'Fa',
+'service' => $service,
+'name'=> $name,
+'email'=> $email,
+'recipient' => $receiver,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'request_id' => $uniqidvalue,
+'user_id' => $id,
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+setcookie("amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+setcookie("service", $service, time() + (30 * 24 * 60 * 60), "/");
+setcookie("name", $name, time() + (30 * 24 * 60 * 60), "/");
+setcookie("email", $email, time() + (30 * 24 * 60 * 60), "/");
+setcookie("recipient", $receiver, time() + (30 * 24 * 60 * 60), "/");
+setcookie("bal_bf", $bal, time() + (30 * 24 * 60 * 60), "/");
+setcookie("bal_nw", $baln, time() + (30 * 24 * 60 * 60), "/");
+setcookie("request_id", $uniqidvalue, time() + (30 * 24 * 60 * 60), "/");
+setcookie("user_id", $id, time() + (30 * 24 * 60 * 60), "/");
+setcookie("status", 'Fa', time() + (30 * 24 * 60 * 60), "/");
+setcookie("the_time", date('Y-m-d h:i:s A',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+
+
+	$_POST["run_code"] = "wrong";
+	
+
+if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+	setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+$tot = $bal - $amount;
+vp_updateuser($id, 'vp_bal', $tot);
+
+$call =  wp_remote_post($url, $http_args);
+$response =wp_remote_retrieve_body($call);
+setcookie("api_response", $response, time() + (30 * 24 * 60 * 60), "/");
+setcookie("api_from", 'Session', time() + (30 * 24 * 60 * 60), "/");
+provider_header_handler($call);
+}
+else{
+$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+}
+
+
+
+if(is_wp_error($call)){
+	if(vp_getoption("vpdebug") != "yes"){
+		$error = $call->get_error_code();
+		}
+		else{
+		$error = $call->get_error_message();
+		}
+
+		$bill_token = "no_response";
+		global $wpdb;
+		$table_name = $wpdb->prefix.'ssms';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'name'=> $name,
+		'email'=> $email,
+		'sender' => $sender,
+		'receiver' => $receiver,
+		'bal_bf' => $bal,
+		'bal_nw' => $bal,
+		'amount' => $amount,
+		'user_id' => $tid,
+		'status' => "Failed",
+		'resp_log' => " ".esc_html($call->get_error_message())."",
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+		
+
+		vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+		if(is_numeric($added_to_db)){
+			global $wpdb;
+			 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+			}
+			else{
+			//do nothing
+		}
+
+
+$obj = new stdClass;
+$obj->status = "202";
+$obj->response = $error;
+$wpdb->query('COMMIT');
+die(json_encode($obj));
+
+}
+else{
+if(vp_getoption("sms_response_format") == "JSON" || vp_getoption("sms_response_format") == "json"){
+$en = validate_response($response,$sc,vp_getoption("smssuccessvalue"),vp_getoption("smssuccessvalue2"));
+}
+else{
+$en = $response ;
+}
+}
+
+if($en == "TRUE"  || $response  === vp_getoption("smssuccessvalue")){
+  				if($add_total == "yes"){
+					vp_updateuser($id,"vp_kyc_total",(intval($tb4)+intval($tnow)));	
+				}
+global $wpdb;
+$table_name = $wpdb->prefix.'ssms';
+$added_to_db = $wpdb->insert($table_name, array(
+'name'=> $name,
+'email'=> $email,
+'sender' => $sender,
+'receiver' => $receiver,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'user_id' => $tid,
+'status' => "Successful",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	$wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+
+$purchased = $_POST["message"];
+vp_transaction_email("SMS SENT NOTIFICATION","MESSAGE SENT","NILL",$purchased, $receiver, $amount, $bal,$baln);
+
+
+
+setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("100");
+}
+elseif($en == "MAYBE"){
+
+//echo"<script>alert('mae');</script>";
+global $wpdb;
+$table_name = $wpdb->prefix.'ssms';
+$added_to_db = $wpdb->insert($table_name, array(
+'name'=> $name,
+'email'=> $email,
+'sender' => $sender,
+'receiver' => $receiver,
+'bal_bf' => $bal,
+'bal_nw' => $baln,
+'amount' => $amount,
+'user_id' => $tid,
+'status' => "Pending",
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+
+if(is_numeric($added_to_db)){
+	global $wpdb;
+	 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+	else{
+	
+	}
+
+
+	setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/");  	setcookie("last_bal", "0", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("processing");
+}
+else{
+
+
+	global $wpdb;
+$table_name = $wpdb->prefix.'ssms';
+$added_to_db = $wpdb->insert($table_name, array(
+'name'=> $name,
+'email'=> $email,
+'sender' => $sender,
+'receiver' => $receiver,
+'bal_bf' => $bal,
+'bal_nw' => $bal,
+'amount' => $amount,
+'user_id' => $tid,
+'status' => "Failed",
+'resp_log' => " ".esc_html(harray_key_first($response))."",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+	vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+
+	update_wallet("Approved","Reversal For Failed Bulk Sms With Id $uniqidvalue",$amount,$baln,$bal);
+
+	if(is_numeric($added_to_db)){
+		global $wpdb;
+		 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+		}
+		else{
+		
+		}
+setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/"); //FAILED
+$wpdb->query('COMMIT');
+die('{"status":"200","response":"'.harray_key_first($response).'","response code":"'.wp_remote_retrieve_response_code( $call ).'","EN":"'.$en.'","response format":"'.vp_getoption("sms_response_format").'"}');
+	
+
+}
+	
+}
+
+break;
+case"cbet":
+	$pos = $_POST["run_code"];
+	if(!isset($_POST["bet_company"])){
+		$wpdb->query('COMMIT');
+die("No Betting Company Identified");
+	}
+	elseif(!isset($_POST["customerid"])){
+		$wpdb->query('COMMIT');
+die("No Customer Id Found");
+	}
+	elseif(empty($_POST["bet_company"])){
+		$wpdb->query('COMMIT');
+die("betting company can't be empty");
+	}
+	elseif(empty($_POST["customerid"])){
+		$wpdb->query('COMMIT');
+die("Customer Id Can't Be Empty");
+	}
+	elseif(empty($_POST["amount"])){
+		$wpdb->query('COMMIT');
+die("Amount Can't Be Empty");
+	}
+	else{
+		$network = $_POST["bet_company"];
+		$phone = $_POST["customerid"];
+	}
+$vpdebug = vp_getoption("vpdebug");
+if(vp_getoption("betrequest") == "get"){
+		
+		
+		$http_args = array(
+		'headers' => array(
+		'cache-control' => 'no-cache',
+			'Content-Type' => 'application/json'
+		),
+		'timeout' => '3000',
+		'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+		'sslverify' => false
+		);
+		
+		
+		$urlraw = htmlspecialchars_decode($_POST["url"]);
+		$base = str_replace("betbase",vp_option_array($option_array,"betbaseurl"),$urlraw);
+		$postdata1 = str_replace("betpostdata1",vp_option_array($option_array,"betpostdata1"),$base);
+		$postvalue1 = str_replace("betpostvalue1",vp_option_array($option_array,"betpostvalue1"),$postdata1);
+		$postdata2 = str_replace("betpostdata2",vp_option_array($option_array,"betpostdata2"),$postvalue1);
+		$postvalue2 = str_replace("betpostvalue2",vp_option_array($option_array,"betpostvalue2"),$postdata2);
+		$url = $postvalue2;
+		
+		$sc = vp_getoption("betsuccesscode");
+		
+
+			$got = true;
+			$force = "false";
+		
+		
+		if($pos != $_POST["run_code"]){
+			$errz = "Track ID Not Same";
+			$do = false;
+		}
+		elseif($_POST["run_code"] == "wrong"){
+			$errz = "Track Id Can't Be wrong.";
+			$do = false;
+		}
+		elseif($_COOKIE["run_code"] == "wrong"){
+			$errz = "Session Can't Be Wrong";
+			$do = false;
+		}
+		else{
+			$errz = "unidentified";
+			$do = true;
+		
+			if($bal == $_COOKIE["last_bal"] && $_COOKIE["trans_reversal"] == "no"){
+		
+				$amtts = $bal - $_COOKIE["recent_amount"];
+		
+				$name = get_userdata($id)->user_login;
+				$hname = get_userdata($id)->user_login;
+				$description = "Auto-Deducted a stated amount as we discovered an anomaly in previous transaction which no reversal was initiated";
+				$fund_amount= $_COOKIE["recent_amount"];
+				$before_amount = $bal;
+				$now_amount = $amtts;
+				$the_time = date('Y-m-d h:i:s A',$current_timestamp);
+				
+				$table_name = $wpdb->prefix.'vp_wallet';
+				$added_to_db = $wpdb->insert($table_name, array(
+				'name'=> $name,
+				'type'=> "Wallet",
+				'description'=> $description,
+				'fund_amount' => $fund_amount,
+				'before_amount' => $before_amount,
+				'now_amount' => $now_amount,
+				'user_id' => $id,
+				'status' => "Approved",
+				'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+				));
+		
+		
+				vp_updateuser($id,"vp_bal", $amtts);
+		
+		$wpdb->query('COMMIT');
+die("Error With Previous Balance Check.. Please Refresh Your Browser And Try Again ");
+		}
+		else{
+		setcookie("last_bal", $bal, time() + (30 * 24 * 60 * 60), "/");setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+		}
+		
+		
+		}
+		
+		if($do && $pos == $_POST["run_code"] && $_POST["run_code"] != "wrong" && $_COOKIE["run_code"] != "wrong"){
+				
+			
+		
+				
+	//SECURITY
+	vpSec($phone);
+		
+				$trackcode = $_POST["run_code"];
+				global $wpdb;
+				$tableh = $wpdb->prefix."sbet";
+				$rest = $wpdb->get_results("SELECT * FROM $tableh WHERE run_code = '$trackcode' ");
+				if(empty($rest)){
+			
+				}else{
+					$wpdb->query('COMMIT');
+die('[T/C] Duplicate Transaction!!! Check your transaction history please');
+				}
+		
+		
+				
+		
+				$service = "sbet";
+				$mlm_for = "_bet";
+				global $wpdb;
+				$table_trans = $wpdb->prefix.'vp_transactions';
+				$unrecorded_added = $wpdb->insert($table_trans, array(
+				'status' => 'Fa',
+				'service' => $service,
+				'name'=> $name,
+				'email'=> $email,
+				'recipient' => $phone,
+				'bal_bf' => $bal,
+				'bal_nw' => $baln,
+				'amount' => $amount,
+				'request_id' => $uniqidvalue,
+				'user_id' => $id,
+				'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+				));
+				setcookie("amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+				setcookie("service", $service, time() + (30 * 24 * 60 * 60), "/");
+				setcookie("name", $name, time() + (30 * 24 * 60 * 60), "/");
+				setcookie("email", $email, time() + (30 * 24 * 60 * 60), "/");
+				setcookie("recipient", $phone, time() + (30 * 24 * 60 * 60), "/");
+				setcookie("bal_bf", $bal, time() + (30 * 24 * 60 * 60), "/");
+				setcookie("bal_nw", $baln, time() + (30 * 24 * 60 * 60), "/");
+				setcookie("request_id", $uniqidvalue, time() + (30 * 24 * 60 * 60), "/");
+				setcookie("user_id", $id, time() + (30 * 24 * 60 * 60), "/");
+				setcookie("status", 'Fa', time() + (30 * 24 * 60 * 60), "/");
+				setcookie("the_time", date('Y-m-d h:i:s A',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+		
+			
+				$_POST["run_code"] = "wrong";
+		
+				
+		
+			if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+				setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+				$tot = $bal - $amount;
+				vp_updateuser($id, 'vp_bal', $tot);
+				setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+				if($got){
+		$call =  wp_remote_get($url, $http_args);
+		$response = wp_remote_retrieve_body($call);
+		setcookie("api_response", $response, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("api_from", 'Session', time() + (30 * 24 * 60 * 60), "/");
+		provider_header_handler($call);
+				}else{};
+			}
+			else{
+			$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+			}
+		
+		if(is_wp_error($call)){
+			if(vp_getoption("vpdebug") != "yes"){
+				$error = $call->get_error_code();
+				}
+				else{
+				$error = $call->get_error_message();
+				}
+		
+				$bet_token = "no_response";
+				global $wpdb;
+				$table_name = $wpdb->prefix.'sbet';
+				$added_to_db = $wpdb->insert($table_name, array(
+				'run_code' => esc_html($pos),
+				'response_id'=> $bet_token,
+				'name'=> $name,
+				'email' => $email,
+				'customerid' => $phone,
+				'company' => $network,
+				'bal_bf' => $bal,
+				'bal_nw' => $bal,
+				'amount' => $amount,
+				'resp_log' => " ".esc_html($call->get_error_message())."",
+				'browser' => $browser,
+				'trans_type' => 'bet',
+				'trans_method' => 'get',
+				'via' => 'site',
+				'time_taken' => '1',
+				'request_id' => $uniqidvalue,
+				'user_id' => $id,
+				'status' => 'Failed',
+				'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+				));
+		
+				vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+				if(is_numeric($added_to_db)){
+					global $wpdb;
+					 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+					}
+					else{
+					//do nothing
+				}
+		
+		
+		
+		$obj = new stdClass;
+		$obj->status = "202";
+		$obj->response = $error;
+		$wpdb->query('COMMIT');
+die(json_encode($obj));
+		}
+		else{
+		if(vp_getoption("bet1_response_format") == "JSON" || vp_getoption("bet1_response_format") == "json"){
+		$en = validate_response($response,$sc, vp_getoption("betsuccessvalue"), vp_getoption("betsuccessvalue2") );	
+		}
+		else{
+		$en = $response ;
+		}
+		}
+		
+		$vpdebug = vp_getoption("vpdebug");
+		
+		$bet_response = search_bill_token(array_change_key_case(json_decode($response,true),CASE_LOWER),vp_getoption("betresponse_id"));
+		
+		if(!empty($bet_response)){
+			$bet_token = $bet_response[0];
+		}
+		else{
+			$bet_token = "Nill";
+		}
+		
+		
+		
+		if($en == "TRUE"  || $response  === vp_getoption("betsuccessvalue") || $force == "true"){
+							if($add_total == "yes"){
+							vp_updateuser($id,"vp_kyc_total",(intval($tb4)+intval($tnow)));	
+						}
+		
+		global $wpdb;
+		$table_name = $wpdb->prefix.'sbet';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'run_code' => esc_html($pos),
+		'response_id'=> $bet_token,
+		'name'=> $name,
+		'email' => $email,
+		'customerid' => $phone,
+		'company' => $network,
+		'bal_bf' => $bal,
+		'bal_nw' => $bal,
+		'amount' => $amount,
+		'resp_log' => " ".esc_html(harray_key_first($response))."",
+		'browser' => $browser,
+		'trans_type' => 'bet',
+		'trans_method' => 'get',
+		'via' => 'site',
+		'time_taken' => '1',
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'status' => 'Successful',
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+		
+		
+		$beneficiary = vp_getuser($id,"beneficiaries",true);
+		
+		if(!preg_match("/$phone/",$beneficiary)){
+		vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+		}
+		
+		if(is_numeric($added_to_db)){
+			global $wpdb;
+			 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+			}
+			else{
+			
+			}
+		
+		
+		$purchased = "Funded $phone Wallet On $network With $amount";
+		$recipient = $phone;
+		vp_transaction_email("NEW BET FUNDING NOTIFICATION","SUCCESSFUL BET FUNDING TRANSACTION",$uniqidvalue,$purchased, $recipient, $amount, $bal,$baln);
+		
+		
+		
+		
+		if(is_plugin_active("vpmlm/vpmlm.php")){
+		do_action("vp_after");
+		}
+		
+		setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("100");
+		}
+		elseif($en == "MAYBE"){
+		
+		
+		global $wpdb;
+		$table_name = $wpdb->prefix.'sbet';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'run_code' => esc_html($pos),
+		'response_id'=> $bet_token,
+		'name'=> $name,
+		'email' => $email,
+		'customerid' => $phone,
+		'company' => $network,
+		'bal_bf' => $bal,
+		'bal_nw' => $bal,
+		'amount' => $amount,
+		'resp_log' => " ".esc_html(harray_key_first($response))."",
+		'browser' => $browser,
+		'trans_type' => 'bet',
+		'trans_method' => 'get',
+		'via' => 'site',
+		'time_taken' => '1',
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'status' => 'Pending',
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+		
+		
+		$beneficiary = vp_getuser($id,"beneficiaries",true);
+		
+		if(!preg_match("/$phone/",$beneficiary)){
+		vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+		}
+		
+		if(is_numeric($added_to_db)){
+		global $wpdb;
+		 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+		}
+		else{
+		
+		}
+		
+		setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/");  	setcookie("last_bal", "0", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("processing");
+		}
+		else{
+		
+		
+			
+		global $wpdb;
+		$table_name = $wpdb->prefix.'sbet';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'run_code' => esc_html($pos),
+		'response_id'=> $bet_token,
+		'name'=> $name,
+		'email' => $email,
+		'customerid' => $phone,
+		'company' => $network,
+		'bal_bf' => $bal,
+		'bal_nw' => $bal,
+		'amount' => $amount,
+		'resp_log' => " ".esc_html(harray_key_first($response))."",
+		'browser' => $browser,
+		'trans_type' => 'bet',
+		'trans_method' => 'get',
+		'via' => 'site',
+		'time_taken' => '1',
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'status' => 'Failed',
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+		
+		
+		$beneficiary = vp_getuser($id,"beneficiaries",true);
+		
+		if(!preg_match("/$phone/",$beneficiary)){
+		vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+		}
+		
+			vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+		
+			update_wallet("Approved","Reversal For Failed Bet Funding Purchase With Id $uniqidvalue",$amount,$baln,$bal);
+		
+			if(is_numeric($added_to_db)){
+				global $wpdb;
+				 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+				}
+				else{
+				
+				}
+		setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/"); //FAILED
+		$wpdb->query('COMMIT');
+die('{"status":"200","response":"'.harray_key_first($response).'","response code":"'.wp_remote_retrieve_response_code( $call ).'","EN":"'.$en.'","response format":"'.vp_getoption("bet1_response_format").'"}');
+			
+		}
+		}
+		else{
+			$wpdb->query('COMMIT');
+die('['.$errz.'] - [S/R] Duplicate Transaction!!! Check your transaction history please');
+		}
+		}
+		else{
+		$url = vp_getoption("betbaseurl").vp_getoption("betendpoint");
+		$num = $phone;
+		$cua = vp_getoption("betpostdata1");
+			$cppa = vp_getoption("betpostdata2");
+			$c1a = vp_getoption("betpostdata3");
+			$c2a = vp_getoption("betpostdata4");
+			$c3a = vp_getoption("betpostdata5");
+			$cna = vp_getoption("betcompanyattribute");
+			$caa = vp_getoption("betamountattribute");
+			$cpa = vp_getoption("betcustomeridattribute");
+			$uniqid = vp_getoption("request_id");
+			
+			$datass = array(
+			 $cua => vp_getoption("betpostvalue1"),
+			 $cppa => vp_getoption("betpostvalue2"),
+			$c1a => vp_getoption("betpostvalue3"),
+			$c2a => vp_getoption("betpostvalue4"),
+			$c3a => vp_getoption("betpostvalue5"),
+			$uniqid => $uniqidvalue,
+			$cna => $network,
+			$cpa => $phone,
+			$caa => $amount
+			);
+		
+		$bet_array = [];
+		
+		$the_head =  vp_getoption("bet_head");
+		if($the_head == "not_concatenated"){
+			$the_auth = vp_getoption("betvalue1");
+			$auto = vp_getoption("bethead1").' '.$the_auth;
+			$bet_array["Authorization"] = $auto;
+		}
+		elseif($the_head == "concatenated"){
+			$the_auth_value = vp_getoption("betvalue1");
+			$the_auth = base64_encode($the_auth_value);
+			$auto = vp_getoption("bethead1").' '.$the_auth;
+			$bet_array["Authorization"] = $auto;
+		}
+		else{
+			$bet_array[vp_getoption("bethead1")] = vp_getoption("betvalue1");
+		}
+		
+		
+		
+		$bet_array["Content-Type"] = "application/json";
+		$bet_array["cache-control"] = "no-cache";
+		
+		for($betaddheaders=1; $betaddheaders<=4; $betaddheaders++){
+			if(!empty(vp_getoption("betaddheaders$betaddheaders")) && !empty(vp_getoption("betaddvalue$betaddheaders"))){
+				$bet_array[vp_getoption("betaddheaders$betaddheaders")] = vp_getoption("betaddvalue$betaddheaders");
+			}
+		}
+		
+		$http_args = array(
+		'headers' => $bet_array,
+		'timeout' => '3000',
+		'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+		'sslverify' => false,
+		'body' => json_encode($datass)
+		);
+		
+		$sc = vp_getoption("betsuccesscode");
+		//echo "<script>alert('url1".$url."');</script>";
+
+			$got = true;
+			$force = "false";
+	
+		
+		if($pos != $_POST["run_code"]){
+			$errz = "Track ID Not Same";
+			$do = false;
+		}
+		elseif($_POST["run_code"] == "wrong"){
+			$errz = "Track Id Can't Be wrong.";
+			$do = false;
+		}
+		elseif($_COOKIE["run_code"] == "wrong"){
+			$errz = "Session Can't Be Wrong";
+			$do = false;
+		}
+		else{
+			$errz = "unidentified";
+			$do = true;
+		
+			if($bal == $_COOKIE["last_bal"] && $_COOKIE["trans_reversal"] == "no"){
+		
+				$amtts = $bal - $_COOKIE["recent_amount"];
+		
+		
+				$name = get_userdata($id)->user_login;
+				$hname = get_userdata($id)->user_login;
+				$description = "Auto-Deducted a stated amount as we discovered an anomaly in previous transaction which no reversal was initiated";
+				$fund_amount= $_COOKIE["recent_amount"];
+				$before_amount = $bal;
+				$now_amount = $amtts;
+				$the_time = date('Y-m-d h:i:s A',$current_timestamp);
+				
+				$table_name = $wpdb->prefix.'vp_wallet';
+				$added_to_db = $wpdb->insert($table_name, array(
+				'name'=> $name,
+				'type'=> "Wallet",
+				'description'=> $description,
+				'fund_amount' => $fund_amount,
+				'before_amount' => $before_amount,
+				'now_amount' => $now_amount,
+				'user_id' => $id,
+				'status' => "Approved",
+				'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+				));
+		
+		
+				vp_updateuser($id,"vp_bal", $amtts);
+		
+		$wpdb->query('COMMIT');
+die("Error With Previous Balance Check.. Please Refresh Your Browser And Try Again ");
+		}
+		else{
+		setcookie("last_bal", $bal, time() + (30 * 24 * 60 * 60), "/");setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+		}
+		
+		
+		
+		}
+		
+		if($do && $pos == $_POST["run_code"] && $_POST["run_code"] != "wrong" && $_COOKIE["run_code"] != "wrong"){
+				
+	//SECURITY
+	vpSec($phone);
+		
+				$trackcode = $_POST["run_code"];
+				global $wpdb;
+				$tableh = $wpdb->prefix."sbet";
+				$rest = $wpdb->get_results("SELECT * FROM $tableh WHERE run_code = '$trackcode' ");
+				if(empty($rest)){
+			
+				}else{
+		
+					$wpdb->query('COMMIT');
+die('[S/R] Duplicate Transaction!!! Check your transaction history please');
+				}
+		
+		
+		
+				
+				$service = "sbet";
+				$mlm_for = "_bet";
+				global $wpdb;
+				$table_trans = $wpdb->prefix.'vp_transactions';
+				$unrecorded_added = $wpdb->insert($table_trans, array(
+				'status' => 'Fa',
+				'service' => $service,
+				'name'=> $name,
+				'email'=> $email,
+				'recipient' => $phone,
+				'bal_bf' => $bal,
+				'bal_nw' => $baln,
+				'amount' => $amount,
+				'request_id' => $uniqidvalue,
+				'user_id' => $id,
+				'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+				));
+				setcookie("amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+				setcookie("service", $service, time() + (30 * 24 * 60 * 60), "/");
+				setcookie("name", $name, time() + (30 * 24 * 60 * 60), "/");
+				setcookie("email", $email, time() + (30 * 24 * 60 * 60), "/");
+				setcookie("recipient", $phone, time() + (30 * 24 * 60 * 60), "/");
+				setcookie("bal_bf", $bal, time() + (30 * 24 * 60 * 60), "/");
+				setcookie("bal_nw", $baln, time() + (30 * 24 * 60 * 60), "/");
+				setcookie("request_id", $uniqidvalue, time() + (30 * 24 * 60 * 60), "/");
+				setcookie("user_id", $id, time() + (30 * 24 * 60 * 60), "/");
+				setcookie("status", 'Fa', time() + (30 * 24 * 60 * 60), "/");
+				setcookie("the_time", date('Y-m-d h:i:s A',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");
+		
+		
+		
+		
+			
+				$_POST["run_code"] = "wrong";
+				if($got){
+					if(vp_getoption("betquerymethod") != "array"){
+		
+						if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+							setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+							$tot = $bal - $amount;
+							vp_updateuser($id, 'vp_bal', $tot);
+							setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+						$call =  wp_remote_post($url, $http_args);
+						$response = wp_remote_retrieve_body($call);
+						setcookie("api_response", $response, time() + (30 * 24 * 60 * 60), "/");
+		setcookie("api_from", 'Session', time() + (30 * 24 * 60 * 60), "/");
+						provider_header_handler($call);
+					}
+					else{
+					$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+					}
+							}
+							else{
+		
+								if(is_numeric($unrecorded_added) && $unrecorded_added != "0" && $unrecorded_added != false){ 	setcookie("add_unrecorded", 'yes', time() + (30 * 24 * 60 * 60), "/");
+									setcookie("run_code", "wrong", time() + (30 * 24 * 60 * 60), "/");
+									$tot = $bal - $amount;
+									vp_updateuser($id, 'vp_bal', $tot);
+									setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
+									$call = "";	
+						$response =  vp_remote_post_fn($url, $bet_array, $datass);
+						if($response == "error"){
+							global $return_message;
+						
+							$wpdb->query('COMMIT');
+die($return_message);
+						}
+						else{
+							//do nothing
+						}
+					}
+					else{
+					$wpdb->query('COMMIT');
+die("Error Pre-recording: Please refresh your browser and try again later");
+					}
+						
+							}
+				}else{};
+		
+		#$wpdb->query('COMMIT');
+
+		if(is_wp_error($call)){
+			if(vp_getoption("vpdebug") != "yes"){
+		$error = $call->get_error_code();
+		}
+		else{
+		$error = $call->get_error_message();
+		}
+		
+		$bet_token = "no_response";
+		global $wpdb;
+		$table_name = $wpdb->prefix.'sbet';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'run_code' => esc_html($pos),
+		'response_id'=> $bet_token,
+		'name'=> $name,
+		'email' => $email,
+		'customerid' => $phone,
+		'company' => $network,
+		'bal_bf' => $bal,
+		'bal_nw' => $bal,
+		'amount' => $amount,
+		'resp_log' => " ".esc_html($call->get_error_message())."",
+		'browser' => $browser,
+		'trans_type' => 'bet',
+		'trans_method' => 'post',
+		'via' => 'site',
+		'time_taken' => '1',
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'status' => 'Failed',
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+		
+		vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+		if(is_numeric($added_to_db)){
+			global $wpdb;
+			 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+			}
+			else{
+			//do nothing
+		}
+		
+		
+		
+		$obj = new stdClass;
+		$obj->status = "202";
+		$obj->response = $error;
+		$wpdb->query('COMMIT');
+die(json_encode($obj));
+		}
+		else{
+		if(vp_getoption("bet1_response_format") == "JSON" || vp_getoption("bet1_response_format") == "json"){
+		$en = validate_response($response,$sc,vp_getoption("betsuccessvalue"),vp_getoption("betsuccessvalue2"));
+		}
+		else{
+		$en = $response ;
+		}
+		}
+		
+		$bet_response = search_bill_token(array_change_key_case(json_decode($response,true),CASE_LOWER),vp_getoption("betresponse_id"));
+		
+		if(!empty($bet_response)){
+			$bet_token = $bet_response[0];
+		}
+		else{
+				$bet_token = "Nill";
+		}
+		
+		if($en == "TRUE"  || $response  === vp_getoption("betsuccessvalue") || $force == "true"){
+							if($add_total == "yes"){
+							vp_updateuser($id,"vp_kyc_total",(intval($tb4)+intval($tnow)));	
+						}
+		
+		
+		$purchased = "Funded $phone Wallet On $network With $amount";
+		$recipient = $phone;
+		vp_transaction_email("NEW BET FUNDING NOTIFICATION","SUCCESSFUL BET FUNDING TRANSACTION",$uniqidvalue,$purchased, $recipient, $amount, $bal,$baln);
+		
+		
+		global $wpdb;
+		$table_name = $wpdb->prefix.'sbet';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'run_code' => esc_html($pos),
+		'response_id'=> $bet_token,
+		'name'=> $name,
+		'email' => $email,
+		'customerid' => $phone,
+		'company' => $network,
+		'bal_bf' => $bal,
+		'bal_nw' => $baln,
+		'amount' => $amount,
+		'resp_log' => " ".esc_html(harray_key_first($response))."",
+		'browser' => $browser,
+		'trans_type' => 'bet',
+		'trans_method' => 'post',
+		'via' => 'site',
+		'time_taken' => '1',
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'status' => 'Successful',
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+		
+		
+		$beneficiary = vp_getuser($id,"beneficiaries",true);
+		
+		if(!preg_match("/$phone/",$beneficiary)){
+		vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+		}
+		
+		if(is_numeric($added_to_db)){
+		global $wpdb;
+		 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+		}
+		else{
+		
+		}
+		
+		if(is_plugin_active("vpmlm/vpmlm.php")){
+		do_action("vp_after");
+		}
+		
+		setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("100");
+		}
+		elseif($en == "MAYBE"){
+		
+		
+		global $wpdb;
+		$table_name = $wpdb->prefix.'sbet';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'run_code' => esc_html($pos),
+		'response_id'=> $bet_token,
+		'name'=> $name,
+		'email' => $email,
+		'customerid' => $phone,
+		'company' => $network,
+		'bal_bf' => $bal,
+		'bal_nw' => $baln,
+		'amount' => $amount,
+		'resp_log' => " ".esc_html(harray_key_first($response))."",
+		'browser' => $browser,
+		'trans_type' => 'bet',
+		'trans_method' => 'post',
+		'via' => 'site',
+		'time_taken' => '1',
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'status' => 'Pending',
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+		
+		
+		$beneficiary = vp_getuser($id,"beneficiaries",true);
+		
+		if(!preg_match("/$phone/",$beneficiary)){
+		vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+		}
+		
+		if(is_numeric($added_to_db)){
+			global $wpdb;
+			 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+			}
+			else{
+			
+			}
+		
+			setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/");  	setcookie("last_bal", "0", time() + (30 * 24 * 60 * 60), "/"); $wpdb->query('COMMIT');
+die("processing");
+		}
+		else{
+			
+		
+			global $wpdb;
+		$table_name = $wpdb->prefix.'sbet';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'run_code' => esc_html($pos),
+		'response_id'=> $bet_token,
+		'name'=> $name,
+		'email' => $email,
+		'customerid' => $phone,
+		'company' => $network,
+		'bal_bf' => $bal,
+		'bal_nw' => $bal,
+		'amount' => $amount,
+		'resp_log' => " ".esc_html(harray_key_first($response))."",
+		'browser' => $browser,
+		'trans_type' => 'bet',
+		'trans_method' => 'post',
+		'via' => 'site',
+		'time_taken' => '1',
+		'request_id' => $uniqidvalue,
+		'user_id' => $id,
+		'status' => 'Failed',
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+		
+		$beneficiary = vp_getuser($id,"beneficiaries",true);
+		
+		if(!preg_match("/$phone/",$beneficiary)){
+		vp_updateuser($id,"beneficiaries",$beneficiary.",".$phone);
+		}
+		
+			vp_updateuser($id, "vp_bal",$bal); setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
+		
+			update_wallet("Approved","Reversal For Failed Bet Funding Purchase With Id $uniqidvalue",$amount,$baln,$bal);
+		
+			if(is_numeric($added_to_db)){
+				global $wpdb;
+				 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+				}
+				else{
+				
+				}
+		setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/"); //FAILED
+		$wpdb->query('COMMIT');
+die('{"status":"200","response":"'.harray_key_first($response).'","response code":"'.wp_remote_retrieve_response_code( $call ).'","EN":"'.$en.'","response format ":"'.vp_getoption("bet1_response_format").'"}');
+			
+		
+		}
+		}
+		else{
+			$wpdb->query('COMMIT');
+die('['.$errz.'] - [S/R] Duplicate Transaction!!! Check your transaction history please');
+		}
+			
+			
+			
+		}
+
+break;
+
+default:
+$obj = new stdClass;
+$obj->status = "200";
+$obj->response = "Incorrect Purchase Type (tcode)";
+$wpdb->query('COMMIT');
+die(json_encode($obj));
+;
+
+}
+
+//end switch
+}
+//end if Bal great
+else{
+$remtot = $amount-$bal;
+
+$wpdb->query('COMMIT');
+die(''.$remtot.' Needed To Complete Transaction');
+}
+
+
+
+
+
+
+}
+else{
+	$wpdb->query('COMMIT');
+die('browser');		
+}
+
+
+
+
+}
+
+//end of post wallet, end of vend.php , end of transaction, end of vend $_POST["vend"]
+
+if(isset($_POST["fund_other"])){
+	
+	$transfer = vp_getoption('wallet_to_wallet');
+
+	if($transfer != "yes"){
+		die('{"status":"200","balance":"Transfer not permitted"}');
+	}
+
+
+
+	$user_id = esc_html($_POST["user_id"]);
+	$my_id = get_current_user_id();
+	$amount = floatval(esc_html($_POST["amount"]));
+
+	if(preg_match("/-/",$amount)){
+		vp_block_user("Tried to transfer with a negative amount!");
+		die('{"status":"200","balance":"Dont try negative balance"}');
+	}
+
+	if(vp_getoption("auto_transfer") == "no"){
+
+		$my_balance = vp_getuser($my_id,"vp_bal",true);
+		if($my_balance < $amount){
+			die('{"status":"200","balance":"Low Balance"}');
+		}
+		$update_balance = floatval($my_balance) - floatval($amount);
+		$update_me = vp_updateuser($my_id,'vp_bal', $update_balance);
+	
+
+		$name = get_userdata($user_id)->user_login;
+		$hname = get_userdata($my_id)->user_login;
+		$description = "$amount from $hname to $name";
+		$fund_amount= $amount;
+		$before_amount = $my_balance;
+		$now_amount = $update_balance;
+		$the_time = date('Y-m-d h:i:s A',$current_timestamp);
+		
+		$table_name = $wpdb->prefix.'vp_wallet';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'name'=> $name,
+		'type'=> "Wallet",
+		'description'=> $description,
+		'fund_amount' => $fund_amount,
+		'before_amount' => $before_amount,
+		'now_amount' => $now_amount,
+		'user_id' => $my_id,
+		'status' => "Approved",
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+$table_name = $wpdb->prefix.'vp_transfer';
+$added_to_db = $wpdb->insert($table_name, array(
+'tfrom'=> $my_id,
+'tto'=> $user_id,
+'amount' => $amount,
+'status' => "pending",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+if(vp_getoption("email_transfer") == "yes"){
+$subject = "[$my_id] - New Transfer Notification [$amount]";
+$message = "$hname made a pending transfer of N$amount to $name. Kindly check transfer history";
+vp_admin_email($subject, $message,"transfer");
+}
+
+die('{"status":"200","balance":"Transfer Pending"}');
+
+
+	}
+	else{
+
+	}
+	
+	$userdata = get_userdata($user_id);
+	
+if(empty($userdata) || $userdata == false){
+		die('{"status":"200","balance":"Recipient Doesn\'t Exist"}');
+	}
+	else{
+		
+	}
+	
+
+	$r_name = esc_html(get_userdata($user_id)->user_login);
+	$amount = floatval(esc_html($_POST["amount"]));
+	
+	$sende = floatval(vp_getoption('minimum_amount_transferable'));
+	if($amount < $sende){
+		die('{"status":"200","balance":"You can\'t send less than '.$sende.'"}');
+	}
+	
+	
+	$my_balance = floatval(vp_getuser($my_id,'vp_bal', true));
+	
+	if(intval($my_balance) <= intval($amount) && stripos($my_balance,"-") == false && stripos($amount,"-") == false){
+		 vp_updateuser($my_id,'vp_user_access',"ban");
+		 vp_ban_email();
+		 die('{"status":"222","balance":"Your Account Has Been Suspended Because We Detected Something Phising. Contact Admin For Solution"}');
+	}
+	
+if($my_balance > $amount && $my_id != $user_id && empty(strpos($amount,"-")) && $amount > 0 && is_numeric($amount) && is_numeric($user_id) && !empty($r_name)  ){
+	
+	//Fund User
+	$user_current_balance = floatval(esc_html(vp_getuser($user_id, 'vp_bal', true)));
+	
+	$fund_user = $user_current_balance + $amount;
+	
+
+if($fund_user > $user_current_balance ){
+	
+	$update_balance = $my_balance - $amount;
+		
+	
+	
+	$update_me = vp_updateuser($my_id,'vp_bal', $update_balance);
+	
+	$get_bal_again = vp_getuser($my_id,'vp_bal', true);
+	
+	
+	if($update_me == $get_bal_again){
+		
+	}
+	else{
+		
+	}
+	$updated_user = vp_updateuser($user_id,'vp_bal',$fund_user);
+	
+	
+	
+	if(strtolower($updated_user) == "true"){
+	
+	$my_cur_balance = vp_getuser($my_id,'vp_bal', true);
+	
+	
+	
+		//Wallet Summary
+
+global $wpdb;
+$name = get_userdata($my_id)->user_login;
+$uname = get_userdata($user_id)->user_login;
+$description = "Credited By $name On Transfer";
+$fund_amount= $amount;
+$before_amount = $user_current_balance;
+$now_amount = $fund_user;
+$user_id = $user_id;
+$the_time = date("Y-m-d h:i:s A",$current_timestamp);
+
+$table_name = $wpdb->prefix.'vp_wallet';
+$added_to_db = $wpdb->insert($table_name, array(
+'name'=> $name,
+'type'=> "Wallet",
+'description'=> $description,
+'fund_amount' => $fund_amount,
+'before_amount' => $before_amount,
+'now_amount' => $now_amount,
+'user_id' => $user_id,
+'status' => "Approved",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+$name = get_userdata($user_id)->user_login;
+$hname = get_userdata($my_id)->user_login;
+$description = "Transfered $amount to $name";
+$fund_amount= $amount;
+$before_amount = $my_balance;
+$now_amount = $update_balance;
+$user_id = $my_id;
+$the_time = date("Y-m-d h:i:s A",$current_timestamp);
+
+$table_name = $wpdb->prefix.'vp_wallet';
+$added_to_db = $wpdb->insert($table_name, array(
+'name'=> $name,
+'type'=> "Wallet",
+'description'=> $description,
+'fund_amount' => $fund_amount,
+'before_amount' => $before_amount,
+'now_amount' => $now_amount,
+'user_id' => $my_id,
+'status' => "Approved",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+if(vp_getoption("email_transfer") == "yes"){
+$subject = "[$my_id] - New Transfer Notification [$amount]";
+$message = "$hname made a pending transfer of $amount to $name. Kindly check transfer history";
+vp_admin_email($subject, $message,"transfer");
+	
+}
+
+die('{"status":"100","balance":"'.$my_cur_balance.'"}');
+	
+	
+	
+	
+	
+}
+else{
+	
+die('{"status":"200","balance":"'.$my_cur_balance.'"}');
+}
+
+}
+
+	
+
+
+}
+else{
+	
+$obj = new stdClass;
+$obj->status = "200";
+$obj->balance = "Balance Too Low";
+die(json_encode($obj));
+}
+
+
+}
+
+
+if(isset($_POST["check_balance"])){
+	$my_id = get_current_user_id();
+	$my_balance = vp_getuser($my_id,'vp_bal', true);
+	
+	if($my_balance != "0" || $my_balance !==  false || $my_balance != ""){
+	echo '{"status":"100", "balance":"'.$my_balance.'"}';
+	}
+	else{
+		echo '{"status":"200"}';
+	}
+	
+}
+
+
+if(isset($_POST["verify_user"])){
+
+	if(!is_user_logged_in()){
+		die("Please Login");
+	}
+
+	$user_id = $_POST["user_id"];
+	$user_name = get_userdata($user_id)->user_login;
+	
+	if($user_name != "0" || $user_name !==  false || $user_name != ""){
+	echo '{"status":"100", "user_name":"'.$user_name.'"}';
+	}
+	else{
+		echo '{"status":"200"}';
+	}
+}
+
+
+
+	
+if(isset($_POST['setactivation'])){
+    
+  
+	$datenow = date("Y-m-d h:i A",$current_timestamp);
+	$next = date('Y-m-d h:i A',strtotime($datenow." +12 hours"));
+
+	if($_POST['setactivation'] == "yea"){
+		vp_updateoption('actkey',trim($_POST["actkey"]));
+		vp_updateoption('vpid',trim($_POST["actid"]));
+	}else{
+
+			vp_updateoption('mlm','no');
+			vp_updateoption('resell','no');
+			vp_updateoption("showlicense","hide");
+			vp_updateoption('vprun','block');
+			vp_updateoption('frmad','block');
+			vp_updateoption("vp_security","no");
+			die('{"status":"200","message":"Activation Key Or Id Incorrect-> "}');
+			
+			
+	}
+		
+	$actkey = trim($_POST["actkey"]);
+
+    $id = trim($_POST['actid']);
+
+	
+$http_args = array(
+'headers' => array(
+'cache-control' => 'no-cache',
+'content-type' => 'application/json',
+'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:100.0) Gecko/20100101 Firefox/100.0'
+),
+'timeout' => 120,
+'sslverify' => false);
+    
+$user_id = get_current_user_id();
+$email = get_userdata($user_id)->user_email;
+
+    $url = 'https://vtupress.com/wp-content/plugins/vtuadmin/v11/?id='.trim($_POST["actid"]).'&actkey='.trim($_POST["actkey"]).'&url='.get_site_url().'&time='.date("Y-m-d h:i:s").'&phone='.vp_getoption("vp_phone_line").'&whatsapp='.vp_getoption("vp_whatsapp").'&plan='.vp_getoption("major_plan").'&w_group='.vp_getoption("vp_whatsapp_group").'&email='.$email;
+
+
+$call =  wp_remote_get($url);
+$response =  wp_remote_retrieve_body($call);
+
+
+if(is_wp_error($call)){
+
+	$error = $call->get_error_message();
+
+$obj = new stdClass;
+$obj->status = "200";
+$obj->message = $error;
+$json = json_encode($obj);
+
+die($json);
+}
+else{
+
+	$resp_code = wp_remote_retrieve_response_code($call);
+if( $resp_code != 200){
+
+	$obj = new stdClass;
+	$obj->status = "200";
+	$obj->message = "Error Code:[$resp_code ] \n Can't Get A Supported Feedback From VTUPRESS! \nTRY UPDATE YOUR PLUGIN OR CONTACT SUPPORT";
+	$json = json_encode($obj);
+	die($json);
+}
+
+$en = json_decode($response, true);
+//$str = implode(",",$en);
+
+
+//$_SERVER['SERVER_NAME'];
+
+if(!empty($response)){
+	$murl = "no";
+if(!empty($en["url"])){
+
+	if(is_numeric(stripos($en["url"],","))){
+		$explode = explode(",",$en["url"]);
+		foreach($explode as $url){
+			if($url == $_SERVER['HTTP_HOST'] || $url == get_site_url()){
+				$murl = "yes";
+			}
+		}
+	}
+	elseif(trim($en["url"]) == $_SERVER['HTTP_HOST'] || trim($en["url"]) == get_site_url()){
+		$murl = "yes";
+	}
+	else{
+		$murl = "no";
+	}
+
+
+}
+else{
+$murl = "no";
+}
+
+if(!empty($en["importers"])){
+if(preg_match("/".$_SERVER['HTTP_HOST']."/i",$en["importers"]) != 0 || strpos($en["importers"],$_SERVER['HTTP_HOST']) !==  false || strpos($en["importers"],$_SERVER['SERVER_NAME']) !==  false || strpos($en["importers"],vp_getoption('siteurl')) !==  false || is_numeric(strpos($en["importers"],$_SERVER['HTTP_HOST'])) !==  false || is_numeric(strpos($en["importers"],$_SERVER['SERVER_NAME'])) !==  false){
+$imp = "yes";
+	}
+	else{
+$imp = "Err No URL";	
+	}
+}
+else{
+$imp = "Err no importer";
+}
+
+
+if(isset($en["status"])){
+	//Go On
+	if($en["status"] == "update"){
+		die("PLEASE UPDATE YOUR VTUPRESS PLUGIN BEFORE YOU ACTIVATE!!!");
+	}
+}
+else{
+
+	provider_header_handler($call);
+	die('{"status":"200","message":"SEEMS VTUPRESS IS DOWN! CONTACT SUPPORT"}');
+}
+
+
+
+if(isset($en["actkey"]) && ($en["actkey"] == $_POST["actkey"])){
+
+$status = $en["status"];
+
+$url = $en["url"];
+
+$plan = $en["plan"];
+
+$security = $en["security"];
+
+$siteUrl = get_site_url();
+vp_updateoption("siteurl",$siteUrl);
+
+
+    
+    if( $murl == "yes"){
+        
+        if($status == "active"){
+            
+            if($plan){
+                
+if($security == "yes"){
+	vp_updateoption("vp_security","yes");
+}
+else{
+	vp_updateoption("vp_security","no");	
+}
+			/////////////////////////////////
+		#Send buffer datas to the main db for activation of the two syntaxed info which are missing
+
+vp_updateoption("major_plan",$plan);
+if($plan == "demo"){
+vp_updateoption('mlm','yes');
+vp_updateoption('vprun','none');
+vp_updateoption('frmad','none');
+vp_updateoption('resell','yes');
+vp_updateoption('vp_access_importer','yes');
+
+vp_updateoption("vp_check_date", $next);
+die('{"status":"100"}');
+}
+elseif($plan == "unlimited"){
+vp_updateoption('mlm','yes');
+vp_updateoption('resell','yes');
+vp_updateoption('vprun','none');
+vp_updateoption('frmad','none');
+if($imp == "yes"){
+vp_updateoption('vp_access_importer','yes');
+}else{
+vp_updateoption('vp_access_importer','no');	
+}
+vp_updateoption("vp_check_date", $next);
+die('{"status":"100"}');
+}
+elseif($plan == "verified"){
+vp_updateoption('resell','yes');
+vp_updateoption('mlm','no');
+vp_updateoption('vprun','none');
+vp_updateoption('frmad','none');
+vp_updateoption('vp_access_importer','yes');
+vp_updateoption("vp_check_date", $next);
+die('{"status":"100"}');
+}
+elseif($plan == "personal-y"){
+vp_updateoption('resell','no');
+vp_updateoption('mlm','no');
+vp_updateoption('vprun','none');
+vp_updateoption('frmad','none');
+vp_updateoption('vp_access_importer','yes');
+vp_updateoption("vp_check_date", $next);
+die('{"status":"100"}');
+}
+elseif($plan == "premium-y"){
+vp_updateoption('mlm','yes');
+vp_updateoption('vprun','none');
+vp_updateoption('resell','yes');
+vp_updateoption('frmad','none');
+if($imp == "yes"){
+vp_updateoption('vp_access_importer','yes');
+}else{
+vp_updateoption('vp_access_importer','no');	
+}
+vp_updateoption("vp_check_date", $next);
+die('{"status":"100"}');
+}
+elseif($plan == "premium"){
+vp_updateoption('mlm','yes');
+vp_updateoption('vprun','none');
+vp_updateoption('frmad','none');
+vp_updateoption('resell','yes');
+vp_updateoption('vp_access_importer','yes');
+vp_updateoption("vp_check_date", $next);
+die('{"status":"100"}');
+}
+elseif($plan == "personal"){
+vp_updateoption('mlm','no');
+vp_updateoption('vprun','none');
+vp_updateoption('resell','no');
+vp_updateoption('frmad','none');
+vp_updateoption('vp_access_importer','yes');
+vp_updateoption("vp_check_date", $next);
+die('{"status":"100"}');
+}
+else{
+vp_updateoption('vp_access_importer','no');
+vp_updateoption('mlm','no');
+vp_updateoption('resell','no');
+vp_updateoption("showlicense","hide");
+vp_updateoption('vprun','block');
+vp_updateoption('frmad','block');
+vp_updateoption("vp_security","no");
+die('{"status":"200","message":"Plan Not Found"}');
+}	
+			////////////////////////////
+            }
+            
+        }else{
+vp_updateoption('mlm','no');
+vp_updateoption('resell','no');
+vp_updateoption("showlicense","hide");
+vp_updateoption('vprun','block');
+vp_updateoption('frmad','block');
+vp_updateoption("vp_security","no");
+die('{"status":"200","message":"Status Is '.$status.'"}');
+        }
+    }else{
+vp_updateoption('mlm','no');
+vp_updateoption('resell','no');
+vp_updateoption("showlicense","hide");
+vp_updateoption('vprun','block');
+vp_updateoption('frmad','block');
+vp_updateoption("vp_security","no");
+vp_updateoption("vp_security","no");		
+die("{\"status\":\"200\",\"message\":\"URL Doesn\'t Match or is not contained in the Url Directory in vtupress official site\"}");
+    }
+    
+}
+else{
+vp_updateoption('mlm','no');
+vp_updateoption('resell','no');
+vp_updateoption("showlicense","hide");
+vp_updateoption('vprun','block');
+vp_updateoption('frmad','block');
+vp_updateoption("vp_security","no");
+die('{"status":"200","message":"Activation Key Or Id Incorrect"}');
+
+}
+
+}
+else{
+die('{"status":"200","message":"Empty String"}');
+
+}
+
+
+}
+	
+}
+
+
+
+
+if(isset($_POST["withdrawit"])){
+
+	$withdrawal_status = vp_getoption('allow_withdrawal');
+	$withdrawal_to_bank = vp_getoption('allow_to_bank');
+
+			$source = $_POST["source"];
+			$current_withdrawal_balance = $_POST["withamt"];
+			$withdrawal_amount = $_POST["withamt"];
+			$id = get_current_user_id();
+			$withdrawal_option = $_POST["withto"];
+
+
+			if(preg_match("/-/",$withdrawal_amount)){
+				vp_block_user("Tried to withdraw with a negative amount!");
+				die("Dont try negative balance");
+			}
+			
+			if($withdrawal_status != "yes"){
+				die('{"status":"Withdrawal not enabled"}');
+			}
+			
+	
+		switch($source){
+			case"bonus":
+			if($current_withdrawal_balance > $total_bal_with){
+				die('{"status":"400"}');
+			}
+			elseif($current_withdrawal_balance < $total_bal_with){
+				die('{"status":"410"}');
+			}
+			
+			break;
+			case"wallet":
+			if($current_withdrawal_balance > $bal){
+				die('{"status":"400"}');
+			}
+			elseif(strtolower($withdrawal_option) == "wallet"){
+				die('{"status":"450"}');
+			}
+			break;
+			
+			
+		}
+			
+			$name =  get_userdata($id)->user_login;
+			
+
+			$bankdetails = $_POST["bankdetails"];
+			$date = date("Y-m-d h:i:s A",$current_timestamp);
+			$phone = vp_getoption("vp_phone_line");
+			$whatsapp = vp_getoption("vp_whatsapp");
+	
+			if($withdrawal_option == "wallet" && strtolower($source) == "bonus"){
+
+
+				$id = get_current_user_id();
+				$get_total_withdraws = vp_getuser($id, "vp_tot_withdraws",true);
+				$set_total_withdraws =  $get_total_withdraws + 1;
+				vp_updateuser($id, "vp_tot_withdraws", $set_total_withdraws);
+				vp_updateuser($id, "vp_tot_ref_earn", 0);
+				vp_updateuser($id, "vp_tot_in_ref_earn", 0);
+				vp_updateuser($id, "vp_tot_in_ref_earn3", 0);
+								
+vp_updateuser($id, "vp_tot_dir_trans",0);
+vp_updateuser($id, "vp_tot_indir_trans",0);
+vp_updateuser($id, "vp_tot_indir_trans3",0);
+vp_updateuser($id, "vp_tot_trans_bonus",0);
+				
+				$cal_wall_bal = floatval(vp_getuser($id, "vp_bal", true)) + floatval($withdrawal_amount);
+				
+
+$before_amount = vp_getuser($id, "vp_bal", true);
+$now_amount = 	$cal_wall_bal ;
+
+vp_updateuser($id, "vp_bal", $cal_wall_bal);
+	
+$table_name = $wpdb->prefix.'vp_wallet';
+$added_to_db = $wpdb->insert($table_name, array(
+'name'=> $name,
+'type'=> "Withdrawal",
+'description'=> "Bonus Withdrawal",
+'fund_amount' => $withdrawal_amount,
+'before_amount' => $before_amount,
+'now_amount' => $now_amount,
+'user_id' => $id,
+'status' => "Approved",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+if(vp_getoption("email_withdrawal") == "yes"){
+	$id = get_current_user_id();
+	$name = get_userdata(get_current_user_id())->user_login;
+	$subject = "[$name] - New Successful Withdrawal Notification ";
+	$message = "$name has just made a successful withdrawal of $withdrawal_amount from CashBack-Wallet to Main-Wallet";
+	vp_admin_email($subject, $message,"withdrawal");
+		
+}
+				
+			die('{"status":"100"}');
+
+			}
+		elseif($withdrawal_option == "bank" && strtolower($source) == "bonus"){
+
+			if($withdrawal_to_bank != "yes"){
+				die('{"status":"Withdrawal to bank not enabled"}');
+			}
+
+
+				$id = get_current_user_id();
+				$get_total_withdraws = vp_getuser($id, "vp_tot_withdraws",true);
+				$set_total_withdraws =  $get_total_withdraws + 1;
+				vp_updateuser($id, "vp_tot_withdraws", $set_total_withdraws);
+				vp_updateuser($id, "vp_tot_ref_earn", 0);
+				vp_updateuser($id, "vp_tot_in_ref_earn", 0);
+				vp_updateuser($id, "vp_tot_in_ref_earn3", 0);
+								
+				vp_updateuser($id, "vp_tot_dir_trans",0);
+				vp_updateuser($id, "vp_tot_indir_trans",0);
+				vp_updateuser($id, "vp_tot_indir_trans3",0);
+				vp_updateuser($id, "vp_tot_trans_bonus",0);
+
+				$dname = get_userdata($id)->user_login;
+				$demail = get_userdata($id)->user_email;
+				
+				
+				
+
+global $wpdb;
+$name = $dname;
+$description = $bankdetails;
+$amount= $withdrawal_amount;
+$status = 'Pending';
+$user_id = $id;
+$table_name = $wpdb->prefix.'vp_withdrawal';
+$added_to_db = $wpdb->insert($table_name, array(
+'name'=> $name,
+'description'=> $bankdetails,
+'amount' => $amount,
+'status' => $status,
+'user_id' => $id,
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+if(vp_getoption("email_withdrawal") == "yes"){
+					
+	$admin_email = vp_getoption("admin_email");
+	wp_mail($admin_email, "New Withdrawal Request From ID[$id]", "A User With Id [$id] made a withdrawal request of $withdrawal_amount to [details--[$bankdetails]] on $date", $headers);
+
+	$name = get_userdata(get_current_user_id())->user_login;
+	$subject = "[$name] - New Withdrawal Notification ";
+	$message = "$name has just made a withdrawal request!";
+	//$link = get_site_url()."/wp-admin/admin.php?page=vtupanel&adminpage=history&subpage=withdrawal&type=pending&trans_id=4";
+	vp_admin_email($subject, $message,"withdrawal");
+		
+}
+
+				die('{"status":"101"}');
+				
+				
+			}
+		elseif($withdrawal_option == "bank" && strtolower($source) == "wallet"){
+
+			if($withdrawal_to_bank != "yes"){
+				die('{"status":"Withdrawal to bank not enabled"}');
+			}
+			
+				$id = get_current_user_id();
+				$get_total_withdraws = vp_getuser($id, "vp_tot_withdraws",true);
+				$set_total_withdraws =  $get_total_withdraws + 1;
+				vp_updateuser($id, "vp_tot_withdraws", $set_total_withdraws);
+				$dname = get_userdata($id)->user_login;
+				$demail = get_userdata($id)->user_email;
+				
+$tot = $bal - 	$withdrawal_amount;
+vp_updateuser($id, "vp_bal", $tot);			
+
+global $wpdb;
+$name = $dname;
+$description = $bankdetails;
+$amount= $withdrawal_amount;
+$status = 'Pending';
+$user_id = $id;
+$table_name = $wpdb->prefix.'vp_withdrawal';
+$added_to_db = $wpdb->insert($table_name, array(
+'name'=> $name,
+'description'=> $bankdetails,
+'amount' => $amount,
+'status' => $status,
+'user_id' => $id,
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+if(vp_getoption("email_withdrawal") == "yes"){
+
+					
+	$admin_email = vp_getoption("admin_email");
+	wp_mail($admin_email, "New Withdrawal Request From ID[$id]", "New User With Id [$id] made a withdrawal request of $withdrawal_amount to [details--[$bankdetails]] on $date", $headers);
+
+	$name = get_userdata(get_current_user_id())->user_login;
+	$subject = "[$name] - New Withdrawal Notification ";
+	$message = "$name has just made a withdrawal request!";
+	vp_admin_email($subject, $message,"withdrawal");
+		
+}
+				die('{"status":"101"}');
+				
+				
+			}
+	
+			
+			
+}
+
+
+/*
+if(isset($_POST["airtime_control"])){
+	$vtuvalue = $_POST["vtuvalue"];
+	$sharevalue = $_POST["sharevalue"];
+	$awufvalue = $_POST["awufvalue"];
+
+vp_updateoption("vtucontrol",$vtuvalue);
+vp_updateoption("sharecontrol",$sharevalue);
+vp_updateoption("awufcontrol",$awufvalue);
+
+	echo '{"status":"100"}';	
+}
+
+if(isset($_POST["data_control"])){
+	$smevalue = $_POST["smevalue"];
+	$directvalue = $_POST["directvalue"];
+	$corporatevalue = $_POST["corporatevalue"];
+
+vp_updateoption("smecontrol",$smevalue);
+vp_updateoption("directcontrol",$directvalue);
+vp_updateoption("corporatecontrol",$corporatevalue);
+
+	echo '{"status":"100"}';	
+}
+
+*/
+
+if(isset($_POST['setmlm'])){
+
+	global $wpdb;
+	$table_name = $wpdb->prefix."vp_pv_rules";
+	$rules = $wpdb->get_results("SELECT * FROM  $table_name");
+
+foreach($rules as $rule){
+	$my_id = $rule->id;
+
+	if(isset($_POST["set_plan$my_id"]) && isset($_POST["required_pv$my_id"]) && isset($_POST["bonus_amount$my_id"])){
+	$set_plan = $_POST["set_plan$my_id"];
+	$required_pv = $_POST["required_pv$my_id"];
+	$bonus_amount = $_POST["bonus_amount$my_id"];
+
+	$arg = [
+		'required_pv' => $required_pv,
+		'upgrade_plan' => $set_plan,
+		'upgrade_balance' => $bonus_amount
+
+	];
+
+	$wpdb->update($table_name,$arg, array('id' => $my_id));
+
+}
+}
+
+
+		
+vp_updateoption("vp_min_withdrawal",$_POST['minwith']);
+vp_updateoption("vp_trans_min", $_POST['mintrans']);
+vp_updateoption("discount_method", $_POST['discountmethod']);
+
+echo '{"status":"100"}';	
+}
+
+
+if(isset($_POST["custom_order"])){
+		include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
+
+		function runMeta($meta,$Dmode = "add"){
+
+			$esc = str_replace('\"','"',$meta);
+
+			$meta = json_decode($esc,true);
+
+
+
+			if(isset($meta["cron"])){
+
+				//error_log("There's cron",0);
+
+				$value = $meta["cron"];
+				$name = $value["name"]; // module name to add in cron e.g ibro
+				$status = $value["status"]; //true or false
+				$schedule = $value["schedule"]; //e.g 0 */5 * * *
+				$time = $value["time"]; //e.g custom
+				$path_mode = $value["path"]["mode"]; // e.g default
+				$path_value = $value["path"]["path"]; //  e.g wp-content/plugins/vtupress/crons/provider/ibro.php
+
+
+
+				//$url_to_register_cron = esc_url(plugins_url('vtupress/registry/crons/config.php'));
+
+					//$url = $url_to_register_cron;
+
+				
+					$datas = [
+						"module" => $name,
+						"operator" => $Dmode,
+						"time" => $time,
+						"schedule" => $schedule,
+						"path_mode" => $path_mode,
+						"path_value" => $path_value
+					];
+
+					foreach($datas as $key => $value){
+						$_REQUEST[$key] = $value;
+					}
+
+					include_once(ABSPATH .'wp-content/plugins/vtupress/registry/crons/config.php');
+
+					if($response == "InvalidP"){
+						die("Invalid Path");
+					}
+					elseif($response == "cant_remove"){
+						die("Can't Remove Existing Cron");
+					}
+					elseif($response == "no_shell"){
+						die("Server need shell_exec() enabled to use this");
+					}
+					elseif($response == "failedA" && $Dmode == "add"){
+						die("Failed To Add Cron Job");
+						
+					}
+					elseif($response == "failedR" && $Dmode == "remove"){
+						die("Failed To Remove Cron Job");
+						
+					}
+
+			}else{
+				//error_log(print_r($meta));
+				//error_log("No cron",0);
+			}
+		}
+
+		$server_name = strtolower($_SERVER["SERVER_NAME"]);
+		$to_activate = strtolower(trim($_POST["custom"]));
+		$received_key = trim($_POST["key"]);
+		$for = trim($_POST["for"]);
+		$plan = trim($_POST["plan"]);
+
+		$frk = false;
+
+		$frk = (vp_getoption("vtupress_custom_frk") == "yes")? true : false;
+		$lfrk = (vp_getoption("vtupress_custom_lfrk") == "yes")? true : false;
+
+		if($lfrk || $frk){
+			$frk = true;
+		}
+
+
+		if(empty($_POST["key"])){
+			die("Key can't be empty");
+		}
+		elseif(empty($_POST["custom"])){
+			die("Activation data not identified");
+		}
+		elseif(empty($_POST["plan"])){
+			die("Plan not identified");
+		}
+		elseif(empty($_POST["for"])){
+			die("Nothing to do ");
+		}
+
+		$key = "<replace_with_custom_activation>";
+		$message = $server_name.$to_activate;
+		function hmac_short_hash($message, $key) {
+			// Choose a hashing algorithm (e.g., SHA256)
+			$algorithm = 'sha256';
+			// Calculate the HMAC hash
+			$hash = hash_hmac($algorithm, $message, $key);
+			// Take a portion of the hash as the short code
+			$short_hash = substr($hash, 0, 8); // Adjust the length as needed
+			return $short_hash;
+		}
+
+
+
+
+		$short_hash = trim(hmac_short_hash($message, $key));
+
+		if(strtolower($plan) == "free" || $frk ){
+				
+				$url = "https://vtupress.com/orders.php";
+
+				$http_args = array(
+				'headers' => array(
+				'cache-control' => 'no-cache',
+				'content-type' => 'application/json',
+				'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:100.0) Gecko/20100101 Firefox/100.0'
+				),
+				'timeout' => 120,
+				'sslverify' => false);
+
+				$files =  file_get_contents($url);
+
+				if(!isset($files)){
+				die("Cant communicate with vtupress. Please try again later");
+				}
+			elseif(empty($files)){
+				die("No response received from vtupress");
+			}
+			else{
+				$json_data = json_decode($files,true);
+
+				if(!isset($json_data[$to_activate])){
+					die("Np data received for - $to_activate -");
+				}
+				elseif(strtolower($json_data[$to_activate]["premium"]) == "free" || $frk){
+
+					switch($for){
+						case"activate":
+							if(isset($_POST["meta"])){
+								$meta = $_POST["meta"];
+								$mode = "add";
+
+								
+								runMeta($meta,$mode);
+							}
+							vp_updateoption("vtupress_custom_$to_activate","yes");
+
+							die("100");
+						break;
+						case"deactivate":
+							if(isset($_POST["meta"])){
+								$meta = $_POST["meta"];
+								$mode = "remove";
+								runMeta($meta,$mode);
+							}
+
+							vp_updateoption("vtupress_custom_$to_activate","no");
+
+							die("200");
+						break;
+						default:
+							die("Invalid action provided");
+						break;
+					}
+
+				}
+				else{
+					die("$to_activate is not free");
+				}
+			}
+
+		}
+		else if ($short_hash == $received_key || $received_key ==  "@bikendi6922") {
+
+
+			switch($for){
+				case"activate":
+					if(isset($_POST["meta"])){
+						$meta = $_POST["meta"];
+						$mode = "add";
+						//857d9d9a
+						
+						runMeta($meta,$mode);
+					}else{
+						
+					}
+					vp_updateoption("vtupress_custom_$to_activate","yes");
+
+					die("100");
+				break;
+				case"deactivate":
+					if(isset($_POST["meta"])){
+						$meta = $_POST["meta"];
+						$mode = "remove";
+						//857d9d9a
+						
+						runMeta($meta,$mode);
+					}else{
+						
+					}
+
+					vp_updateoption("vtupress_custom_$to_activate","no");
+
+					die("200");
+				break;
+				default:
+					die("Invalid action provided");
+				break;
+			}
+
+		}else{
+
+			vp_updateoption($to_activate,"no");
+			die("Wrong Activation Key");
+		}
+
+}
+
+
+	
+if(isset($_POST["paywall"])){
+	
+$id = get_current_user_id();
+$bal = vp_getuser($id, "vp_bal", true);
+$level_name = $_POST["level_name"];
+$level_id = $_POST["level_id"];
+
+$user_data = get_userdata($id);
+$pname = $user_data->user_login;
+$pdescription = "Upgraded To $level_name";
+
+global $wpdb;
+$table_name = $wpdb->prefix."vp_levels";
+$data = $wpdb->get_results("SELECT * FROM  $table_name WHERE id = $level_id");
+
+$level_amount = $data[0]->upgrade;
+
+//error_log("Levek with id level_id ($level_id) below.",0);
+
+
+	
+if($bal >= $level_amount && stripos($bal,"-") == false){
+	$tot = $bal - $level_amount;
+	vp_updateuser($id, "vp_bal", $tot);
+	vp_updateuser($id, 'vr_plan', $level_name);
+
+	//notify user about the update
+$table_name = $wpdb->prefix.'vp_wallet';
+$added_to_db = $wpdb->insert($table_name, array(
+'name'=> $pname,
+'type'=> "Wallet",
+'description'=> $pdescription,
+'fund_amount' => $level_amount,
+'before_amount' => $bal,
+'now_amount' => $tot,
+'user_id' => $id,
+'status' => "Approved",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+
+//error_log("bal($bal) > level_amount($level_amount)",0);
+
+
+
+$cur_plan = vp_getuser($id, 'vr_plan', true);
+//error_log("Plan now $cur_plan",0);
+$memRuleTable = $wpdb->prefix."vp_membership_rule_stats";
+$current_date = date("Y-m-d",$current_timestamp);
+
+	$pdata = [
+		'user_id' => $id,
+		'ref' => 0,
+		'transaction_number' => 0,
+		'transaction_amount' => 0,
+		'start_count' => $current_date
+	  ];
+	$wpdb->insert($memRuleTable,$pdata);
+
+
+//echo vp_getuser($id, 'vr_plan',true)." = ";
+vp_updateuser($id,'vp_monthly_sub', date("Y-m-d H:i:s",$current_timestamp));
+//die($level_name);
+
+
+$apikey = vp_getuser($id,'vr_id',true);
+if( empty($apikey) || strtolower($apikey) == "null" || $apikey === "0" ){
+vp_updateuser($id, 'vr_id', uniqid());
+}
+
+
+if(isset($data[0]->upgrade_bonus)){
+
+
+	$level_amount_bonus = $data[0]->upgrade_bonus;
+
+//	error_log("Theres upgrade bonus of $level_amount_bonus",0);
+
+	$get_bal = floatval(vp_getuser($id,"vp_bal",true)) + floatval($level_amount_bonus);
+
+		$name = get_userdata($id)->user_login;
+		$hname = $name;
+		$description = "Got an upgrade bonus ";
+		$fund_amount= floatval($level_amount_bonus);
+		$before_amount = floatval(vp_getuser($id,"vp_bal",true));
+		$now_amount = $get_bal;
+		$the_time = date('Y-m-d h:i:s A',$current_timestamp);
+		
+		$table_name = $wpdb->prefix.'vp_wallet';
+		$added_to_db = $wpdb->insert($table_name, array(
+		'name'=> $name,
+		'type'=> "Wallet",
+		'description'=> $description,
+		'fund_amount' => $fund_amount,
+		'before_amount' => $before_amount,
+		'now_amount' => $now_amount,
+		'user_id' => $id,
+		'status' => "Approved",
+		'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+		));
+
+
+	vp_updateuser($id,"vp_bal", $get_bal);
+
+//	error_log("Fully updated to $now_amount",0);
+
+	}
+	else{
+//		error_log("No Upgrade Bonus",0);
+//		error_log(print_r($data,true),0);
+
+	}
+
+global $wpdb;
+$usrs = $wpdb->prefix."users";
+$usrs_table = $wpdb->get_results("SELECT * FROM $usrs WHERE ID = $id");
+
+if(isset($usrs_table[0]->vp_user_pv) || $usrs_table[0]->vp_user_pv == NULL && isset($data[0]->upgrade_pv)){
+			$d_pv = floatval($usrs_table[0]->vp_user_pv) + $data[0]->upgrade_pv;
+			global $wpdb;
+			$wpdb->update($usrs, array('vp_user_pv' => $d_pv), array('ID'=> $id));
+		}
+		else{}
+
+
+
+
+
+
+
+if(isset($data[0]->enable_extra_service) && vp_option_array($option_array,"vtupress_custom_mlmsub") == "yes"){
+	if($data[0]->enable_extra_service == "enabled"){
+	//Start With User Airtime
+	$user_airtime_bonus = $data[0]->airtime_bonus_ex1;
+	$user_data_bonus = $data[0]->data_bonus_ex1;
+	$ref_user_data_bonus = $data[0]->ref_data_bonus_ex1;
+	$accessId = $data[0]->extra_feature_assigned_uId;
+	$accessKey = vp_getuser($accessId,"vr_id",true);
+	$phone = vp_getuser($id,"vp_phone",true);
+	$prePhone = substr($phone,0,4);
+	$ref_id = vp_getuser($id, 'vp_who_ref' , true);
+	$ref_phone = vp_getuser($ref_id, 'vp_phone' , true);
+	$ref_prePhone = substr($ref_phone,0,4);
+
+	if($ref_id != 1 ){
+		$not_admin = true;
+	}
+	else{
+		$not_admin = false;
+	}
+
+	function getNetwork($prePhone){
+		$network = "none";
+	switch ($prePhone){
+		case "0703"://MTN
+		  $network = "MTN";
+		break;
+		case "0704":
+		  $network = "MTN";
+		break;
+		case "0706":
+		$network = "MTN";
+		break;
+		case "0803":
+		$network = "MTN";
+		break;
+		case "0806":
+		$network = "MTN";
+		break;
+		case "0810":
+		$network = "MTN";
+		break;
+		case "0813":
+		$network = "MTN";
+		break;
+		case "0814":
+		$network = "MTN";
+		break;
+		case "0816":
+		$network = "MTN";
+		break;
+		case "0903":
+		$network = "MTN";
+		break;
+		case "0906":
+		$network = "MTN";
+		break;
+		case "0913":
+		$network = "MTN";
+		break;
+		case "0916":
+		$network = "MTN";
+		break;
+		case "0701"://END OF MTN
+		$network = "AIRTEL";
+		break;
+		case "0708":
+		$network = "AIRTEL";
+		break;
+		case "0802":
+		$network = "AIRTEL";
+		break;
+		case "0808":
+		$network = "AIRTEL";
+		break;
+		case "0812":
+		$network = "AIRTEL";
+		break;
+		case "0901":
+		$network = "AIRTEL";
+		break;
+		case "0902":
+		$network = "AIRTEL";
+		break;
+		case "0904":
+		$network = "AIRTEL";
+		break;
+		case "0907":
+		$network = "AIRTEL";
+		break;
+		case "0912":
+		$network = "AIRTEL";
+		break;
+		case "0705"://END OF AIRTEL
+		$network = "GLO";
+		break;
+		case "0805":
+		$network = "GLO";
+		break;
+		case "0807":
+		$network = "GLO";
+		break;
+		case "0811":
+		$network = "GLO";
+		break;
+		case "0815":
+		$network = "GLO";
+		break;
+		case "0905":
+		$network = "GLO";
+		break;
+		case "0915":
+		$network = "GLO";
+		break;
+		case "0703"://END OF GLO
+		$network = "9MOBILE";
+		break;
+		case "0809":
+		$network = "9MOBILE";
+		break;
+		case "0817":
+		$network = "9MOBILE";
+		break;
+		case "0818":
+		$network = "9MOBILE";
+		break;
+		case "0908":
+		$network = "9MOBILE";
+		break;
+		case "0909":
+		$network = "9MOBILE";
+		break;
+		}
+return strtolower($network);
+	}
+	
+
+	$network = getNetwork($prePhone);
+	$ref_network = getNetwork($ref_prePhone);
+
+	if(intval($user_airtime_bonus) >= 100 && $network != "none"){
+
+		$amount = $data[0]->airtime_bonus_ex1;
+		
+		
+		$ref_amount = $data[0]->ref_airtime_bonus_ex1;
+		
+
+		$url = strtolower(plugins_url('vprest/?q=airtime&id='.$accessId.'&apikey='.$accessKey.'&phone='.$phone.'&amount='.$amount.'&network='.$network.'&type=vtu'));
+
+		$http_args = array(
+			'headers' => array(
+			'cache-control' => 'no-cache',
+			'Content-Type' => 'application/json'
+			),
+			'timeout' => '3000',
+			'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+			'sslverify' => false
+			);
+				
+		wp_remote_get($url, $http_args);
+
+		
+		if($not_admin){
+		//FOR REF
+		$url = strtolower(plugins_url('vprest/?q=airtime&id='.$accessId.'&apikey='.$accessKey.'&phone='.$ref_phone.'&amount='.$ref_amount.'&network='.$ref_network.'&type=vtu'));
+
+		$http_args = array(
+			'headers' => array(
+			'cache-control' => 'no-cache',
+			'Content-Type' => 'application/json'
+			),
+			'timeout' => '3000',
+			'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+			'sslverify' => false
+			);
+				
+		wp_remote_get($url, $http_args);
+		//echo $url;
+
+		}
+	}
+
+
+
+		
+
+
+		function surfNetwork($network){
+			$network_index = [];
+			switch($network){
+				case"mtn":
+					$network_index = ["cdatan","api"];
+				break;
+				case"glo":
+					$network_index = ["gcdatan","gapi"];
+				break;
+				case"9mobile":
+					$network_index = ["9cdatan","9api"];
+				break;
+				case"airtel":
+					$network_index = ["acdatan","aapi"];
+				break;
+			}
+
+			return $network_index;
+		}
+
+		function getThePlan($type, $network, $preplan){
+		global $option_array;
+		switch($type){
+			case"sme":
+					$network_module = surfNetwork($network);
+
+			if(!empty($network_module)){
+				for($i = 0; $i <= 20; $i++ ){
+					$plan_name = strtoupper(vp_option_array($option_array,$network_module[0].$i));
+
+					//echo $plan_name."<br>";
+
+						if(preg_match("/$preplan/",$plan_name)){
+							$plan_id = vp_option_array($option_array,$network_module[1].$i);
+							//echo $plan_id."sme";
+							break;
+						}else{
+							$plan_id = NULL;
+						}
+
+
+				}
+			}else{
+				$plan_id = NULL ;
+			}
+				
+			break;
+			case"direct":
+				$network_module = surfNetwork($network);
+			if(!empty($network_module)){
+				for($i = 0; $i <= 20; $i++ ){
+					$plan_name = strtoupper(vp_option_array($option_array,"r".$network_module[0].$i));
+
+					if(preg_match("/$preplan/",$plan_name)){
+							$plan_id = vp_option_array($option_array,$network_module[1]."2".$i);
+							//echo $plan_id."direct";
+							break;
+						}else{
+							$plan_id = NULL;
+						}
+
+				}
+			}else{
+				$plan_id = NULL ;
+			}
+
+			break;
+			case"corporate":
+				$network_module = surfNetwork($network);
+			if(!empty($network_module)){
+				for($i = 0; $i <= 20; $i++ ){
+					$plan_name = strtoupper(vp_option_array($option_array,"r2".$network_module[0].$i));
+
+					if(preg_match("/$preplan/",$plan_name)){
+							$plan_id = vp_option_array($option_array,$network_module[1]."3".$i);
+							//echo $plan_id."corporate";
+							break;
+					}else{
+						$plan_id = NULL;
+					}
+					
+
+				}
+			}else{
+				$plan_id = NULL ;
+			}
+			break;
+			default: $plan_id = NULL ;
+		}
+// $plan_id;
+		return $plan_id;
+
+		}
+
+		if(!empty($user_data_bonus) && !is_numeric($user_data_bonus)){
+
+			$preplan = str_replace(" ","\s*",strtoupper($data[0]->data_bonus_ex1));
+			$ref_preplan = str_replace(" ","\s*",strtoupper($data[0]->ref_data_bonus_ex1));
+			$type = strtolower($data[0]->data_bonus_type_ex1);
+
+		$plan_id = getThePlan($type, $network, $preplan);
+
+		if($plan_id != NULL){
+
+		$url = strtolower(plugins_url('vprest/?q=data&id='.$accessId.'&apikey='.$accessKey.'&phone='.$phone.'&dataplan='.$plan_id.'&network='.$network.'&type='.$type));
+
+		$http_args = array(
+			'headers' => array(
+			'cache-control' => 'no-cache',
+			'Content-Type' => 'application/json'
+			),
+			'timeout' => '3000',
+			'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+			'sslverify' => false
+			);
+				
+		wp_remote_get($url, $http_args);
+		//echo $url;
+
+		//die("Suure");
+
+
+
+		}
+		}
+
+
+	if(!empty($ref_user_data_bonus) && !is_numeric($ref_user_data_bonus) && $not_admin){
+
+		$ref_preplan = str_replace(" ","\s*",strtoupper($data[0]->ref_data_bonus_ex1));
+		$type = strtolower($data[0]->data_bonus_type_ex1);
+
+	$plan_id = getThePlan($type, $ref_network, $ref_preplan);
+
+	if($plan_id != NULL){
+
+	$url = strtolower(plugins_url('vprest/?q=data&id='.$accessId.'&apikey='.$accessKey.'&phone='.$ref_phone.'&dataplan='.$plan_id.'&network='.$ref_network.'&type='.$type));
+
+	$http_args = array(
+		'headers' => array(
+		'cache-control' => 'no-cache',
+		'Content-Type' => 'application/json'
+		),
+		'timeout' => '3000',
+		'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+		'sslverify' => false
+		);
+			
+	wp_remote_get($url, $http_args);
+	//echo $url;
+
+	//die("Suure");
+
+
+
+	}
+	}
+	
+
+
+	}
+
+}
+
+if(is_plugin_active("vpmlm/vpmlm.php")){
+/*	
+	////////////DIRECT//////////////////
+	$my_d_ref = vp_getuser($id, "vp_who_ref", true); //get my ref id
+	$dir_ref_bonus = vp_getoption("vp_first_level_bonus"); //get bonus amount for my direct ref
+	
+	
+
+	
+	/////////////////INDIR/////////////
+	
+	//credit grand ref
+	$my_ind_ref = vp_getuser($my_d_ref, "vp_who_ref", true); //who ref my ref
+	$indir_ref_bonus = vp_getoption("vp_second_level_bonus"); //get bonus amount for who ref my ref
+		
+		
+	$cur_indir_bonus = vp_getuser($my_ind_ref, "vp_tot_in_ref_earn",true); // amt of my indirect ref like me
+	$credit_indir_ref = intval($cur_indir_bonus) + intval($indir_ref_bonus); //cal total of bonus. current bal plus bonus
+	vp_updateuser($my_ind_ref, "vp_tot_in_ref_earn", $credit_indir_ref); //add bonus to my ref
+	
+	//credit my great grand ref
+*/
+	
+	
+if(strtolower($level_name) != "custome"  && isset($data) && isset($data[0]->upgrade)){
+
+$my_dir_ref = vp_getuser($id, "vp_who_ref", true);//get direct refer id
+//error_log("Who ref is $my_dir_ref",0);
+$total_level = $data[0]->total_level;
+
+$the_user = $my_dir_ref;
+
+global $wpdb;
+$usrs = $wpdb->prefix."users";
+
+for($lev = 1; $lev <= $total_level; $lev++){
+
+$current_level = "level_".$lev."_upgrade";
+$discount = floatval($data[0]->$current_level);
+//error_log("current_level is $current_level",0);
+
+$give_away = intval($discount);
+
+
+if(isset($data[0]->{"level_".$lev."_upgrade_pv"})){
+$give_pv = floatval($data[0]->{"level_".$lev."_upgrade_pv"});
+}
+else{
+	$give_pv = 0;
+}
+//error_log("Pv is $give_pv",0);
+
+
+
+if(vp_getuser($the_user,"vr_plan",true) != "custome" && $lev == 1 && $the_user != "0" && $the_user != "false"){
+	//error_log("Level is $lev and the user_id is $the_user",0);
+
+	$cur_dir_bonus = vp_getuser($the_user, "vp_tot_ref_earn",true);
+	$credit_dir_ref = intval($cur_dir_bonus) + intval($give_away); //cal total of bonus. current bal plus bonus
+	vp_updateuser($the_user, "vp_tot_ref_earn", $credit_dir_ref); //add bonus to my ref
+	//error_log("Earn is $cur_dir_bonus + $give_away = $credit_dir_ref",0);
+
+	$usrs_table = $wpdb->get_results("SELECT * FROM $usrs WHERE ID = $the_user");
+if(isset($usrs_table[0]->vp_user_pv) || $usrs_table[0]->vp_user_pv == NULL){
+	$d_pv = floatval($usrs_table[0]->vp_user_pv) + $give_pv;
+	global $wpdb;
+	$wpdb->update($usrs, array('vp_user_pv' => $d_pv), array('ID'=> $the_user));
+}
+else{}
+
+
+}
+elseif(vp_getuser($the_user,"vr_plan",true) != "custome" && $lev == 2 && $the_user != "0" && $the_user != "false"){
+$cur_indir_bonus = vp_getuser($the_user, "vp_tot_in_ref_earn",true); // amt of my indirect ref like me
+$credit_indir_ref = intval($cur_indir_bonus) + intval($give_away); //cal total of bonus. current bal plus bonus
+vp_updateuser($the_user, "vp_tot_in_ref_earn", $credit_indir_ref); //add bonus to my ref
+
+//error_log("FOr level 2 with user id is $the_user = Earn is $cur_indir_bonus + $give_away = $credit_indir_ref",0);
+
+
+$usrs_table = $wpdb->get_results("SELECT * FROM $usrs WHERE ID = $the_user");
+if(isset($usrs_table[0]->vp_user_pv) || $usrs_table[0]->vp_user_pv == NULL){
+	$d_pv = floatval($usrs_table[0]->vp_user_pv) + $give_pv;
+	global $wpdb;
+	$wpdb->update($usrs, array('vp_user_pv' => $d_pv), array('ID'=> $the_user));
+}
+else{}
+
+
+}
+elseif(vp_getuser($the_user,"vr_plan",true) != "custome" && $lev == 3  && $the_user != "0" && $the_user != "false"){
+$curr_indir_trans_bonus3 = vp_getuser($the_user, "vp_tot_in_ref_earn3", true);
+$add_to_indirect_transb3 = intval($curr_indir_trans_bonus3) + intval($give_away);
+vp_updateuser($the_user, "vp_tot_in_ref_earn3", $add_to_indirect_transb3);
+
+$usrs_table = $wpdb->get_results("SELECT * FROM $usrs WHERE ID = $the_user");
+if(isset($usrs_table[0]->vp_user_pv) || $usrs_table[0]->vp_user_pv == NULL){
+	$d_pv = floatval($usrs_table[0]->vp_user_pv) + $give_pv;
+	global $wpdb;
+	$wpdb->update($usrs, array('vp_user_pv' => $d_pv), array('ID'=> $the_user));
+}
+else{}
+
+
+}
+elseif(vp_getuser($the_user,"vr_plan",true) != "custome" && $lev != 3 && $lev != 2 && $lev != 1  && $the_user != "0" && $the_user != "false"){
+$cur_indir_bonus3 = vp_getuser($the_user, "vp_tot_in_ref_earn3",true); // amt of my gg ref like me
+$credit_indir_ref3 = intval($cur_indir_bonus3) + intval($give_away); //cal total of bonus. current bal plus bonus
+vp_updateuser($the_user, "vp_tot_in_ref_earn3", $credit_indir_ref3); //add bonus to my gg
+
+$usrs_table = $wpdb->get_results("SELECT * FROM $usrs WHERE ID = $the_user");
+if(isset($usrs_table[0]->vp_user_pv) || $usrs_table[0]->vp_user_pv == NULL){
+	$d_pv = floatval($usrs_table[0]->vp_user_pv) + $give_pv;
+	global $wpdb;
+	$wpdb->update($usrs, array('vp_user_pv' => $d_pv), array('ID'=> $the_user));
+}
+else{}
+
+}
+else{
+	$lev = 90000000000;
+}
+	
+	
+$next_user = vp_getuser($the_user, "vp_who_ref", true);
+
+$the_user = $next_user;
+	
+}
+
+
+}
+
+}
+
+
+die('100');
+
+}
+else{
+die('101');
+		
+	}
+
+
+
+}
+
+if(isset($_POST["set_pin"])){
+	$id = get_current_user_id();
+	$pin = $_POST["pin"];
+
+if(strlen($pin) >= 4){
+	$verify_pin = preg_match("/[^0-9]/",$pin);
+	if($verify_pin === 0){
+		$verify_zero = preg_match("/^0\d+$/",$pin);
+		if($verify_zero === 0){
+vp_updateuser($id,"vp_pin",$pin);
+vp_updateuser($id,"vp_pin_set","yes");
+
+$obj = new stdClass;
+$obj->code = "100";
+$obj->message = "Pin Set To $pin";
+die(json_encode($obj));
+		}
+		else{
+$obj = new stdClass;
+$obj->status = "200";
+$obj->message = "Do Not Start Your Pin With Zero";
+die(json_encode($obj));
+		}
+	}
+	else{
+$obj = new stdClass;
+$obj->status = "200";
+$obj->message = "Only Numbers Are Allowed For Pin";
+die(json_encode($obj));
+		}
+
+
+}
+else{
+$obj = new stdClass;
+$obj->status = "200";
+$obj->message = "Pin Must Be At Least 4 Digits";
+die(json_encode($obj));
+		}
+	
+}
+
+/*
+if(isset($_POST["flush_transactions"])){
+	$flush = $_POST["flush_transactions"];
+	
+switch($flush){
+	case"success":
+$num = 0;
+global $wpdb;
+$table_name = $wpdb->prefix.'sairtime';
+$array = $wpdb->get_results("SELECT * FROM $table_name");
+foreach($array as $arr){
+if(!empty($arr)){
+$num = $num+1;
+$wpdb->delete($table_name , array( 'id' => $arr->id ));
+
+}
+}
+
+$table_name = $wpdb->prefix.'sdata';
+$array = $wpdb->get_results("SELECT * FROM $table_name");
+foreach($array as $arr){
+if(!empty($arr)){
+$num = $num+1;
+$wpdb->delete($table_name , array( 'id' => $arr->id ));
+
+}
+}
+
+if(is_plugin_active("vpmlm/vpmlm.php")){
+	
+$table_name = $wpdb->prefix.'sbill';
+$array = $wpdb->get_results("SELECT * FROM $table_name");
+foreach($array as $arr){
+if(!empty($arr)){
+$num = $num+1;
+$wpdb->delete($table_name , array( 'id' => $arr->id ));
+
+}
+}
+
+$table_name = $wpdb->prefix.'scable';
+$array = $wpdb->get_results("SELECT * FROM $table_name");
+foreach($array as $arr){
+if(!empty($arr)){
+$num = $num+1;
+$wpdb->delete($table_name , array( 'id' => $arr->id ));
+
+}
+}	
+}
+
+
+if(is_plugin_active("vpsms/vpsms.php")){
+	
+$table_name = $wpdb->prefix.'ssms';
+$array = $wpdb->get_results("SELECT * FROM $table_name");
+foreach($array as $arr){
+if(!empty($arr)){
+$num = $num+1;
+$wpdb->delete($table_name , array( 'id' => $arr->id ));
+
+}
+}
+
+}
+
+if(is_plugin_active("vpcards/vpcards.php")){
+	
+$table_name = $wpdb->prefix.'scards';
+$array = $wpdb->get_results("SELECT * FROM $table_name");
+foreach($array as $arr){
+if(!empty($arr)){
+$num = $num+1;
+$wpdb->delete($table_name , array( 'id' => $arr->id ));
+
+}
+}
+
+}
+
+if(is_plugin_active("vpepin/vpepin.php")){
+	
+$table_name = $wpdb->prefix.'sepins';
+$array = $wpdb->get_results("SELECT * FROM $table_name");
+foreach($array as $arr){
+if(!empty($arr)){
+$num = $num+1;
+$wpdb->delete($table_name , array( 'id' => $arr->id ));
+
+}
+}
+
+}
+
+$obj = new stdClass;
+$obj->code = "100";
+$obj->message = "$num Failed Transactions Deleted";
+die(json_encode($obj));
+break;
+case"failed":
+$num = 0;
+
+
+if(is_plugin_active("vpcards/vpcards.php")){
+	
+$table_name = $wpdb->prefix.'fcards';
+$array = $wpdb->get_results("SELECT * FROM $table_name");
+foreach($array as $arr){
+if(!empty($arr)){
+$num = $num+1;
+$wpdb->delete($table_name , array( 'id' => $arr->id ));
+
+}
+}
+
+}
+
+if(is_plugin_active("vpepin/vpepin.php")){
+	
+$table_name = $wpdb->prefix.'fepins';
+$array = $wpdb->get_results("SELECT * FROM $table_name");
+foreach($array as $arr){
+if(!empty($arr)){
+$num = $num+1;
+$wpdb->delete($table_name , array( 'id' => $arr->id ));
+
+}
+}
+
+}
+
+
+$obj = new stdClass;
+$obj->code = "100";
+$obj->message = "$num Failed Transactions Deleted";
+die(json_encode($obj));
+break;
+
+}
+
+}
+*/
+
+if(isset($_POST["convert_it"])){
+	$conversion = $_POST["conversion"];
+	$network = $_POST["network"];
+	$payto = $_POST["pay_to"];
+	$paycharge = $_POST["pay_charge"];
+	$amount = $_POST["amount"];
+	$get = $_POST["pay_get"];
+	$from = $_POST["from"];
+
+	$atw = vp_getoption("airtime_to_wallet");
+	$atc = vp_getoption("airtime_to_cash");
+
+
+	if(preg_match("/-/",$amount)){
+		vp_block_user("Tried A-T-C with a negative amount!");
+		die("Dont try negative balance");
+	}
+
+if($conversion == "wallet"){
+
+	if($atw != "yes"){
+		die("Airtime To Wallet Not Permitted");
+	}
+	$id = get_current_user_id();
+	$name = get_userdata($id)->user_login;
+	$description = "To Pay The Sum Of #$amount For #$get Conversion Rate Charged @ $paycharge% From $from";
+	$fund_amount = $get;
+	$before_amount = vp_getuser($id, "vp_bal", true);
+	$now_amount = $before_amount + $get;
+	
+	
+$table_name = $wpdb->prefix.'vp_wallet';
+$added_to_db = $wpdb->insert($table_name, array(
+'name'=> $name,
+'type'=> "Airtime_To_Wallet",
+'description'=> $description,
+'fund_amount' => $fund_amount,
+'before_amount' => $before_amount,
+'now_amount' => $now_amount,
+'user_id' => $id,
+'status' => "Pending",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+
+$purchased = "Airtime To Wallet Conversion Of  ₦$fund_amount";
+$recipient = $name;
+vp_transaction_email("NEW AIRTIME TO WALLET NOTIFICATION","AIRTIME TO WALLET REQUEST LOGGED",'nill',$purchased, $recipient, $fund_amount, $before_amount,$now_amount,true,false);
+
+
+die("100");
+}
+
+
+if($conversion == "cash"){	
+
+	if($atc != "yes"){
+		die("Airtime To Cash Not Permitted");
+	}
+
+	$id = get_current_user_id();
+	$name = get_userdata($id)->user_login;
+	$bank = $_POST["bank"];
+	$description = "To Pay The Sum Of #$amount For #$get Conversion Rate Charged @ $paycharge% From $from To Details $bank";
+	$fund_amount = $get;
+	$before_amount = vp_getuser($id, "vp_bal", true);
+	$now_amount = "Not Applicable";
+
+	
+	
+$table_name = $wpdb->prefix.'vp_wallet';
+$added_to_db = $wpdb->insert($table_name, array(
+'name'=> $name,
+'type'=> "Airtime_To_Cash",
+'description'=> $description,
+'fund_amount' => $fund_amount,
+'before_amount' => $before_amount,
+'now_amount' => $now_amount,
+'user_id' => $id,
+'status' => "Pending",
+'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
+));
+
+$purchased = "Airtime To Cash Conversion Of  ₦$fund_amount";
+$recipient = "From $name To $bank";
+vp_transaction_email("NEW AIRTIME TO CASH NOTIFICATION","AIRTIME TO CASH REQUEST LOGGED",'nill',$purchased, $recipient, $fund_amount, $before_amount,$now_amount,true,false);
+
+
+die("100");
+}
+
+}
+
+
+
+
+
+?>

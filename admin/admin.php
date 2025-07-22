@@ -11,10 +11,10 @@ if(!defined('ABSPATH')){
   include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
 
   $phpVersion = phpversion();
-  if(floatval($phpVersion) < floatval("7.4.0") || floatval($phpVersion) > floatval("8.0.60")){
+  if(floatval($phpVersion) < floatval("7.4.0") || floatval($phpVersion) > floatval("8.3.60")){
 
     $title = "PHP VERSION ERROR ";
-    $message = "You are using an incompatible php version of <b>$phpVersion</b>, this might break up your experience. Kindly send a request to your developer or change your php version yourself on cpanel if you use one to not less than <b>7.4</b> and not greater than <b>8.0</b> ";
+    $message = "You are using an incompatible php version of <b>$phpVersion</b>, this might break up your experience. Kindly send a request to your developer or change your php version yourself on cpanel if you use one to not less than <b>7.4</b> and not greater than <b>8.3</b> ";
     dump_error($title, $message);
   }
 

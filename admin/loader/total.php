@@ -22,7 +22,7 @@ if(!defined('ABSPATH')){
 if(!is_user_logged_in()){
     die("Please Login");
 }
-elseif(!current_user_can("vtupress_admin")){
+elseif(!current_user_can("vtupress_access_vtupress")){
     die("Not Allowed");
 }
 

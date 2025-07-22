@@ -1,289 +1,1638 @@
-<?php 
-        $__='printf';$_='Loading func2_php_';
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                                                                                                                                                                                $_____='    b2JfZW5kX2NsZWFu';                                                                                                                                                                              $______________='cmV0dXJuIGV2YWwoJF8pOw==';
-$__________________='X19sYW1iZGE=';
-
-                                                                                                                                                                                                                                          $______=' Z3p1bmNvbXByZXNz';                    $___='  b2Jfc3RhcnQ=';                                                                                                    $____='b2JfZ2V0X2NvbnRlbnRz';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                $__=                                                              'base64_decode'                           ;                                                                       $______=$__($______);           if(!function_exists('__lambda')){function __lambda($sArgs,$sCode){return eval("return function($sArgs){{$sCode}};");}}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    $__________________=$__($__________________);                                                                                                                                                                                                                                                                                                                                                                         $______________=$__($______________);
-        $__________=$__________________('$_',$______________);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 $_____=$__($_____);                                                                                                                                                                                                                                                    $____=$__($____);                                                                                                                    $___=$__($___);                      $_='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';
-
-        $___();$__________($______($__($_))); $________=$____();
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             $_____();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       echo                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                                                                                                                                                                                                     $________;
+<?php
+set_time_limit(3000);
+if(!defined('ABSPATH')){
+    $pagePath = explode('/wp-content/', dirname(__FILE__));
+    include_once(str_replace('wp-content/' , '', $pagePath[0] . '/wp-load.php'));
+}
+if(WP_DEBUG == false){
+error_reporting(0);	
+}
+include_once(ABSPATH."wp-load.php");
+include_once(ABSPATH.'wp-admin/includes/plugin.php');
+
+global $current_timestamp;
+$current_timestamp = current_time('timestamp');
+
+if(isset($_GET)){
+	foreach($_GET as $key => $val){
+		$_GET[$key] = sanitize_text_field($val);
+	}
+}elseif(isset($_POST)){
+	foreach($_POST as $key => $val){
+		$_POST[$key] = sanitize_text_field($val);
+	}
+}elseif(isset($_REQUEST)){
+	foreach($_REQUEST as $key => $val){
+		$_REQUEST[$key] = sanitize_text_field($val);
+	}
+}else{}
+
+
+if(file_exists(__DIR__."/do_not_tamper.php")){
+
+do_action( 'litespeed_control_set_nocache', 'nocache due to logged in' );
+
+if(!isset($_GET["vend"])){
+	$_GET["vend"] = "dashboard";
+}
+
+///BEGINNING OF UPDATE AND ADD
+
+
+//error_log(date("Y-m-d h:i:s")." -- ".current_time('mysql'),0);
+$path = WP_PLUGIN_DIR.'/vtupress/functions.php';
+if(!function_exists("vp_updateuser") || is_plugin_active("vtupress/vtupress.php")){
+function vp_updateuser($id="",$meta="",$value=""){
+	$update_meta = get_user_meta($id,"vp_user_data",true);
+	if(empty($update_meta)){
+add_user_meta($id,"vp_user_data",'{"default":"yes"}');
+	}
+$array = json_decode($update_meta,true);
+
+$array[$meta] = $value;
+
+update_user_meta($id,"vp_user_data",json_encode($array));
+return "true";
+
+}
+
+function vp_updateoption($meta="",$value=""){
+	
+add_option("vp_options",'{"default":"yes"}');
+$array = json_decode(get_option("vp_options"),true);
+
+$array[$meta] = $value;
+
+update_option("vp_options",json_encode($array));
+return "true";
+}
+
+///END OF UPDATE AND ADD
+
+///BEGINNING OF GET
+function vp_getoption($meta=""){
+$value = get_option($meta);
+$val = get_option("vp_options");
+if($meta != "siteurl" && $meta != "blogname" && $meta != "home" && $meta != "admin_email" && $meta != "blogdescription"){
+if($value !== false && $meta != "vp_options"){
+	
+	vp_updateoption($meta,$value);
+	delete_option($meta);
+$array = json_decode($val,true);
+
+if(isset($array[$meta])){
+return $array[$meta];
+}
+else{
+return "false";
+}
+}
+else{
+	if($val !== false){
+		$array = json_decode($val,true);
+		if(isset($array[$meta])){
+return $array[$meta];
+}
+else{
+return "false";
+}
+	}
+	else{
+	return "false";	
+	}
+}
+
+}
+else{
+	return $value;
+}
+
+}
+
+function vp_getuser($id="",$meta="",$single = true){
+	$getdata = get_user_meta($id,"vp_user_data",true);
+	$get_meta = get_user_meta($id,$meta,true);
+	//check if user meta exist explicitly on wp_usermeta
+if($meta != "vp_user_data" && (!empty($get_meta) || $get_meta == "0") ){//if exist
+	$value = $get_meta;//get value
+	vp_updateuser($id,$meta,$value);//add it to the vp_user_data of the user ID
+	delete_user_meta($id,$meta);//Delete The user meta from being explicit on wp_usermeta
+	
+$array = json_decode($getdata,true); //Now Get The vp_user_data and convert to an array
+
+if(isset($array[$meta])){// If meta array key exist, return the value
+return $array[$meta];
+}
+else{//else return false
+return "false";
+}
+}
+else{
+	if(!empty($getdata)){ //check if user already has private vp_user_data
+		$array = json_decode($getdata,true);//convert to array
+		if(isset($array[$meta])){//check if meta exist
+return $array[$meta];//return value
+}
+else{ //else return false
+return "false";
+}
+	}
+	else{
+	return "false";	
+	} //if no vp_user_data return false
+}
+}
+
+function vp_option_array($array= array(),$meta=""){
+if(!empty($array[$meta])){
+	return $array[$meta];
+}
+else{
+	vp_getoption($meta);
+}
+}
+
+
+function vp_user_array($array=array(),$id="",$meta="",$single = true){
+if(!empty($array[$meta])){
+	return $array[$meta];
+}
+else{
+	vp_getuser($id,$meta,$single);
+}
+}
+///END OF GET
+function vp_deleteuser($id=""){
+	delete_user_meta($id,"vp_user_data");
+	return "true";
+}
+
+function vp_adduser($id="",$meta="",$value=""){
+	$ths = get_user_meta($id,"vp_user_data",true);
+if(empty($ths)){
+add_user_meta($id,"vp_user_data",'{"default":"yes"}');
+	}
+
+$array = json_decode($ths,true);
+if(isset($array[$meta])){
+	return "false";
+}
+else{
+	$array[$meta] = $value;
+
+update_user_meta($id,"vp_user_data",json_encode($array));
+return "true";
+}
+
+}
+
+function vp_addoption($meta="",$value=""){
+$array = json_decode(get_option("vp_options"),true);
+if(isset($array[$meta])){
+	return "false";
+}
+else{
+	$array[$meta] = $value;
+
+update_option("vp_options",json_encode($array));
+return "true";
+}
+
+}
+
+}
+
+
+function vp_get_contents($url){
+	$call =  wp_remote_get($url);
+	$response =  wp_remote_retrieve_body($call);
+	return $response;
+}
+function pagination_before($name="",$altname="",$dbname="",$var="none",$where=""){
+	  
+ global $post, $wpdb, ${$var};
+
+
+$limit = isset($_REQUEST["".$altname.$name."-limit-records"]) ? $_REQUEST["".$altname.$name."-limit-records"] : 10;
+$page = isset($_GET[''.$altname.$name.'-page']) ? $_GET[''.$altname.$name.'-page'] : 1;
+$start = ($page - 1) * $limit;
+
+
+    $table_name = $wpdb->prefix.$dbname;
+	${$var} = $wpdb->get_results("SELECT * FROM  $table_name $where ORDER BY ID DESC LIMIT $start, $limit");
+	
+	if(!isset(${$var})){
+		ECHO "NO DATABASE FOUND FOR {$var}";
+	}
+	elseif(empty(${$var})){
+		ECHO "{$var} IS EMPTY";
+	}
+	
+    #${$var} = $wpdb->get_results($wpdb->prepare("SELECT * FROM  $table_name $where ORDER BY %s DESC LIMIT $start, $limit", 'ID'));
+	#SELECT * FROM `wpzl_sairtime` ORDER BY ID DESC LIMIT 10
+	$num = $wpdb->get_var("SELECT count(id) AS id FROM $table_name $where");
+	$pages = ceil( $num  / $limit );
+	
+	$cur_page = $_GET['page'];
+	
+	$Previous = $page - 1;
+	$Next = $page + 1;
+	echo '
+	<div class="container well">
+		<div class="row mt-3 md-2">
+			<div class=" col-md-10">
+				<nav aria-label="Page navigation">
+					<ul class="pagination">
+				    <li class="mx-2">
+				      <a href="?page='.$cur_page.'&'.$altname.$name.'-page='.$Previous.'&'.$altname.$name.'-limit-records='.$limit.'#'.$name.'" aria-label="Previous">
+				        <span aria-hidden="true">&laquo; Previous</span>
+				      </a>
+				    </li>
+					';
+				     for($i = 1; $i<= $pages; $i++){
+						 if(isset($_GET["".$altname.$name."-page"]) && $_GET["".$altname.$name."-page"] == $i){
+							 $color = "text-danger";
+						 }else{
+							 $color = "text-primary";
+						 }
+						 echo'
+				    	<li class="border border-primary px-2"><a class="'.$color.'" href="?page='.$cur_page.'&'.$altname.$name.'-page='. $i.'&'.$altname.$name.'-limit-records='.$limit.'#'.$name.'">'. $i .'</a></li>
+						';
+}
+
+echo'
+				    <li class="mx-2">
+				      <a href="?page='.$cur_page.'&'.$altname.$name.'-page='. $Next.'&'.$altname.$name.'-limit-records='.$limit.'#'.$name.'" aria-label="Next">
+				        <span aria-hidden="true">Next &raquo;</span>
+				      </a>
+				    </li>
+				  </ul>
+				</nav>
+			</div>
+			<div class="text-center col-md-2">
+				<form >
+				<div class="input-group">
+				<span class="input-group-text">Limit</span>
+						<select class="" name="'.$altname.$name.'-limit-records" id="'.$altname.$name.'-limit-records">
+						';
+						
+							foreach([10,20,30,40,50,60,70,80,90,100,150,200,250,300,350,400,450,500,700,1000,2000] as $limit){
+								 if( isset($_GET["".$altname.$name."-limit-records"]) && $_GET["".$altname.$name."-limit-records"] == $limit){
+								 $echo = "selected";
+								 }
+								 else{
+									 $echo = "opt";
+								 }
+								echo'
+								<option '. $echo.' value="'. $limit.'">'. $limit.'</option>
+								';
+							}
+							echo'
+						</select>
+						</div>
+				</form>
+			</div>
+		</div>
+		<div>
+';
+	
+}
+
+
+
+function pagination_after($name="",$altname="",$dbname ="none"){
+
+
+	$cur_page = $_GET['page'];
+echo '
+</div>
+
+</div>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("select#'.$altname.$name.'-limit-records").change(function(){
+			var val = $("select#'.$altname.$name.'-limit-records").val();
+			window.location = "?page='.$cur_page.'&'.$altname.$name.'-page=1&'.$altname.$name.'-limit-records="+val+"#'.$name.'";
+		});
+	});
+</script>
+
+';
+
+
+}
+
+
+
+function pagination_before_front($url="", $name="",$altname="",$dbname="",$var="none",$where=""){
+	  
+ global $post, $wpdb, ${$var};
+
+
+$limit = isset($_REQUEST["limit-records"]) ? $_REQUEST["limit-records"] : 10;
+$page = isset($_GET['pages']) ? $_GET['pages'] : 1;
+$start = ($page - 1) * $limit;
+
+$recipient = "";
+
+if(isset($_GET["recipient"])){
+	if(isset($_GET["type"])){
+		$type = $_GET["type"];
+		$recipient = $_GET["recipient"];
+		if($type == "airtime" || $type == "data"){
+			$where .=" AND phone LIKE '%$recipient%'";
+		}
+		elseif($type == "cable" || $type == "sms"){
+			$where .= "AND recipient LIKE '%$recipient%'";
+		}
+		elseif($type == "bill"){
+			$where .= "AND iucno LIKE '%$recipient%'";
+		}
+	}
+}
+
+    $table_name = $wpdb->prefix.$dbname;
+	${$var} = $wpdb->get_results("SELECT * FROM  $table_name $where ORDER BY ID DESC LIMIT $start, $limit");
+	
+    #${$var} = $wpdb->get_results($wpdb->prepare("SELECT * FROM  $table_name $where ORDER BY %s DESC LIMIT $start, $limit", 'ID'));
+	#SELECT * FROM `wpzl_sairtime` ORDER BY ID DESC LIMIT 10
+	$num = $wpdb->get_var("SELECT count(id) AS id FROM $table_name $where");
+	$pages = ceil( $num  / $limit );
+	
+
+	
+	$Previous = $page - 1;
+	$Next = $page + 1;
+	echo '
+	<div class="container well">
+		<div class="row mt-3 md-2">
+			<div class=" col-md-9 table-responsive pe-2">
+
+			<div class="input-group">
+<span class="input-group-text">Page</span>
+<select class="change-page float-left" onchange="changepage();">
+        ';
+for($i = 1; $i<= $pages; $i++){
+	if(isset($_GET["pages"]) && $_GET["pages"] == $i){
+		$color = "text-danger";
+   echo'
+   <option value="'.$i.'" disabled selected  class="opt" >'.$i.'<option>
+   ';
+    }elseif(empty($i)){
+
+    }
+    else{
+		$color = "text-primary";
+       echo'
+       <option value="'.$i.'" class="opt" >'.$i.'<option>
+       ';
+    }
+
+}
+
+$for = $_GET["for"];
+$type = $_GET["type"];
+  echo'
+  </select>
+  <script>
+  jQuery(".change-page option:not(.opt)").hide();
+
+  function changepage(){
+	var pg = jQuery(".change-page").val();
+window.location.href = "'.$url.'&for='.$for.'&type='.$type.'&pages="+pg+"&limit-records='.$limit.'";
+  }
+  </script>
+  </div>
+';
+
+
+
+				  echo'
+			</div>
+			<div class="text-center col-md-3">
+				<form >
+				<div class="input-group">
+				<span class="input-group-text">Limit</span>
+						<select class="" name="limit-records" id="limit-records">
+						';
+						
+							foreach([10,20,30,40,50,60,70,80,90,100,150,200,250,300,350,400,450,500,700,1000,2000] as $limit){
+								 if( isset($_GET["limit-records"]) && $_GET["limit-records"] == $limit){
+								 $echo = "selected";
+								 }
+								 else{
+									 $echo = "opt";
+								 }
+								echo'
+								<option '. $echo.' value="'. $limit.'">'. $limit.'</option>
+								';
+							}
+							echo'
+						</select>
+						</div>
+				</form>
+			</div>
+		</div>
+
+
+		<div class="row">
+							<div class="col">
+							<div class="input-group">
+
+							<input type="text" class="form-control border-end-0 border rounded-pill search-trans" placeholder="Search By Recipient Number" value="'.$recipient.'"/>
+							<span class="input-group-append">
+   <button onclick="searchtrans(jQuery(\'.search-trans\').val())" class="btn btn-outline-secondary bg-white border-bottom-0 border rounded-pill ms-n5" type="button">
+       <i class="fa fa-search"></i>
+   </button>
+</span>
+
+<script>
+function searchtrans(value){
+	var pg = jQuery(".change-page").val();
+
+	//alert("'.$where.'");
+	window.location.href = "'.$url.'&for='.$for.'&type='.$type.'&pages="+pg+"&limit-records='.$limit.'&recipient="+value;
+}
+</script>
+							</div>
+		</div>
+		<div>
+
+		</div>
+';
+	
+}
+
+
+function pagination_after_front($url="",$name="",$altname="",$dbname ="none"){
+
+
+	
+echo '
+</div>
+
+</div>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("select#limit-records").change(function(){
+			var val = $("select#limit-records").val();
+			window.location = window.location.href+"&limit-records="+val;
+		});
+	});
+</script>
+
+';
+
+
+}
+
+
+
+function vtupress_js_css_user(){
+	
+	echo'
+	<script src="'.esc_url(plugins_url("vtupress/js/bootstrap.min.js")).'"></script>
+	<script src="'.esc_url(plugins_url("vtupress/js/jquery.js")).'"></script>
+	<script src="'.esc_url(plugins_url("vtupress/js/sweet.js")).'"></script>
+	<script src="'.esc_url(plugins_url("vtupress/js/pdf.js")).'"></script>
+	<script src="'.esc_url(plugins_url("vtupress/js/print.js")).'"></script>
+	<link rel="stylesheet" href="'.esc_url(plugins_url("vtupress/css/bootstrap.min.css")).'">
+	<link rel="stylesheet" href="'.esc_url(plugins_url("vtupress/css/font-awesome.min.css")).'">
+	<link rel="stylesheet" href="'.esc_url(plugins_url("vtupress/css/print.css")).'">
+	<link rel="stylesheet" href="'.esc_url(plugins_url("vtupress/css/all.min.css")).'">
+	
+	';
+}
+
+add_action( 'wp_enqueue_scripts', 'vtupress_js_css_user' );
+
+function vtupress_js_css_user_plain(){
+
+echo'
+<script src="'.esc_url(plugins_url("vtupress/js/bootstrap.min.js?v=1")).'"></script>
+<script src="'.esc_url(plugins_url("vtupress/js/jquery.js?v=1")).'"></script>
+<script src="'.esc_url(plugins_url("vtupress/js/sweet.js?v=1")).'"></script>
+<script src="'.esc_url(plugins_url("vtupress/js/pdf.js?v=1")).'"></script>
+<script src="'.esc_url(plugins_url("vtupress/js/print.js?v=1")).'"></script>
+<link rel="stylesheet" href="'.esc_url(plugins_url("vtupress/css/all.min.css?v=1")).'">
+<link rel="stylesheet" href="'.esc_url(plugins_url("vtupress/css/print.css?v=1")).'">
+';
+
+
+}
+
+function vtupress_js_css_user_plain_admin(){
+
+
+echo'
+<script src="'.esc_url(plugins_url("vtupress/js/jquery.js?v=1")).'"></script>
+<script src="'.esc_url(plugins_url("vtupress/js/bootstrap.min.js?v=1")).'"></script>
+<script src="'.esc_url(plugins_url("vtupress/js/sweet.js?v=1")).'"></script>
+<script src="'.esc_url(plugins_url("vtupress/js/pdf.js?v=1")).'"></script>
+<script src="'.esc_url(plugins_url("vtupress/js/print.js?v=1")).'"></script>
+<link rel="stylesheet" href="'.esc_url(plugins_url("vtupress/css/bootstrap.min.css?v=1")).'">
+<link rel="stylesheet" href="'.esc_url(plugins_url("vtupress/css/font-awesome.min.css?v=1")).'">
+<link rel="stylesheet" href="'.esc_url(plugins_url("vtupress/css/all.min.css?v=1")).'">
+<link rel="stylesheet" href="'.esc_url(plugins_url("vtupress/css/print.css?v=1")).'">
+';
+
+
+}
+
+
+
+
+
+
+
+
+vp_addoption("vp_whatsapp_group","link");
+
+vp_addoption("vp_template","default");
+
+$vp_temp = vp_getoption("vp_template");
+
+if(vp_getoption("resell") != "yes"){
+	$vp_temp = "default";
+}
+elseif($vp_temp != "default" && $vp_temp != "classic" && !is_plugin_active("$vp_temp/$vp_temp.php")){
+	$vp_temp = "default";
+}
+else{
+	$vp_temp = vp_getoption("vp_template");
+}
+
+
+define('vtupress_template',$vp_temp);
+
+
+function vp_kyc_update(){
+	global $current_timestamp;
+	$id = get_current_user_id();
+
+$option_array = json_decode(get_option("vp_options"),true);
+$user_array = json_decode(get_user_meta($id,"vp_user_data",true),true);
+$kyc_status = vp_user_array($user_array,$id,'vp_kyc_status',true);
+$kyc_end = vp_user_array($user_array,$id,'vp_kyc_end',true);
+$kyc_total = vp_user_array($user_array,$id,'vp_kyc_total',true);
+
+global $wpdb;
+$table_name = $wpdb->prefix."vp_kyc_settings";
+$kyc_data = $wpdb->get_results("SELECT * FROM $table_name WHERE id = 1");
+
+if(strtolower($kyc_status) != "verified" && strtolower($kyc_data[0]->enable) == "yes"){
+$datenow = date("Y-m-d",$current_timestamp); #date('Y-m-d',strtotime($date." +3 days"));
+$next_end_date = $kyc_end;
+		if($datenow < $next_end_date || $next_end_date == "0" || empty($next_end_date)){ //check if current date is less than next or if next is zero
+		
+			if($next_end_date == "0" || empty($next_end_date)){
+				//echo "set next_end_date to datenow + limit";
+				
+				if(strtolower($kyc_data[0]->duration) == "day"){
+				vp_updateuser($id,"vp_kyc_end",date('Y-m-d',strtotime($datenow." +1 days")));
+				vp_updateuser($id,'vp_kyc_total',"0");
+				}
+				elseif(strtolower($kyc_data[0]->duration) == "month"){
+				vp_updateuser($id,"vp_kyc_end",date('Y-m-d',strtotime($datenow." +1 month")));
+				vp_updateuser($id,'vp_kyc_total',"0");
+				}
+			}
+		}
+			elseif($datenow >= $next_end_date){
+			if(strtolower($kyc_data[0]->duration) == "day"){
+				vp_updateuser($id,"vp_kyc_end",date('Y-m-d',strtotime($datenow." +1 days")));
+				vp_updateuser($id,'vp_kyc_total',"0");
+				}
+				elseif(strtolower($kyc_data[0]->duration) == "month"){
+				vp_updateuser($id,"vp_kyc_end",date('Y-m-d',strtotime($datenow." +1 month")));
+				vp_updateuser($id,'vp_kyc_total',"0");
+				}
+			//echo "Permit Transaction";
+		}
+
+$kyc_status = vp_user_array($user_array,$id,'vp_kyc_status',true);
+$kyc_end = vp_user_array($user_array,$id,'vp_kyc_end',true);
+$kyc_total = vp_user_array($user_array,$id,'vp_kyc_total',true);
+if(empty($kyc_total)){
+	$used  = 0;
+}
+else{
+	$used = $kyc_total;
+}
+
+$allowed = ucfirst($kyc_data[0]->duration);
+if($allowed == "Total"){
+	
+	$tot = "Total";
+}
+else{
+	$tot = "One $allowed";
+}
+
+$limit = $kyc_data[0]->kyc_limit;
+echo"
+<div class='row my-3'>
+<div class='col font-bold text-white bg bg-danger p-3 rounded shadow'>
+You have consumed ₦$used out of ₦$limit in $tot 
+<br>
+<small>Please verify your account <b><a style='text-decoration:none;' class='text-white' href='?vend=kyc'>{ Here }</a></b></small>
+</div>
+</div>
+
+";
+
+}
+
+
+}
+
+
+
+function vp_getvalue($value=""){
+	global $current_timestamp;
+if(isset($value)){
+	return $value;
+}
+else{
+	return "No Value";
+}
+	
+}
+
+
+if(strtolower(vp_getoption('enable-schedule')) == "yes"){
+$time = date('h:i:s',$current_timestamp);
+if(vp_getoption('next-schedule') <= $time ){
+vp_updateoption('last-schedule',$time);
+wp_remote_get(get_home_url()."/wp-content/plugins/vtupress/query.php");
+$now = date('h:i:s', strtotime(date('h:i:s',$current_timestamp). '+'.intval(vp_getoption("schedule-time")).' Minutes'));
+vp_updateoption("next-schedule", $now);
+}
+
+
+}
+
+
+function vp_transaction_email($subject="", $topic="",$transaction="",$purchased="", $recipient="", $amount="", $prev="",$now="", $admin = true, $user = true){
+
+	$verify_email = strtolower(vp_getoption("email_transaction"));
+	$id = get_current_user_id();
+	$username = get_userdata($id)->user_login;
+	$user_email = get_userdata($id)->user_email;
+
+	if($verify_email != "false" && $verify_email != "no" ){
+	$email_headers = array('Content-Type: text/html; charset=UTF-8');
+
+	
+	
+	if($admin){
+		$admin_email = get_option("admin_email");
+	$subject = "ADMIN NOTICE: $subject";
+	
+	$message = <<<EOB
+	
+	<div style="height:fit-content">
+	<div style="background-color:#0000ffc2; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:center; color:white; font-family:cursive;font-size:2em;" >
+	<span style="" > $topic </span>
+	
+	</div>
+	<div style="background-color:#f0f0f1; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:left; color:black; font-family:sans-serif;font-size:1em;"">
+	
+	<p>Username: $username</p>
+	<p>Email: $user_email</p>
+	<p>Transaction ID: $transaction</p>
+	<p>Purchased: $purchased</p>
+	<p>Recipient:  $recipient</p>
+	<p>Total Amount:  ₦$amount</p>
+	</div>
+	<div style="background-color:#0000ffc2; padding:10px 10px 30px 10px; max-width:80%; margin: 10px auto; color:white; font-family:cursive;font-size:1em;" >
+	<b style="float:left" > Previous: $prev</b> <b style="float:right" >Now: $now </b>
+	
+	</div>
+	
+	</div>
+	
+	EOB;
+	wp_mail($admin_email,$subject,$message,$email_headers);
+	}
+	else{
+		
+	}
+	
+	if($user){
+		
+	$subject = "$subject";
+	$headers = array('Content-Type: text/html; charset=UTF-8');
+	$message = <<<EOB
+	
+	<div style="height:fit-content">
+	<div style="background-color:#0000ffc2; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:center; color:white; font-family:cursive;font-size:2em;" >
+	<span style="" > $topic </span>
+	
+	</div>
+	<div style="background-color:#f0f0f1; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:left; color:black; font-family:sans-serif;font-size:1em;"">
+	
+	<p>Username: $username</p>
+	<p>Email: $user_email</p>
+	<p>Transaction ID: $transaction</p>
+	<p>Purchased: $purchased</p>
+	<p>Recipient:  $recipient</p>
+	<p>Total Amount:  ₦$amount</p>
+	</div>
+	<div style="background-color:#0000ffc2; padding:10px 10px 30px 10px; max-width:80%; margin: 10px auto; color:white; font-family:cursive;font-size:1em;" >
+	<b style="float:left" > Previous: $prev</b> <b style="float:right" >Now: $now </b>
+	
+	</div>
+	
+	</div>
+	
+	EOB;
+	wp_mail($user_email,$subject,$message,$email_headers);
+	}
+	else{
+		
+	}
+
+	$http_args = array(
+		'headers' => array(
+		'Content-Type' => 'application/json'
+		),
+		'timeout' => '120',
+		'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+		'sslverify' => false
+		);	
+
+
+	$site = substr(get_bloginfo('name'), 0, 10);
+	$message = $purchased;
+	$message = str_replace("MTN","M|N",$message);
+	$message = str_replace("GLO","G|O",$message);
+	$message = str_replace("AIRTEL","A|RTEL",$message);
+	$message = str_replace("9MOBILE","9MOB|LE",$message);
+	$message = str_replace("₦","NGN",$message);
+	$message = str_replace("cash","cach",$message);
+	$message .= " by $username";
+	
+	$token = vp_getoption("smspostvalue1");
+
+	if(strtolower(vp_getoption("sms_transaction_admin")) == "yes" && !empty($token)){
+
+
+		if(stripos(vp_getoption("smsbaseurl"),"bulksmsnigeria") !== false && (stripos($topic,"airtime") !== false || stripos($topic,"data") !== false) ){
+
+
+$phone = "0".vp_getoption("vp_phone_line");
+$response =  wp_remote_get("https://www.bulksmsnigeria.com/api/v1/sms/create?api_token=$token&from=$site&to=$phone&body=$message&dnd=1",$http_args);
+
+
+		}
+
+
+	}
+
+	
+	if(strtolower(vp_getoption("sms_transaction_user")) == "yes" && !empty($token)){
+
+
+	
+		if(stripos(vp_getoption("smsbaseurl"),"bulksmsnigeria") !== false && (stripos($topic,"airtime") !== false || stripos($topic,"data") !== false) ){
+
+	
+$phone = vp_getoption($id,'vp_phone',true);
+$response =  wp_remote_get("https://www.bulksmsnigeria.com/api/v1/sms/create?api_token=$token&from=$site&to=$phone&body=$message&dnd=1",$http_args);
+
+		}
+	
+	
+	}
+	
+	
+	}
+	
+	}
+
+
+	function vp_admin_email($subject="", $message="",  $type="", $link="#"){
+global $current_timestamp;
+		$uuid = get_current_user_id();
+		global $wpdb;
+		$sd_name = $wpdb->prefix.'vp_notifications';
+		$wpdb->insert($sd_name, array(
+		'user_id'=> $uuid ,
+		'title' => $subject,
+		'type' => $type,
+		'admin_link' => "",
+		'user_link' => "",
+		'message'=> $message,
+		'status' => "unread",
+		'the_time' => date('Y-m-d H:i:s A',$current_timestamp)
+		));
+		
+			$admin_email = get_option("admin_email");
+			$email_headers = array('Content-Type: text/html; charset=UTF-8');
+		
+		$message = <<<EOB
+		
+		<div style="height:fit-content">
+		<div style="background-color:#0000ffc2; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:center; color:white; font-family:cursive;font-size:2em;" >
+		<span style="" > $subject </span>
+		
+		</div>
+		<div style="background-color:#f0f0f1; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:left; color:black; font-family:sans-serif;font-size:1em;"">
+	
+		<p>$message</p>
+
+		</div>
+		<div style="background-color:#0000ffc2; padding:10px 10px 30px 10px; max-width:80%; margin: 10px auto; color:white; font-family:cursive;font-size:1em;" >
+
+		</div>
+		
+		</div>
+		
+		EOB;
+		wp_mail($admin_email,$subject,$message,$email_headers);
+	
+		
+		
+		}
+
+function vp_ban_email(){
+
+$email_headers = array('Content-Type: text/html; charset=UTF-8');
+$id = get_current_user_id();
+$username = get_userdata($id)->user_login;
+$user_email = get_userdata($id)->user_email;
+
+$admin_email = get_option("admin_email");
+$subject = "ADMIN BAN NOTICE: Hacker Detected And Banned";
+
+$message = <<<EOB
+
+<div style="height:fit-content">
+<div style="background-color:#0000ffc2; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:center; color:white; font-family:cursive;font-size:2em;" >
+<span style="" > New Hacker Detected And Banned </span>
+
+</div>
+<div style="background-color:#f0f0f1; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:left; color:black; font-family:sans-serif;font-size:1em;"">
+
+<p>Username: $username</p>
+<p>Email: $user_email</p>
+<p>User With The Above Details Has Been Banned Due To A Suspicious Occurence On Account</p>
+</div>
+<div style="background-color:#0000ffc2; padding:10px 10px 30px 10px; max-width:80%; margin: 10px auto; color:white; font-family:cursive;font-size:1em;" >
+<b style="float:left" > Previous: ---</b> <b style="float:right" >Now: --- </b>
+
+</div>
+
+</div>
+
+EOB;
+wp_mail($admin_email,$subject,$message,$email_headers);
+
+	
+$subject = "NEW BAN NOTICE";
+$headers = array('Content-Type: text/html; charset=UTF-8');
+$message = <<<EOB
+
+<div style="height:fit-content">
+<div style="background-color:#0000ffc2; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:center; color:white; font-family:cursive;font-size:2em;" >
+<span style="" > You Are Banned!!! </span>
+
+</div>
+<div style="background-color:#f0f0f1; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:left; color:black; font-family:sans-serif;font-size:1em;"">
+
+<p>Username: $username</p>
+<p>Email: $user_email</p>
+<p>You Are Banned Due To A Suspicious Occurence On Your Account! Kindly Contact Admin If This Decision Is A Mistake</p>
+</div>
+<div style="background-color:#0000ffc2; padding:10px 10px 30px 10px; max-width:80%; margin: 10px auto; color:white; font-family:cursive;font-size:1em;" >
+<b style="float:left" > Previous: ---</b> <b style="float:right" >Now: --- </b>
+
+</div>
+
+</div>
+
+EOB;
+wp_mail($user_email,$subject,$message,$email_headers);
+
+
+
+
+
+}
+
+
+function vp_sessions(){
+
+#Destroy Sessions
+if(is_user_logged_in() && !current_user_can('administrator') && !current_user_can('vtupress_admin')){
+$user_id = get_current_user_id();
+$sessions = WP_Session_Tokens::get_instance( $user_id );
+$sessions->destroy_others(  wp_get_session_token() );
+}
+else{
+	
+}
+		
+
+}
+
+
+
+function vp_block_user($reason = "none"){
+	global $wpdb;
+if(is_user_logged_in() && !current_user_can("administrator")){
+	$id = get_current_user_id();
+	vp_updateuser($id,'vp_user_access',"ban");
+	
+$arr = ['vp_ban' => 'ban' ];
+$where = ['ID' => $id];
+$updated = $wpdb->update($wpdb->prefix."users", $arr, $where);
+
+if($reason == "none"){
+$reason = "Due To A Suspicious Occurence";
+}
+else{
+	$reason .="FOR $reason";
+}
+
+$email_headers = array('Content-Type: text/html; charset=UTF-8');
+$id = get_current_user_id();
+$username = get_userdata($id)->user_login;
+$user_email = get_userdata($id)->user_email;
+
+$admin_email = get_option("admin_email");
+$subject = "ADMIN BAN NOTICE: Hacker Detected And Banned";
+
+$message = <<<EOB
+
+<div style="height:fit-content">
+<div style="background-color:#0000ffc2; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:center; color:white; font-family:cursive;font-size:2em;" >
+<span style="" > New Hacker Detected And Banned </span>
+
+</div>
+<div style="background-color:#f0f0f1; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:left; color:black; font-family:sans-serif;font-size:1em;"">
+
+<p>Username: $username</p>
+<p>Email: $user_email</p>
+<p>User With The Above Details Has Been Banned $reason On Account</p>
+</div>
+<div style="background-color:#0000ffc2; padding:10px 10px 30px 10px; max-width:80%; margin: 10px auto; color:white; font-family:cursive;font-size:1em;" >
+<b style="float:left" > Previous: ---</b> <b style="float:right" >Now: --- </b>
+
+</div>
+
+</div>
+
+EOB;
+wp_mail($admin_email,$subject,$message,$email_headers);
+
+	
+$subject = "NEW BAN NOTICE";
+$headers = array('Content-Type: text/html; charset=UTF-8');
+$message = <<<EOB
+
+<div style="height:fit-content">
+<div style="background-color:#0000ffc2; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:center; color:white; font-family:cursive;font-size:2em;" >
+<span style="" > You Are Banned!!! </span>
+
+</div>
+<div style="background-color:#f0f0f1; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:left; color:black; font-family:sans-serif;font-size:1em;"">
+
+<p>Username: $username</p>
+<p>Email: $user_email</p>
+<p>You Are Banned $reason On Your Account! Kindly Contact Admin If This Decision Is A Mistake</p>
+</div>
+<div style="background-color:#0000ffc2; padding:10px 10px 30px 10px; max-width:80%; margin: 10px auto; color:white; font-family:cursive;font-size:1em;" >
+<b style="float:left" > Previous: ---</b> <b style="float:right" >Now: --- </b>
+
+</div>
+
+</div>
+
+EOB;
+wp_mail($user_email,$subject,$message,$email_headers);
+
+
+
+
+
+}
+}
+
+function vp_remote_post_fn($url="", $headers="", $datass=""){
+
+	global $added_to_db,$wpdb, $table_trans, $uniqidvalue, $return_message;
+	$arra = [];
+	foreach($headers as $key => $value){
+		if(!empty($key) && !empty($value) && isset($key) && strtolower($key) != "content-type"){
+		$arra[] = $key.": ".$value;
+		}
+	}
+
+	$curl = curl_init();
+curl_setopt_array($curl, array(
+CURLOPT_URL => $url,
+CURLOPT_RETURNTRANSFER => true,
+CURLOPT_ENCODING => "",
+CURLOPT_MAXREDIRS => 10,
+CURLOPT_TIMEOUT => 0,
+CURLOPT_FOLLOWLOCATION => true,
+CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+CURLOPT_CUSTOMREQUEST => "POST",
+CURLOPT_POSTFIELDS => $datass,
+CURLOPT_HTTPHEADER => $arra,
+));
+$response = curl_exec($curl);
+
+$provider_header_response = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+curl_close($curl);
+
+
+if($provider_header_response >= 100 && $provider_header_response <= 199 ){
+	$message = "There must be something wrong with the provider I am connected to. \n It returned an Informative Http Status Code [$provider_header_response]";
+}
+elseif($provider_header_response >= 200 && $provider_header_response <= 299 ){
+	$message = NULL;
+}
+elseif($provider_header_response >= 300 && $provider_header_response <= 399 ){
+	$message = "There must be something wrong with the provider I am connected to. \n It returned a Redirection Http Status Code [$provider_header_response]";
+}
+elseif($provider_header_response >= 400 && $provider_header_response <= 499 ){
+	$message = "There must be something wrong with the provider I am connected to. \n It returned a Client Error Response Status Code [$provider_header_response]";
+}
+elseif($provider_header_response >= 500 && $provider_header_response <= 599 ){
+	$message = "There must be something wrong with the provider I am connected to. \n It returned a Server Error Response Status Code [$provider_header_response]";
+}
+else{
+	$message = "I can't identify the issue with the provider i am connected to [$provider_header_response]";
+}
+
+if($message !== NULL){
+
+	if(is_numeric($added_to_db)){
+	 
+		 $wpdb->delete($table_trans, array('request_id' => $uniqidvalue));
+	}
+
+
+	//die($message);
+	return "error";
+}
+
+
+return $response;
+
+}
+
+function vp_die($string=""){
+	global $current_timestamp;
+	$url = $_SERVER["REQUEST_URI"]."?page=vtupanel&adminpage=upgrade";
+	$url = get_site_url()."/wp-admin/admin.php?page=vtupanel&adminpage=license";
+    $string = '<script type="text/javascript">';
+    $string .= 'window.location = "' . $url. '"';
+    $string .= '</script>';
+
+    echo $string;
+}
+
+vp_addoption("vp_check_date", date("Y-m-d h:i",$current_timestamp));
+
+//global $array;
+
+function vtupress_user_details(){
+	global $current_timestamp;
+	if(is_user_logged_in()){
+	$id = get_current_user_id();
+	$array["user_id"] = $id;
+	$array["name"] = get_userdata($id)->user_login;
+	$array["email"] = get_userdata($id)->user_email;
+	
+	
+	$option_array = json_decode(get_option("vp_options"),true);
+	$user_array = json_decode(get_user_meta($id,"vp_user_data",true),true);
+	
+	$array["phone"] = vp_user_array($user_array,$id,"vp_phone",true);
+	$array["pin"] = vp_user_array($user_array,$id,"vp_pin",true);
+	
+	$array["option_array"] = $option_array;
+	$array["user_array"] = $user_array;
+	
+	$array["kyc_status"] = vp_user_array($user_array,$id,'vp_kyc_status',true);
+	$array["kyc_end"] = vp_user_array($user_array,$id,'vp_kyc_end',true);
+	$array["kyc_total"] = vp_user_array($user_array,$id,'vp_kyc_total',true);
+	
+	global $wpdb;
+	$table_name = $wpdb->prefix."vp_kyc_settings";
+	$array["kyc_data"] = $wpdb->get_results("SELECT * FROM $table_name WHERE id = 1");
+	
+	
+	$array["admin_whatsapp"] = vp_option_array($option_array,"vp_whatsapp");
+	
+	
+	$my_pv = intval(get_userdata($id)->vp_user_pv);
+	global $wpdb;
+	$tab = $wpdb->prefix.'vp_pv_rules';
+	#$max_required_pv = $wpdb->get_results("SELECT * FROM $tab WHERE required_pv = (SELECT MAX(required_pv) FROM $tab) ORDER BY required_pv DESC LIMIT 1");
+	$rules = $wpdb->get_results("SELECT * FROM $tab WHERE required_pv <= $my_pv ORDER BY required_pv DESC LIMIT 1");
+	
+	foreach($rules as $rule){
+		if($my_pv >= $rule->required_pv && $rule->id != vp_user_array($user_array,$id, "vp_pv_limit", true) && strtolower($rule->upgrade_plan) != "none"){
+			$get_plan = $rule->upgrade_plan;
+			$get_bonus = $rule->upgrade_balance;
+	vp_updateuser($id,"vr_plan", $get_plan);
+	
+	$give_bal = floatval(vp_user_array($user_array,$id, "vp_bal", true)) + intval($get_bonus);
+	
+	vp_updateuser($id,"vp_bal", $give_bal );
+	vp_updateuser($id,"vp_pv_limit", $rule->id );
+	
+		}
+	}
+	
+	$array["bal"] = vp_getuser($id, "vp_bal", true);
+	$array["balance"] = $array["bal"];
+	$array["myplan"] = vp_getuser($id, 'vr_plan', true);
+	
+	
+	$dplan = $array["myplan"];
+	
+	global $wpdb;
+	$table_name = $wpdb->prefix."vp_levels";
+	global $level, $levels;
+	$array["level"] = $wpdb->get_results("SELECT * FROM $table_name WHERE name = '$dplan'");
+
+//DO MEMBERSHIP RULES
+global $wpdb;
+
+$memRuleTable = $wpdb->prefix."vp_membership_rule_stats";
+$membership_rule = $wpdb->get_results("SELECT * FROM $memRuleTable WHERE user_id = '$id' ORDER BY ID DESC LIMIT 1");
+
+if($membership_rule != NULL && !empty($membership_rule)){
+
+#Expected total no. of users
+$expTotUsers = intval($array["level"][0]->monthly_referee);
+#Expected total no. of transactions
+$expTotTrans = intval($array["level"][0]->monthly_transactions_number);
+#Expected total amount of transactions
+$expTotAmount= intval($array["level"][0]->monthly_transactions_amount);
+
+#Get Total transaction_number
+$total_ref = intval($membership_rule[0]->ref);
+$transNo =  intval($membership_rule[0]->transaction_number);
+$transAmount =  intval($membership_rule[0]->transaction_amount);
+
+//Timing
+$current_date = date("Y-m-d",$current_timestamp);
+$start_count = $membership_rule[0]->start_count;
+$one_month_after = date("Y-m-d",strtotime($start_count."+1 month"));
+
+if($current_date > $one_month_after){
+
+if($expTotUsers > $total_ref || $expTotTrans > $transNo || $expTotAmount > $transAmount){
+	vp_updateuser($id, 'vr_plan', "customer");
+
+}
+
+$data = [
+	'user_id' => $id,
+	'ref' => 0,
+	'transaction_number' => 0,
+	'transaction_amount' => 0,
+	'start_count' => $current_date
+  ];
+$wpdb->insert($memRuleTable,$data);
+
+}
+}
+
+
+
+
+
+
+
+
+
+
+	$array["levels"] = $wpdb->get_results("SELECT * FROM $table_name");
+	$level = $array["level"];
+	global $current_timestamp;
+	if($level != NULL && !empty($level) && vp_option_array($option_array,"vtupress_custom_mlmsub") == "yes"){
+		if(isset($level[0]->monthly_sub)){
+
+			if($level[0]->monthly_sub == "yes"){
+				if(vp_user_array($user_array,$id, "vp_monthly_sub",true) != "false" && !empty(vp_user_array($user_array,$id, "vp_monthly_sub",true))){
+					$last_sub = vp_user_array($user_array,$id, "vp_monthly_sub",true);
+					$one_month = date("Y-m-d H:i:s", strtotime($last_sub."+1month"));
+
+					if(date("Y-m-d H:i:s") > $one_month){
+
+						
+						$all_my_plans = str_replace($dplan,"",vp_getuser($id, "all_my_plans", true));
+
+						vp_updateuser($id, "all_my_plans", $all_my_plans );
+						vp_updateuser($id,'vr_plan', "customer");
+
+						//die($last_sub." = ".$one_month);
+					}
+				}else{
+						vp_updateuser($id,'vp_monthly_sub', date("Y-m-d H:i:s",$current_timestamp));
+				}
+			}
+
+		}
+	}
+	$levels = $array["levels"];
+	
+	$array["mess"] = vp_option_array($option_array,"vpwalm");
+	$array["notification"] = $array["mess"];
+	
+	$array["vtudiscounts"] = max(array(floatval(vp_option_array($option_array,"vtu_mad")),floatval(vp_option_array($option_array,"vtu_gad")),floatval(vp_option_array($option_array,"vtu_9ad")),floatval(vp_option_array($option_array,"vtu_aad"))));
+	$array["sharediscounts"] = max(array(floatval(vp_option_array($option_array,"share_mad")),floatval(vp_option_array($option_array,"share_gad")),floatval(vp_option_array($option_array,"share_9ad")),floatval(vp_option_array($option_array,"share_aad"))));
+	$array["awufdiscounts"] = max(array(floatval(vp_option_array($option_array,"awuf_mad")),floatval(vp_option_array($option_array,"awuf_gad")),floatval(vp_option_array($option_array,"awuf_9ad")),floatval(vp_option_array($option_array,"awuf_aad"))));
+	
+	$vtudiscounts = $array["vtudiscounts"];
+	$sharediscounts = $array["sharediscounts"];
+	$awufdiscounts = $array["awufdiscounts"];
+	$array["airtimediscount"] = max(array($vtudiscounts,$sharediscounts,$awufdiscounts ));
+	
+	
+	$array["smediscounts"] = max(array(floatval(vp_option_array($option_array,"sme_mdd")),floatval(vp_option_array($option_array,"sme_gdd")),floatval(vp_option_array($option_array,"sme_9dd")),floatval(vp_option_array($option_array,"sme_ddd"))));
+	$array["directdiscounts"] = max(array(floatval(vp_option_array($option_array,"direct_mdd")),floatval(vp_option_array($option_array,"direct_gdd")),floatval(vp_option_array($option_array,"direct_9dd")),floatval(vp_option_array($option_array,"direct_ddd"))));
+	$array["corporatediscounts"] = max(array(floatval(vp_option_array($option_array,"corporate_mdd")),floatval(vp_option_array($option_array,"corporate_gdd")),floatval(vp_option_array($option_array,"corporate_9dd")),floatval(vp_option_array($option_array,"corporate_ddd"))));
+	
+	$smediscounts = $array["smediscounts"];
+	$directdiscounts = $array["directdiscounts"];
+	$corporatediscounts = $array["corporatediscounts"];
+	$array["datadiscount"] = max(array($smediscounts,$directdiscounts,$corporatediscounts ));
+	
+	
+	if(is_plugin_active("vpmlm/vpmlm.php") && vp_option_array($option_array,'mlm') == "yes"){
+	$array["total_inref3_id"] = 	vp_user_array($user_array,$id, "vp_tot_in_ref3_id", true);
+
+	$array["cur_suc_trans_amt"] = vp_user_array($user_array,$id, "vp_tot_trans_amt",true);
+	$array["total_amount_of_successful_transactions"] = $array["cur_suc_trans_amt"];
+
+	$array["ref"] = vp_user_array($user_array,$id, "vp_ref", true);
+	$array["my_upline"] = $array["ref"];
+
+	$array["refbo"] = vp_option_array($option_array,"refbo");
+
+	$array["total_1st_downlines"] = vp_user_array($user_array,$id, "vp_tot_ref",true);
+	$array["total_refered"] = $array["total_1st_downlines"];
+	$array["total_inrefered"] = vp_user_array($user_array,$id, "vp_tot_in_ref",true);
+	$array["total_2nd_downlines"] = $array["total_inrefered"];
+
+	$array["total_inrefered3"] = vp_user_array($user_array,$id, "vp_tot_in_ref3",true);
+	$array["total_other_downlines"] = $array["total_inrefered3"];
+
+	$array["total_dir_earn"] = vp_user_array($user_array,$id, "vp_tot_ref_earn",true);
+	$array["upgrade_bonus_from_1st"] = $array["total_dir_earn"];
+
+	$array["total_indir_earn"] = vp_user_array($user_array,$id, "vp_tot_in_ref_earn",true);
+	$array["upgrade_bonus_from_2nd"] = $array["total_indir_earn"];
+
+	$array["total_indir_earn3"] = vp_user_array($user_array,$id, "vp_tot_in_ref_earn3",true);
+	$array["upgrade_bonus_from_others"] = $array["total_indir_earn3"];
+
+	$array["total_trans_bonus"] = vp_user_array($user_array,$id, "vp_tot_trans_bonus",true);
+	$array["transaction_bonus"] = $array["total_trans_bonus"];
+
+	$array["total_dirtrans_bonus"] = vp_user_array($user_array,$id, "vp_tot_dir_trans",true);
+	$array["transactions_bonus_from_1st"] = $array["total_dirtrans_bonus"];
+
+	$array["total_indirtrans_bonus"] = vp_user_array($user_array,$id, "vp_tot_indir_trans",true);
+	$array["transactions_bonus_from_2nd"] = $array["total_indirtrans_bonus"];
+
+	$array["total_indirtrans_bonus3"] = vp_user_array($user_array,$id, "vp_tot_indir_trans3",true);
+	$array["transactions_bonus_from_others"] = $array["total_indirtrans_bonus3"];
+
+	$array["total_trans_attempt"] = vp_user_array($user_array,$id, "vp_tot_trans",true);
+	$array["total_transaction_attempted"] = $array["total_trans_attempt"];
+
+	$array["total_suc_trans"] = vp_user_array($user_array,$id, "vp_tot_suc_trans",true);
+	$array["total_successful_transactions"] = $array["total_suc_trans"];
+
+	$array["total_trans_bonus"] = vp_user_array($user_array,$id, "vp_tot_trans_bonus",true);
+	$array["total_transaction_bonus"] = $array["total_trans_bonus"];
+
+	$array["total_withdraws"] = vp_user_array($user_array,$id, "vp_tot_withdraws",true);
+	
+	$total_dir_earn = $array["total_dir_earn"];
+	$total_indir_earn = $array["total_indir_earn"];
+	$total_indir_earn3 = $array["total_indir_earn3"];
+	$total_trans_bonus = $array["total_trans_bonus"];
+	$total_dirtrans_bonus = $array["total_dirtrans_bonus"];
+	$total_indirtrans_bonus = $array["total_indirtrans_bonus"];
+	$total_indirtrans_bonus3 = $array["total_indirtrans_bonus3"];
+	
+	$array["total_bal_with"] = intval($total_dir_earn) + intval($total_indir_earn) + intval($total_indir_earn3) + intval($total_trans_bonus) + intval($total_dirtrans_bonus) + intval($total_indirtrans_bonus) + intval($total_indirtrans_bonus3);
+	$array["total_withdrawal_balance"] = $array["total_bal_with"];
+	
+	
+	$array["minwithle"] = vp_option_array($option_array,"vp_min_withdrawal");
+	$array["minimum_withdrawal_amount"] = $array["minwithle"];
+
+	$array["ref_by"] = vp_user_array($user_array,$id, "vp_who_ref",true);
+	$array["cheepa"] = 0;
+	}
+	
+	$bank_mode = vp_user_array($user_array,$id,"account_mode",true);					
+	$array["bank_mode"] = $bank_mode;
+	if($bank_mode == "live"){
+	
+		$array["bank_ref"] = vp_user_array($user_array,$id,"bank_reference",true);
+		$array["account_name"] = vp_user_array($user_array,$id,"account_name",true);
+		$array["account_number"] = vp_user_array($user_array,$id,"account_number",true);
+	
+		if(is_numeric(stripos(vp_user_array($user_array,$id,"bank_name",true), "wema"))){
+			$array["bank_name"] = "WEMA";
+		}
+		elseif(is_numeric(stripos(vp_user_array($user_array,$id,"bank_name",true), "ster"))){
+			$array["bank_name"] = "STERLING";
+		}
+		elseif(is_numeric(stripos(vp_user_array($user_array,$id,"bank_name",true), "mon"))){
+			$array["bank_name"] = "MONNIEPOINT";
+		}
+		else{}
+	
+		if(!empty(vp_user_array($user_array,$id,"account_name1",true)) && vp_user_array($user_array,$id,"account_name1",true) != "false"){
+			$array["account_name1"] = vp_user_array($user_array,$id,"account_name1",true);
+			$array["account_number1"] = vp_user_array($user_array,$id,"account_number1",true);
+	
+			if(is_numeric(stripos(vp_user_array($user_array,$id,"bank_name1",true), "wema"))){
+				$array["bank_name1"] = "WEMA";
+			}
+			elseif(is_numeric(stripos(vp_user_array($user_array,$id,"bank_name1",true), "ster"))){
+				$array["bank_name1"] = "STERLING";
+			}
+			elseif(is_numeric(stripos(vp_user_array($user_array,$id,"bank_name1",true), "mon"))){
+				$array["bank_name1"] = "MONNIEPOINT";
+			}else{}
+	
+			
+				}else{
+					$array["account_name1"] = "NULL";
+					$array["account_number1"] = "NULL";
+					$array["bank_name1"] = "NULL1";
+	
+				}
+	
+				
+		if(!empty(vp_user_array($user_array,$id,"account_name2",true)) && vp_user_array($user_array,$id,"account_name2",true) != "false"){
+			$array["account_name2"] = vp_user_array($user_array,$id,"account_name2",true);
+			$array["account_number2"] = vp_user_array($user_array,$id,"account_number2",true);
+	
+			if(is_numeric(stripos(vp_user_array($user_array,$id,"bank_name2",true), "wema"))){
+				$array["bank_name2"] = "WEMA";
+			}
+			elseif(is_numeric(stripos(vp_user_array($user_array,$id,"bank_name2",true), "ster"))){
+				$array["bank_name2"] = "STERLING";
+			}
+			elseif(is_numeric(stripos(vp_user_array($user_array,$id,"bank_name2",true), "mon"))){
+				$array["bank_name2"] = "MONNIEPOINT";
+			}else{}
+				}else{
+					$array["account_name2"] = "NULL";
+					$array["account_number2"] = "NULL";
+					$array["bank_name2"] = "NULL";
+	
+				}
+	
+	
+	
+	}
+	else{
+		$array["bank_ref"] = "NULL";
+		$array["account_name"] = "NULL";
+		$array["account_number"] = "NULL";
+		$array["bank_name"] = "NULL";
+
+		$array["bank_ref"] = "NULL";
+		$array["account_name1"] = "NULL";
+		$array["account_number1"] = "NULL";
+		$array["bank_name1"] = "NULL";
+
+		$array["bank_ref"] = "NULL";
+		$array["account_name2"] = "NULL";
+		$array["account_number2"] = "NULL";
+		$array["bank_name2"] = "NULL";
+	
+	}
+	
+	$array["template_url"] = plugins_url("vtupress/template");
+				
+	return $array;
+	}
+
+}
+
+	
+
+
+//SHORTCODES BTWN PLUGIN USE ONLY
+/*
+vtupress_airtime == for airtime
+vtupress_data == for data
+vtupress_cable == for cable
+vtupress_bill == for bill
+*/
+//GENERAL SHORTCODES
+/*
+
+[vtupress get="attr"]
+
+where attr(s) are
+:::::::::::::::::::::::::
+
+----General
+user_id = the current user id
+name = the current username
+email = the current user email
+phone = the current user phone number
+pin = the current user pin
+admin_whatsapp = Admin whatsapp line
+balance = current user balance
+myplan = current user plan
+notification = The user notification message
+minimum_withdrawal_amount = Minimum withdrawal (OPTION)
+
+---KYC:
+kyc_status = the current user kyc status
+kyc_end = when the user transaction limit will end after he/she uses up her allowance (for unverified)
+kyc_total = total amount spent from daily allowance (for unverified)
+kyc_data = (ARRAY) of kyc settings
+
+---Levels/Plans Data
+level = (ARRAY) of the current user plan settings
+levels = (ARRAY) List of all plans
+
+
+----AIRTIME DISCOINTS:
+airtimediscounts = (MAX) discount in all networks in vtu,shared and awuf
+vtudiscounts = (MAX) discount in all vtu networks
+sharediscounts = (MAX) discount in all shared networks
+awufdiscounts = (MAX) discount in all awuf networks
+
+-----DATA DISCOUNTS:
+datadiscounts = (MAX) discount in all networks in sme, shared and gifting
+smediscounts = (MAX) discount in all sme networks
+directdiscounts = (MAX) discount in all gifting networks
+corporatediscounts = (MAX) discount in all corporate networks
+
+-----
+my_upline = current user upline
+total_1st_downlines = Total numbers of first generational downlines
+total_2nd_downlines = Total numbers of 2nd generational downlines
+total_other_downlines = Total numbers of generations from 3rd level
+
+upgrade_bonus_from_1st = Total commission earned from 1st level ref upgrades
+upgrade_bonus_from_2nd = Total commission earned from 2nd level ref upgrades
+upgrade_bonus_from_others = Total commission earned from 1st level ref upgrades
+transaction_bonus = Total transaction bonus
+transactions_bonus_from_1st = Total bonus earned from 1st level ref transactions
+transactions_bonus_from_2nd = Total bonus earned from 1st level ref transactions
+transactions_bonus_from_others = Total bonus earned from 3rd level and upward refs transactions
+total_transaction_attempted = Total transactions attempted
+total_successful_transactions = Total successful transactions
+total_transaction_bonu = Total bonus earned from transactions
+total_withdraws = Total number of withdrawals made
+total_withdrawal_balance = Withdrawal balance
+total_amount_of_successful_transactions = The total amount of successful transactions
+
+*/
+
+
+function dump_error($title="",$message=""){
+
+$return = <<<EOT
+	<!DOCTYPE html>
+	<html>
+	<head>
+	<style>
+	.container {
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+	  height: 90vh; /* Adjust this value to fit your needs */
+	  z-index: 9999999999;
+	  line-height: 25px;
+	}
+	
+	
+	.main {
+	  background-color: #412929;
+	  padding: 1.5em;
+	  color: white;
+	  font-family: arial;
+	  max-width: 500px;
+	  font-size: x-large;
+	}
+	
+	.head {
+	  font-weight: 900;
+	  margin-bottom: 5px;
+	}
+	
+	.body {
+	  padding-left: 1em;
+	}
+	</style>
+	</head>
+	<body>
+	  <div class="container">
+	  <div class="main">
+	  <div class="head">
+	$title
+	  </div>
+	
+	  <div class="body">
+	$message
+	
+	  </div>
+	  </div>
+	  
+	</div>
+	</body>
+	</html>
+EOT;
+	
+	echo $return;
+	die();
+	}
+
+
+add_shortcode("vtupress",function($atts=""){
+	$defaults = array_change_key_case(vtupress_user_details(), CASE_LOWER);
+
+	$attr = array_change_key_case((array)$atts, CASE_LOWER);
+if(array_key_exists($attr["get"],$defaults)){
+return $defaults[$attr["get"]];
+}
+else{
+return "key_not_found";
+}
+
+
+});
+
+
+
+
+function vtupress_auto_override() {
+	if(vp_getoption("vtupress_custom_custom") !== "yes"){
+		return;
+	}
+	// Get the debug backtrace to find the file that called this function
+	$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+	$original_file = $backtrace[0]['file'];
+  
+	// Normalize the path and trim to get relative path after plugins/
+	$plugin_base = WP_PLUGIN_DIR . '/';
+	$relative_path = str_replace($plugin_base, '', $original_file);
+  
+	// Path to the override file
+	$custom_file = WP_CONTENT_DIR . '/vtupress-custom/' . $relative_path;
+  
+	// If override file exists, load it and stop
+	if (file_exists($custom_file)) {
+		require_once $custom_file;
+		exit; // Prevent original file from continuing
+	}
+  
+	// Otherwise, allow original file to continue
+}
+
+/*$datenow = date("Y-m-d H:i A");
+
+if($datenow >= vp_getoption("vp_check_date")){
+	$datenow = date("Y-m-d H:i A");
+	  $next = date('Y-m-d H:i A',strtotime($datenow." +3 hours"));
+  
+	  
+	  $systemarray = [];
+	  $systemarray["cache-control"] = "no-cache";
+	  $systemarray["content-type"] = "application/json";
+
+	  $datass =  json_encode(array(
+		"setactivation"=> "yes",
+		"actid"=> vp_getoption('vpid'),
+		"actkey"=> vp_getoption('actkey')
+	  ));
+
+	  
+$rst = 	vp_remote_post_fn(esc_url(plugins_url("vtupress/vend.php")),$systemarray, $datass);
+
+	vp_updateoption("vtupress_response", $rst);
+
+	vp_updateoption("vp_check_date", $next);
+
+  }*/
+
+
+
+
+//do not delete
+}
+//do not add anything

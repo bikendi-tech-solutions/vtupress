@@ -725,14 +725,21 @@ switch($for){
     case"monnify":
 
         if(vp_getoption('enable_monnify') == "yes"){
+            $admin_bvn = trim(vp_getoption("monnifybvn"));
     
             $contract_code = vp_getoption("monnifycontractcode");
             $hd = $id;
                     if(!empty($hd)){
                         $userid = $hd;
                     
-                        $bvn = trim(vp_getuser($userid,"myBvn",true));
-                        $nin = trim(vp_getuser($userid,"myNin",true));
+                        if(mb_strlen($admin_bvn) < 10){
+                            $bvn = trim(vp_getuser($userid,"myBvn",true));
+                            $nin = trim(vp_getuser($userid,"myNin",true));
+                        }
+                        else{
+                            $bvn = $admin_bvn;
+                            $nin = "false";
+                        }
 
     
                         if(($bvn == 'false' && $nin == 'false') || (empty($bvn) && empty($nin)) || (mb_strlen($bvn) < 10 && mb_strlen($nin) < 10 )){
@@ -797,7 +804,7 @@ switch($for){
                             $data["customerName"] = $fun." ".$lun;
                             $data["getAllAvailableBanks"] = false;
                             $data["preferredBanks"] = ["035","232","50515"];
-                           if($bvn != "false" && !empty($bvn) && mb_strlen($bvn) > 10 && is_numeric($bvn)){
+                            if($bvn != "false" && !empty($bvn) && mb_strlen($bvn) > 10 && is_numeric($bvn)){
                                 $data["bvn"] = $bvn;
                             }
                             if($nin != "false" && !empty($nin) && mb_strlen($nin) > 10 && is_numeric($nin)){

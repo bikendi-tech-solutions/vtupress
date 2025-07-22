@@ -18,7 +18,7 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
 if(!is_user_logged_in()){
     die("Please Login");
 }
-elseif(!current_user_can("vtupress_admin")){
+elseif(!current_user_can("vtupress_access_history")){
     die("Not Allowed");
 }
 
