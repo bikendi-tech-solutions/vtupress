@@ -650,8 +650,8 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
             ];
             $header_map = [
                 'head_option' => 'airtime_head' . ($airtime_choice == "vtu" ? "" : ($airtime_choice == "share" ? "2" : "3")),
-                'head1' => $airtime_choice . 'airtimehead1',
-                'value1' => $airtime_choice . 'airtimevalue1'
+                'head1' => $payload_type . 'airtimehead1',
+                'value1' => $payload_type . 'airtimevalue1'
             ];
             $add_headers_prefix = $airtime_choice . 'addheaders';
             $add_value_prefix = $airtime_choice . 'addvalue';
@@ -699,10 +699,10 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
             $request_method = vp_getoption($payload_type . "request");
             $api_url_option = $payload_type . "databaseurl";
             $api_endpoint_option = $payload_type. "dataendpoint";
-            $success_code_option = $payload_type . "successcode";
+            $success_code_option = $payload_type . "datasuccesscode";
             $response_format_option = ($datatcode == "sme" ? "data1" : ($datatcode == "direct" ? "data2" : ($datatcode == "corporate" ? "data3" : ($datatcode == "smile" ? "smile1" : "alpha1")))) . "_response_format";
-            $success_value_option = $payload_type . "successvalue";
-            $success_value2_option = $payload_type . "successvalue2";
+            $success_value_option = $payload_type . "datasuccessvalue";
+            $success_value2_option = $payload_type . "datasuccessvalue2";
             $response_id_option = $payload_type . "response_id";
             $query_method_option = $datatcode . "querymethod";
             $post_data_map = [];

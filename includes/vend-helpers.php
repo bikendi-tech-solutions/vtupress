@@ -165,7 +165,7 @@ function harray_key_first($arr = "") {
     }
 
     // Encode HTML so it displays literally, but keep quotes readable
-    return htmlspecialchars($arr, ENT_NOQUOTES, 'UTF-8');
+    return $arr;
 }
 
 
@@ -185,14 +185,19 @@ function validate_response($response = "", $key = "", $value = "", $alter = "not
     if (empty($response)) {
         die("Empty response from the provider");
     }
-
     $array = json_decode($response, true);
+
     if ($array === null && json_last_error() !== JSON_ERROR_NONE) {
-        // If it's not JSON, treat the entire response as a string for comparison
+        // Not JSON → wrap it in an array
         $array = ['str' => $response];
-    } else {
+    } elseif (is_array($array)) {
+        // Only change keys if it's an array
         $array = array_change_key_case($array, CASE_LOWER);
+    } else {
+        // Valid JSON but not an array → wrap it in array for consistency
+        $array = ['str' => $array];
     }
+
 
     // Nested helper function to search for a key in a multi-dimensional array.
     function search_Key_recursive($array, $key_to_find) {
