@@ -783,108 +783,80 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
      * @param bool $user Whether to send email to user.
      * @return void
      */
-    function vp_transaction_email($subject = "", $topic = "", $transaction = "", $purchased = "", $recipient = "", $amount = "", $prev = "", $now = "", $admin = true, $user = true) {
-        $verify_email = strtolower(vp_getoption("email_transaction"));
-        $id = get_current_user_id();
-        $username = get_userdata($id) ? get_userdata($id)->user_login : 'Unknown User';
-        $user_email = get_userdata($id) ? get_userdata($id)->user_email : 'unknown@example.com';
+function vp_transaction_email($subject = "", $topic = "", $transaction = "", $purchased = "", $recipient = "", $amount = "", $prev = "", $now = "", $admin = true, $user = true) {
+    $verify_email = strtolower(vp_getoption("email_transaction"));
+    $id = get_current_user_id();
+    $username = get_userdata($id) ? get_userdata($id)->user_login : 'Unknown User';
+    $user_email = get_userdata($id) ? get_userdata($id)->user_email : 'unknown@example.com';
 
-        if ($verify_email !== "false" && $verify_email !== "no") {
-            $email_headers = array('Content-Type: text/html; charset=UTF-8');
+    if ($verify_email !== "false" && $verify_email !== "no") {
+        $email_headers = array('Content-Type: text/html; charset=UTF-8');
 
-            $message_template = <<<EOB
-<div style="height:fit-content">
-    <div style="background-color:#0000ffc2; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:center; color:white; font-family:cursive;font-size:2em;" >
-        <span style="" > %s </span>
-    </div>
-    <div style="background-color:#f0f0f1; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:left; color:black; font-family:sans-serif;font-size:1em;"">
-        <p>Username: %s</p>
-        <p>Email: %s</p>
-        <p>Transaction ID: %s</p>
-        <p>Purchased: %s</p>
-        <p>Recipient: %s</p>
-        <p>Total Amount: ₦%s</p>
-    </div>
-    <div style="background-color:#0000ffc2; padding:10px 10px 30px 10px; max-width:80%; margin: 10px auto; color:white; font-family:cursive;font-size:1em;" >
-        <b style="float:left" > Previous: %s</b> <b style="float:right" >Now: %s </b>
-    </div>
-</div>
-EOB;
+        // Build the HTML message without sprintf
+        $message_template =
+            '<div style="height:fit-content">
+                <div style="background-color:#0000ffc2; padding:20px 10px; max-width:80%; margin:10px auto; text-align:center; color:white; font-family:cursive; font-size:2em;">
+                    <span>' . esc_html($topic) . '</span>
+                </div>
+                <div style="background-color:#f0f0f1; padding:20px 10px; max-width:80%; margin:10px auto; text-align:left; color:black; font-family:sans-serif; font-size:1em;">
+                    <p>Username: ' . esc_html($username) . '</p>
+                    <p>Email: ' . esc_html($user_email) . '</p>
+                    <p>Transaction ID: ' . esc_html($transaction) . '</p>
+                    <p>Purchased: ' . esc_html($purchased) . '</p>
+                    <p>Recipient: ' . esc_html($recipient) . '</p>
+                    <p>Total Amount: ₦' . esc_html($amount) . '</p>
+                </div>
+                <div style="background-color:#0000ffc2; padding:10px 10px 30px 10px; max-width:80%; margin:10px auto; color:white; font-family:cursive; font-size:1em;">
+                    <b style="float:left">Previous: ' . esc_html($prev) . '</b>
+                    <b style="float:right">Now: ' . esc_html($now) . '</b>
+                </div>
+            </div>';
 
-            if ($admin) {
-                $admin_email = get_option("admin_email");
-                $admin_subject = "ADMIN NOTICE: " . $subject;
-                $admin_message = sprintf(
-                    $message_template,
-                    esc_html($topic),
-                    esc_html($username),
-                    esc_html($user_email),
-                    esc_html($transaction),
-                    esc_html($purchased),
-                    esc_html($recipient),
-                    esc_html($amount),
-                    esc_html($prev),
-                    esc_html($now)
-                );
-                wp_mail($admin_email, $admin_subject, $admin_message, $email_headers);
+        // Send to admin
+        if ($admin) {
+            $admin_email = get_option("admin_email");
+            $admin_subject = "ADMIN NOTICE: " . $subject;
+            wp_mail($admin_email, $admin_subject, $message_template, $email_headers);
+        }
+
+        // Send to user
+        if ($user) {
+            wp_mail($user_email, $subject, $message_template, $email_headers);
+        }
+
+        // --- SMS Logic ---
+        $http_args = array(
+            'headers' => array('Content-Type' => 'application/json'),
+            'timeout' => 120,
+            'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+            'sslverify' => false
+        );
+
+        $site = substr(get_bloginfo('name'), 0, 10);
+        $sms_message = str_replace(
+            ["MTN", "GLO", "AIRTEL", "9MOBILE", "₦", "cash"],
+            ["M|N", "G|O", "A|RTEL", "9MOB|LE", "NGN", "cach"],
+            $purchased
+        );
+        $sms_message .= " by " . $username;
+        $token = vp_getoption("smspostvalue1");
+
+        if (strtolower(vp_getoption("sms_transaction_admin")) === "yes" && !empty($token)) {
+            if (stripos(vp_getoption("smsbaseurl"), "bulksmsnigeria") !== false && (stripos($topic, "airtime") !== false || stripos($topic, "data") !== false)) {
+                $phone = "0" . vp_getoption("vp_phone_line");
+                wp_remote_get("https://www.bulksmsnigeria.com/api/v1/sms/create?api_token=" . esc_attr($token) . "&from=" . esc_attr($site) . "&to=" . esc_attr($phone) . "&body=" . urlencode($sms_message) . "&dnd=1", $http_args);
             }
+        }
 
-            if ($user) {
-                $user_subject = $subject;
-                $user_message = sprintf(
-                    $message_template,
-                    esc_html($topic),
-                    esc_html($username),
-                    esc_html($user_email),
-                    esc_html($transaction),
-                    esc_html($purchased),
-                    esc_html($recipient),
-                    esc_html($amount),
-                    esc_html($prev),
-                    esc_html($now)
-                );
-                wp_mail($user_email, $user_subject, $user_message, $email_headers);
-            }
-
-            // SMS Notification Logic
-            $http_args = array(
-                'headers' => array(
-                    'Content-Type' => 'application/json'
-                ),
-                'timeout' => 120,
-                'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
-                'sslverify' => false // Consider setting to true in production with proper CA certs
-            );
-
-            $site = substr(get_bloginfo('name'), 0, 10);
-            $sms_message = $purchased;
-            // Replace sensitive network names for SMS (if needed, this is a custom filter)
-            $sms_message = str_replace(["MTN", "GLO", "AIRTEL", "9MOBILE", "₦", "cash"], ["M|N", "G|O", "A|RTEL", "9MOB|LE", "NGN", "cach"], $sms_message);
-            $sms_message .= " by " . $username;
-
-            $token = vp_getoption("smspostvalue1"); // Assuming this is the SMS API token
-
-            if (strtolower(vp_getoption("sms_transaction_admin")) === "yes" && !empty($token)) {
-                if (stripos(vp_getoption("smsbaseurl"), "bulksmsnigeria") !== false && (stripos($topic, "airtime") !== false || stripos($topic, "data") !== false)) {
-                    $phone = "0" . vp_getoption("vp_phone_line");
-                    $response = wp_remote_get("https://www.bulksmsnigeria.com/api/v1/sms/create?api_token=" . esc_attr($token) . "&from=" . esc_attr($site) . "&to=" . esc_attr($phone) . "&body=" . urlencode($sms_message) . "&dnd=1", $http_args);
-                    if (is_wp_error($response)) {
-                        error_log("Admin SMS Error: " . $response->get_error_message());
-                    }
-                }
-            }
-
-            if (strtolower(vp_getoption("sms_transaction_user")) === "yes" && !empty($token)) {
-                if (stripos(vp_getoption("smsbaseurl"), "bulksmsnigeria") !== false && (stripos($topic, "airtime") !== false || stripos($topic, "data") !== false)) {
-                    $phone = vp_getuser($id, 'vp_phone', true);
-                    $response = wp_remote_get("https://www.bulksmsnigeria.com/api/v1/sms/create?api_token=" . esc_attr($token) . "&from=" . esc_attr($site) . "&to=" . esc_attr($phone) . "&body=" . urlencode($sms_message) . "&dnd=1", $http_args);
-                    if (is_wp_error($response)) {
-                        error_log("User SMS Error: " . $response->get_error_message());
-                    }
-                }
+        if (strtolower(vp_getoption("sms_transaction_user")) === "yes" && !empty($token)) {
+            if (stripos(vp_getoption("smsbaseurl"), "bulksmsnigeria") !== false && (stripos($topic, "airtime") !== false || stripos($topic, "data") !== false)) {
+                $phone = vp_getuser($id, 'vp_phone', true);
+                wp_remote_get("https://www.bulksmsnigeria.com/api/v1/sms/create?api_token=" . esc_attr($token) . "&from=" . esc_attr($site) . "&to=" . esc_attr($phone) . "&body=" . urlencode($sms_message) . "&dnd=1", $http_args);
             }
         }
     }
+}
+
 
 
     /**
