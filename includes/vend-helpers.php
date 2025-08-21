@@ -218,20 +218,34 @@ function validate_response($response = "", $key = "", $value = "", $alter = "not
     // Nested helper function to search for a value in an array of results.
     function search_val_in_results($results, $the_value, $alt) {
         $status = "FALSE";
-        $the_value = strtolower($the_value);
-        $alt = strtolower($alt);
-
+        $the_value = strtolower(trim((string)$the_value));
+        $alt       = strtolower(trim((string)$alt));
+    
         foreach ($results as $dvalue) {
             if (!is_array($dvalue)) {
-                $mdvalue = strtolower($dvalue);
-                if ((($mdvalue === $the_value) || ($mdvalue === $alt) || ($dvalue == 1) || (strpos($mdvalue, $the_value) !== false) || (strpos($mdvalue, $alt) !== false)) && (strpos($mdvalue, "not") === false)) {
-                    $status = "TRUE";
-                    break; // Found a match, no need to continue
-                } elseif (strpos($mdvalue, "proce") !== false || strpos($mdvalue, "pen") !== false) {
+                $mdvalue = strtolower(trim((string)$dvalue));
+    
+                //  If expected value is numeric → strict compare
+                if (is_numeric($the_value)) {
+                    if (($mdvalue === $the_value || $mdvalue === $alt || $mdvalue === "1") 
+                        && strpos($mdvalue, "not") === false) {
+                        return "TRUE";
+                    }
+                } else {
+                    //  For text → allow substrings (succ -> success)
+                    if ((strpos($mdvalue, $the_value) !== false || strpos($mdvalue, $alt) !== false || $mdvalue === "1") 
+                        && strpos($mdvalue, "not") === false) {
+                        return "TRUE";
+                    }
+                }
+    
+                // MAYBE cases
+                if (strpos($mdvalue, "proce") !== false || strpos($mdvalue, "pen") !== false) {
                     $status = "MAYBE";
                 }
             }
         }
+    
         return $status;
     }
 
