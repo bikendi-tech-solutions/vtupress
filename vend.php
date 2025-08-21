@@ -280,10 +280,12 @@ if (isset($_POST["vend"])) {
                 if (!empty($plan_prefix_name) && !empty($plan_prefix_price)) {
                     $expected_plan_name = vp_option_array($option_array, $plan_prefix_name . $plan_index);
                     $expected_plan_price = floatval(vp_option_array($option_array, $plan_prefix_price . $plan_index));
-
-                    if ($data_plan_name_from_request  != $expected_plan_name . ' ₦' . $expected_plan_price) {
+                    $left  = preg_replace('/\s+/u', ' ', trim($data_plan_name_from_request));
+                    $right = preg_replace('/\s+/u', ' ', trim($expected_plan_name . ' ₦' . $expected_plan_price));
+                    
+                    if ($left !== $right) {
                         $wpdb->query('ROLLBACK');
-                        die('Plan Mis-Match. You can try with another browser');
+                        die('Plan mis-match please refresh and try again');
                     }
                     if ($amount != $expected_plan_price) {
                         vp_block_user("Modified the Price");
