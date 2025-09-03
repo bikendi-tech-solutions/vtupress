@@ -10,7 +10,7 @@
 *Plugin Name: VTU Press
 *Plugin URI: http://vtupress.com
 *Description: This is the very first <b>VTU plugin</b>. It's VTU services are all Automated with wonderful features
-*Version: 6.8.1
+*Version: 6.8.2
 *Author: Akor Victor
 *Author URI: https://facebook.com/vtupressceo
 *License: GPL3
@@ -60,22 +60,22 @@ $current_timestamp = current_time('timestamp');
  * This function is hooked to 'plugins_loaded' with a high priority (1)
  * to ensure it runs as early as possible, before any output might occur.
  */
-function vtupress_set_security_headers() {
-    // Check if headers have already been sent before attempting to set them.
-    // This is a safeguard, but the goal is to prevent this check from being necessary
-    // by hooking to a very early action.
-    if (!headers_sent()) {
-        header("Content-Security-Policy: https:");
-        header("strict-transport-security: max-age=31536000 ");
-        header("X-Frame-Options: SAMEORIGIN");
-        header("X-Content-Type-Options: nosniff");
-        header("Referrer-Policy: same-origin");
-        header("X-Xss-Protection: 1");
-        header('Permissions-Policy: geolocation=(self),camera=(self), microphone=(self)');
-    }
-}
+// function vtupress_set_security_headers() {
+//     // Check if headers have already been sent before attempting to set them.
+//     // This is a safeguard, but the goal is to prevent this check from being necessary
+//     // by hooking to a very early action.
+//     if (!headers_sent()) {
+//         header("Content-Security-Policy: https:");
+//         header("strict-transport-security: max-age=31536000 ");
+//         header("X-Frame-Options: SAMEORIGIN");
+//         header("X-Content-Type-Options: nosniff");
+//         header("Referrer-Policy: same-origin");
+//         header("X-Xss-Protection: 1");
+//         header('Permissions-Policy: geolocation=(self),camera=(self), microphone=(self)');
+//     }
+// }
 // Hook the security header function to the 'plugins_loaded' action with a very high priority.
-add_action('plugins_loaded', 'vtupress_set_security_headers', 1);
+// add_action('plugins_loaded', 'vtupress_set_security_headers', 1);
 
 
 /*

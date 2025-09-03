@@ -195,6 +195,7 @@ if (isset($_POST["vend"])) {
     $table_name_levels = $wpdb->prefix . "vp_levels";
     $level_data = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$table_name_levels} WHERE name = %s", $plan));
     $level = !empty($level_data) ? $level_data[0] : null;
+    $network = sanitize_text_field($_POST["network"] ?? '');
 
 
     if($level == null){

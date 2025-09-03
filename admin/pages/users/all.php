@@ -125,7 +125,7 @@ $wpdb->update($db,['vp_bal' => 0],['ID' => $users->ID]);
     $phone = vp_user_array($user_array,$id, "vp_phone", true);
     $balance = vp_user_array($user_array,$id, "vp_bal", true);
     
-    $current_amt += $balance;
+    $current_amt += intval($balance);
     
 
     $vpaccess = vp_user_array($user_array,$id, "vp_user_access", true);

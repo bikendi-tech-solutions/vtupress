@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 /**
  * Transaction processing functions for VTUPress vend operations.
  *
@@ -671,15 +674,15 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
             $service_table = 'sdata';
             $trans_type_for_db = $datatcode; // 'sme', 'direct', 'corporate', 'smile', 'alpha'
             $payload_type = '';
-            $var = "";
+            $var = "c";
 
             if($datatcode == 'corporate'){
                 $payload_type = 'r2';
-                $var = $payload_type;
+                $var = $payload_type."c";
             }
             elseif($datatcode == 'direct'){
                 $payload_type = 'r';
-                $var = $payload_type;
+                $var = $payload_type."c";
             }
             elseif($datatcode == 'smile'){
                 $payload_type = 'smile';
@@ -697,23 +700,72 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
 
             // Determine API options based on data type
             $request_method = vp_getoption($payload_type . "request");
-            $api_url_option = $payload_type . "databaseurl";
-            $api_endpoint_option = $payload_type. "dataendpoint";
-            $success_code_option = $payload_type . "datasuccesscode";
-            $response_format_option = ($datatcode == "sme" ? "data1" : ($datatcode == "direct" ? "data2" : ($datatcode == "corporate" ? "data3" : ($datatcode == "smile" ? "smile1" : "alpha1")))) . "_response_format";
-            $success_value_option = $payload_type . "datasuccessvalue";
-            $success_value2_option = $payload_type . "datasuccessvalue2";
-            $response_id_option = $payload_type . "response_id";
-            $query_method_option = $datatcode . "querymethod";
+            $api_url_option = $datatcode =="smile" ? "smilebaseurl" : ($datatcode =="alpha" ? "alphabaseurl" : $payload_type . "databaseurl");
+
+            // Define mappings once
+            $endpointMap = [
+                "smile" => "smileendpoint",
+                "alpha" => "alphaendpoint",
+            ];
+
+            $successCodeMap = [
+                "smile" => "smilesuccesscode",
+                "alpha" => "alphasuccesscode",
+            ];
+
+            $responseFormatMap = [
+                "sme"       => "data1",
+                "direct"    => "data2",
+                "corporate" => "data3",
+                "smile"     => "smile1",
+                "alpha"     => "alpha1",
+            ];
+
+            $successValueMap = [
+                "smile" => "smilesuccessvalue",
+                "alpha" => "alphasuccessvalue",
+            ];
+
+            $successValue2Map = [
+                "smile" => "smilesuccessvalue2",
+                "alpha" => "alphasuccessvalue2",
+            ];
+
+            // Use fallback with null coalescing (??)
+            $api_endpoint_option      = $endpointMap[$datatcode]     ?? $payload_type . "dataendpoint";
+            $success_code_option      = $successCodeMap[$datatcode]  ?? $payload_type . "datasuccesscode";
+            $response_format_option   = ($responseFormatMap[$datatcode] ?? $payload_type . "data") . "_response_format";
+            $success_value_option     = $successValueMap[$datatcode] ?? $payload_type . "datasuccessvalue";
+            $success_value2_option    = $successValue2Map[$datatcode]?? $payload_type . "datasuccessvalue2";
+            $response_id_option       = $payload_type . "response_id";
+            $query_method_option      = $datatcode . "querymethod";
+
+            // Post data/value mapping loop
             $post_data_map = [];
             for ($i = 1; $i <= 5; $i++) {
-                $post_data_map[$payload_type . 'datapostdata' . $i] = $payload_type . 'datapostvalue' . $i;
+                if ($datatcode === "smile") {
+                    $pind = "smilepostdata$i";
+                    $vind = "smilepostvalue$i";
+                } elseif ($datatcode === "alpha") {
+                    $pind = "alphapostdata$i";
+                    $vind = "alphapostvalue$i";
+                } else {
+                    $pind = $payload_type . "datapostdata$i";
+                    $vind = $payload_type . "datapostvalue$i";
+                }
+
+                $post_data_map[$pind] = $vind;
             }
+
+            $attrsp = in_array($datatcode, ["smile", "alpha"], true)
+                ? $datatcode
+                : $payload_type . "data";
+
             $attribute_map = [
-                'network' => $payload_type . 'datanetworkattribute',
-                'amount' => $payload_type . 'dataamountattribute',
-                'phone' => $payload_type . 'dataphoneattribute',
-                'plan' => $var.'cvariationattr',
+                'network' => $attrsp . 'networkattribute',
+                'amount' => $attrsp . 'amountattribute',
+                'phone' => $attrsp . 'phoneattribute',
+                'plan' => $var.'variationattr',
                 'request_id' => $payload_type .'request_id'
             ];
 
@@ -1064,7 +1116,7 @@ function handle_airtime_transaction($request_method, $api_url_option, $api_endpo
 
     // Add dynamic attributes
     if (isset($attribute_map['network'])) $datass[vp_option_array($option_array, $attribute_map['network'])] = $network;
-    if (isset($attribute_map['amount'])) $datass[vp_option_array($option_array, $attribute_map['amount'])] = round(floatval($amount), 2);
+    if (isset($attribute_map['amount'])) $datass[vp_option_array($option_array, $attribute_map['amount'])] = round(floatval($realAmt), 2);
     if (isset($attribute_map['phone'])) $datass[vp_option_array($option_array, $attribute_map['phone'])] = $phone;
     if (isset($attribute_map['request_id'])) $datass[vp_option_array($option_array, $attribute_map['request_id'])] = $uniqidvalue;
 
@@ -1527,7 +1579,7 @@ function handle_bill_transaction($request_method, $api_url_option, $api_endpoint
 
     // Add dynamic attributes specific to bill
     if (isset($attribute_map['meterno'])) $datass[vp_option_array($option_array, $attribute_map['meterno'])] = sanitize_text_field($post_data['meterno'] ?? '');
-    if (isset($attribute_map['amount'])) $datass[vp_option_array($option_array, $attribute_map['amount'])] = round(floatval($amount), 2);
+    if (isset($attribute_map['amount'])) $datass[vp_option_array($option_array, $attribute_map['amount'])] = round(floatval($realAmt), 2);
     if (isset($attribute_map['phone'])) $datass[vp_option_array($option_array, $attribute_map['phone'])] = $phone;
     if (isset($attribute_map['product_id'])) $datass[vp_option_array($option_array, $attribute_map['product_id'])] = sanitize_text_field($post_data['cbill'] ?? '');
     if (isset($attribute_map['type'])) $datass[vp_option_array($option_array, $attribute_map['type'])] = sanitize_text_field($post_data['type'] ?? '');

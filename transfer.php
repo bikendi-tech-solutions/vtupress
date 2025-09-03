@@ -22,9 +22,6 @@ $action = $_POST["action"];
 
 
 $id = get_current_user_id();
-if($id != 1){
-    die("Under Maintenance");
-}
 
 
 
