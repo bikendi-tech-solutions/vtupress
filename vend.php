@@ -317,8 +317,8 @@ if (isset($_POST["vend"])) {
             case "cbill": // Bill Payment
                 $discount_rate = floatval($level->bill_prepaid);
                 $bill_charge = floatval(vp_option_array($option_array, "bill_charge"));
-                $amountv = ($amount - ($amount * $discount_rate / 100)) + $bill_charge;
-                $_POST['amount'] = $amount + $bill_charge; // Adjust total amount for balance deduction
+                $amountv = ($amount - ($amount * $discount_rate / 100));
+                $_POST['amount'] = $amount; // Adjust total amount for balance deduction
                 $baln = $bal - $_POST['amount'];
                 $processVal = sanitize_text_field($_POST["meterno"] ?? '');
             break;

@@ -50,6 +50,12 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/functions.php'); // Your plug
 include_once(ABSPATH .'wp-admin/includes/plugin.php');
 require_once(ABSPATH.'wp-admin/includes/upgrade.php');
 
+include_once('database.php');
+include_once('registry/function.php');
+include_once('actions.php');
+include_once('vpcustom.php');
+include_once('vpuser.php');
+
 // Define global current timestamp.
 global $current_timestamp;
 $current_timestamp = current_time('timestamp');
@@ -1058,8 +1064,3 @@ register_activation_hook(__FILE__,  'vtupress_roles');
 
 // Include other plugin files.
 do_action("vtupressmain");
-include_once('database.php');
-include_once('registry/function.php');
-include_once('actions.php');
-include_once('vpcustom.php');
-include_once('vpuser.php');

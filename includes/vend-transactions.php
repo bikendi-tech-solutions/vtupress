@@ -640,7 +640,7 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
             $query_method_option = $airtime_choice . "querymethod";
             $post_data_map = [];
             for ($i = 1; $i <= 5; $i++) {
-                $post_data_map[$payload_type . 'airtimepostdata' . $i] = $airtime_choice . 'postvalue' . $i;
+                $post_data_map[$payload_type . 'airtimepostdata' . $i] = $payload_type . 'airtimepostvalue' . $i;
             }
             $attribute_map = [
                 'network' => $payload_type . 'airtimenetworkattribute',
@@ -820,11 +820,11 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
                 $post_data_map['cablepostdata' . $i] = 'cablepostvalue' . $i;
             }
             $attribute_map = [
-                'iucno' => 'cableiucattribute',
+                'iucno' => 'ciucattr',
                 'amount' => 'cableamountattribute',
-                'phone' => 'cablephoneattribute',
-                'product_id' => 'cableproductattribute',
-                'type' => 'cabletypeattribute',
+                'phone' => 'ciucattr',
+                'product_id' => 'ccvariationattr',
+                'type' => 'ctypeattr',
                 'request_id' => 'crequest_id'
             ];
             $header_map = [
@@ -876,11 +876,11 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
                 $post_data_map['billpostdata' . $i] = 'billpostvalue' . $i;
             }
             $attribute_map = [
-                'meterno' => 'billmeterattribute',
+                'meterno' => 'cmeterattr',
                 'amount' => 'billamountattribute',
-                'phone' => 'billphoneattribute',
-                'product_id' => 'billproductattribute',
-                'type' => 'billtypeattribute',
+                'phone' => 'cmeterattr',
+                'product_id' => 'cbvariationattr',
+                'type' => 'btypeattr',
                 'request_id' => 'brequest_id'
             ];
             $header_map = [
@@ -1574,9 +1574,13 @@ function handle_bill_transaction($request_method, $api_url_option, $api_endpoint
         }
     }
 
+    
+    $bill_charge = floatval(vp_option_array($option_array, "bill_charge"));
+    $buyAmt = $amount - $bill_charge;
+
     // Add dynamic attributes specific to bill
     if (isset($attribute_map['meterno'])) $datass[vp_option_array($option_array, $attribute_map['meterno'])] = sanitize_text_field($post_data['meterno'] ?? '');
-    if (isset($attribute_map['amount'])) $datass[vp_option_array($option_array, $attribute_map['amount'])] = round(floatval($realAmt), 2);
+    if (isset($attribute_map['amount'])) $datass[vp_option_array($option_array, $attribute_map['amount'])] = round(floatval($buyAmt), 2);
     if (isset($attribute_map['phone'])) $datass[vp_option_array($option_array, $attribute_map['phone'])] = $phone;
     if (isset($attribute_map['product_id'])) $datass[vp_option_array($option_array, $attribute_map['product_id'])] = sanitize_text_field($post_data['cbill'] ?? '');
     if (isset($attribute_map['type'])) $datass[vp_option_array($option_array, $attribute_map['type'])] = sanitize_text_field($post_data['type'] ?? '');
