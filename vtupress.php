@@ -10,7 +10,7 @@
 *Plugin Name: VTU Press
 *Plugin URI: http://vtupress.com
 *Description: This is the very first <b>VTU plugin</b>. It's VTU services are all Automated with wonderful features
-*Version: 6.8.5
+*Version: 6.8.6
 *Author: Akor Victor
 *Author URI: https://facebook.com/vtupressceo
 *License: GPL3
@@ -768,7 +768,7 @@ function actnote(){
         }
         </style>
         <div class="notice vp-not notice-success is-dismissible">
-        Thank you for installing and Activating <b>VTUPRESS '.esc_html($version).' Beta </b>.
+        Thank you for installing and Activating <b>VTUPRESS '.esc_html($version).' Stable </b>.
         Are you new to VTUPRESS? kindly get started by visiting <a href="https://vtupress.com/doc">VtuPress Doc</a> to get Started!!!
         Discuss on our forum <a href="https://vtupress.com/forum">VtuPress Forum</a>
         </div>

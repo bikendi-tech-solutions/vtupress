@@ -1434,6 +1434,12 @@ if(vp_getoption("vtupress_custom_bet") == "yes"){
             </div>
           </div>
         </div>
+
+        <div class="alert alert-info">
+          <strong> <i class="fas fa-info"></i></strong>
+          <span>Vtupress now partnering with connectbridge for seemless integration outside the box! We are now...
+            <a href="https://vtupress.com/connect-bridge/" class="">Read More</a>
+        </div>
         <!-- ============================================================== -->
         <!-- End Bread crumb and right sidebar toggle -->
         <!-- ============================================================== -->
