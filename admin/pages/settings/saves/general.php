@@ -57,6 +57,7 @@ elseif(strtolower($spray_code) != "false"){
 
 
 if(isset($_POST["fset"])){
+    $_POST = wp_unslash($_POST);
 
 
     if(vp_getoption("vtupress_custom_ibrolinks_profit") == "yes"){

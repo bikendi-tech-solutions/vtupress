@@ -145,8 +145,8 @@ if (isset($_POST["vend"])) {
         $phone = "0800000001"; // Default phone if not set for user
     }
 
-    $tphone = 
-    $bal = floatval(vp_getuser($id, "vp_bal", true)); // User's current balance
+    $tphone =
+        $bal = floatval(vp_getuser($id, "vp_bal", true)); // User's current balance
 
     // Initialize $uniqidvalue
     $uniqidvalue = date('Ymd', $current_timestamp) . date('H', $current_timestamp) . date("i", $current_timestamp) . date("s", $current_timestamp) . uniqid('', false);
@@ -198,12 +198,11 @@ if (isset($_POST["vend"])) {
     $network = sanitize_text_field($_POST["network"] ?? '');
 
 
-    if($level == null){
-            $wpdb->query('ROLLBACK');
+    if ($level == null) {
+        $wpdb->query('ROLLBACK');
         die("Current User Package Not Found");
-    }
-    else{
-    // Calculate actual amount and new balance based on service type and user level
+    } else {
+        // Calculate actual amount and new balance based on service type and user level
         switch ($tcode) {
             case "cair": // Airtime
                 $processVal = sanitize_text_field($_POST["phone"] ?? '');
@@ -213,29 +212,53 @@ if (isset($_POST["vend"])) {
 
                 if ($airtimechoice == "vtu") {
                     switch ($disnetwork) {
-                        case "MTN": $discount_rate = floatval($level->mtn_vtu); break;
-                        case "GLO": $discount_rate = floatval($level->glo_vtu); break;
-                        case "9MOBILE": $discount_rate = floatval($level->mobile_vtu); break;
-                        case "AIRTEL": $discount_rate = floatval($level->airtel_vtu); break;
+                        case "MTN":
+                            $discount_rate = floatval($level->mtn_vtu);
+                            break;
+                        case "GLO":
+                            $discount_rate = floatval($level->glo_vtu);
+                            break;
+                        case "9MOBILE":
+                            $discount_rate = floatval($level->mobile_vtu);
+                            break;
+                        case "AIRTEL":
+                            $discount_rate = floatval($level->airtel_vtu);
+                            break;
                     }
                 } elseif ($airtimechoice == "share") {
                     switch ($disnetwork) {
-                        case "MTN": $discount_rate = floatval($level->mtn_share); break;
-                        case "GLO": $discount_rate = floatval($level->glo_share); break;
-                        case "9MOBILE": $discount_rate = floatval($level->mobile_share); break;
-                        case "AIRTEL": $discount_rate = floatval($level->airtel_share); break;
+                        case "MTN":
+                            $discount_rate = floatval($level->mtn_share);
+                            break;
+                        case "GLO":
+                            $discount_rate = floatval($level->glo_share);
+                            break;
+                        case "9MOBILE":
+                            $discount_rate = floatval($level->mobile_share);
+                            break;
+                        case "AIRTEL":
+                            $discount_rate = floatval($level->airtel_share);
+                            break;
                     }
                 } elseif ($airtimechoice == "awuf") {
                     switch ($disnetwork) {
-                        case "MTN": $discount_rate = floatval($level->mtn_awuf); break;
-                        case "GLO": $discount_rate = floatval($level->glo_awuf); break;
-                        case "9MOBILE": $discount_rate = floatval($level->mobile_awuf); break;
-                        case "AIRTEL": $discount_rate = floatval($level->airtel_awuf); break;
+                        case "MTN":
+                            $discount_rate = floatval($level->mtn_awuf);
+                            break;
+                        case "GLO":
+                            $discount_rate = floatval($level->glo_awuf);
+                            break;
+                        case "9MOBILE":
+                            $discount_rate = floatval($level->mobile_awuf);
+                            break;
+                        case "AIRTEL":
+                            $discount_rate = floatval($level->airtel_awuf);
+                            break;
                     }
                 }
                 $amountv = $amount - ($amount * $discount_rate / 100);
                 $baln = $bal - $amount; // Balance is deducted by the full amount
-            break;
+                break;
 
             case "cdat": // Data
                 $processVal = sanitize_text_field($_POST["phone"] ?? '');
@@ -250,24 +273,72 @@ if (isset($_POST["vend"])) {
 
                 if ($datatcode == "sme") {
                     switch ($datnetwork) {
-                        case "MTN": $discount_rate = floatval($level->mtn_sme); $plan_prefix_name = "cdatan"; $plan_prefix_price = "cdatap"; break;
-                        case "GLO": $discount_rate = floatval($level->glo_sme); $plan_prefix_name = "gcdatan"; $plan_prefix_price = "gcdatap"; break;
-                        case "9MOBILE": $discount_rate = floatval($level->mobile_sme); $plan_prefix_name = "9cdatan"; $plan_prefix_price = "9cdatap"; break;
-                        case "AIRTEL": $discount_rate = floatval($level->airtel_sme); $plan_prefix_name = "acdatan"; $plan_prefix_price = "acdatap"; break;
+                        case "MTN":
+                            $discount_rate = floatval($level->mtn_sme);
+                            $plan_prefix_name = "cdatan";
+                            $plan_prefix_price = "cdatap";
+                            break;
+                        case "GLO":
+                            $discount_rate = floatval($level->glo_sme);
+                            $plan_prefix_name = "gcdatan";
+                            $plan_prefix_price = "gcdatap";
+                            break;
+                        case "9MOBILE":
+                            $discount_rate = floatval($level->mobile_sme);
+                            $plan_prefix_name = "9cdatan";
+                            $plan_prefix_price = "9cdatap";
+                            break;
+                        case "AIRTEL":
+                            $discount_rate = floatval($level->airtel_sme);
+                            $plan_prefix_name = "acdatan";
+                            $plan_prefix_price = "acdatap";
+                            break;
                     }
                 } elseif ($datatcode == "direct") {
                     switch ($datnetwork) {
-                        case "MTN": $discount_rate = floatval($level->mtn_gifting); $plan_prefix_name = "rcdatan"; $plan_prefix_price = "rcdatap"; break;
-                        case "GLO": $discount_rate = floatval($level->glo_gifting); $plan_prefix_name = "rgcdatan"; $plan_prefix_price = "rgcdatap"; break;
-                        case "9MOBILE": $discount_rate = floatval($level->mobile_gifting); $plan_prefix_name = "r9cdatan"; $plan_prefix_price = "r9cdatap"; break;
-                        case "AIRTEL": $discount_rate = floatval($level->airtel_gifting); $plan_prefix_name = "racdatan"; $plan_prefix_price = "racdatap"; break;
+                        case "MTN":
+                            $discount_rate = floatval($level->mtn_gifting);
+                            $plan_prefix_name = "rcdatan";
+                            $plan_prefix_price = "rcdatap";
+                            break;
+                        case "GLO":
+                            $discount_rate = floatval($level->glo_gifting);
+                            $plan_prefix_name = "rgcdatan";
+                            $plan_prefix_price = "rgcdatap";
+                            break;
+                        case "9MOBILE":
+                            $discount_rate = floatval($level->mobile_gifting);
+                            $plan_prefix_name = "r9cdatan";
+                            $plan_prefix_price = "r9cdatap";
+                            break;
+                        case "AIRTEL":
+                            $discount_rate = floatval($level->airtel_gifting);
+                            $plan_prefix_name = "racdatan";
+                            $plan_prefix_price = "racdatap";
+                            break;
                     }
                 } elseif ($datatcode == "corporate") {
                     switch ($datnetwork) {
-                        case "MTN": $discount_rate = floatval($level->mtn_corporate); $plan_prefix_name = "r2cdatan"; $plan_prefix_price = "r2cdatap"; break;
-                        case "GLO": $discount_rate = floatval($level->glo_corporate); $plan_prefix_name = "r2gcdatan"; $plan_prefix_price = "r2gcdatap"; break;
-                        case "9MOBILE": $discount_rate = floatval($level->mobile_corporate); $plan_prefix_name = "r29cdatan"; $plan_prefix_price = "r29cdatap"; break;
-                        case "AIRTEL": $discount_rate = floatval($level->airtel_corporate); $plan_prefix_name = "r2acdatan"; $plan_prefix_price = "r2acdatap"; break;
+                        case "MTN":
+                            $discount_rate = floatval($level->mtn_corporate);
+                            $plan_prefix_name = "r2cdatan";
+                            $plan_prefix_price = "r2cdatap";
+                            break;
+                        case "GLO":
+                            $discount_rate = floatval($level->glo_corporate);
+                            $plan_prefix_name = "r2gcdatan";
+                            $plan_prefix_price = "r2gcdatap";
+                            break;
+                        case "9MOBILE":
+                            $discount_rate = floatval($level->mobile_corporate);
+                            $plan_prefix_name = "r29cdatan";
+                            $plan_prefix_price = "r29cdatap";
+                            break;
+                        case "AIRTEL":
+                            $discount_rate = floatval($level->airtel_corporate);
+                            $plan_prefix_name = "r2acdatan";
+                            $plan_prefix_price = "r2acdatap";
+                            break;
                     }
                 } elseif ($datatcode == "smile" || $datatcode == "alpha") {
                     // For smile/alpha, assume no percentage discount, fixed amount
@@ -281,9 +352,9 @@ if (isset($_POST["vend"])) {
                 if (!empty($plan_prefix_name) && !empty($plan_prefix_price)) {
                     $expected_plan_name = vp_option_array($option_array, $plan_prefix_name . $plan_index);
                     $expected_plan_price = floatval(vp_option_array($option_array, $plan_prefix_price . $plan_index));
-                    $left  = preg_replace('/\s+/u', ' ', trim($data_plan_name_from_request));
+                    $left = preg_replace('/\s+/u', ' ', trim($data_plan_name_from_request));
                     $right = preg_replace('/\s+/u', ' ', trim($expected_plan_name . ' ₦' . $expected_plan_price));
-                    
+
                     if ($left !== $right) {
                         $wpdb->query('ROLLBACK');
                         die('Plan mis-match please refresh and try again');
@@ -299,7 +370,7 @@ if (isset($_POST["vend"])) {
                     $amountv = $amount - ($amount * $discount_rate / 100);
                     $baln = $bal - $amount;
                 }
-            break;
+                break;
 
             case "ccab": // Cable
                 $planIndex = intval($_POST["plan_index"] ?? 0);
@@ -313,7 +384,7 @@ if (isset($_POST["vend"])) {
                 $amountv = $amount - ($amount * $discount_rate / 100);
                 $baln = $bal - $amount;
                 $processVal = sanitize_text_field($_POST["iuc"] ?? '');
-            break;
+                break;
             case "cbill": // Bill Payment
                 $discount_rate = floatval($level->bill_prepaid);
                 $bill_charge = floatval(vp_option_array($option_array, "bill_charge"));
@@ -321,18 +392,18 @@ if (isset($_POST["vend"])) {
                 $_POST['amount'] = $amount; // Adjust total amount for balance deduction
                 $baln = $bal - $_POST['amount'];
                 $processVal = sanitize_text_field($_POST["meterno"] ?? '');
-            break;
+                break;
 
             case "cepin": // E-PIN
                 $amountv = $amount;
                 $baln = $bal - $amount;
                 $processVal = '12345678';
-            break;
+                break;
             case "csms": // SMS
                 $amountv = $amount;
                 $baln = $bal - $amount;
                 $processVal = sanitize_text_field($_POST["receiver"] ?? '');
-            break;
+                break;
 
             case "cbet": // Betting
                 $bet_charge = intval(vp_getoption("betcharge"));
@@ -342,11 +413,11 @@ if (isset($_POST["vend"])) {
                 $baln = $bal - $amount_en_charge;
                 $network = sanitize_text_field($_POST["bet_company"] ?? '');
                 $processVal = sanitize_text_field($_POST["customerid"] ?? ''); // Assuming phone is customer ID for betting
-            break;
+                break;
             default:
                 $baln = $bal - $amount;
                 $amountv = $amount;
-            break;
+                break;
         }
     }
 
@@ -554,7 +625,7 @@ if (isset($_POST["vend"])) {
     echo "Activation Version: " . esc_html(vp_getoption("last_activation_version")) . " \n";
     echo "Activation Time: " . esc_html(vp_getoption("last_activation_time")) . " \n";
 } elseif (isset($_POST["custom_order"])) {
-	include_once(__DIR__.'/foradmin.php');
+    include_once(__DIR__ . '/foradmin.php');
     handle_custom_activation($_POST);
 } elseif (isset($_POST["paywall"])) {
     handle_paywall_upgrade($_POST);
@@ -562,6 +633,67 @@ if (isset($_POST["vend"])) {
     handle_withdrawal($_POST);
 } elseif (isset($_POST["convert_it"])) {
     handle_airtime_conversion($_POST);
+} elseif (isset($_POST["set_pin"])) {
+    handle_setpin($_POST);
+} elseif (isset($_POST["check_balance"])) {
+    $my_id = get_current_user_id();
+    $my_balance = vp_getuser($my_id, 'vp_bal', true);
+
+    if ($my_balance != "0" || $my_balance !== false || $my_balance != "") {
+        echo '{"status":"100", "balance":"' . $my_balance . '"}';
+    } else {
+        echo '{"status":"200"}';
+    }
+
+} elseif (isset($_POST['setmlm'])) {
+
+    global $wpdb;
+    $table_name = $wpdb->prefix . "vp_pv_rules";
+    $rules = $wpdb->get_results("SELECT * FROM  $table_name");
+
+    foreach ($rules as $rule) {
+        $my_id = $rule->id;
+
+        if (isset($_POST["set_plan$my_id"]) && isset($_POST["required_pv$my_id"]) && isset($_POST["bonus_amount$my_id"])) {
+            $set_plan = $_POST["set_plan$my_id"];
+            $required_pv = $_POST["required_pv$my_id"];
+            $bonus_amount = $_POST["bonus_amount$my_id"];
+
+            $arg = [
+                'required_pv' => $required_pv,
+                'upgrade_plan' => $set_plan,
+                'upgrade_balance' => $bonus_amount
+
+            ];
+
+            $wpdb->update($table_name, $arg, array('id' => $my_id));
+
+        }
+    }
+
+
+
+    vp_updateoption("vp_min_withdrawal", $_POST['minwith']);
+    vp_updateoption("vp_trans_min", $_POST['mintrans']);
+    vp_updateoption("discount_method", $_POST['discountmethod']);
+
+    echo '{"status":"100"}';
+} elseif (isset($_POST["verify_user"])) {
+
+    if (!is_user_logged_in()) {
+        die("Please Login");
+    }
+
+    $user_id = $_POST["user_id"];
+    $user_name = get_userdata($user_id)->user_login;
+
+    if ($user_name != "0" || $user_name !== false || $user_name != "") {
+        echo '{"status":"100", "user_name":"' . $user_name . '"}';
+    } else {
+        echo '{"status":"200"}';
+    }
+} elseif (isset($_POST['setactivation'])) {
+    handle_activation();
 } else {
     // Default response or error for unhandled requests.
     die('{"status":"error","response":"Invalid Request."}'); // Changed from wp_die()
