@@ -1480,7 +1480,7 @@ function handle_airtime_conversion($post_data)
 }
 
 
-handle_setpin($post){
+function handle_setpin($post){
     $_POST = $post;
     	$id = get_current_user_id();
 	$pin = $_POST["pin"];
@@ -1521,7 +1521,7 @@ handle_setpin($post){
 
 }
 
-handle_activation(){
+function handle_activation(){
     
 
 	$datenow = date("Y-m-d h:i A", $current_timestamp);

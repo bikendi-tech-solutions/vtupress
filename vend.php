@@ -698,6 +698,13 @@ if (isset($_POST["vend"])) {
     // Default response or error for unhandled requests.
     die('{"status":"error","response":"Invalid Request."}'); // Changed from wp_die()
 }
+/*
+Quick syntax check: php -l file.php
+
+Run & debug with full errors: php -d display_errors=1 -d error_reporting=E_ALL file.php
+
+Inline test: php -r 'your_code_here;'
+*/
 
 // Ensure no further output after wp_die.
 exit;
