@@ -153,6 +153,12 @@ elseif(!$bvnDetails->status){
     'the_time' => date('Y-m-d h:i:s A',$current_timestamp)
     ));
 
+    if(!$added_to_db){
+        $erorr = $wpdb->last_error;
+        die("ERR/DB - Could not save to database. Please reach out to us [ $erorr ]");
+    }
+
+
 
 
 die("success");

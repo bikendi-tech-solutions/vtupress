@@ -137,9 +137,9 @@ function check_wallet_history($user_id, $current_balance) {
     } else {
         $the_balance_when_funded = floatval($result[0]->now_amount);
         if (floatval($current_balance) > $the_balance_when_funded) {
-            vp_block_user("Blocked because user $user_id's current balance ($current_balance) is higher than total balance ($the_balance_when_funded) when last funded.");
+            // vp_block_user("Blocked because user $user_id's current balance ($current_balance) is higher than total balance ($the_balance_when_funded) when last funded.");
             $wpdb->query('ROLLBACK'); // Rollback transaction if anomaly detected
-            die("Blocked due to balance anomaly. Please contact support.");
+            die("There is a balance issue. Please contact support.");
         }
     }
 }

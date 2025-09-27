@@ -10,7 +10,7 @@
 *Plugin Name: VTU Press
 *Plugin URI: http://vtupress.com
 *Description: This is the very first <b>VTU plugin</b>. It's VTU services are all Automated with wonderful features
-*Version: 6.8.8
+*Version: 6.8.9
 *Author: Akor Victor
 *Author URI: https://facebook.com/vtupressceo
 *License: GPL3
@@ -254,9 +254,15 @@ if(isset($_SERVER['HTTP_HOST'])){
 
 
 // Plugin update and database schema management.
-$update_vtupress_options = 73;
+$update_vtupress_options = 72;
 if(get_option("vtupress_options2") != $update_vtupress_options){
     global $wpdb;
+
+    $table_name = $wpdb->prefix.'vp_verifications';
+
+    $wpdb->query("ALTER TABLE $table_name MODIFY COLUMN vDatas LONGTEXT");
+
+
 
     // Create or update vp_wallet_lock table.
     $table_lock = "{$wpdb->prefix}vp_wallet_lock";
@@ -443,7 +449,7 @@ if(get_option("vtupress_options2") != $update_vtupress_options){
 
     // Update site URL to HTTPS if not already.
     $url = home_url();
-    $url = str_replace("http://","https://",$url);
+    // $url = str_replace("http://","https://",$url);
     vp_updateoption("siteurl",$url);
 
     // Update vp_kyc table columns.

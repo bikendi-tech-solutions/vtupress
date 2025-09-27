@@ -105,7 +105,7 @@ ob_start();
 header("Access-Control-Allow-Origin: 'self'");
 
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Content-Security-Policy: https:");
+// header("Content-Security-Policy: https:");
  //Script_Transport-Security
 header("strict-transport-security: max-age=31536000 ");
 header("X-Frame-Options: SAMEORIGIN");

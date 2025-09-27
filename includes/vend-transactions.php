@@ -629,7 +629,7 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
             ];
 
             // Determine API options based on airtime choice
-            $request_method = vp_getoption($airtime_choice . "request");
+            $request_method = vp_getoption($payload_type . "airtimerequest");
             $api_url_option = $payload_type . "airtimebaseurl";
             $api_endpoint_option = $payload_type . "airtimeendpoint";
             $success_code_option = $payload_type . "airtimesuccesscode";
@@ -696,7 +696,7 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
             ];
 
             // Determine API options based on data type
-            $request_method = vp_getoption($payload_type . "request");
+            $request_method = vp_getoption($payload_type . "datarequest");
             $api_url_option = $datatcode =="smile" ? "smilebaseurl" : ($datatcode =="alpha" ? "alphabaseurl" : $payload_type . "databaseurl");
 
             // Define mappings once
@@ -1153,10 +1153,15 @@ function handle_airtime_transaction($request_method, $api_url_option, $api_endpo
 
     $call = null;
     $response = '';
+    // die($request_method);
 
     if ($query_method != "array") { // Direct GET/POST request
         if ($request_method == "get") {
             $final_url = add_query_arg($datass, $url); // Append data to URL for GET
+            // echo $final_url;
+            // echo "\n";
+            // echo $http_args;
+            // die();
             $call = wp_remote_get($final_url, $http_args);
         } else { // post
             $http_args['body'] = json_encode($datass);

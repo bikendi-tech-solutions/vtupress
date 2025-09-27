@@ -890,16 +890,21 @@ function vp_transaction_email($subject = "", $topic = "", $transaction = "", $pu
         $email_body = <<<EOB
 <div style="height:fit-content">
     <div style="background-color:#0000ffc2; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:center; color:white; font-family:cursive;font-size:2em;" >
-        <span style="" > %s </span>
+        <span style="" > {subject} </span>
     </div>
-    <div style="background-color:#f0f0f1; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:left; color:black; font-family:sans-serif;font-size:1em;"">
-        <p>%s</p>
+    <div style="background-color:#f0f0f1; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:left; color:black; font-family:sans-serif;font-size:1em;">
+        <p>{message}</p>
     </div>
     <div style="background-color:#0000ffc2; padding:10px 10px 30px 10px; max-width:80%; margin: 10px auto; color:white; font-family:cursive;font-size:1em;" >
     </div>
 </div>
 EOB;
-        $formatted_message = sprintf($email_body, esc_html($subject), esc_html($message));
+
+        $formatted_message = str_replace(
+    ['{subject}', '{message}'],
+    [esc_html($subject), esc_html($message)],
+    $email_body
+);
         wp_mail($admin_email, $subject, $formatted_message, $email_headers);
     }
 
@@ -923,9 +928,9 @@ EOB;
     <div style="background-color:#0000ffc2; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:center; color:white; font-family:cursive;font-size:2em;" >
         <span style="" > New Hacker Detected And Banned </span>
     </div>
-    <div style="background-color:#f0f0f1; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:left; color:black; font-family:sans-serif;font-size:1em;"">
-        <p>Username: %s</p>
-        <p>Email: %s</p>
+    <div style="background-color:#f0f0f1; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:left; color:black; font-family:sans-serif;font-size:1em;">
+        <p>Username: {username}</p>
+        <p>Email: {email}</p>
         <p>User With The Above Details Has Been Banned Due To A Suspicious Occurence On Account</p>
     </div>
     <div style="background-color:#0000ffc2; padding:10px 10px 30px 10px; max-width:80%; margin: 10px auto; color:white; font-family:cursive;font-size:1em;" >
@@ -933,7 +938,11 @@ EOB;
     </div>
 </div>
 EOB;
-        $admin_formatted_message = sprintf($admin_message_template, esc_html($username), esc_html($user_email));
+        $admin_formatted_message = str_replace(
+    ['{username}', '{email}'],
+    [esc_html($username), esc_html($email)],
+    $admin_message_template
+);
         wp_mail($admin_email, $admin_subject, $admin_formatted_message, $email_headers);
 
         // User Email
@@ -943,9 +952,9 @@ EOB;
     <div style="background-color:#0000ffc2; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:center; color:white; font-family:cursive;font-size:2em;" >
         <span style="" > You Are Banned!!! </span>
     </div>
-    <div style="background-color:#f0f0f1; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:left; color:black; font-family:sans-serif;font-size:1em;"">
-        <p>Username: %s</p>
-        <p>Email: %s</p>
+    <div style="background-color:#f0f0f1; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:left; color:black; font-family:sans-serif;font-size:1em;">
+        <p>Username: {username}</p>
+        <p>Email: {email}</p>
         <p>You Are Banned Due To A Suspicious Occurence On Your Account! Kindly Contact Admin If This Decision Is A Mistake</p>
     </div>
     <div style="background-color:#0000ffc2; padding:10px 10px 30px 10px; max-width:80%; margin: 10px auto; color:white; font-family:cursive;font-size:1em;" >
@@ -953,7 +962,12 @@ EOB;
     </div>
 </div>
 EOB;
-        $user_formatted_message = sprintf($user_message_template, esc_html($username), esc_html($user_email));
+
+        $user_formatted_message = str_replace(
+    ['{username}', '{email}'],
+    [esc_html($username), esc_html($user_email)],
+    $user_message_template);
+
         wp_mail($user_email, $user_subject, $user_formatted_message, $email_headers);
     }
 
@@ -1003,17 +1017,21 @@ EOB;
     <div style="background-color:#0000ffc2; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:center; color:white; font-family:cursive;font-size:2em;" >
         <span style="" > New Hacker Detected And Banned </span>
     </div>
-    <div style="background-color:#f0f0f1; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:left; color:black; font-family:sans-serif;font-size:1em;"">
-        <p>Username: %s</p>
-        <p>Email: %s</p>
-        <p>User With The Above Details Has Been Banned %s On Account</p>
+    <div style="background-color:#f0f0f1; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:left; color:black; font-family:sans-serif;font-size:1em;">
+        <p>Username: {username}</p>
+        <p>Email: {email}</p>
+        <p>User With The Above Details Has Been Banned {reason} On Account</p>
     </div>
     <div style="background-color:#0000ffc2; padding:10px 10px 30px 10px; max-width:80%; margin: 10px auto; color:white; font-family:cursive;font-size:1em;" >
         <b style="float:left" > Previous: ---</b> <b style="float:right" >Now: --- </b>
     </div>
 </div>
 EOB;
-            $admin_formatted_message = sprintf($admin_message_template, esc_html($username), esc_html($user_email), esc_html($display_reason));
+            $admin_formatted_message = str_replace(
+    ['{username}', '{email}','{reason}'],
+    [esc_html($username), esc_html($user_email), esc_html($display_reason)],
+    $admin_message_template);
+    
             wp_mail($admin_email, $admin_subject, $admin_formatted_message, $email_headers);
 
             // User Email
@@ -1023,17 +1041,23 @@ EOB;
     <div style="background-color:#0000ffc2; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:center; color:white; font-family:cursive;font-size:2em;" >
         <span style="" > You Are Banned!!! </span>
     </div>
-    <div style="background-color:#f0f0f1; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:left; color:black; font-family:sans-serif;font-size:1em;"">
-        <p>Username: %s</p>
-        <p>Email: %s</p>
-        <p>You Are Banned %s On Your Account! Kindly Contact Admin If This Decision Is A Mistake</p>
+    <div style="background-color:#f0f0f1; padding:20px 10px; max-width:80%; margin: 10px auto; text-align:left; color:black; font-family:sans-serif;font-size:1em;">
+        <p>Username: {username}</p>
+        <p>Email: {email}</p>
+        <p>You Are Banned {reason} On Your Account! Kindly Contact Admin If This Decision Is A Mistake</p>
     </div>
     <div style="background-color:#0000ffc2; padding:10px 10px 30px 10px; max-width:80%; margin: 10px auto; color:white; font-family:cursive;font-size:1em;" >
         <b style="float:left" > Previous: ---</b> <b style="float:right" >Now: --- </b>
     </div>
 </div>
 EOB;
-            $user_formatted_message = sprintf($user_message_template, esc_html($username), esc_html($user_email), esc_html($display_reason));
+   
+
+           $user_formatted_message =   str_replace(
+    ['{username}', '{email}','{reason}'],
+    [esc_html($username), esc_html($user_email), esc_html($display_reason)],
+    $user_message_template);
+    
             wp_mail($user_email, $user_subject, $user_formatted_message, $email_headers);
         }
     }
