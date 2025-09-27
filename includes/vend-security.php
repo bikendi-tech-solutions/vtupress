@@ -135,11 +135,12 @@ function check_wallet_history($user_id, $current_balance) {
         $wpdb->query('ROLLBACK'); // Rollback transaction if history is missing
         die("Wasn't able to see your wallet funding history.");
     } else {
-        $the_balance_when_funded = floatval($result[0]->now_amount);
-        if (floatval($current_balance) > $the_balance_when_funded) {
+        $the_balance_when_funded = preg_replace('/\s+/u', ' ', trim(floatval($result[0]->now_amount)));
+        $current_balance = preg_replace('/\s+/u', ' ', trim(floatval($current_balance)));
+        if ($current_balance > $the_balance_when_funded) {
             // vp_block_user("Blocked because user $user_id's current balance ($current_balance) is higher than total balance ($the_balance_when_funded) when last funded.");
             $wpdb->query('ROLLBACK'); // Rollback transaction if anomaly detected
-            die("There is a balance issue. Please contact support.");
+            die("There is a balance issue. Please contact support. $current_balance - $the_balance_when_funded");
         }
     }
 }
