@@ -22,10 +22,13 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
     <label>Select Payment Gateway</label>
     <select name='paychoice' class='form-select payment-opt' >
       <option value='paystack'>PayStack</option>
-      <option value='monnify'>Monnify</option>
-
     ";
 
+    if(!$bypass):
+      echo"
+      <option value='monnify'>Monnify</option>
+      ";
+    endif;
     
     if(vp_getoption("vtupress_custom_paymentpoint") == "yes"){
       echo"
@@ -101,7 +104,7 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
       <select name='paystack_charge_method' class='form-control paystack_charge_method '>
       <option value='".vp_getoption('paystack_charge_method')."'>".vp_getoption('paystack_charge_method')."</option>
       <option value='percentage'>Percentage[%]</option>
-      <option value='fixed'>Fixed[NGN]</option>
+      <option value='fixed'>Fixed[".$currency."]</option>
       </select>
       <input class='form-control paystack_charge_back ' name='paystack_charge_back' value='".floatval(vp_getoption('paystack_charge_back'))."'>
     </div>
@@ -141,7 +144,7 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
       <select name='ncwallet_charge_method' class='form-control ncwallet_charge_method '>
       <option value='".vp_getoption('ncwallet_charge_method')."'>".vp_getoption('ncwallet_charge_method')."</option>
       <option value='percentage'>Percentage[%]</option>
-      <option value='fixed'>Fixed[NGN]</option>
+      <option value='fixed'>Fixed[". $currency."]</option>
       </select>
       <input class='form-control ncwallet_charge_back ' name='ncwallet_charge_back' value='".floatval(vp_getoption('ncwallet_charge_back'))."'>
     </div>
@@ -182,7 +185,7 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
       <select name='payvessel_charge_method' class='form-control payvessel_charge_method '>
       <option value='".vp_getoption('payvessel_charge_method')."'>".vp_getoption('payvessel_charge_method')."</option>
       <option value='percentage'>Percentage[%]</option>
-      <option value='fixed'>Fixed[NGN]</option>
+      <option value='fixed'>Fixed[". $currency."]</option>
       </select>
       <input class='form-control payvessel_charge_back ' name='payvessel_charge_back' value='".floatval(vp_getoption('payvessel_charge_back'))."'>
     </div>
@@ -224,7 +227,7 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
       <select name='paymentpoint_charge_method' class='form-control paymentpoint_charge_method '>
       <option value='".vp_getoption('paymentpoint_charge_method')."'>".vp_getoption('paymentpoint_charge_method')."</option>
       <option value='percentage'>Percentage[%]</option>
-      <option value='fixed'>Fixed[NGN]</option>
+      <option value='fixed'>Fixed[". $currency."]</option>
       </select>
       <input class='form-control paymentpoint_charge_back ' name='paymentpoint_charge_back' value='".floatval(vp_getoption('paymentpoint_charge_back'))."'>
     </div>
@@ -273,7 +276,7 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
       <select name='nomba_charge_method' class='form-control nomba_charge_method '>
       <option value='".vp_getoption('nomba_charge_method')."'>".vp_getoption('nomba_charge_method')."</option>
       <option value='percentage'>Percentage[%]</option>
-      <option value='fixed'>Fixed[NGN]</option>
+      <option value='fixed'>Fixed[". $currency."]</option>
       </select>
       <input class='form-control nomba_charge_back ' name='nomba_charge_back' value='".floatval(vp_getoption('nomba_charge_back'))."'>
     </div>
@@ -325,7 +328,7 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
       <select name='auto_manual_charge_method' class='form-control auto_manual_charge_method '>
       <option value='".vp_getoption('auto_manual_charge_method')."'>".vp_getoption('auto_manual_charge_method')."</option>
       <option value='percentage'>Percentage[%]</option>
-      <option value='fixed'>Fixed[NGN]</option>
+      <option value='fixed'>Fixed[". $currency."]</option>
       </select>
       <input class='form-control auto_manual_charge_back ' name='auto_manual_charge_back' value='".floatval(vp_getoption('auto_manual_charge_back'))."'>
     </div>
@@ -355,7 +358,7 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
       <select name='billstack_charge_method' class='form-control billstack_charge_method '>
       <option value='".vp_getoption('billstack_charge_method')."'>".vp_getoption('billstack_charge_method')."</option>
       <option value='percentage'>Percentage[%]</option>
-      <option value='fixed'>Fixed[NGN]</option>
+      <option value='fixed'>Fixed[". $currency."]</option>
       </select>
       <input class='form-control billstack_charge_back ' name='billstack_charge_back' value='".floatval(vp_getoption('billstack_charge_back'))."'>
     </div>
@@ -390,7 +393,7 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
       <select name='vpay_charge_method' class='form-control vpay_charge_method '>
       <option value='".vp_getoption('vpay_charge_method')."'>".vp_getoption('vpay_charge_method')."</option>
       <option value='percentage'>Percentage[%]</option>
-      <option value='fixed'>Fixed[NGN]</option>
+      <option value='fixed'>Fixed[". $currency."]</option>
       </select>
       <input class='form-control vpay_charge_back ' name='vpay_charge_back' value='".floatval(vp_getoption('vpay_charge_back'))."'>
     </div>
@@ -444,7 +447,7 @@ but its all automated
       <select name='gtb_charge_method' class='form-control gtb_charge_method '>
       <option value='".vp_getoption('gtb_charge_method')."'>".vp_getoption('gtb_charge_method')."</option>
       <option value='percentage'>Percentage[%]</option>
-      <option value='fixed'>Fixed[NGN]</option>
+      <option value='fixed'>Fixed[". $currency."]</option>
       </select>
       <input class='form-control gtb_charge_back ' name='gtb_charge_back' value='".floatval(vp_getoption('gtb_charge_back'))."'>
     </div>
@@ -476,7 +479,7 @@ but its all automated
       <select name='kuda_charge_method' class='form-control kuda_charge_method '>
       <option value='".vp_getoption('kuda_charge_method')."'>".vp_getoption('kuda_charge_method')."</option>
       <option value='percentage'>Percentage[%]</option>
-      <option value='fixed'>Fixed[NGN]</option>
+      <option value='fixed'>Fixed[". $currency."]</option>
       </select>
       <input class='form-control kuda_charge_back ' name='kuda_charge_back' value='".floatval(vp_getoption('kuda_charge_back'))."'>
     </div>
@@ -520,7 +523,7 @@ but its all automated
           <select name='charge_method' class='form-control charge_method '>
           <option value='".vp_getoption('charge_method')."'>".vp_getoption('charge_method')."</option>
           <option value='percentage'>Percentage[%]</option>
-          <option value='fixed'>Fixed[NGN]</option>
+          <option value='fixed'>Fixed[". $currency."]</option>
           </select>
           <input class='form-control charge_back ' name='charge_back' value='".floatval(vp_getoption('charge_back'))."'>
         </div>

@@ -11,6 +11,15 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/functions.php');
 include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
 
 
+	$vp_country = vp_country();
+	$glo = $vp_country["glo"];
+	$mobile = $vp_country["9mobile"];
+	$mtn = $vp_country["mtn"];
+	$airtel = $vp_country["airtel"];
+	$bypass = $vp_country["bypass"];
+	$currency = $vp_country["currency"];
+	$symbol = $vp_country["symbol"];
+
 $option_array = json_decode(get_option("vp_options"),true);
 
 global $wpdb;
@@ -195,7 +204,7 @@ $ref_data = get_referees_by_referrer_id($id);
                                                   <h1 class="font-light text-white">
                                                     <i class="mdi mdi-view-dashboard"></i>
                                                   </h1>
-                                                  <h6 class="text-white">₦ <?php echo $balance;?></h6>
+                                                  <h6 class="text-white"> <?php echo $symbol.$balance;?></h6>
                                                 </div>
                                               </div>
                                     </div>
@@ -1454,15 +1463,15 @@ function userbalance(id, action){
 switch(action){
 case"add":
     obj["action"] = "addbalance";
-message = "<?php echo strtoupper($user->user_login);?> Is Now Funded With ₦"+jQuery(".balance-amount").val();
+message = "<?php echo strtoupper($user->user_login);?> Is Now Funded With <?php echo $symbol;?>"+jQuery(".balance-amount").val();
     break;
     case"set":
         obj["action"] = "setbalance";
-        message = "<?php echo strtoupper($user->user_login);?> Now Has A Balance Of ₦"+jQuery(".balance-amount").val();
+        message = "<?php echo strtoupper($user->user_login);?> Now Has A Balance Of  <?php echo $symbol;?>"+jQuery(".balance-amount").val();
         break;
         case"remove":
             obj["action"] = "removebalance";
-            message = "₦"+jQuery(".balance-amount").val()+" Now deducted from  <?php echo strtoupper($user->user_login);?>'s Balance";
+            message = "<?php echo $symbol;?>"+jQuery(".balance-amount").val()+" Now deducted from  <?php echo strtoupper($user->user_login);?>'s Balance";
             break;
 }
 

@@ -107,7 +107,7 @@ switch(dchoice){
 ';
 if(vp_getoption("paystack_charge_method") == "fixed"){
 	?>
-jQuery(".dcharge .methodinai").text("₦");
+jQuery(".dcharge .methodinai").text("<?php echo $symbol;?>");
 <?php
 }
 else{
@@ -125,7 +125,7 @@ echo'
       ';
       if(vp_getoption("charge_method") == "fixed"){
         ?>
-      jQuery(".dcharge .methodinai").text("₦");
+      jQuery(".dcharge .methodinai").text("<?php echo $symbol;?>");
       <?php
       }
       else{
@@ -143,7 +143,7 @@ echo'
       ';
       if(vp_getoption("gtb_charge_method") == "fixed"){
         ?>
-      jQuery(".dcharge .methodinai").text("₦");
+      jQuery(".dcharge .methodinai").text("<?php echo $symbol;?>");
       <?php
       }
       else{

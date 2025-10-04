@@ -55,17 +55,17 @@ Not even the developers of this plugin should be trusted enough to grant access 
                         <div class="col-12 col-md-7 ssettings border rounded rounded-3">
 
                                 <div class="py-3 px-2 savingsForm">
-                                        <label for="sign_up_fee mt-2">SignUp Fee ₦</label>
+                                        <label for="sign_up_fee mt-2">SignUp Fee <?php echo $symbol;?></label>
                                         <input class="form-control" id="sign_up_fee" value="<?php echo $sign_up_fee;?>">
 
-                                        <label for="minimum_amount mt-2">Minimum Saving Amount ₦</label>
+                                        <label for="minimum_amount mt-2">Minimum Saving Amount <?php echo $symbol;?></label>
                                         <input class="form-control" id="minimum_amount"  value="<?php echo $minimum_amount;?>">
                                         
                                         <label for="interest mt-2">Interest %</label>
                                         <input class="form-control" id="interest"  value="<?php echo $interest;?>">
 
 
-                                        <label for="referer_commission mt-2">Referer Commission ₦</label>
+                                        <label for="referer_commission mt-2">Referer Commission <?php echo $symbol;?></label>
                                         <input class="form-control" id="referer_commission"  value="<?php echo $referer_commission;?>">
 
                                         <label for="charge mt-2">Charge </label>
@@ -203,7 +203,7 @@ Not even the developers of this plugin should be trusted enough to grant access 
                                 <p><b>SignUp Fee [number]</b> | This is the charge you require for your users to be able to apply for daily Saving</p>
                                 <p><b>Minimum Savings Amount [number]</b> | Minimum threshold to be able to save</p>
                                 <p><b>Interest [number]</b> | How much interest % you want to give your user i.e principal + interest = withdrawable amount</p>
-                                <p><b>Referer Commissions [number]</b> | How much interest in ₦ you want give the saver's referer</p>
+                                <p><b>Referer Commissions [number]</b> | How much interest in <?php echo $symbol;?> you want give the saver's referer</p>
                                 <p><b>Charge Figure [number]</b> | How much you want to charge per [month] upon withdrawal</p>
                                 <p><b>Charge Type [off / percentage]</b> | <i>Off</i> means your cut from total saving. e.g if the saver saved 1k daily and you set charge figure to 1 then you get 1k. Same applies to 2 meaning 2 daily savings / total daily savings. <br> <i>Percentage</i> is (charge figure)% off total savings </p>
                         </div>

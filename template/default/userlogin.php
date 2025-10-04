@@ -1005,7 +1005,7 @@ You are an admin and have switch in as another user. Kindly <b><a href="?vend=sw
 	
 					
           if(vp_getoption("charge_method") == "fixed"){
-            $chargef =  "₦".floatval(vp_getoption("charge_back"));
+            $chargef =  $symbol.floatval(vp_getoption("charge_back"));
             }
             else{
              $chargef =  floatval(vp_getoption("charge_back"))."%";
@@ -1361,7 +1361,7 @@ VISA
                             <!-- small box -->
                             <div class="small-box bg-maroon bg-darken-5">
                                 <div class="inner">
-                                    <h3>₦';
+                                    <h3>'.$symbol;
 									if(!empty($bal)){
 echo floatval(round(floatval($bal),2));
 }
@@ -1407,7 +1407,7 @@ echo "0.00";
                             <!-- small box -->
                             <div class="small-box bg-warning">
                                 <div class="inner">
-                                    <h3>₦'.$cur_suc_trans_amt.'</h3>
+                                    <h3>'.$symbol.$cur_suc_trans_amt.'</h3>
 
                                     <p>Total Transaction Sum</p>
                                 </div>

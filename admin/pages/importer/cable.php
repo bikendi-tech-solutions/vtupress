@@ -72,7 +72,7 @@ Not even the developers of this plugin should be trusted enough to grant access 
 <option value="<?php echo vp_option_array($option_array,"cable_platform");?>"><?php echo vp_option_array($option_array,"cable_platform");?></option>
 
 <?php
-$url = "https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?cable_names";
+$url = "https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?cable_names&country=".$country;
 
 $http_args = array(
   'headers' => array(

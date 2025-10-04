@@ -70,7 +70,7 @@ Not even the developers of this plugin should be trusted enough to grant access 
 <option value="<?php echo vp_option_array($option_array,"sms_platform");?>"><?php echo vp_option_array($option_array,"sms_platform");?></option>
 
 <?php
-$url = "https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?sms_names";
+$url = "https://vtupress.com/wp-content/plugins/vpimporter/vpimporter.php?sms_names&country=".$country;
 
 $http_args = array(
   'headers' => array(

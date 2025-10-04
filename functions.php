@@ -69,7 +69,8 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
          * @param mixed $value The new value for the meta key.
          * @return string "true" on success, "false" on failure.
          */
-        function vp_updateuser($id = "", $meta = "", $value = "") {
+        function vp_updateuser($id = "", $meta = "", $value = "")
+        {
             $update_meta = get_user_meta($id, "vp_user_data", true);
 
             // Initialize if 'vp_user_data' doesn't exist.
@@ -102,7 +103,8 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
          * @param mixed $value The new value for the option key.
          * @return string "true" on success, "false" on failure.
          */
-        function vp_updateoption($meta = "", $value = "") {
+        function vp_updateoption($meta = "", $value = "")
+        {
             $options_json = get_option("vp_options");
 
             // Initialize if 'vp_options' doesn't exist.
@@ -138,7 +140,8 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
          * @param string $meta The option key to retrieve.
          * @return mixed The option value, or "false" if not found.
          */
-        function vp_getoption($meta = "") {
+        function vp_getoption($meta = "", $default = "false")
+        {
             // WordPress core options should be retrieved directly.
             if (in_array($meta, ["siteurl", "blogname", "home", "admin_email", "blogdescription"])) {
                 return get_option($meta);
@@ -157,7 +160,7 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
                 if (isset($array[$meta])) {
                     return $array[$meta];
                 } else {
-                    return "false";
+                    return $default;
                 }
             } else {
                 // If not found as individual, or if it's the 'vp_options' itself.
@@ -166,10 +169,10 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
                     if (isset($array[$meta])) {
                         return $array[$meta];
                     } else {
-                        return "false";
+                        return $default;
                     }
                 } else {
-                    return "false";
+                    return $default;
                 }
             }
         }
@@ -182,7 +185,8 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
          * @param bool $single Whether to return a single value (true) or an array of values (false).
          * @return mixed The user meta value, or "false" if not found.
          */
-        function vp_getuser($id = "", $meta = "", $single = true) {
+        function vp_getuser($id = "", $meta = "", $single = true)
+        {
             $getdata = get_user_meta($id, "vp_user_data", true); // Get the main JSON user meta
             $get_meta = get_user_meta($id, $meta, true); // Check for individual user meta
 
@@ -222,7 +226,8 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
          * @param string $meta The key to retrieve.
          * @return mixed The value, or "false" if not found.
          */
-        function vp_option_array($array = [], $meta = "") {
+        function vp_option_array($array = [], $meta = "")
+        {
             if (isset($array[$meta]) && !empty($array[$meta])) {
                 return $array[$meta];
             } else {
@@ -240,7 +245,8 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
          * @param bool $single Whether to return a single value.
          * @return mixed The value, or "false" if not found.
          */
-        function vp_user_array($array = [], $id = "", $meta = "", $single = true) {
+        function vp_user_array($array = [], $id = "", $meta = "", $single = true)
+        {
             if (isset($array[$meta]) && !empty($array[$meta])) {
                 return $array[$meta];
             } else {
@@ -256,7 +262,8 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
          * @param int|string $id The user ID.
          * @return string "true" on success.
          */
-        function vp_deleteuser($id = "") {
+        function vp_deleteuser($id = "")
+        {
             delete_user_meta($id, "vp_user_data");
             return "true";
         }
@@ -270,7 +277,8 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
          * @param mixed $value The value for the new meta key.
          * @return string "true" on success, "false" if key already exists or on failure.
          */
-        function vp_adduser($id = "", $meta = "", $value = "") {
+        function vp_adduser($id = "", $meta = "", $value = "")
+        {
             $ths = get_user_meta($id, "vp_user_data", true);
             if (empty($ths)) {
                 add_user_meta($id, "vp_user_data", '{"default":"yes"}', true);
@@ -305,7 +313,8 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
          * @param mixed $value The new value for the new option key.
          * @return string "true" on success, "false" if key already exists or on failure.
          */
-        function vp_addoption($meta = "", $value = "") {
+        function vp_addoption($meta = "", $value = "")
+        {
             $options_json = get_option("vp_options");
             if (empty($options_json)) {
                 add_option("vp_options", '{"default":"yes"}', '', 'no');
@@ -334,13 +343,73 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
     } // End if(!function_exists("vp_updateuser") || is_plugin_active("vtupress/vtupress.php"))
 
 
+    
+    /**
+     * COUNTRY SWITCH
+     */
+
+    function vp_country()
+    {
+        $vp_country = vp_getoption("vp_country", "ng");
+
+
+        switch ($vp_country) {
+            case "ng":
+
+                $vp_services = [
+                    "glo" => "GLO",
+                    "9mobile" => "9MOBILE",
+                    "mtn" => "MTN",
+                    "airtel" => "AIRTEL",
+                    "bypass" => false,
+                    "currency" => "NGN",
+                    "symbol" => "₦",
+                    "line_prefix" => "234",
+                    "country" => "ng",
+                    "airtime" => true,
+                    "data" => true,
+                    "cabletv" => true,
+                    "electricity" => true,
+                    "education" => true,
+                    "betting" => true,
+                    "bills" => true,
+                    "others" => true
+                ];
+                break;
+            case "gh":
+                $vp_services = [
+                    "glo" => "TIGO",
+                    "9mobile" => "VODAFONE",
+                    "mtn" => "MTN",
+                    "airtel" => "AIRTEL",
+                    "bypass" => true,
+                    "currency" => "GHS",
+                    "symbol" => "₵",
+                    "line_prefix" => "233",
+                    "country" => "gh",
+                    "airtime" => true,
+                    "data" => true,
+                    "cabletv" => false,
+                    "electricity" => false,
+                    "education" => false,
+                    "betting" => false,
+                    "bills" => false,
+                    "others" => false
+                ];
+                break;
+        }
+
+        return $vp_services;
+    }
+
     /**
      * Fetches content from a URL using WordPress's HTTP API.
      *
      * @param string $url The URL to fetch.
      * @return string The response body, or an error message.
      */
-    function vp_get_contents($url) {
+    function vp_get_contents($url)
+    {
         $response = wp_remote_get(esc_url_raw($url));
         if (is_wp_error($response)) {
             error_log("VP_GET_CONTENTS Error: " . $response->get_error_message());
@@ -359,7 +428,8 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
      * @param string $where SQL WHERE clause (should be pre-sanitized or built with wpdb->prepare).
      * @return void Echos HTML.
      */
-    function pagination_before($name = "", $altname = "", $dbname = "", $var = "none", $where = "") {
+    function pagination_before($name = "", $altname = "", $dbname = "", $var = "none", $where = "")
+    {
         global $post, $wpdb, ${$var};
 
         $limit = isset($_REQUEST["{$altname}{$name}-limit-records"]) ? intval($_REQUEST["{$altname}{$name}-limit-records"]) : 10;
@@ -449,7 +519,8 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
      * @param string $dbname Database table name.
      * @return void Echos HTML and JavaScript.
      */
-    function pagination_after($name = "", $altname = "", $dbname = "none") {
+    function pagination_after($name = "", $altname = "", $dbname = "none")
+    {
         $cur_page = isset($_GET['page']) ? sanitize_text_field($_GET['page']) : '';
         echo '
         </div>
@@ -476,7 +547,8 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
      * @param string $where SQL WHERE clause (should be pre-sanitized or built with wpdb->prepare).
      * @return void Echos HTML.
      */
-    function pagination_before_front($url = "", $name = "", $altname = "", $dbname = "", $var = "none", $where = "") {
+    function pagination_before_front($url = "", $name = "", $altname = "", $dbname = "", $var = "none", $where = "")
+    {
         global $post, $wpdb, ${$var};
 
         $limit = isset($_REQUEST["limit-records"]) ? intval($_REQUEST["limit-records"]) : 10;
@@ -587,7 +659,8 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
      * @param string $dbname Database table name.
      * @return void Echos HTML and JavaScript.
      */
-    function pagination_after_front($url = "", $name = "", $altname = "", $dbname = "none") {
+    function pagination_after_front($url = "", $name = "", $altname = "", $dbname = "none")
+    {
         echo '
         </div>
         </div>
@@ -609,7 +682,8 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
      *
      * @return void
      */
-    function vtupress_js_css_user() {
+    function vtupress_js_css_user()
+    {
         wp_enqueue_script('vtupress-bootstrap-js', plugins_url('vtupress/js/bootstrap.min.js'), array('jquery'), '1.0', true);
         wp_enqueue_script('vtupress-jquery', plugins_url('vtupress/js/jquery.js'), array(), '1.0', true); // jQuery is often already enqueued by WP
         wp_enqueue_script('vtupress-sweet-alert', plugins_url('vtupress/js/sweet.js'), array(), '1.0', true);
@@ -628,7 +702,8 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
      *
      * @return void
      */
-    function vtupress_js_css_user_plain() {
+    function vtupress_js_css_user_plain()
+    {
         wp_enqueue_script('vtupress-bootstrap-js-plain', plugins_url('vtupress/js/bootstrap.min.js'), array('jquery'), '1', true);
         wp_enqueue_script('vtupress-jquery-plain', plugins_url('vtupress/js/jquery.js'), array(), '1', true);
         wp_enqueue_script('vtupress-sweet-alert-plain', plugins_url('vtupress/js/sweet.js'), array(), '1', true);
@@ -645,7 +720,8 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
      *
      * @return void
      */
-    function vtupress_js_css_user_plain_admin() {
+    function vtupress_js_css_user_plain_admin()
+    {
         wp_enqueue_script('vtupress-jquery-admin', plugins_url('vtupress/js/jquery.js'), array(), '1', true);
         wp_enqueue_script('vtupress-bootstrap-js-admin', plugins_url('vtupress/js/bootstrap.min.js'), array('jquery'), '1', true);
         wp_enqueue_script('vtupress-sweet-alert-admin', plugins_url('vtupress/js/sweet.js'), array(), '1', true);
@@ -675,13 +751,20 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
     define('vtupress_template', $vp_temp);
 
 
+
+    global $vp_country,$symbol,$currency;
+    $vp_country = vp_country();
+    $symbol = $vp_country["symbol"];
+    $currency = $vp_country["currency"];
+    $country = $vp_country["country"];
     /**
      * Updates KYC (Know Your Customer) limits and displays a notification.
      * This function seems to be called directly or within a hook.
      *
      * @return void Echos HTML if KYC verification is needed.
      */
-    function vp_kyc_update() {
+    function vp_kyc_update()
+    {
         global $current_timestamp, $wpdb;
 
         if (!is_user_logged_in()) {
@@ -730,10 +813,11 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
             $total_text = ($allowed_duration_text === "Total") ? "Total" : "One " . $allowed_duration_text;
             $limit = floatval($kyc_data->kyc_limit);
 
+            global $symbol;
             echo "
             <div class='row my-3'>
                 <div class='col font-bold text-white bg bg-danger p-3 rounded shadow'>
-                    You have consumed ₦" . esc_html($used) . " out of ₦" . esc_html($limit) . " in " . esc_html($total_text) . "
+                    You have consumed $symbol" . esc_html($used) . " out of $symbol" . esc_html($limit) . " in " . esc_html($total_text) . "
                     <br>
                     <small>Please verify your account <b><a style='text-decoration:none;' class='text-white' href='?vend=kyc'>{ Here }</a></b></small>
                 </div>
@@ -749,7 +833,8 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
      * @param mixed $value The value to check.
      * @return mixed The value, or "No Value".
      */
-    function vp_getvalue($value = "") {
+    function vp_getvalue($value = "")
+    {
         return isset($value) ? $value : "No Value";
     }
 
@@ -783,18 +868,20 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
      * @param bool $user Whether to send email to user.
      * @return void
      */
-function vp_transaction_email($subject = "", $topic = "", $transaction = "", $purchased = "", $recipient = "", $amount = "", $prev = "", $now = "", $admin = true, $user = true) {
-    $verify_email = strtolower(vp_getoption("email_transaction"));
-    $id = get_current_user_id();
-    $username = get_userdata($id) ? get_userdata($id)->user_login : 'Unknown User';
-    $user_email = get_userdata($id) ? get_userdata($id)->user_email : 'unknown@example.com';
+    function vp_transaction_email($subject = "", $topic = "", $transaction = "", $purchased = "", $recipient = "", $amount = "", $prev = "", $now = "", $admin = true, $user = true)
+    {
+        $verify_email = strtolower(vp_getoption("email_transaction"));
+        $id = get_current_user_id();
+        $username = get_userdata($id) ? get_userdata($id)->user_login : 'Unknown User';
+        $user_email = get_userdata($id) ? get_userdata($id)->user_email : 'unknown@example.com';
 
-    if ($verify_email !== "false" && $verify_email !== "no") {
-        $email_headers = array('Content-Type: text/html; charset=UTF-8');
+        if ($verify_email !== "false" && $verify_email !== "no") {
+            $email_headers = array('Content-Type: text/html; charset=UTF-8');
+            global $symbol;
 
-        // Build the HTML message without sprintf
-        $message_template =
-            '<div style="height:fit-content">
+            // Build the HTML message without sprintf
+            $message_template =
+                '<div style="height:fit-content">
                 <div style="background-color:#0000ffc2; padding:20px 10px; max-width:80%; margin:10px auto; text-align:center; color:white; font-family:cursive; font-size:2em;">
                     <span>' . esc_html($topic) . '</span>
                 </div>
@@ -804,7 +891,7 @@ function vp_transaction_email($subject = "", $topic = "", $transaction = "", $pu
                     <p>Transaction ID: ' . esc_html($transaction) . '</p>
                     <p>Purchased: ' . esc_html($purchased) . '</p>
                     <p>Recipient: ' . esc_html($recipient) . '</p>
-                    <p>Total Amount: ₦' . esc_html($amount) . '</p>
+                    <p>Total Amount: ' .$symbol. esc_html($amount) . '</p>
                 </div>
                 <div style="background-color:#0000ffc2; padding:10px 10px 30px 10px; max-width:80%; margin:10px auto; color:white; font-family:cursive; font-size:1em;">
                     <b style="float:left">Previous: ' . esc_html($prev) . '</b>
@@ -812,50 +899,50 @@ function vp_transaction_email($subject = "", $topic = "", $transaction = "", $pu
                 </div>
             </div>';
 
-        // Send to admin
-        if ($admin) {
-            $admin_email = get_option("admin_email");
-            $admin_subject = "ADMIN NOTICE: " . $subject;
-            wp_mail($admin_email, $admin_subject, $message_template, $email_headers);
-        }
-
-        // Send to user
-        if ($user) {
-            wp_mail($user_email, $subject, $message_template, $email_headers);
-        }
-
-        // --- SMS Logic ---
-        $http_args = array(
-            'headers' => array('Content-Type' => 'application/json'),
-            'timeout' => 120,
-            'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
-            'sslverify' => false
-        );
-
-        $site = substr(get_bloginfo('name'), 0, 10);
-        $sms_message = str_replace(
-            ["MTN", "GLO", "AIRTEL", "9MOBILE", "₦", "cash"],
-            ["M|N", "G|O", "A|RTEL", "9MOB|LE", "NGN", "cach"],
-            $purchased
-        );
-        $sms_message .= " by " . $username;
-        $token = vp_getoption("smspostvalue1");
-
-        if (strtolower(vp_getoption("sms_transaction_admin")) === "yes" && !empty($token)) {
-            if (stripos(vp_getoption("smsbaseurl"), "bulksmsnigeria") !== false && (stripos($topic, "airtime") !== false || stripos($topic, "data") !== false)) {
-                $phone = "0" . vp_getoption("vp_phone_line");
-                wp_remote_get("https://www.bulksmsnigeria.com/api/v1/sms/create?api_token=" . esc_attr($token) . "&from=" . esc_attr($site) . "&to=" . esc_attr($phone) . "&body=" . urlencode($sms_message) . "&dnd=1", $http_args);
+            // Send to admin
+            if ($admin) {
+                $admin_email = get_option("admin_email");
+                $admin_subject = "ADMIN NOTICE: " . $subject;
+                wp_mail($admin_email, $admin_subject, $message_template, $email_headers);
             }
-        }
 
-        if (strtolower(vp_getoption("sms_transaction_user")) === "yes" && !empty($token)) {
-            if (stripos(vp_getoption("smsbaseurl"), "bulksmsnigeria") !== false && (stripos($topic, "airtime") !== false || stripos($topic, "data") !== false)) {
-                $phone = vp_getuser($id, 'vp_phone', true);
-                wp_remote_get("https://www.bulksmsnigeria.com/api/v1/sms/create?api_token=" . esc_attr($token) . "&from=" . esc_attr($site) . "&to=" . esc_attr($phone) . "&body=" . urlencode($sms_message) . "&dnd=1", $http_args);
+            // Send to user
+            if ($user) {
+                wp_mail($user_email, $subject, $message_template, $email_headers);
+            }
+
+            // --- SMS Logic ---
+            $http_args = array(
+                'headers' => array('Content-Type' => 'application/json'),
+                'timeout' => 120,
+                'user-agent' => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+                'sslverify' => false
+            );
+
+            $site = substr(get_bloginfo('name'), 0, 10);
+            $sms_message = str_replace(
+                ["MTN", "GLO", "AIRTEL", "9MOBILE", "₦", "cash"],
+                ["M|N", "G|O", "A|RTEL", "9MOB|LE", "NGN", "cach"],
+                $purchased
+            );
+            $sms_message .= " by " . $username;
+            $token = vp_getoption("smspostvalue1");
+
+            if (strtolower(vp_getoption("sms_transaction_admin")) === "yes" && !empty($token)) {
+                if (stripos(vp_getoption("smsbaseurl"), "bulksmsnigeria") !== false && (stripos($topic, "airtime") !== false || stripos($topic, "data") !== false)) {
+                    $phone = "0" . vp_getoption("vp_phone_line");
+                    wp_remote_get("https://www.bulksmsnigeria.com/api/v1/sms/create?api_token=" . esc_attr($token) . "&from=" . esc_attr($site) . "&to=" . esc_attr($phone) . "&body=" . urlencode($sms_message) . "&dnd=1", $http_args);
+                }
+            }
+
+            if (strtolower(vp_getoption("sms_transaction_user")) === "yes" && !empty($token)) {
+                if (stripos(vp_getoption("smsbaseurl"), "bulksmsnigeria") !== false && (stripos($topic, "airtime") !== false || stripos($topic, "data") !== false)) {
+                    $phone = vp_getuser($id, 'vp_phone', true);
+                    wp_remote_get("https://www.bulksmsnigeria.com/api/v1/sms/create?api_token=" . esc_attr($token) . "&from=" . esc_attr($site) . "&to=" . esc_attr($phone) . "&body=" . urlencode($sms_message) . "&dnd=1", $http_args);
+                }
             }
         }
     }
-}
 
 
 
@@ -868,7 +955,8 @@ function vp_transaction_email($subject = "", $topic = "", $transaction = "", $pu
      * @param string $link Admin link (not used in message, but kept for consistency).
      * @return void
      */
-    function vp_admin_email($subject = "", $message = "", $type = "", $link = "#") {
+    function vp_admin_email($subject = "", $message = "", $type = "", $link = "#")
+    {
         global $current_timestamp, $wpdb;
 
         $uuid = get_current_user_id();
@@ -901,10 +989,10 @@ function vp_transaction_email($subject = "", $topic = "", $transaction = "", $pu
 EOB;
 
         $formatted_message = str_replace(
-    ['{subject}', '{message}'],
-    [esc_html($subject), esc_html($message)],
-    $email_body
-);
+            ['{subject}', '{message}'],
+            [esc_html($subject), esc_html($message)],
+            $email_body
+        );
         wp_mail($admin_email, $subject, $formatted_message, $email_headers);
     }
 
@@ -913,7 +1001,8 @@ EOB;
      *
      * @return void
      */
-    function vp_ban_email() {
+    function vp_ban_email()
+    {
         $id = get_current_user_id();
         $username = get_userdata($id) ? get_userdata($id)->user_login : 'Unknown User';
         $user_email = get_userdata($id) ? get_userdata($id)->user_email : 'unknown@example.com';
@@ -939,10 +1028,10 @@ EOB;
 </div>
 EOB;
         $admin_formatted_message = str_replace(
-    ['{username}', '{email}'],
-    [esc_html($username), esc_html($email)],
-    $admin_message_template
-);
+            ['{username}', '{email}'],
+            [esc_html($username), esc_html($email)],
+            $admin_message_template
+        );
         wp_mail($admin_email, $admin_subject, $admin_formatted_message, $email_headers);
 
         // User Email
@@ -964,9 +1053,10 @@ EOB;
 EOB;
 
         $user_formatted_message = str_replace(
-    ['{username}', '{email}'],
-    [esc_html($username), esc_html($user_email)],
-    $user_message_template);
+            ['{username}', '{email}'],
+            [esc_html($username), esc_html($user_email)],
+            $user_message_template
+        );
 
         wp_mail($user_email, $user_subject, $user_formatted_message, $email_headers);
     }
@@ -977,7 +1067,8 @@ EOB;
      *
      * @return void
      */
-    function vp_sessions() {
+    function vp_sessions()
+    {
         if (is_user_logged_in() && !current_user_can('administrator') && !current_user_can('vtupress_admin')) {
             $user_id = get_current_user_id();
             $sessions = WP_Session_Tokens::get_instance($user_id);
@@ -992,7 +1083,8 @@ EOB;
      * @param string $reason The reason for blocking the user.
      * @return void
      */
-    function vp_block_user($reason = "none") {
+    function vp_block_user($reason = "none")
+    {
         global $wpdb;
         if (is_user_logged_in() && !current_user_can("administrator")) {
             $id = get_current_user_id();
@@ -1028,10 +1120,11 @@ EOB;
 </div>
 EOB;
             $admin_formatted_message = str_replace(
-    ['{username}', '{email}','{reason}'],
-    [esc_html($username), esc_html($user_email), esc_html($display_reason)],
-    $admin_message_template);
-    
+                ['{username}', '{email}', '{reason}'],
+                [esc_html($username), esc_html($user_email), esc_html($display_reason)],
+                $admin_message_template
+            );
+
             wp_mail($admin_email, $admin_subject, $admin_formatted_message, $email_headers);
 
             // User Email
@@ -1051,13 +1144,14 @@ EOB;
     </div>
 </div>
 EOB;
-   
 
-           $user_formatted_message =   str_replace(
-    ['{username}', '{email}','{reason}'],
-    [esc_html($username), esc_html($user_email), esc_html($display_reason)],
-    $user_message_template);
-    
+
+            $user_formatted_message = str_replace(
+                ['{username}', '{email}', '{reason}'],
+                [esc_html($username), esc_html($user_email), esc_html($display_reason)],
+                $user_message_template
+            );
+
             wp_mail($user_email, $user_subject, $user_formatted_message, $email_headers);
         }
     }
@@ -1072,7 +1166,8 @@ EOB;
      * @param string $datass The POST data as a string.
      * @return string The response body, or "error" on failure.
      */
-    function vp_remote_post_fn($url = "", $headers = [], $datass = "") {
+    function vp_remote_post_fn($url = "", $headers = [], $datass = "")
+    {
         global $added_to_db, $wpdb, $uniqidvalue; // $table_trans is not global here, needs to be passed or re-declared
         $table_trans = $wpdb->prefix . 'vp_transactions'; // Ensure table_trans is defined
 
@@ -1132,7 +1227,8 @@ EOB;
      * @param string $string The message to output before dying.
      * @return void
      */
-    function vp_die($string = "") {
+    function vp_die($string = "")
+    {
         // For plain text output, simply die with the string.
         // The previous redirect logic is removed as it conflicts with plain text output.
         die($string);
@@ -1148,7 +1244,8 @@ EOB;
      *
      * @return array An associative array of user and plugin details.
      */
-    function vtupress_user_details() {
+    function vtupress_user_details()
+    {
         global $current_timestamp, $wpdb;
 
         if (!is_user_logged_in()) {
@@ -1405,6 +1502,7 @@ EOB;
     }
 
 
+
     /**
      * Dumps an error message and terminates script execution.
      * This function now outputs plain text for consistency with die().
@@ -1413,7 +1511,8 @@ EOB;
      * @param string $message Error message.
      * @return void
      */
-    function dump_error($title = "", $message = "") {
+    function dump_error($title = "", $message = "")
+    {
         // Output plain text error message.
         // The HTML structure is removed to ensure plain text output as requested.
         die("ERROR: " . $title . " - " . $message);
@@ -1432,21 +1531,57 @@ EOB;
 
         // Define whitelisted attributes that are safe to expose via shortcode.
         $whitelisted_attrs = [
-            'user_id', 'name', 'email', 'phone', 'admin_whatsapp', 'balance', 'myplan',
-            'notification', 'minimum_withdrawal_amount', 'kyc_status', 'kyc_end', 'kyc_total',
-            'airtimediscounts', 'vtudiscounts', 'sharediscounts', 'awufdiscounts',
-            'datadiscounts', 'smediscounts', 'directdiscounts', 'corporatediscounts',
-            'my_upline', 'total_1st_downlines', 'total_2nd_downlines', 'total_other_downlines',
-            'upgrade_bonus_from_1st', 'upgrade_bonus_from_2nd', 'upgrade_bonus_from_others',
-            'transaction_bonus', 'transactions_bonus_from_1st', 'transactions_bonus_from_2nd',
-            'transactions_bonus_from_others', 'total_transaction_attempted', 'total_successful_transactions',
-            'total_transaction_bonus', 'total_withdraws', 'total_withdrawal_balance',
-            'total_amount_of_successful_transactions', 'bank_mode', 'account_name', 'account_number', 'bank_name',
-            'account_name1', 'account_number1', 'bank_name1', 'account_name2', 'account_number2', 'bank_name2',
+            'user_id',
+            'name',
+            'email',
+            'phone',
+            'admin_whatsapp',
+            'balance',
+            'myplan',
+            'notification',
+            'minimum_withdrawal_amount',
+            'kyc_status',
+            'kyc_end',
+            'kyc_total',
+            'airtimediscounts',
+            'vtudiscounts',
+            'sharediscounts',
+            'awufdiscounts',
+            'datadiscounts',
+            'smediscounts',
+            'directdiscounts',
+            'corporatediscounts',
+            'my_upline',
+            'total_1st_downlines',
+            'total_2nd_downlines',
+            'total_other_downlines',
+            'upgrade_bonus_from_1st',
+            'upgrade_bonus_from_2nd',
+            'upgrade_bonus_from_others',
+            'transaction_bonus',
+            'transactions_bonus_from_1st',
+            'transactions_bonus_from_2nd',
+            'transactions_bonus_from_others',
+            'total_transaction_attempted',
+            'total_successful_transactions',
+            'total_transaction_bonus',
+            'total_withdraws',
+            'total_withdrawal_balance',
+            'total_amount_of_successful_transactions',
+            'bank_mode',
+            'account_name',
+            'account_number',
+            'bank_name',
+            'account_name1',
+            'account_number1',
+            'bank_name1',
+            'account_name2',
+            'account_number2',
+            'bank_name2',
             'template_url'
         ];
 
-        $attr = array_change_key_case((array)$atts, CASE_LOWER);
+        $attr = array_change_key_case((array) $atts, CASE_LOWER);
 
         if (isset($attr["get"]) && in_array($attr["get"], $whitelisted_attrs, true)) {
             // Return only whitelisted attributes.
@@ -1476,7 +1611,8 @@ EOB;
      *
      * @return void
      */
-    function vtupress_auto_override() {
+    function vtupress_auto_override()
+    {
         if (vp_getoption("vtupress_custom_custom") !== "yes") {
             return;
         }

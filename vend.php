@@ -111,6 +111,10 @@ if (vp_getoption("vp_security") == "yes") {
 
 // --- MAIN TRANSACTION PROCESSING BLOCK ---
 if (isset($_POST["vend"])) {
+
+    global $vp_country;
+    $vp_country = vp_country();
+    $symbol = $vp_country["symbol"];
     // 1. Race condition fix: Start database transaction and lock user row immediately.
     // This is the earliest point to prevent concurrent modifications.
     $current_user_id = get_current_user_id();
@@ -353,7 +357,7 @@ if (isset($_POST["vend"])) {
                     $expected_plan_name = vp_option_array($option_array, $plan_prefix_name . $plan_index);
                     $expected_plan_price = floatval(vp_option_array($option_array, $plan_prefix_price . $plan_index));
                     $left = preg_replace('/\s+/u', ' ', trim($data_plan_name_from_request));
-                    $right = preg_replace('/\s+/u', ' ', trim($expected_plan_name . ' ₦' . $expected_plan_price));
+                    $right = preg_replace('/\s+/u', ' ', trim($expected_plan_name . " $symbol" . $expected_plan_price));
 
                     if ($left !== $right) {
                         $wpdb->query('ROLLBACK');

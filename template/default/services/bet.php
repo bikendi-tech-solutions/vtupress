@@ -120,7 +120,7 @@ if(count($bens) >= 1 && vp_getoption("enable_beneficiaries") == "yes"){
             <div class="mb-2">
                 <label for="network" class="form-label">Original Amount</label>
                 <div class="input-group mb-2">
-                    <span class="input-group-text" id="basic-addon1">NGN.</span>
+                    <span class="input-group-text" id="basic-addon1"><?php echo $currency;?>.</span>
                     <input id="amt" name="amount" type="number" class="form-control bet-amount" onchange="calcit();" placeholder="Amount" aria-label="Username" aria-describedby="basic-addon1">
                     <span class="input-group-text" id="basic-addon1">.00</span>
                     <div id="validationServer04Feedback" class="invalid-feedback">
@@ -137,7 +137,7 @@ if(count($bens) >= 1 && vp_getoption("enable_beneficiaries") == "yes"){
                 <label for="network" class="form-label">Amount To Pay</label>
 	
                 <div class="input-group mb-2">
-                    <span class="input-group-text" id="basic-addon1">NGN.</span>
+                    <span class="input-group-text" id="basic-addon1"><?php echo $currency;?>.</span>
                     <input id="amttopay" type="number" class="form-control amttopay" max="<?php echo $bal;?>" placeholder="Amount To Pay" aria-label="Username" aria-describedby="basic-addon1" readonly>
                     <span class="input-group-text" id="basic-addon1">.00</span>
                     <div id="validationServer04Feedback" class="invalid-feedback">
@@ -180,9 +180,9 @@ else{
                     <div>
                     Bet Company : <span class="bet-company-confirm"></span><br>
                     Customer ID : <span class="customer-id-confirm"></span><br>
-					Original Amount: ₦<span class="amount-confirm"></span><br>
-                    Charge : ₦<span class="charge-confirm"></span><br>
-                    Amount To Pay : ₦<span class="amttopay2" ></span><br>
+					Original Amount: <?php echo $symbol;?><span class="amount-confirm"></span><br>
+                    Charge : <?php echo $symbol;?><span class="charge-confirm"></span><br>
+                    Amount To Pay : <?php echo $symbol;?><span class="amttopay2" ></span><br>
                     Status : <span class="bet-status-confirm"></span><br>
 					<div class="input-group form">
 					<span class="input-group-text">PIN</span>

@@ -827,7 +827,7 @@ My Account
 </svg>
 </div>
 <div class="ml-5">
-<p class="text-xs font-bold text-indigo-400 uppercase">Wallet (NGN)</p>
+<p class="text-xs font-bold text-indigo-400 uppercase">Wallet (<?php echo $currency;?>)</p>
 <p class="text-2xl font-bold"><?php 
 
 if(!empty($bal)){
@@ -894,11 +894,12 @@ if(strtolower(vp_getoption("totcons")) == "yes"){
 </svg>
 </div>
 <div class="ml-5">
-<p class="text-xs font-bold text-indigo-400 uppercase">sales (ngn)</p>
-<p class="text-2xl font-bold">₦
+<p class="text-xs font-bold text-indigo-400 uppercase">sales (<?php echo $currency;?>)</p>
+<p class="text-2xl font-bold">
 <?php
+$symbol = vp_country()["symbol"];
 if(!empty($cur_suc_trans_amt)){
-echo floatval($cur_suc_trans_amt);
+echo $symbol.floatval($cur_suc_trans_amt);
 }
 else{
 echo "0";

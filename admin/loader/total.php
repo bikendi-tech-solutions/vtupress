@@ -227,34 +227,35 @@ $sepins_available = true;
 // echo $bill_balance;
 
 
-
+$vp_country = vp_country();
+$symbol = $vp_country["symbol"];
 
 
 
 
  $obj = new stdClass();
- $obj->airtime = "₦".number_format(floatval($airtime_balance));
+ $obj->airtime = $symbol.number_format(floatval($airtime_balance));
  $obj->airtime_check = vp_option_array($option_array,"setairtime");
- $obj->data = "₦".number_format(floatval($data_balance));
+ $obj->data = $symbol.number_format(floatval($data_balance));
  $obj->data_check = vp_option_array($option_array,"setdata");
- $obj->cable = "₦".number_format(floatval($cable_balance));
+ $obj->cable = $symbol.number_format(floatval($cable_balance));
  $obj->cable_check = vp_option_array($option_array,"setcable");
  $obj->cable_available = $cable_available;
- $obj->bill = "₦".number_format(floatval($bill_balance));
+ $obj->bill = $symbol.number_format(floatval($bill_balance));
  $obj->bill_check = vp_option_array($option_array,"setbill");
  $obj->bill_available = $bill_available;
- $obj->recharge = "₦".number_format(floatval($scards_balance));
+ $obj->recharge = $symbol.number_format(floatval($scards_balance));
  $obj->recharge_check = vp_option_array($option_array,"cardscontrol");
  $obj->recharge_available = $scards_available;
- $obj->datacard = "₦".number_format(floatval($sdatacards_balance));
+ $obj->datacard = $symbol.number_format(floatval($sdatacards_balance));
  $obj->datacard_check = vp_option_array($option_array,"datascontrol");
  $obj->datacard_available = $sdatacards_available;
- $obj->epin = "₦".number_format(floatval($sepins_balance));
+ $obj->epin = $symbol.number_format(floatval($sepins_balance));
  $obj->epin_check = vp_option_array($option_array,"epinscontrol");
  $obj->epin_available = $sepins_available;
- $obj->sms = "₦".number_format(floatval($sms_balance));
+ $obj->sms = $symbol.number_format(floatval($sms_balance));
  $obj->sms_check = vp_option_array($option_array,"smscontrol");
  $obj->sms_available = $sms_available;
- $obj->earn = "₦".number_format(floatval($earn_balance));
+ $obj->earn = $symbol.number_format(floatval($earn_balance));
 
  echo json_encode($obj);

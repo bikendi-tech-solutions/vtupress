@@ -437,11 +437,14 @@ function calculate_transaction_amounts($tcode, $post_data, $level, $current_bal,
             if ($datatcode !== "smile" && $datatcode !== "alpha") {
                 $planname_option = $plan_prefix . 'datan' . $plan_index;
                 $planprice_option = $plan_prefix . 'datap' . $plan_index;
+                
+                $vp_country = vp_country();
+                $symbol = $vp_country["symbol"];
 
                 $check_plan_name = vp_option_array($option_array, $planname_option);
                 $check_plan_price = floatval(vp_option_array($option_array, $planprice_option));
 
-                if ($check_plan_name . ' ₦' . $check_plan_price !== $data_plan_name) {
+                if ($check_plan_name . " $symbol" . $check_plan_price !== $data_plan_name) {
                     die('Plan Mis-Match. You can try with another browser');
                 }
                 if ($check_plan_price !== floatval($post_data["amount"])) {
@@ -1386,6 +1389,8 @@ function handle_withdrawal($post_data)
  */
 function handle_airtime_conversion($post_data)
 {
+                    $vp_country = vp_country();
+                $symbol = $vp_country["symbol"];
     global $wpdb, $current_timestamp;
     $conversion = $_POST["conversion"];
     $network = $_POST["network"];
@@ -1431,7 +1436,7 @@ function handle_airtime_conversion($post_data)
         ));
 
 
-        $purchased = "Airtime To Wallet Conversion Of  ₦$fund_amount";
+        $purchased = "Airtime To Wallet Conversion Of  $symbol$fund_amount";
         $recipient = $name;
         vp_transaction_email("NEW AIRTIME TO WALLET NOTIFICATION", "AIRTIME TO WALLET REQUEST LOGGED", 'nill', $purchased, $recipient, $fund_amount, $before_amount, $now_amount, true, false);
 
@@ -1469,7 +1474,7 @@ function handle_airtime_conversion($post_data)
             'the_time' => date('Y-m-d h:i:s A', $current_timestamp)
         ));
 
-        $purchased = "Airtime To Cash Conversion Of  ₦$fund_amount";
+        $purchased = "Airtime To Cash Conversion Of  $symbol$fund_amount";
         $recipient = "From $name To $bank";
         vp_transaction_email("NEW AIRTIME TO CASH NOTIFICATION", "AIRTIME TO CASH REQUEST LOGGED", 'nill', $purchased, $recipient, $fund_amount, $before_amount, $now_amount, true, false);
 

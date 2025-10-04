@@ -312,7 +312,7 @@ echo"
 <tr style='background-color:#ffc107;'>
 <td scope='row'> $plan_type </td>
 <td> $plan_network </td><td> ".strtoupper($plan_name)." </td>
-<td> NGN $disamount </td>
+<td> $currency $disamount </td>
 <td> $discount% </td>
 </tr>
 ";
@@ -337,7 +337,7 @@ echo"
 <td scope='row'> $plan_type </td>
 <td> $plan_network </td>
 <td> ".strtoupper($plan_name)." </td>
-<td> NGN $disamount </td>
+<td> $currency $disamount </td>
 <td> $discount% </td>
 </tr>
 ";
@@ -361,7 +361,7 @@ echo"
 <tr style='background-color:#20c997; color:white;'>
 <td scope='row'> $plan_type </td>
 <td> $plan_network </td><td> ".strtoupper($plan_name)." </td>
-<td> NGN $disamount </td>
+<td> $currency $disamount </td>
 <td> $discount% </td>
 </tr>
 ";
@@ -386,7 +386,7 @@ echo"
 <tr style='background-color:#28a745;color:white;'>
 <td scope='row'> $plan_type </td>
 <td> $plan_network </td><td> ".strtoupper($plan_name)." </td>
-<td> NGN $disamount </td>
+<td> $currency $disamount </td>
 <td> $discount% </td>
 </tr>
 ";
@@ -411,7 +411,7 @@ echo"
 <tr style='background-color:#ffc107;'>
 <td scope='row'> $plan_type </td>
 <td> $plan_network </td><td> ".strtoupper($plan_name)." </td>
-<td> NGN $disamount </td>
+<td> $currency $disamount </td>
 <td> $discount% </td>
 </tr>
 ";
@@ -436,7 +436,7 @@ echo"
 <tr style='background-color:#e83e8c; color:white;'>
 <td scope='row'> $plan_type </td>
 <td> $plan_network </td><td> ".strtoupper($plan_name)." </td>
-<td> NGN $disamount </td>
+<td> $currency $disamount </td>
 <td> $discount% </td>
 </tr>
 ";
@@ -460,7 +460,7 @@ echo"
 <tr style='background-color:#20c997; color:white;'>
 <td scope='row'> $plan_type </td>
 <td> $plan_network </td><td> ".strtoupper($plan_name)." </td>
-<td> NGN $disamount </td>
+<td> $currency $disamount </td>
 <td> $discount% </td>
 </tr>
 ";
@@ -483,7 +483,7 @@ echo"
 <tr style='background-color:#28a745;color:white;'>
 <td scope='row'> $plan_type </td>
 <td> $plan_network </td><td> ".strtoupper($plan_name)." </td>
-<td> NGN $disamount </td>
+<td> $currency $disamount </td>
 <td> $discount% </td>
 </tr>
 ";
@@ -509,7 +509,7 @@ echo"
 <tr style='background-color:#ffc107;'>
 <td scope='row'> $plan_type </td>
 <td> $plan_network </td><td> ".strtoupper($plan_name)." </td>
-<td> NGN $disamount </td>
+<td> $currency $disamount </td>
 <td> $discount% </td>
 </tr>
 ";
@@ -535,7 +535,7 @@ echo"
 <tr style='background-color:#e83e8c; color:white;'>
 <td scope='row'> $plan_type </td>
 <td> $plan_network </td><td> ".strtoupper($plan_name)." </td>
-<td> NGN $disamount </td>
+<td> $currency $disamount </td>
 <td> $discount% </td>
 </tr>
 ";
@@ -559,7 +559,7 @@ echo"
 <tr style='background-color:#20c997; color:white;'>
 <td scope='row'> $plan_type </td>
 <td> $plan_network </td><td> ".strtoupper($plan_name)." </td>
-<td> NGN $disamount </td>
+<td> $currency $disamount </td>
 <td> $discount% </td>
 </tr>
 ";
@@ -584,7 +584,7 @@ echo"
 <tr style='background-color:#28a745;color:white;'>
 <td scope='row'> $plan_type </td>
 <td> $plan_network </td><td> ".strtoupper($plan_name)." </td>
-<td> NGN $disamount </td>
+<td> $currency $disamount </td>
 <td> $discount% </td>
 </tr>
 ";

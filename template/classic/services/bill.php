@@ -128,7 +128,7 @@ if(count($bens) >= 1 && vp_getoption("enable_beneficiaries") == "yes"){
                 <div class="mb-2">
                     <label for="network" class="form-label">Amount</label>
                     <div class="input-group mb-2" >
-                        <span class="input-group-text" id="basic-addon1">NGN.</span>
+                        <span class="input-group-text" id="basic-addon1"><?php echo $currency;?>.</span>
                         <input onchange="calcit();" type="number" class="form-control bill-amount" max="<?php echo $bal;?>" placeholder="Amount" aria-label="Username" aria-describedby="basic-addon1"  id="amt" name="amount">
                         <span class="input-group-text" id="basic-addon1">.00</span>
                     </div> 
@@ -152,7 +152,7 @@ if(count($bens) >= 1 && vp_getoption("enable_beneficiaries") == "yes"){
 				
 					?>
                 <div class="input-group mb-2">
-                    <span class="input-group-text" id="basic-addon1">NGN.</span>
+                    <span class="input-group-text" id="basic-addon1"><?php echo $currency;?>.</span>
                     <input id="amttopay" type="number" class="form-control amttopay" max="<?php echo $bal;?>" placeholder="Amount To Pay" aria-label="Username" aria-describedby="basic-addon1" readonly>
                     <span class="input-group-text" id="basic-addon1">.00</span>
                     <div id="validationServer04Feedback" class="invalid-feedback">
@@ -199,19 +199,19 @@ else{
                       <div>
                         Meter Type: <span class="bill-type-confirm"></span><br>
                         Meter No: <span class="bill-meter-confirm"></span><br>
-                        Original Amount : ₦<span class="bill-amount-confirm"></span><br>
-                        Charge : ₦<span class=""><?php echo floatval(vp_option_array($option_array,"bill_charge"));?></span><br>
+                        Original Amount : <?php echo $symbol;?><span class="bill-amount-confirm"></span><br>
+                        Charge : <?php echo $symbol;?><span class=""><?php echo floatval(vp_option_array($option_array,"bill_charge"));?></span><br>
 					<?php
 				if(is_plugin_active("vprest/vprest.php")  && vp_option_array($option_array,'resell') == "yes"){
 					
 					if(vp_option_array($option_array,"discount_method") == "direct"){
 					?>
-					Amount To Pay : ₦<span class="amttopay2" ></span><br>
+					Amount To Pay : <?php echo $symbol;?><span class="amttopay2" ></span><br>
 					Discount On Original Amount: <span class="discount-amount-confirm"></span> <br>
 					<?php
 					}else{
 					?>
-					Charge Back Bonus : ₦<span class="amttopay2" ></span><br>
+					Charge Back Bonus : <?php echo $symbol;?><span class="amttopay2" ></span><br>
 					Commission : <span class="discount-amount-confirm"></span><br>	
 					<?php	
 					}

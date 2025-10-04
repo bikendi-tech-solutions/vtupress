@@ -15,6 +15,15 @@ if(current_user_can("vtupress_admin")){
 
 $option_array = json_decode(get_option("vp_options"),true);
 
+
+	$vp_country = vp_country();
+	$glo = $vp_country["glo"];
+	$mobile = $vp_country["9mobile"];
+	$mtn = $vp_country["mtn"];
+	$airtel = $vp_country["airtel"];
+	$bypass = $vp_country["bypass"];
+	$currency = $vp_country["currency"];
+	$symbol = $vp_country["symbol"];
 ?>
 
 <div class="container-fluid license-container">
@@ -404,22 +413,22 @@ for($datapost=1; $datapost<=5; $datapost++){
 <label class="simple">USSD SETTINGS</label>
 <br>
 <div class="input-group mb-3">
-<span class="input-group-text simple">MTN BALANCE USSD</span>
+<span class="input-group-text simple"><?php echo $mtn;?> BALANCE USSD</span>
 <input type="text" value="<?php echo vp_option_array($option_array,"direct_mtn_balance");?>" name="direct_mtn_balance" class="simple fillable form-control" style="border: 3px solid pink;">
 </div>
 
 <div class="input-group mb-3">
-<span class="input-group-text simple">GLO BALANCE USSD</span>
+<span class="input-group-text simple"><?php echo $glo;?> BALANCE USSD</span>
 <input type="text" value="<?php echo vp_option_array($option_array,"direct_glo_balance");?>" name="direct_glo_balance" class="simple fillable form-control" style="border: 3px solid pink;">
 </div>
 
 <div class="input-group mb-3">
-<span class="input-group-text simple">9MOBILE BALANCE USSD</span>
+<span class="input-group-text simple"><?php echo $mobile;?> BALANCE USSD</span>
 <input type="text" value="<?php echo vp_option_array($option_array,"direct_9mobile_balance");?>" name="direct_9mobile_balance" class="simple fillable form-control" style="border: 3px solid pink;">
 </div>
 
 <div class="input-group mb-3">
-<span class="input-group-text simple">AIRTEL BALANCE USSD</span>
+<span class="input-group-text simple"><?php echo $airtel;?> BALANCE USSD</span>
 <input type="text" value="<?php echo vp_option_array($option_array,"direct_airtel_balance");?>" name="direct_airtel_balance" class="simple fillable form-control" style="border: 3px solid pink;">
 </div>
 
@@ -430,30 +439,30 @@ for($datapost=1; $datapost<=5; $datapost++){
 <br>
 <label class="form-label">Service IDs</label>
 <div class="input-group mb-3">
-<span class="input-group-text">MTN Attribute/Id</span>
+<span class="input-group-text"><?php echo $mtn;?> Attribute/Id</span>
 <input type="text" value="<?php echo vp_option_array($option_array,"rdatamtn");?>" name="rdatamtn" id="rdatamtn" class="form-control">
-<span class="input-group-text">MTN Datatype Value</span>
+<span class="input-group-text"><?php echo $mtn;?> Datatype Value</span>
 <input type="text" value="<?php echo vp_option_array($option_array,"mtn_direct_datatype");?>" name="mtn_direct_datatype" id="mtn_direct_datatype" class="form-control">
 
 </div>
 <div class="input-group mb-3">
-<span class="input-group-text">GLO Attribute/Id</span>
+<span class="input-group-text"><?php echo $glo;?> Attribute/Id</span>
 <input type="text" value="<?php echo vp_option_array($option_array,"rdataglo");?>" name="rdataglo" id="rdataglo" class="form-control">
-<span class="input-group-text">GLO Datatype Value</span>
+<span class="input-group-text"><?php echo $glo;?> Datatype Value</span>
 <input type="text" value="<?php echo vp_option_array($option_array,"glo_direct_datatype");?>" name="glo_direct_datatype" id="glo_direct_datatype" class="form-control">
 
 </div>
 <div class="input-group mb-3">
-<span class="input-group-text">9MOBILE Attribute/Id</span>
+<span class="input-group-text"><?php echo $mobile;?> Attribute/Id</span>
 <input type="text" value="<?php echo vp_option_array($option_array,"rdata9mobile");?>" name="rdata9mobile"  id="rdata9mobile" class="form-control">
-<span class="input-group-text">9MOBILE Datatype Value</span>
+<span class="input-group-text"><?php echo $mobile;?> Datatype Value</span>
 <input type="text" value="<?php echo vp_option_array($option_array,"9mobile_direct_datatype");?>" name="9mobile_direct_datatype" id="9mobile_direct_datatype" class="form-control">
 
 </div>
 <div class="input-group mb-3">
-<span class="input-group-text">AIRTEL Attribute/Id</span>
+<span class="input-group-text"><?php echo $airtel;?> Attribute/Id</span>
 <input type="text" value="<?php echo vp_option_array($option_array,"rdataairtel");?>" name="rdataairtel"  id="rdataairtel" class="form-control">
-<span class="input-group-text">AIRTEL Datatype Value</span>
+<span class="input-group-text"><?php echo $airtel;?> Datatype Value</span>
 <input type="text" value="<?php echo vp_option_array($option_array,"airtel_direct_datatype");?>" name="airtel_direct_datatype" id="airtel_direct_datatype" class="form-control">
 
 </div>
@@ -473,7 +482,7 @@ for($datapost=1; $datapost<=5; $datapost++){
 
 </div>
 
-<label class="form-label simple">MTN DATA PLAN</label><br>
+<label class="form-label simple"><?php echo $mtn;?> DATA PLAN</label><br>
 
 <?php
 for($i=0; $i<=20; $i++){
@@ -493,7 +502,7 @@ for($i=0; $i<=20; $i++){
 }
 ?>
 
-<label class="simple"> AIRTEL DATA PLAN</label><br>
+<label class="simple"> <?php echo $airtel;?> DATA PLAN</label><br>
 
 <?php
 for($i=0; $i<=20; $i++){
@@ -513,7 +522,7 @@ for($i=0; $i<=20; $i++){
 }
 ?>
 
-<label class="simple"> 9MOBILE DATA PLAN</label><br>
+<label class="simple"> <?php echo $mobile;?> DATA PLAN</label><br>
 
 <?php
 for($i=0; $i<=20; $i++){
@@ -533,7 +542,7 @@ for($i=0; $i<=20; $i++){
 }
 ?>
 
-<label class="simple"> GLO DATA PLAN</label><br>
+<label class="simple"> <?php echo $glo;?> DATA PLAN</label><br>
 
 <?php
 for($i=0; $i<=20; $i++){

@@ -12,7 +12,7 @@ if(isset($_GET["vend"]) && $_GET["vend"]=="referral-details"){
 <span class="lg:inline">Referral Info</span>
 </h1>
 <div class="font-bold tracking-wider">
-<span class="dark inline-block px-3 py-1 bg-gray-200 border rounded-lg cursor-pointer visually-hidden" id="copyme" x-text="`NGN ${$format(total_sum)}`"><?php echo get_bloginfo("url")."/vpaccount/?ref=".$id;?></span>
+<span class="dark inline-block px-3 py-1 bg-gray-200 border rounded-lg cursor-pointer visually-hidden" id="copyme" x-text="<?php echo $currency;?>` ${$format(total_sum)}`"><?php echo get_bloginfo("url")."/vpaccount/?ref=".$id;?></span>
 
 					<span class="dark ref-info-action ref inline-block px-3 py-1 bg-gray-200 border rounded-lg cursor-pointer" onclick="copyToClipboard('#copyme')">
 						Click To Copy Refer Link
@@ -81,12 +81,12 @@ echo"
 	if($lev == 1){
 	$you = intval($this_level->{"level_".$lev."_upgrade"});
 	echo"
-	<td>₦$you</td>
+	<td>$symbol$you</td>
 	";
 	}
 	else{
 	$upline = isset($this_level->{"level_".$lev."_upgrade"}) ? intval($this_level->{"level_".$lev."_upgrade"}) :  $upline = "0";
-	 echo"<td>₦$upline</td>";
+	 echo"<td>$symbol$upline</td>";
 	}
 	
 	

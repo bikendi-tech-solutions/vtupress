@@ -737,12 +737,15 @@ if(current_user_can("vtupress_access_history")){
                   ><span class="hide-menu">Verifications</span></a
                 >
             <ul aria-expanded="false" class="collapse first-level">
+<?php if(!$bypass):?>
+
                   <li class="sidebar-item">
                       <a href="?page=vtupanel&adminpage=history&subpage=verification&type=bvn" class="sidebar-link"
                       ><i class="far fa-user"></i
                       ><span class="hide-menu">BVN</span></a
                     >
                   </li>
+<?php endif;?>
                    <li class="sidebar-item">
                       <a href="?page=vtupanel&adminpage=history&subpage=verification&type=nin" class="sidebar-link"
                       ><i class="far fa-user"></i
@@ -990,7 +993,7 @@ if(current_user_can("vtupress_access_users")){
                     >
                   </li>
 
-
+<?php if(!$bypass):?>
           <li class="sidebar-item bg bg-success">   
                   <a
                   class="sidebar-link has-arrow waves-effect waves-dark"
@@ -1032,7 +1035,8 @@ if(current_user_can("vtupress_access_users")){
                   </li>
             </ul>
           </li>
-        
+<?php endif;?>
+
 </ul>
  </li>
 
@@ -1157,6 +1161,8 @@ if(current_user_can("vtupress_access_gateway")){
                       ><span class="hide-menu">Vtu</span></a
                     >
                   </li>
+<?php if(!$bypass):?>
+
                   <li class="sidebar-item">
                     <a href="?page=vtupanel&adminpage=gateway&subpage=shared" class="sidebar-link"
                       ><i class="fas fa-phone-volume"></i
@@ -1169,6 +1175,7 @@ if(current_user_can("vtupress_access_gateway")){
                       ><span class="hide-menu">Awuf</span></a
                     >
                   </li>
+<?php endif;?>
             </ul>
         </li>
 
@@ -1180,6 +1187,8 @@ if(current_user_can("vtupress_access_gateway")){
                   ><i class="mdi mdi-database"></i
                   ><span class="hide-menu">Data</span></a>
             <ul aria-expanded="false" class="collapse first-level">
+<?php if(!$bypass):?>
+
                   <li class="sidebar-item">
                     <a href="?page=vtupanel&adminpage=gateway&subpage=sme" class="sidebar-link"
                       ><i class="fas fa-phone-volume"></i
@@ -1192,13 +1201,15 @@ if(current_user_can("vtupress_access_gateway")){
                       ><span class="hide-menu">Corporate</span></a
                     >
                   </li>
+
+<?php endif;?>
                   <li class="sidebar-item">
                     <a href="?page=vtupanel&adminpage=gateway&subpage=direct" class="sidebar-link"
                       ><i class="fas fa-phone-volume"></i
                       ><span class="hide-menu">Direct</span></a
                     >
                   </li>
-                  <?php if(vp_getoption("vtupress_custom_smile") == "yes"){
+                  <?php if(vp_getoption("vtupress_custom_smile") == "yes" && !$bypass){
 						?>
                     <li class="sidebar-item">
                     <a href="?page=vtupanel&adminpage=gateway&subpage=smile" class="sidebar-link"
@@ -1522,7 +1533,7 @@ elseif(isset($_GET["adminpage"] ) && isset($_GET["subpage"] ) && $_GET["adminpag
     echo $string;
 
   }else{
-  include_once(ABSPATH .'wp-content/plugins/vtupress/admin/pages/users.php');
+    include_once(ABSPATH .'wp-content/plugins/vtupress/admin/pages/users.php');
   }
 
 }

@@ -13,6 +13,9 @@ if (!defined('ABSPATH')) {
     die('Access denied.');
 }
 
+    global $vp_country,$symbol;
+    $vp_country = vp_country();
+	$symbol = $vp_country["symbol"];
 /**
  * Returns the specific columns and their formats for a given service table.
  * This is crucial for handling different database structures.
@@ -696,7 +699,8 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
             ];
 
             // Determine API options based on data type
-            $request_method = vp_getoption($payload_type . "datarequest");
+            // die($datatcode);
+            $request_method = ($datatcode == "smile" || $datatcode == "alpha") ? vp_getoption($payload_type . "request") : vp_getoption($payload_type . "datarequest");
             $api_url_option = $datatcode =="smile" ? "smilebaseurl" : ($datatcode =="alpha" ? "alphabaseurl" : $payload_type . "databaseurl");
 
             // Define mappings once
@@ -780,6 +784,12 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
             if(empty($network)){
                 die("No Network");
             }
+
+            // print_r($attribute_map);
+            // print_r($post_data);
+            // print_r($success_code_option);
+            // print_r($api_url_option);
+            // print_r($api_endpoint_option);
 
             handle_data_transaction(
                 $request_method, $api_url_option, $api_endpoint_option, $success_code_option,
@@ -1085,7 +1095,7 @@ function handle_airtime_transaction($request_method, $api_url_option, $api_endpo
                                     $header_map, $add_headers_prefix, $add_value_prefix, $post_data, $user_id,
                                     $name, $email, $phone, $network, $url_from_post, $uniqidvalue, $bal, $baln, $amount,
                                     $realAmt, $browser, $option_array, $service_table_name, $trans_table_name, $add_total, $pos, $trans_type_for_db, $tb4, $tnow, $extra_data = []) {
-    global $wpdb, $current_timestamp;
+    global $wpdb, $current_timestamp,$vp_country,$symbol;
 
     // Ensure $extra_data is an array. If it's not, initialize it as an empty array.
     if (!is_array($extra_data)) {
@@ -1209,7 +1219,7 @@ function handle_airtime_transaction($request_method, $api_url_option, $api_endpo
     $log_response_snippet = harray_key_first($response); // Assuming harray_key_first is defined in helpers
 
     if ($en_status == "TRUE" || $response === $success_value) {
-        $purchased_message = "Purchased {" . strtoupper($trans_type_for_db) . " AIRTIME} worth ₦" . number_format($realAmt, 2);
+        $purchased_message = "Purchased {" . strtoupper($trans_type_for_db) . " AIRTIME} worth $symbol" . number_format($realAmt, 2);
         weblinkBlast($phone, $purchased_message);
         vp_transaction_email("NEW AIRTIME NOTIFICATION", "SUCCESSFUL AIRTIME PURCHASE", $uniqidvalue, $purchased_message, $phone, $amount, $bal, $baln);
 
@@ -1243,7 +1253,7 @@ function handle_data_transaction($request_method, $api_url_option, $api_endpoint
                                  $header_map, $add_headers_prefix, $add_value_prefix, $post_data, $user_id,
                                  $name, $email, $phone, $network, $url_from_post, $uniqidvalue, $bal, $baln, $amount,
                                  $realAmt, $browser, $option_array, $service_table_name, $trans_table_name, $add_total, $pos, $trans_type_for_db, $tb4, $tnow, $extra_data = []) {
-    global $wpdb, $current_timestamp;
+    global $wpdb, $current_timestamp,$vp_country,$symbol;
 
     // Ensure $extra_data is an array. If it's not, initialize it as an empty array.
     if (!is_array($extra_data)) {
@@ -1316,9 +1326,13 @@ function handle_data_transaction($request_method, $api_url_option, $api_endpoint
 
 
     if (!$force_success) { // Only make API call if not forced by hollatag
+
+
+        // die($request_method);
         if ($query_method != "array") {
             if ($request_method == "get") {
                 $final_url = add_query_arg($datass, $url);
+                // die($final_url);
                 $call = wp_remote_get($final_url, $http_args);
             } else { // post
                 $http_args['body'] = json_encode($datass);
@@ -1399,7 +1413,9 @@ function handle_cable_transaction($request_method, $api_url_option, $api_endpoin
                                  $header_map, $add_headers_prefix, $add_value_prefix, $post_data, $user_id,
                                  $name, $email, $phone, $network, $url_from_post, $uniqidvalue, $bal, $baln, $amount,
                                  $realAmt, $browser, $option_array, $service_table_name, $trans_table_name, $add_total, $pos, $trans_type_for_db, $tb4, $tnow, $extra_data = []) {
-    global $wpdb, $current_timestamp;
+    global $wpdb, $current_timestamp,$vp_country,$symbol;
+
+
 
     // Ensure $extra_data is an array. If it's not, initialize it as an empty array.
     if (!is_array($extra_data)) {
@@ -1519,7 +1535,7 @@ function handle_cable_transaction($request_method, $api_url_option, $api_endpoin
 
     if ($en_status == "TRUE" || $response === $success_value) {
         $cable_type_for_email = strtoupper(sanitize_text_field($post_data['cabtype'] ?? ''));
-        $purchased_message = "Paid " . $cable_type_for_email . " CableTv Subscription worth ₦" . number_format($realAmt, 2);
+        $purchased_message = "Paid " . $cable_type_for_email . " CableTv Subscription worth $symbol" . number_format($realAmt, 2);
         weblinkBlast($phone, $purchased_message);
         vp_transaction_email("NEW CABLETV NOTIFICATION", "SUCCESSFUL CABLETV SUBSCRIPTION", $uniqidvalue, $purchased_message, sanitize_text_field($post_data['iuc'] ?? ''), $amount, $bal, $baln);
 
@@ -1553,7 +1569,7 @@ function handle_bill_transaction($request_method, $api_url_option, $api_endpoint
                                  $header_map, $add_headers_prefix, $add_value_prefix, $post_data, $user_id,
                                  $name, $email, $phone, $network, $url_from_post, $uniqidvalue, $bal, $baln, $amount,
                                  $realAmt, $browser, $option_array, $service_table_name, $trans_table_name, $add_total, $pos, $trans_type_for_db, $tb4, $tnow, $extra_data = []) {
-    global $wpdb, $current_timestamp;
+    global $wpdb, $current_timestamp,$vp_country,$symbol;
 
     // Ensure $extra_data is an array. If it's not, initialize it as an empty array.
     if (!is_array($extra_data)) {
@@ -1683,7 +1699,7 @@ function handle_bill_transaction($request_method, $api_url_option, $api_endpoint
     $log_response_snippet = harray_key_first($response);
 
     if ($en_status == "TRUE" || $response === $success_value) {
-        $purchased_message = "Paid for UTILITY BILL worth ₦" . number_format($realAmt, 2);
+        $purchased_message = "Paid for UTILITY BILL worth $symbol" . number_format($realAmt, 2);
         weblinkBlast($phone, $purchased_message);
         vp_transaction_email("NEW UTILITY BILL NOTIFICATION", "SUCCESSFUL UTILITY BILL PAYMENT", $uniqidvalue, $purchased_message, $meter_token, $amount, $bal, $baln);
 

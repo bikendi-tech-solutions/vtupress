@@ -55,6 +55,15 @@ if(current_user_can("vtupress_access_users") && $_GET["subpage"] == "levels"){
         }
         }
 
+        
+	$vp_country = vp_country();
+	$glo = $vp_country["glo"];
+	$mobile = $vp_country["9mobile"];
+	$mtn = $vp_country["mtn"];
+	$airtel = $vp_country["airtel"];
+	$bypass = $vp_country["bypass"];
+	$currency = $vp_country["currency"];
+	$symbol = $vp_country["symbol"];
 ?>
 
 <div class="container-fluid license-container">
@@ -280,19 +289,19 @@ Please note that all values are percentage based and are calculated based on fix
 		<div class="col-12 col-sm my-3">
 		<span> VTU </span>
 			<div class="input-group">
-				<span class="input-group-text">MTN VTU</span>
+				<span class="input-group-text"><?php echo $mtn;?> VTU</span>
 				<input type="number" class="input-group-text form-control" name="mtn_vtu" value="<?php echo floatval(levelsDb("mtn_vtu"));?>">
 			</div>
 			<div class="input-group">
-				<span class="input-group-text">GLO VTU</span>
+				<span class="input-group-text"><?php echo $glo;?> VTU</span>
 				<input type="number" class="input-group-text form-control"  name="glo_vtu" value="<?php echo floatval(levelsDb("glo_vtu"));?>">
 			</div>
 			<div class="input-group">
-				<span class="input-group-text">AIRTEL VTU</span>
+				<span class="input-group-text"><?php echo $airtel;?> VTU</span>
 				<input type="number" class="input-group-text form-control"  name="airtel_vtu"  value="<?php echo floatval(levelsDb("airtel_vtu"));?>">
 			</div>
 			<div class="input-group">
-				<span class="input-group-text">9MOBILE VTU</span>
+				<span class="input-group-text"><?php echo $mobile;?> VTU</span>
 				<input type="number" class="input-group-text form-control"  name="mobile_vtu"  value="<?php echo floatval(levelsDb("mobile_vtu"));?>">
 			</div>
 		</div>
@@ -301,19 +310,19 @@ Please note that all values are percentage based and are calculated based on fix
 		<div class="col-12 col-sm  my-3">
 		<span> SHARE & SELL </span>
 			<div class="input-group">
-				<span class="input-group-text">MTN SHARE</span>
+				<span class="input-group-text"><?php echo $mtn;?> SHARE</span>
 				<input type="number" class="input-group-text form-control"  name="mtn_share"  value="<?php echo floatval(levelsDb("mtn_share"));?>">
 			</div>
 			<div class="input-group">
-				<span class="input-group-text">GLO SHARE</span>
+				<span class="input-group-text"><?php echo $glo;?> SHARE</span>
 				<input type="number" class="input-group-text form-control"  name="glo_share"  value="<?php echo floatval(levelsDb("glo_share"));?>">
 			</div>
 			<div class="input-group">
-				<span class="input-group-text">AIRTEL SHARE</span>
+				<span class="input-group-text"><?php echo $airtel;?> SHARE</span>
 				<input type="number" class="input-group-text form-control"  name="airtel_share"  value="<?php echo floatval(levelsDb("airtel_share"));?>">
 			</div>
 			<div class="input-group">
-				<span class="input-group-text">9MOBILE SHARE</span>
+				<span class="input-group-text"><?php echo $mobile;?> SHARE</span>
 				<input type="number" class="input-group-text form-control"  name="mobile_share"  value="<?php echo floatval(levelsDb("mobile_share"));?>">
 			</div>
 		</div>
@@ -322,19 +331,19 @@ Please note that all values are percentage based and are calculated based on fix
 		<div class="col-12 col-sm  my-3">
 		<span> AWUF </span>
 			<div class="input-group">
-				<span class="input-group-text">MTN AWUF</span>
+				<span class="input-group-text"><?php echo $mtn;?> AWUF</span>
 				<input type="number" class="input-group-text form-control"  name="mtn_awuf"  value="<?php echo floatval(levelsDb("mtn_awuf"));?>">
 			</div>
 			<div class="input-group">
-				<span class="input-group-text">GLO AWUF</span>
+				<span class="input-group-text"><?php echo $glo;?> AWUF</span>
 				<input type="number" class="input-group-text form-control"  name="glo_awuf"  value="<?php echo floatval(levelsDb("glo_awuf"));?>">
 			</div>
 			<div class="input-group">
-				<span class="input-group-text">AIRTEL AWUF</span>
+				<span class="input-group-text"><?php echo $airtel;?> AWUF</span>
 				<input type="number" class="input-group-text form-control"  name="airtel_awuf"  value="<?php echo floatval(levelsDb("airtel_awuf"));?>">
 			</div>
 			<div class="input-group">
-				<span class="input-group-text">9MOBILE AWUF</span>
+				<span class="input-group-text"><?php echo $mobile;?> AWUF</span>
 				<input type="number" class="input-group-text form-control"  name="mobile_awuf" value="<?php echo floatval(levelsDb("mobile_awuf"));?>">
 			</div>
 		</div>
@@ -360,19 +369,19 @@ Please note that all values are percentage based and are calculated based on fix
 		<div class="col-12 col-sm my-3">
 		<span> SME </span>
 			<div class="input-group">
-				<span class="input-group-text">MTN SME</span>
+				<span class="input-group-text"><?php echo $mtn;?> SME</span>
 				<input type="number" class="input-group-text form-control"  name="mtn_sme"  value="<?php echo floatval(levelsDb("mtn_sme"));?>">
 			</div>
 			<div class="input-group">
-				<span class="input-group-text">GLO SME</span>
+				<span class="input-group-text"><?php echo $glo;?> SME</span>
 				<input type="number" class="input-group-text form-control"  name="glo_sme"  value="<?php echo floatval(levelsDb("glo_sme"));?>">
 			</div>
 			<div class="input-group">
-				<span class="input-group-text">AIRTEL SME</span>
+				<span class="input-group-text"><?php echo $airtel;?> SME</span>
 				<input type="number" class="input-group-text form-control"  name="airtel_sme"  value="<?php echo floatval(levelsDb("airtel_sme"));?>">
 			</div>
 			<div class="input-group">
-				<span class="input-group-text">9MOBILE SME</span>
+				<span class="input-group-text"><?php echo $mobile;?> SME</span>
 				<input type="number" class="input-group-text form-control"  name="mobile_sme"  value="<?php echo floatval(levelsDb("mobile_sme"));?>">
 			</div>
 		</div>
@@ -381,19 +390,19 @@ Please note that all values are percentage based and are calculated based on fix
 		<div class="col-12 col-sm my-3">
 		<span> CORPORATE </span>
 			<div class="input-group">
-				<span class="input-group-text">MTN Corp</span>
+				<span class="input-group-text"><?php echo $mtn;?> Corp</span>
 				<input type="number" class="input-group-text form-control"  name="mtn_corporate"  value="<?php echo floatval(levelsDb("mtn_corporate"));?>">
 			</div>
 			<div class="input-group">
-				<span class="input-group-text">GLO Corp</span>
+				<span class="input-group-text"><?php echo $glo;?> Corp</span>
 				<input type="number" class="input-group-text form-control"  name="glo_corporate"  value="<?php echo floatval(levelsDb("glo_corporate"));?>">
 			</div>
 			<div class="input-group">
-				<span class="input-group-text">AIRTEL Corp</span>
+				<span class="input-group-text"><?php echo $airtel;?> Corp</span>
 				<input type="number" class="input-group-text form-control"  name="airtel_corporate"  value="<?php echo floatval(levelsDb("airtel_corporate"));?>">
 			</div>
 			<div class="input-group">
-				<span class="input-group-text">9MOBILE Corp</span>
+				<span class="input-group-text"><?php echo $mobile;?> Corp</span>
 				<input type="number" class="input-group-text form-control"  name="mobile_corporate"  value="<?php echo floatval(levelsDb("mobile_corporate"));?>">
 			</div>
 		</div>
@@ -402,19 +411,19 @@ Please note that all values are percentage based and are calculated based on fix
 		<div class="col-12 col-sm my-3">
 		<span> GIFTING </span>
 			<div class="input-group">
-				<span class="input-group-text">MTN Gift</span>
+				<span class="input-group-text"><?php echo $mtn;?> Gift</span>
 				<input type="number" class="input-group-text form-control"  name="mtn_gifting"  value="<?php echo floatval(levelsDb("mtn_gifting"));?>">
 			</div>
 			<div class="input-group">
-				<span class="input-group-text">GLO Gift</span>
+				<span class="input-group-text"><?php echo $glo;?> Gift</span>
 				<input type="number" class="input-group-text form-control"   name="glo_gifting"    value="<?php echo floatval(levelsDb("glo_gifting"));?>">
 			</div>
 			<div class="input-group">
-				<span class="input-group-text">AIRTEL Gift</span>
+				<span class="input-group-text"><?php echo $airtel;?> Gift</span>
 				<input type="number" class="input-group-text form-control"   name="airtel_gifting"   value="<?php echo floatval(levelsDb("airtel_gifting"));?>">
 			</div>
 			<div class="input-group">
-				<span class="input-group-text">9MOBILE Gift</span>
+				<span class="input-group-text"><?php echo $mobile;?> Gift</span>
 				<input type="number" class="input-group-text form-control"   name="mobile_gifting"   value="<?php echo floatval(levelsDb("mobile_gifting"));?>">
 			</div>
 		</div>
@@ -454,19 +463,19 @@ Please note that all values are percentage based and are calculated based on fix
 		<div class="col-12 col-sm my-3">
 		<span> ECARDS </span>
 			<div class="input-group">
-				<span class="input-group-text">MTN CARDS</span>
+				<span class="input-group-text"><?php echo $mtn;?> CARDS</span>
 				<input type="number" class="input-group-text form-control"  name="card_mtn"  value="<?php echo floatval(levelsDb("card_mtn"));?>">
 			</div>
 			<div class="input-group">
-				<span class="input-group-text">GLO CARDS</span>
+				<span class="input-group-text"><?php echo $glo;?> CARDS</span>
 				<input type="number" class="input-group-text form-control" name="card_glo" value="<?php echo floatval(levelsDb("card_glo"));?>">
 			</div>
 			<div class="input-group">
-				<span class="input-group-text">AIRTEL CARDS</span>
+				<span class="input-group-text"><?php echo $airtel;?> CARDS</span>
 				<input type="number" class="input-group-text form-control" name="card_airtel" value="<?php echo floatval(levelsDb("card_airtel"));?>">
 			</div>
 			<div class="input-group">
-				<span class="input-group-text">9MOBILE CARDS</span>
+				<span class="input-group-text"><?php echo $mobile;?> CARDS</span>
 				<input type="number" class="input-group-text form-control" name="card_9mobile" value="<?php echo floatval(levelsDb("card_9mobile"));?>">
 			</div>
 		</div>
@@ -475,19 +484,19 @@ Please note that all values are percentage based and are calculated based on fix
 		<div class="col-12 col-sm my-3">
 		<span> DATA CARDS </span>
 			<div class="input-group">
-				<span class="input-group-text">MTN D.CARDS</span>
+				<span class="input-group-text"><?php echo $mtn;?> D.CARDS</span>
 				<input type="number" class="input-group-text form-control"  name="data_mtn"  value="<?php echo floatval(levelsDb("data_mtn"));?>">
 			</div>
 			<div class="input-group">
-				<span class="input-group-text">GLO D.CARDS</span>
+				<span class="input-group-text"><?php echo $glo;?> D.CARDS</span>
 				<input type="number" class="input-group-text form-control" name="data_glo" value="<?php echo floatval(levelsDb("data_glo"));?>">
 			</div>
 			<div class="input-group">
-				<span class="input-group-text">AIRTEL D.CARDS</span>
+				<span class="input-group-text"><?php echo $airtel;?> D.CARDS</span>
 				<input type="number" class="input-group-text form-control" name="data_airtel" value="<?php echo floatval(levelsDb("data_airtel"));?>">
 			</div>
 			<div class="input-group">
-				<span class="input-group-text">9MOBILE D.CARDS</span>
+				<span class="input-group-text"><?php echo $mobile;?> D.CARDS</span>
 				<input type="number" class="input-group-text form-control" name="data_9mobile" value="<?php echo floatval(levelsDb("data_9mobile"));?>">
 			</div>
 		</div>
@@ -537,7 +546,7 @@ Please note that all values are percentage based and are calculated based on fix
 <div class="row">
   <span class="pb-2"> SERVICE BONUSES TO USER: </span>
       <div class="input-group mx-2">
-				<span class="input-group-text">Airtime ₦ -</span>
+				<span class="input-group-text">Airtime <?php echo $symbol;?> -</span>
 				<input type="number" class="input-group-text form-control"  name="airtime_bonus_ex1"  value="<?php echo floatval(levelsDb("airtime_bonus_ex1"));?>">
 				<span class="input-group-text">Data</span>
 				<select class="form-control" name="data_bonus_ex1" >
@@ -573,7 +582,7 @@ Please note that all values are percentage based and are calculated based on fix
   <div class="row mt-3">
   <span class="pb-2"> SERVICE BONUSES TO REFERRER: </span>
       <div class="input-group mx-2">
-				<span class="input-group-text">Airtime ₦ -</span>
+				<span class="input-group-text">Airtime <?php echo $symbol;?> -</span>
 				<input type="number" class="input-group-text form-control"  name="ref_airtime_bonus_ex1"  value="<?php echo floatval(levelsDb("ref_airtime_bonus_ex1"));?>">
 				<span class="input-group-text">Data</span>
 				<select class="form-control" name="ref_data_bonus_ex1" >
@@ -732,7 +741,7 @@ $lev = $level;
     </div>
         
     <div class="input-group">
-    <span class="input-group-text">Level_<?php echo $level;?> - Upgrade Bonus NGN</span>
+    <span class="input-group-text">Level_<?php echo $level;?> - Upgrade Bonus <?php echo $currency;?></span>
 		<input type="number" class="input-group-text form-control"   name="level_<?php echo $level;?>_upgrade"  value="<?php echo floatval($level_price_upgrade);?>">
 
     <span class="input-group-text">Level_<?php echo $level;?> - Upgrade PV</span>

@@ -45,6 +45,9 @@ foreach($fdbalrs as $fdbalr){
 $fdbalsum += $fdbalr->amount;
 }
 
+
+$symbol = vp_country()["symbol"];
+
 echo apply_filters("vpover","heloppo");
 echo '
 <style>
@@ -588,10 +591,10 @@ width:450px;
 AIRTIME
 </div>
 <div id="airtime-values">
-NGN <b  id="airtime-s">'.$mabalsum.'</b>
+'.$symbol.' <b  id="airtime-s">'.$mabalsum.'</b>
 </div>
 <div id="airtime-valuef">
-NGN <b  id="airtime-f">'.$fabalsum.'</b>
+'.$symbol.' <b  id="airtime-f">'.$fabalsum.'</b>
 </div>
 
 </div>
@@ -600,10 +603,10 @@ NGN <b  id="airtime-f">'.$fabalsum.'</b>
 DATA
 </div>
 <div id="data-values">
-NGN <b  id="data-s">'.$sdbalsum.'</b>
+'.$symbol.' <b  id="data-s">'.$sdbalsum.'</b>
 </div>
 <div id="data-valuef">
-NGN <b  id="data-f">'.$fdbalsum.'</b>
+'.$symbol.' <b  id="data-f">'.$fdbalsum.'</b>
 </div>
 </div>
 ';
@@ -651,10 +654,10 @@ CABLE
 </div>
 
 <div id="cable-values">
-NGN <b  id="cable-s">'.$scbalsum.'</b>
+'.$symbol.' <b  id="cable-s">'.$scbalsum.'</b>
 </div>
 <div id="cable-valuef">
-NGN <b  id="cable-f">'.$fcbalsum.'</b>
+'.$symbol.' <b  id="cable-f">'.$fcbalsum.'</b>
 </div>
 </div>
 <div id="bill-content">
@@ -662,10 +665,10 @@ NGN <b  id="cable-f">'.$fcbalsum.'</b>
 BILL
 </div>
 <div id="bill-values">
-NGN <b  id="bill-s">'.$sbbalsum.'</b>
+'.$symbol.' <b  id="bill-s">'.$sbbalsum.'</b>
 </div>
 <div id="bill-valuef">
-NGN <b  id="bill-f">'.$fbbalsum.'</b>
+'.$symbol.' <b  id="bill-f">'.$fbbalsum.'</b>
 </div>
 </div>
 ';
@@ -679,10 +682,10 @@ CABLE
 </div>
 
 <div id="cable-values">
-NGN <b  id="cable-s">1</b>
+'.$symbol.' <b  id="cable-s">1</b>
 </div>
 <div id="cable-valuef">
-NGN <b  id="cable-f">1</b>
+'.$symbol.' <b  id="cable-f">1</b>
 </div>
 </div>
 <div id="bill-content">
@@ -690,10 +693,10 @@ NGN <b  id="cable-f">1</b>
 BILL
 </div>
 <div id="bill-values">
-NGN <b  id="bill-s">1</b>
+'.$symbol.' <b  id="bill-s">1</b>
 </div>
 <div id="bill-valuef">
-NGN <b  id="bill-f">1</b>
+'.$symbol.' <b  id="bill-f">1</b>
 </div>
 </div>
 ';
@@ -1034,7 +1037,7 @@ echo'
 MobileMila Balance
 </div>
 <div id="airt-values">
-NGN <b>2000</b>
+'.$symbol.' <b>2000</b>
 </div>
 <div id="airt-valuef">
 
@@ -1046,7 +1049,7 @@ NGN <b>2000</b>
 VTU NG Balance
 </div>
 <div id="dat-values">
-NGN <b>4000</b>
+'.$symbol.' <b>4000</b>
 </div>
 <div id="data-valuef">
 
@@ -1057,7 +1060,7 @@ NGN <b>4000</b>
 CUSTOM Balance
 </div>
 <div id="cab-values">
-NGN <b>4000</b>
+'.$symbol.' <b>4000</b>
 </div>
 <div id="cab-valuef">
 

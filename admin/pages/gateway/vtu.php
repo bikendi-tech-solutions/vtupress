@@ -13,6 +13,16 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/foradmin.php');
 
 if(current_user_can("vtupress_admin")){
 
+  
+	$vp_country = vp_country();
+	$glo = $vp_country["glo"];
+	$mobile = $vp_country["9mobile"];
+	$mtn = $vp_country["mtn"];
+	$airtel = $vp_country["airtel"];
+	$bypass = $vp_country["bypass"];
+	$currency = $vp_country["currency"];
+	$symbol = $vp_country["symbol"];
+
 $option_array = json_decode(get_option("vp_options"),true);
 
 ?>
@@ -408,25 +418,25 @@ for($airtimepost=1; $airtimepost<=5; $airtimepost++){
 <label class="form-label">Service IDs</label>
 <br>
 <div class="input-group md-3">
-<span class="input-group-text">MTN</span>
+<span class="input-group-text"><?php echo $mtn;?></span>
 <input type="text" value="<?php echo vp_option_array($option_array,"airtimemtn");?>" name="airtimemtn" id="airtimemtn" class="form-control">
 
 </div>
 
 <div class="input-group md-3">
-<span class="input-group-text">GLO</span>
+<span class="input-group-text"><?php echo $glo;?></span>
 <input type="text" value="<?php echo vp_option_array($option_array,"airtimeglo");?>" name="airtimeglo" id="airtimeglo" class="form-control">
 
 </div>
 
 <div class="input-group md-3">
-<span class="input-group-text">9MOBILE</span>
+<span class="input-group-text"><?php echo $mobile;?></span>
 <input type="text" value="<?php echo vp_option_array($option_array,"airtime9mobile");?>" name="airtime9mobile"  id="airtime9mobile" class="form-control">
 
 </div>
 
 <div class="input-group md-3">
-<span class="input-group-text">AIRTEL</span>
+<span class="input-group-text"><?php echo $airtel;?></span>
 <input type="text" value="<?php echo vp_option_array($option_array,"airtimeairtel");?>" name="airtimeairtel"  id="airtimeairtel" class="form-control">
 
 </div>

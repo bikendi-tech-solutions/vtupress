@@ -14,7 +14,9 @@ require_once(ABSPATH.'wp-load.php');
 include_once(ABSPATH.'wp-admin/includes/plugin.php');
 include_once(ABSPATH .'wp-content/plugins/vtupress/functions.php');
 
-
+  // $vp_country = vp_country();
+	// $currency = $vp_country["currency"];
+	// $country = $vp_country["country"];
 $allowed_referrers = [
   $_SERVER['SERVER_NAME']
 ];
@@ -90,6 +92,8 @@ $check_bal = vp_getoption("checkbal");
 
 
 if(isset($amounte) || $check_bal == "no"){
+
+
 	
 if($paychoice == "flutterwave"){
 
@@ -106,8 +110,8 @@ echo'
       public_key: "'.$k.'",
       tx_ref: "vtu"+Math.floor((Math.random() * 1000000000) + 1),
       amount: "'.$amount.'",
-      currency: "NGN",
-      country: "NG",
+      currency: "'.$currency.'",
+      country: "'.$country.'",
       payment_options: " ",
       customer: {
         email:  "'.$email.'",
@@ -522,7 +526,7 @@ curl_setopt_array($curl, array(
   "customerEmail": "'.$email.'",
   "paymentReference":"'.uniqid("vtu-",false).'",
   "paymentDescription": "VTU SERVICE",
-  "currencyCode": "NGN",
+  "currencyCode": "'.$currency.'",
   "contractCode": "'.vp_getoption("monnifycontractcode").'",
   "redirectUrl": "'.vp_getoption("siteurl").'/vpaccount",
   "paymentMethods": [

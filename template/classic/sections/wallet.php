@@ -58,7 +58,7 @@ if(vp_getoption('enable_monnify') == "yes"  || vp_getoption('enable_ncwallet') =
 
   
   if(vp_getoption("charge_method") == "fixed"){
-   $chargef =  "₦".floatval(vp_getoption("charge_back"));
+   $chargef =  $symbol.floatval(vp_getoption("charge_back"));
    }
    else{
     $chargef =  floatval(vp_getoption("charge_back"))."%";
@@ -228,7 +228,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
                     $squadAccountNumber = vp_getuser($id,"squadAccountNumber");
 
                     if(vp_getoption("gtb_charge_method") == "fixed"){
-                      $gtb_chargef =  "₦".floatval(vp_getoption("gtb_charge_back"));
+                      $gtb_chargef =  $symbol.floatval(vp_getoption("gtb_charge_back"));
                       }
                       else{
                        $gtb_chargef =  floatval(vp_getoption("gtb_charge_back"))."%";
@@ -261,7 +261,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
                   $vpayAccountNumber = vp_getuser($id,"vpayAccountNumber");
 
                   if(vp_getoption("vpay_charge_method") == "fixed"){
-                    $vpay_chargef =  "₦".floatval(vp_getoption("vpay_charge_back"));
+                    $vpay_chargef =  $symbol.floatval(vp_getoption("vpay_charge_back"));
                     }
                     else{
                      $vpay_chargef =  floatval(vp_getoption("vpay_charge_back"))."%";
@@ -292,7 +292,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
                                   $ncwallet_AccountNumber = vp_getuser($id,"ncwallet_accountnumber");
                 
                                   if(vp_getoption("ncwallet_charge_method") == "fixed"){
-                                      $ncwallet_chargef =  "₦".floatval(vp_getoption("ncwallet_charge_back"));
+                                      $ncwallet_chargef =  $symbol.floatval(vp_getoption("ncwallet_charge_back"));
                                     }
                                     else{
                                      $ncwallet_chargef =  floatval(vp_getoption("ncwallet_charge_back"))."%";
@@ -323,7 +323,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
                       $payvessel_AccountNumber = vp_getuser($id,"payvessel_accountnumber");
     
                       if(vp_getoption("payvessel_charge_method") == "fixed"){
-                          $payvessel_chargef =  "₦".floatval(vp_getoption("payvessel_charge_back"));
+                          $payvessel_chargef =  $symbol.floatval(vp_getoption("payvessel_charge_back"));
                         }
                         else{
                           $payvessel_chargef =  floatval(vp_getoption("payvessel_charge_back"))."%";
@@ -355,7 +355,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
                 $paymentpoint_accountnumber = vp_getuser($id,"paymentpoint_accountnumber");
 
                 if(vp_getoption("paymentpoint_charge_method") == "fixed"){
-                    $paymentpoint_chargef =  "₦".floatval(vp_getoption("paymentpoint_charge_back"));
+                    $paymentpoint_chargef =  $symbol.floatval(vp_getoption("paymentpoint_charge_back"));
                   }
                   else{
                     $paymentpoint_chargef =  floatval(vp_getoption("paymentpoint_charge_back"))."%";
@@ -383,7 +383,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
           $billstack_AccountNumber = vp_getuser($id,"billstack_accountnumber");
 
           if(vp_getoption("billstack_charge_method") == "fixed"){
-              $billstack_chargef =  "₦".floatval(vp_getoption("billstack_charge_back"));
+              $billstack_chargef =  $symbol.floatval(vp_getoption("billstack_charge_back"));
             }
             else{
               $billstack_chargef =  floatval(vp_getoption("billstack_charge_back"))."%";
@@ -413,7 +413,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
                     $kudaAccountNumber = vp_getuser($id,"kudaAccountNumber");
 
                     if(vp_getoption("kuda_charge_method") == "fixed"){
-                      $kuda_chargef =  "₦".floatval(vp_getoption("kuda_charge_back"));
+                      $kuda_chargef =  $symbol.floatval(vp_getoption("kuda_charge_back"));
                       }
                       else{
                        $kuda_chargef =  floatval(vp_getoption("kuda_charge_back"))."%";
@@ -1162,7 +1162,7 @@ switch(dchoice){
 ';
 if(vp_getoption("paystack_charge_method") == "fixed"){
 	?>
-jQuery(".dcharge .methodinai").text("₦");
+jQuery(".dcharge .methodinai").text($symbol);
 <?php
 }
 else{
@@ -1180,7 +1180,7 @@ echo'
       ';
       if(vp_getoption("charge_method") == "fixed"){
         ?>
-      jQuery(".dcharge .methodinai").text("₦");
+      jQuery(".dcharge .methodinai").text($symbol);
       <?php
       }
       else{
@@ -1198,7 +1198,7 @@ echo'
       ';
       if(vp_getoption("gtb_charge_method") == "fixed"){
         ?>
-      jQuery(".dcharge .methodinai").text("₦");
+      jQuery(".dcharge .methodinai").text($symbol);
       <?php
       }
       else{

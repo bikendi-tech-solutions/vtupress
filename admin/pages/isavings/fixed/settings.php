@@ -128,11 +128,11 @@ Not even the developers of this plugin should be trusted enough to grant access 
                         <div class="col-12 col-md-7 ssettings border rounded rounded-3">
 
                                 <div class="py-3 px-2 savingsForm">
-                                        <label for="sign_up_fee mt-2">SignUp Fee ₦</label>
+                                        <label for="sign_up_fee mt-2">SignUp Fee <?php echo $symbol;?></label>
                                         <input class="form-control" id="sign_up_fee" value="">
 
 
-                                        <label for="minimum_amount mt-2">Minimum Saving Amount ₦</label>
+                                        <label for="minimum_amount mt-2">Minimum Saving Amount <?php echo $symbol;?></label>
                                         <input class="form-control" id="minimum_amount"  value="">
                                         
                                         <label for="duration mt-2">Duration </label>
@@ -313,7 +313,7 @@ Not even the developers of this plugin should be trusted enough to grant access 
                                 <p><b>Continue giving interest / duration [yes/no]</b> | Do you want to continue giving interest following [Applicable After] recurrently?</p>
                                 <p><b>Liquidation Penalty [number]</b> | How much % do you want to deduct from the principal amount incase the saver wants to withdraw before saving ripes. Interest are not added afterwards ?</p>
                                 <p><b>Interest [number]</b> | How much interest % you want to give your user i.e principal + interest = withdrawable amount</p>
-                                <p><b>Referer Commissions [number]</b> | How much interest in ₦ you want give the saver's referer</p>
+                                <p><b>Referer Commissions [number]</b> | How much interest in <?php echo $symbol;?> you want give the saver's referer</p>
                                 <p><b>Charge Figure [number]</b> | How much you want to charge per [month] upon withdrawal</p>
                                 <p><b>Charge Type [off / percentage]</b> | <i>Off</i> means your cut from total saving. e.g if the saver saves 1k daily for a 3 months plan and you set charge figure to 1 then you get 1k. Same applies to 2 meaning 2 daily savings from total duration plan. <br> <i>Percentage</i> is (charge figure)% off total savings </p>
                         </div>

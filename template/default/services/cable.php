@@ -87,7 +87,7 @@ $level = $wpdb->get_results("SELECT * FROM  $table_name WHERE name = '$plan'");
                       $cableclass = "istartimes";
                      }
                       if($doos != ""){
-                      echo '<option value="'.vp_option_array($option_array,"ccable".$i).'" id="'.$i.'" class="'.$cableclass.'">'.vp_option_array($option_array,"ccablen".$i).' ₦'.vp_option_array($option_array,"ccablep".$i).'</option>';
+                      echo '<option value="'.vp_option_array($option_array,"ccable".$i).'" id="'.$i.'" class="'.$cableclass.'">'.vp_option_array($option_array,"ccablen".$i)." $symbol".vp_option_array($option_array,"ccablep".$i).'</option>';
                       }
                       }
 
@@ -148,7 +148,7 @@ if(count($bens) >= 1 && vp_getoption("enable_beneficiaries") == "yes"){
                 <div class="mb-2">
                     <label for="network" class="form-label">Amount + Charge(<?php echo floatval(vp_option_array($option_array,"cable_charge"));?>)</label>
                     <div class="input-group mb-2" >
-                        <span class="input-group-text" id="basic-addon1">NGN.</span>
+                        <span class="input-group-text" id="basic-addon1"><?php echo $currency;?>.</span>
                         <input type="number" class="form-control cable-amount" max="<?php echo $bal;?>" placeholder="Amount" aria-label="Username" aria-describedby="basic-addon1"  id="amt" name="amount" readonly>
                         <span class="input-group-text" id="basic-addon1">.00</span>
                     </div> 
@@ -173,7 +173,7 @@ if(count($bens) >= 1 && vp_getoption("enable_beneficiaries") == "yes"){
 				
 					?>
                 <div class="input-group mb-2">
-                    <span class="input-group-text" id="basic-addon1">NGN.</span>
+                    <span class="input-group-text" id="basic-addon1"><?php echo $currency;?>.</span>
                     <input id="amttopay" type="number" class="form-control amttopay" max="<?php echo $bal;?>" placeholder="Amount To Pay" aria-label="Username" aria-describedby="basic-addon1" readonly>
                     <span class="input-group-text" id="basic-addon1">.00</span>
                     <div id="validationServer04Feedback" class="invalid-feedback">
@@ -222,19 +222,19 @@ else{
                         Cable Type : <span class="cable-type-confirm"></span><br>
                         Cable Info: <span class="cable-plan-confirm"></span><br>
                         Iuc : <span class="cable-iuc-confirm"></span><br>
-                        Charge : ₦<span class="cable_charge"><?php echo floatval(vp_option_array($option_array,"cable_charge"));?></span><br>
-                        Total Amount(Original Amount + Charge) : ₦<span class="cable-amount-confirm"></span><br>
+                        Charge : <?php echo $symbol;?><span class="cable_charge"><?php echo floatval(vp_option_array($option_array,"cable_charge"));?></span><br>
+                        Total Amount(Original Amount + Charge) : <?php echo $symbol;?><span class="cable-amount-confirm"></span><br>
 					<?php
 				if(is_plugin_active("vprest/vprest.php")  && vp_option_array($option_array,'resell') == "yes"){
 					
 					if(vp_option_array($option_array,"discount_method") == "direct"){
 					?>
-					Amount To Pay : ₦<span class="amttopay2" ></span><br>
+					Amount To Pay : <?php echo $symbol;?><span class="amttopay2" ></span><br>
 					Discount : <span class="discount-amount-confirm"></span> <br>
 					<?php
 					}else{
 					?>
-					Charge Back Bonus : ₦<span class="amttopay2" ></span><br>
+					Charge Back Bonus : <?php echo $symbol;?><span class="amttopay2" ></span><br>
 					Commission : <span class="discount-amount-confirm"></span><br>	
 					<?php	
 					}

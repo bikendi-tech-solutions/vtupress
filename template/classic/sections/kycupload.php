@@ -124,7 +124,7 @@ if(!preg_match('/^[0-9]{11}/',$phone)){
 if($eraptor == "yes"){
 
 	if($bvn_charge > $current_bal && $bvn_charge != 0){
-		die("NGN $bvn_charge is needed to complete this verification");
+		die("$currency $bvn_charge is needed to complete this verification");
 	}
 //check for raptor details
 $raptor_conid = vp_getoption('raptor_conid');

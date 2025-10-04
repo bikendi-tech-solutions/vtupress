@@ -136,7 +136,7 @@ if(count($bens) >= 1 && vp_getoption("enable_beneficiaries") == "yes"){
             <div class="mb-2">
                 <label for="network" class="form-label">Original Amount</label>
                 <div class="input-group mb-2">
-                    <span class="input-group-text" id="basic-addon1">NGN.</span>
+                    <span class="input-group-text" id="basic-addon1"><?php echo $currency;?>.</span>
                     <input id="amt" name="amount" type="number" class="form-control airtime-amount" onchange="calcit();" placeholder="Amount" aria-label="Username" aria-describedby="basic-addon1">
                     <span class="input-group-text" id="basic-addon1">.00</span>
                 </div>
@@ -160,7 +160,7 @@ if(count($bens) >= 1 && vp_getoption("enable_beneficiaries") == "yes"){
 				
 					?>
                 <div class="input-group mb-2">
-                    <span class="input-group-text" id="basic-addon1">NGN.</span>
+                    <span class="input-group-text" id="basic-addon1"><?php echo $currency;?>.</span>
                     <input id="amttopay" type="number" class="form-control amttopay" max="<?php echo $bal;?>" placeholder="Amount To Pay" aria-label="Username" aria-describedby="basic-addon1" readonly>
                     <span class="input-group-text" id="basic-addon1">.00</span>
                     <div id="validationServer04Feedback" class="invalid-feedback">
@@ -217,18 +217,18 @@ else{
                     <div>
                     Network : <span class="airtime-network-confirm"></span><br>
                     Phone : <span class="airtime-number-confirm"></span><br>
-					Original Amount: ₦<span class="airtime-amount-confirm"></span><br>
+					Original Amount: <?php echo $symbol;?><span class="airtime-amount-confirm"></span><br>
 					<?php
 				if(is_plugin_active("vprest/vprest.php")  && vp_option_array($option_array,'resell') == "yes"){
 					
 					if(vp_option_array($option_array,"discount_method") == "direct"){
 					?>
-					Amount To Pay : ₦<span class="amttopay2" ></span><br>
+					Amount To Pay : <?php echo $symbol;?><span class="amttopay2" ></span><br>
 					Discount : <span class="discount-amount-confirm"></span> <br>
 					<?php
 					}else{
 					?>
-					Charge Back Bonus : ₦<span class="amttopay2" ></span><br>
+					Charge Back Bonus : <?php echo $symbol;?><span class="amttopay2" ></span><br>
 					Commission : <span class="discount-amount-confirm"></span><br>	
 					<?php	
 					}

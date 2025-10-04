@@ -93,11 +93,11 @@ if(vp_getoption("enable_nomba") == "yes"){
   include_once 'transfer-nomba.php';
 }
 $secret_key = vp_getoption('psec'); //get_option('jettrade_paystack_secret');
-
+$symbol = vp_country()["symbol"];
 $name = vp_getuser($userid, 'first_name')." ".vp_getuser($userid, 'last_name');
 $accountNo = trim($_POST["account_number"]);
 $bank_code = trim($_POST["bank_code"]);
-$currency = "NGN";
+$currency = $symbol;
 $current_balance = intval(vp_getuser($id, 'vp_bal', true));
 
 

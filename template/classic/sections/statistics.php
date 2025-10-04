@@ -80,7 +80,7 @@ $table_name = $wpdb->prefix."vp_levels";
 													echo'
 												<tr>
                                                     <td>Total Earned From Direct Referee Upgrades</td>
-                                                    <td>₦'.$total_dir_earn.'</td>
+                                                    <td>'.$symbol.$total_dir_earn.'</td>
                                                 </tr>
 												';
 												}
@@ -89,7 +89,7 @@ $table_name = $wpdb->prefix."vp_levels";
 													echo'
 												<tr>
                                                     <td>Total Earned From Second Level Referee Upgrades</td>
-                                                    <td>₦'.$total_indir_earn.'</td>
+                                                    <td>'.$symbol.$total_indir_earn.'</td>
                                                 </tr>
 												';
 												}
@@ -97,7 +97,7 @@ $table_name = $wpdb->prefix."vp_levels";
 													echo'
 												<tr>
                                                     <td>Total Earned From Third Level Referee Upgrades Downward</td>
-                                                    <td>₦'.$total_indir_earn3.'</td>
+                                                    <td>'.$symbol.$total_indir_earn3.'</td>
                                                 </tr>
 												';
 												}else{}
@@ -135,14 +135,14 @@ $table_name = $wpdb->prefix."vp_levels";
 												echo'
 												<tr>
                                                     <td>Total Amount Of Transactions Consumed</td>
-                                                    <td>₦'.$cur_suc_trans_amt.'</td>
+                                                    <td>'.$symbol.$cur_suc_trans_amt.'</td>
                                                 </tr>
 												';
 											}
 												echo'
 												<tr>
                                                     <td>Total Amount Of Transaction Bonus Earned</td>
-                                                    <td>₦'.$total_trans_bonus.'</td>
+                                                    <td>'.$symbol.$total_trans_bonus.'</td>
                                                 </tr>
 												';
 										if(isset($level) && isset($level[0]->total_level)){
@@ -153,7 +153,7 @@ $table_name = $wpdb->prefix."vp_levels";
 													echo'
 												<tr>
                                                     <td>Total Amount Of Transaction Bonus Earned From Direct Referee</td>
-                                                    <td>₦'.$total_dirtrans_bonus.'</td>
+                                                    <td>'.$symbol.$total_dirtrans_bonus.'</td>
                                                 </tr>
 												';
 												}
@@ -161,7 +161,7 @@ $table_name = $wpdb->prefix."vp_levels";
 													echo'
 												<tr>
                                                     <td>Total Amount Of Transaction Bonus Earned From Second Level Referee</td>
-                                                    <td>₦'.$total_indirtrans_bonus.'</td>
+                                                    <td>'.$symbol.$total_indirtrans_bonus.'</td>
                                                 </tr>
 												';
 													}
@@ -169,7 +169,7 @@ $table_name = $wpdb->prefix."vp_levels";
 													echo'
 												<tr>
                                                     <td>Total Amount Of Transaction Bonus Earned From Third Level Referee Downwards</td>
-                                                    <td>₦'.$total_indirtrans_bonus3.'</td>
+                                                    <td>'.$symbol.$total_indirtrans_bonus3.'</td>
                                                 </tr>
 												';
 														}else{}
@@ -206,11 +206,11 @@ $table_name = $wpdb->prefix."vp_levels";
                                                 </tr>
 												<tr>
                                                     <td>Total Balance</td>
-                                                    <td>₦'.$total_bal_with.'</td>
+                                                    <td>'.$symbol.$total_bal_with.'</td>
                                                 </tr>
 												<tr>
                                                     <td>Minimum Amount Withdrawable</td>
-                                                    <td>₦'.$minwithle.'</td>
+                                                    <td>'.$symbol.$minwithle.'</td>
                                                 </tr>
 												<tr>
                                                     <td>Action</td>

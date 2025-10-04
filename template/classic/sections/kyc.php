@@ -69,7 +69,7 @@ if($data == NULL || strtolower($data[0]->status) == "retry" && strtolower($data[
 
 <div class="bbbvvvvnnn">
 <input class="form-control  bvn_value " type="number" name="bvn_value" />
-<code>A charge of ₦ <?php echo intval(vp_getoption('bvn_verification_charge'));?> will be deducted from your balance</code>
+<code>A charge of  <?php echo $symbol.intval(vp_getoption('bvn_verification_charge'));?> will be deducted from your balance</code>
 </div>
 
 

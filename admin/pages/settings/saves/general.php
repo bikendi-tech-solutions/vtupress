@@ -68,6 +68,7 @@ if(isset($_POST["fset"])){
 
 
     vp_updateoption("vpdebug", trim($_POST["vpdebug"]));
+    vp_updateoption("vp_country", trim($_POST["country"]));
     vp_updateoption("spraycode", $spray_code);
     if(vp_getoption("vp_security") == "yes"){
     vp_updateoption("auto_transfer", trim($_POST["auto_transfer"]));

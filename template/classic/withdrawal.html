@@ -12,7 +12,7 @@ if($_GET["vend"]=="withdraw" || $_GET["vend"]=="referrals" ){
 <span class="lg:inline">Referral</span>
 </h1>
 <div class="font-bold tracking-wider">
-<span class="dark inline-block px-3 py-1 bg-gray-200 border rounded-lg cursor-pointer visually-hidden" id="copyme" x-text="`NGN ${$format(total_sum)}`"><?php echo get_bloginfo("url")."/vpaccount/?ref=".$id;?></span>
+<span class="dark inline-block px-3 py-1 bg-gray-200 border rounded-lg cursor-pointer visually-hidden" id="copyme" x-text="<?php echo $currency;?>` ${$format(total_sum)}`"><?php echo get_bloginfo("url")."/vpaccount/?ref=".$id;?></span>
 
 					<span class="white ref-info-action ref inline-block px-3 py-1 bg-gray-200 border rounded-lg cursor-pointer" onclick="copyToClipboard('#copyme')">
 						Click To Copy Refer Link

@@ -13,6 +13,9 @@ include_once(ABSPATH."wp-load.php");
 include_once(ABSPATH .'wp-content/plugins/vtupress/functions.php');
 
 
+  $vp_country = vp_country();
+	$symbol = $vp_country["symbol"];
+  
 if(!$_POST){
     die("Post request alone");
 }
@@ -156,7 +159,7 @@ elseif(isset($_POST["planid"])){
   }
   elseif(($sign + $saveAmount) > $bal){
 
-    die("Balance too low to perform this transaction. You balance must be above ₦".($sign + $saveAmount));
+    die("Balance too low to perform this transaction. You balance must be above $symbol".($sign + $saveAmount));
 
     //continue
   }
@@ -297,7 +300,7 @@ elseif(isset($_POST["daily-planid"])){
   }
   elseif(($sign + $saveAmount) > $bal){
 
-    die("Balance too low to perform this transaction. You balance must be above ₦".($sign + $saveAmount));
+    die("Balance too low to perform this transaction. You balance must be above $symbol".($sign + $saveAmount));
 
     //continue
   }

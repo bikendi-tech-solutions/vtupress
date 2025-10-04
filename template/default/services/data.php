@@ -110,7 +110,7 @@ $level = $wpdb->get_results("SELECT * FROM  $table_name WHERE name = '$plan'");
 						for($i=0; $i<=10; $i++){
 						$doos = vp_option_array($option_array,"cdata".$i);
 						if($doos != "" ){
-						echo '<option value="'.vp_option_array($option_array,"cdata".$i).'" id="'.$i.'" class="imtn smedataplan">'.vp_option_array($option_array,"cdatan".$i).' ₦'.vp_option_array($option_array,"cdatap".$i).'</option>';
+						echo '<option value="'.vp_option_array($option_array,"cdata".$i).'" id="'.$i.'" class="imtn smedataplan">'.vp_option_array($option_array,"cdatan".$i)." $symbol".vp_option_array($option_array,"cdatap".$i).'</option>';
 						}
 						}
 						?>
@@ -119,7 +119,7 @@ $level = $wpdb->get_results("SELECT * FROM  $table_name WHERE name = '$plan'");
 						for($i=0; $i<=10; $i++){
 						$doos = vp_option_array($option_array,"acdata".$i);
 						if($doos != "" ){
-						echo '<option value="'.vp_option_array($option_array,"acdata".$i).'" id="'.$i.'" class="iairtel smedataplan">'.vp_option_array($option_array,"acdatan".$i).' ₦'.vp_option_array($option_array,"acdatap".$i).'</option>';
+						echo '<option value="'.vp_option_array($option_array,"acdata".$i).'" id="'.$i.'" class="iairtel smedataplan">'.vp_option_array($option_array,"acdatan".$i)." $symbol".vp_option_array($option_array,"acdatap".$i).'</option>';
 						}
 						}
 						?>
@@ -128,7 +128,7 @@ $level = $wpdb->get_results("SELECT * FROM  $table_name WHERE name = '$plan'");
 						for($i=0; $i<=10; $i++){
 						$doos = vp_option_array($option_array,"9cdata".$i);
 						if($doos != "" ){
-						echo '<option value="'.vp_option_array($option_array,"9cdata".$i).'" id="'.$i.'" class="i9mobile smedataplan">'.vp_option_array($option_array,"9cdatan".$i).' ₦'.vp_option_array($option_array,"9cdatap".$i).'</option>';
+						echo '<option value="'.vp_option_array($option_array,"9cdata".$i).'" id="'.$i.'" class="i9mobile smedataplan">'.vp_option_array($option_array,"9cdatan".$i)." $symbol".vp_option_array($option_array,"9cdatap".$i).'</option>';
 						}
 						}
 						?>
@@ -137,7 +137,7 @@ $level = $wpdb->get_results("SELECT * FROM  $table_name WHERE name = '$plan'");
 						for($i=0; $i<=10; $i++){
 						$doos = vp_option_array($option_array,"gcdata".$i);
 						if($doos != "" ){
-						echo '<option value="'.vp_option_array($option_array,"gcdata".$i).'" id="'.$i.'" class="iglo smedataplan">'.vp_option_array($option_array,"gcdatan".$i).' ₦'.vp_option_array($option_array,"gcdatap".$i).'</option>';
+						echo '<option value="'.vp_option_array($option_array,"gcdata".$i).'" id="'.$i.'" class="iglo smedataplan">'.vp_option_array($option_array,"gcdatan".$i)." $symbol".vp_option_array($option_array,"gcdatap".$i).'</option>';
 						}
 						}
 						?>
@@ -148,7 +148,7 @@ $level = $wpdb->get_results("SELECT * FROM  $table_name WHERE name = '$plan'");
 						for($i=0; $i<=10; $i++){
 							$doos = vp_option_array($option_array,"r2cdata".$i);
 							if($doos != "" ){
-								echo '<option value="'.vp_option_array($option_array,"r2cdata".$i).'" id="'.$i.'" class="r2imtn corporatedataplan">'.vp_option_array($option_array,"r2cdatan".$i).' ₦'.vp_option_array($option_array,"r2cdatap".$i).'</option>';
+								echo '<option value="'.vp_option_array($option_array,"r2cdata".$i).'" id="'.$i.'" class="r2imtn corporatedataplan">'.vp_option_array($option_array,"r2cdatan".$i)." $symbol".vp_option_array($option_array,"r2cdatap".$i).'</option>';
 							}
 							}
 						?>
@@ -157,7 +157,7 @@ $level = $wpdb->get_results("SELECT * FROM  $table_name WHERE name = '$plan'");
 						for($i=0; $i<=10; $i++){
 							$doos = vp_option_array($option_array,"r2acdata".$i);
 							if($doos != "" ){
-							echo '<option value="'.vp_option_array($option_array,"r2acdata".$i).'" id="'.$i.'" class="r2iairtel corporatedataplan">'.vp_option_array($option_array,"r2acdatan".$i).' ₦'.vp_option_array($option_array,"r2acdatap".$i).'</option>';
+							echo '<option value="'.vp_option_array($option_array,"r2acdata".$i).'" id="'.$i.'" class="r2iairtel corporatedataplan">'.vp_option_array($option_array,"r2acdatan".$i)." $symbol".vp_option_array($option_array,"r2acdatap".$i).'</option>';
 							}
 							}
 						?>
@@ -165,7 +165,7 @@ $level = $wpdb->get_results("SELECT * FROM  $table_name WHERE name = '$plan'");
 						for($i=0; $i<=10; $i++){
 							$doos = vp_option_array($option_array,"r29cdata".$i);
 							if($doos != "" ){
-								echo '<option value="'.vp_option_array($option_array,"r29cdata".$i).'" id="'.$i.'" class="r2i9mobile corporatedataplan">'.vp_option_array($option_array,"r29cdatan".$i).' ₦'.vp_option_array($option_array,"r29cdatap".$i).'</option>';
+								echo '<option value="'.vp_option_array($option_array,"r29cdata".$i).'" id="'.$i.'" class="r2i9mobile corporatedataplan">'.vp_option_array($option_array,"r29cdatan".$i)." $symbol".vp_option_array($option_array,"r29cdatap".$i).'</option>';
 							}
 							}
 						?>
@@ -173,7 +173,7 @@ $level = $wpdb->get_results("SELECT * FROM  $table_name WHERE name = '$plan'");
 						for($i=0; $i<=10; $i++){
 							$doos = vp_option_array($option_array,"r2gcdata".$i);
 							if($doos != "" ){
-								echo '<option value="'.vp_option_array($option_array,"r2gcdata".$i).'" id="'.$i.'" class="r2iglo corporatedataplan">'.vp_option_array($option_array,"r2gcdatan".$i).' ₦'.vp_option_array($option_array,"r2gcdatap".$i).'</option>';
+								echo '<option value="'.vp_option_array($option_array,"r2gcdata".$i).'" id="'.$i.'" class="r2iglo corporatedataplan">'.vp_option_array($option_array,"r2gcdatan".$i)." $symbol".vp_option_array($option_array,"r2gcdatap".$i).'</option>';
 							}
 							}
 						?>
@@ -184,7 +184,7 @@ $level = $wpdb->get_results("SELECT * FROM  $table_name WHERE name = '$plan'");
 						for($i=0; $i<=10; $i++){
 							$doos = vp_option_array($option_array,"rcdata".$i);
 							if($doos != "" ){
-								echo '<option value="'.vp_option_array($option_array,"rcdata".$i).'" id="'.$i.'" class="rimtn directdataplan">'.vp_option_array($option_array,"rcdatan".$i).' ₦'.vp_option_array($option_array,"rcdatap".$i).'</option>';
+								echo '<option value="'.vp_option_array($option_array,"rcdata".$i).'" id="'.$i.'" class="rimtn directdataplan">'.vp_option_array($option_array,"rcdatan".$i)." $symbol".vp_option_array($option_array,"rcdatap".$i).'</option>';
 							}
 							}
 						?>
@@ -193,7 +193,7 @@ $level = $wpdb->get_results("SELECT * FROM  $table_name WHERE name = '$plan'");
 						for($i=0; $i<=10; $i++){
 							$doos = vp_option_array($option_array,"racdata".$i);
 							if($doos != "" ){
-							echo '<option value="'.vp_option_array($option_array,"racdata".$i).'" id="'.$i.'" class="riairtel directdataplan">'.vp_option_array($option_array,"racdatan".$i).' ₦'.vp_option_array($option_array,"racdatap".$i).'</option>';
+							echo '<option value="'.vp_option_array($option_array,"racdata".$i).'" id="'.$i.'" class="riairtel directdataplan">'.vp_option_array($option_array,"racdatan".$i)." $symbol".vp_option_array($option_array,"racdatap".$i).'</option>';
 							}
 							}
 						?>
@@ -201,7 +201,7 @@ $level = $wpdb->get_results("SELECT * FROM  $table_name WHERE name = '$plan'");
 						for($i=0; $i<=10; $i++){
 							$doos = vp_option_array($option_array,"r9cdata".$i);
 							if($doos != "" ){
-								echo '<option value="'.vp_option_array($option_array,"r9cdata".$i).'" id="'.$i.'" class="ri9mobile directdataplan">'.vp_option_array($option_array,"r9cdatan".$i).' ₦'.vp_option_array($option_array,"r9cdatap".$i).'</option>';
+								echo '<option value="'.vp_option_array($option_array,"r9cdata".$i).'" id="'.$i.'" class="ri9mobile directdataplan">'.vp_option_array($option_array,"r9cdatan".$i)." $symbol".vp_option_array($option_array,"r9cdatap".$i).'</option>';
 							}
 							}
 						?>
@@ -209,7 +209,7 @@ $level = $wpdb->get_results("SELECT * FROM  $table_name WHERE name = '$plan'");
 						for($i=0; $i<=10; $i++){
 							$doos = vp_option_array($option_array,"rgcdata".$i);
 							if($doos != "" ){
-								echo '<option value="'.vp_option_array($option_array,"rgcdata".$i).'" id="'.$i.'" class="riglo directdataplan">'.vp_option_array($option_array,"rgcdatan".$i).' ₦'.vp_option_array($option_array,"rgcdatap".$i).'</option>';
+								echo '<option value="'.vp_option_array($option_array,"rgcdata".$i).'" id="'.$i.'" class="riglo directdataplan">'.vp_option_array($option_array,"rgcdatan".$i)." $symbol".vp_option_array($option_array,"rgcdatap".$i).'</option>';
 							}
 							}
 						?>
@@ -220,7 +220,7 @@ $level = $wpdb->get_results("SELECT * FROM  $table_name WHERE name = '$plan'");
 						for($i=0; $i<=10; $i++){
 							$doos = vp_option_array($option_array,"csmiledata".$i);
 							if($doos != "" ){
-								echo '<option value="'.vp_option_array($option_array,"csmiledata".$i).'" id="'.$i.'" class="smiledata smiledataplan">'.vp_option_array($option_array,"csmiledatan".$i).' ₦'.vp_option_array($option_array,"csmiledatap".$i).'</option>';
+								echo '<option value="'.vp_option_array($option_array,"csmiledata".$i).'" id="'.$i.'" class="smiledata smiledataplan">'.vp_option_array($option_array,"csmiledatan".$i)." $symbol".vp_option_array($option_array,"csmiledatap".$i).'</option>';
 							}
 							}
 						?>
@@ -293,7 +293,7 @@ if(count($bens) >= 1 && vp_getoption("enable_beneficiaries") == "yes"){
                 <div class="mb-2">
                     <label for="network" class="form-label">Original Amount</label>
                     <div class="input-group mb-2" >
-                        <span class="input-group-text" id="basic-addon1">NGN.</span>
+                        <span class="input-group-text" id="basic-addon1"><?php echo $currency;?>.</span>
                         <input type="number" class="form-control data-amount" placeholder="Amount" aria-label="Amount" aria-describedby="basic-addon1"  id="amt" name="amount" readonly>
                         <span class="input-group-text" id="basic-addon1">.00</span>
                     </div> 
@@ -317,7 +317,7 @@ if(count($bens) >= 1 && vp_getoption("enable_beneficiaries") == "yes"){
 				
 					?>
                 <div class="input-group mb-2">
-                    <span class="input-group-text" id="basic-addon1">NGN.</span>
+                    <span class="input-group-text" id="basic-addon1"><?php echo $currency;?>.</span>
                     <input id="amttopay" type="number" class="form-control amttopay" max="<?php echo $bal;?>" placeholder="Amount To Pay" aria-label="Username" aria-describedby="basic-addon1" readonly>
                     <span class="input-group-text" id="basic-addon1">.00</span>
                     <div id="validationServer04Feedback" class="invalid-feedback">
@@ -374,18 +374,18 @@ else{
                     Network : <span class="data-network-confirm"></span><br>
                     Phone : <span class="data-number-confirm"></span><br>
                     Data Info: <span class="data-plan-confirm"></span><br>
-                    Amount : ₦<span class="data-amount-confirm"></span><br>
+                    Amount : <?php echo $symbol;?><span class="data-amount-confirm"></span><br>
 					<?php
 				if(is_plugin_active("vprest/vprest.php")  && vp_option_array($option_array,'resell') == "yes"){
 					
 					if(vp_option_array($option_array,"discount_method") == "direct"){
 					?>
-					Amount To Pay : ₦<span class="amttopay2" ></span><br>
+					Amount To Pay : <?php echo $symbol;?><span class="amttopay2" ></span><br>
 					Discount : <span class="discount-amount-confirm"></span> <br>
 					<?php
 					}else{
 					?>
-					Charge Back Bonus : ₦<span class="amttopay2" ></span><br>
+					Charge Back Bonus : <?php echo $symbol;?><span class="amttopay2" ></span><br>
 					Commission : <span class="discount-amount-confirm"></span><br>	
 					<?php	
 					}

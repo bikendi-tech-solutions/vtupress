@@ -15,6 +15,7 @@ if(current_user_can("vtupress_admin")){
 
 $option_array = json_decode(get_option("vp_options"),true);
 
+$symbol = vp_country()["symbol"];
 ?>
 
 <div class="container-fluid license-container">
@@ -439,7 +440,7 @@ for($i=0; $i<=35; $i++){
 
 
 <div class="input-group mb-2">
-<span class="input-group-text simple" id="basic-addon1">Bill Charge ₦</span>
+<span class="input-group-text simple" id="basic-addon1">Bill Charge <?php echo $symbol;?></span>
 <input type="text" name="bill_charge" value="<?php echo vp_option_array($option_array,"bill_charge");?>" class="simple fillable form-control" style="border: 3px solid green;">
 </div>
 

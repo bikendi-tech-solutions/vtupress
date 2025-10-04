@@ -379,7 +379,7 @@ for($betpost=1; $betpost<=5; $betpost++){
 <input type="text" value="<?php echo vp_option_array($option_array,"betamountattribute");?>" name="betamountattribute"  id="betamountattribute" class="form-control">
 </div>
 <div class="input-group mb-3">
-<span class="input-group-text">Betting Charge NGN </span>
+<span class="input-group-text">Betting Charge <?php echo $currency;?> </span>
 <input type="number" value="<?php echo vp_option_array($option_array,"betcharge");?>" name="betcharge"  id="betcharge" class="form-control">
 </div>
 <div class="input-group mb-3">

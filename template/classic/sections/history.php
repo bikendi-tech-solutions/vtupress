@@ -1552,7 +1552,7 @@ echo '
 										<span class="input-group-text1"><h5>Amount</h5></span>
 								</div>
 								<div class="col right">
-										<span class="input-group-text1"><h5>₦'.strtoupper($resultsd->amount).'</h5></span>
+										<span class="input-group-text1"><h5>'.$symbol.strtoupper($resultsd->amount).'</h5></span>
 								</div>
 							</div>
 							

@@ -103,7 +103,7 @@ $fixed_amount = intval($wpdb->get_var("SELECT SUM(amount_saved) FROM $table WHER
 
             <div class="daily-savings mt-2 mx-2 mx-md-1 savings-div d-flex flex-column justify-content-between align-items-center">
                 <span class="savings-type">Daily</span>
-                <span class="savings-amount p-4 text-white d-flex">₦<h2 class="amount fw-bold"><?php echo $daily_amount;?></h2></span>
+                <span class="savings-amount p-4 text-white d-flex"><?php echo $symbol;?><h2 class="amount fw-bold"><?php echo $daily_amount;?></h2></span>
 
                 <div class="w-100 savings-control ">
 
@@ -121,7 +121,7 @@ $fixed_amount = intval($wpdb->get_var("SELECT SUM(amount_saved) FROM $table WHER
             <div class="fixed-savings mt-2  mx-2 mx-md-1 savings-div d-flex flex-column justify-content-between align-items-center">
                     <span class="savings-type">Fixed</span>
 
-                    <span class="savings-amount text-white p-4 d-flex"><span>₦</span><h2 class="amount fw-bold"><?php echo $fixed_amount;?></h2></span>
+                    <span class="savings-amount text-white p-4 d-flex"><span><?php echo $symbol;?></span><h2 class="amount fw-bold"><?php echo $fixed_amount;?></h2></span>
 
                     <div class="w-100 savings-control ">
 
@@ -363,7 +363,7 @@ $fixed_amount = intval($wpdb->get_var("SELECT SUM(amount_saved) FROM $table WHER
                 $return .= "
                     <div class='daily-plan-amount my-3'>
                         <div class='input-group'>
-                            <span class='input-group-text'>Save ₦</span>
+                            <span class='input-group-text'>Save $symbol</span>
                             <input type='number' class='daily-save-amount form-control' value='$minimum_amount'>
                             <span class='input-group-text '>Every Day</span>
                         </div>
@@ -409,7 +409,7 @@ $fixed_amount = intval($wpdb->get_var("SELECT SUM(amount_saved) FROM $table WHER
                     <div class='form-check my-3 px-3'>
                         <input class='form-check-input automatic' type='checkbox' value='' id='flexCheckChecked' checked>
                         <label class='form-check-label' for='flexCheckChecked'>
-                            Automatically deduct ₦<span class='daily-deductAmount'>$minimum_amount</span> every day
+                            Automatically deduct $symbol<span class='daily-deductAmount'>$minimum_amount</span> every day
                         </label>
                     </div>
                 ";
@@ -441,16 +441,16 @@ $fixed_amount = intval($wpdb->get_var("SELECT SUM(amount_saved) FROM $table WHER
                                 showToast('All fields are required', 'red', 5000);
                                 return;
                             } else if (parseInt($bal) < saveAmount) {
-                                showToast('Your balance is lower than what you wanna save ₦' + saveAmount, 'red', 5000);
+                                showToast('Your balance is lower than what you wanna save $symbol' + saveAmount, 'red', 5000);
                                 return;
                             } else if (parseInt($bal) < sign) {
-                                showToast('Your balance is lower than the signup fee ₦' + sign, 'red', 5000);
+                                showToast('Your balance is lower than the signup fee $symbol' + sign, 'red', 5000);
                                 return;
                             } else if (parseInt($bal) < minimum) {
-                                showToast('Your balance is lower than minimum balance of ₦' + minimum, 'red', 5000);
+                                showToast('Your balance is lower than minimum balance of $symbol' + minimum, 'red', 5000);
                                 return;
                             } else if (saveAmount < minimum) {
-                                showToast('You can\'t save below the minimum amount of ₦' + minimum, 'red', 5000);
+                                showToast('You can\'t save below the minimum amount of $symbol' + minimum, 'red', 5000);
                                 return;
                             } else {
                                 showToast('Processing... ', 'yellow', 5000);
@@ -627,13 +627,13 @@ $fixed_amount = intval($wpdb->get_var("SELECT SUM(amount_saved) FROM $table WHER
 
                     $return .= "
                         <option value=''>--Select Plan --</option>
-                        <option value='$pid' sign='$sign_up_fee' minimum='$minimum_amount' interest='$interest' charge='$cut' charge-type='$cut_type'>$duration - [ ₦$minimum_amount ] Minimum</option>
+                        <option value='$pid' sign='$sign_up_fee' minimum='$minimum_amount' interest='$interest' charge='$cut' charge-type='$cut_type'>$duration - [ $symbol$minimum_amount ] Minimum</option>
                     ";
                 }
                 $return .= "</select>
                     <div class='plan-amount my-3'>
                         <div class='input-group'>
-                            <span class='input-group-text'>Save ₦</span>
+                            <span class='input-group-text'>Save $symbol</span>
                             <input type='number' class='save-amount form-control' value='$minimum_amount'>
                             <span class='input-group-text '>Every</span>
                             <select class='save-duration form-control'>
@@ -678,7 +678,7 @@ $fixed_amount = intval($wpdb->get_var("SELECT SUM(amount_saved) FROM $table WHER
                                             <p>Will you get same interest recurrently @ same duration? [$recurrent_after_first !]</p>
                                             <p>We will penalize you with a charge of $penalty % from your principal if you liquidate (withdraw before plan ends) your account and no interest will be added</p>
                                             <p>Charge is just $cut$cut_type of your total savings</p>
-                                            <span class='cal fw-bold fs-4 my-2'>e.g You will get <b class='price'>₦0</b> in 1 Day @ saving amount + $interest% - $cut$cut_type if you save daily and interest is to me applied everyday</span>
+                                            <span class='cal fw-bold fs-4 my-2'>e.g You will get <b class='price'>$symbol0</b> in 1 Day @ saving amount + $interest% - $cut$cut_type if you save daily and interest is to me applied everyday</span>
                                             <p>Edit the amount you wanna save to see calculated changes example</p>
                                         
                                         </div>
@@ -690,7 +690,7 @@ $fixed_amount = intval($wpdb->get_var("SELECT SUM(amount_saved) FROM $table WHER
                         <div class='form-check my-3 px-3'>
                             <input class='form-check-input automatic' type='checkbox' value='' id='flexCheckChecked' checked>
                             <label class='form-check-label' for='flexCheckChecked'>
-                                Automatically deduct ₦<span class='deductAmount'>$minimum_amount</span> every <span class='deductDay'>day</span>
+                                Automatically deduct $symbol<span class='deductAmount'>$minimum_amount</span> every <span class='deductDay'>day</span>
                             </label>
                         </div>
                     ";
@@ -758,16 +758,16 @@ $fixed_amount = intval($wpdb->get_var("SELECT SUM(amount_saved) FROM $table WHER
                                 showToast('All fields are required', 'red', 5000);
                                 return;
                             } else if (parseInt($bal) < saveAmount) {
-                                showToast('Your balance is lower than what you wanna save ₦' + saveAmount, 'red', 5000);
+                                showToast('Your balance is lower than what you wanna save $symbol' + saveAmount, 'red', 5000);
                                 return;
                             } else if (parseInt($bal) < sign) {
-                                showToast('Your balance is lower than the signup fee ₦' + sign, 'red', 5000);
+                                showToast('Your balance is lower than the signup fee $symbol' + sign, 'red', 5000);
                                 return;
                             } else if (parseInt($bal) < minimum) {
-                                showToast('Your balance is lower than minimum balance of ₦' + minimum, 'red', 5000);
+                                showToast('Your balance is lower than minimum balance of $symbol' + minimum, 'red', 5000);
                                 return;
                             } else if (saveAmount < minimum) {
-                                showToast('You can\'t save below the minimum amount of ₦' + minimum, 'red', 5000);
+                                showToast('You can\'t save below the minimum amount of $symbol' + minimum, 'red', 5000);
                                 return;
                             } else {
                                 showToast('Processing... ', 'yellow', 5000);
