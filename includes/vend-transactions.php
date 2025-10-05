@@ -1336,6 +1336,8 @@ function handle_data_transaction($request_method, $api_url_option, $api_endpoint
                 $call = wp_remote_get($final_url, $http_args);
             } else { // post
                 $http_args['body'] = json_encode($datass);
+                // echo $url;
+                // print_r($http_args);
                 $call = wp_remote_post($url, $http_args);
             }
             $response = wp_remote_retrieve_body($call);
