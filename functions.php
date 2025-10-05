@@ -357,10 +357,6 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
             case "ng":
 
                 $vp_services = [
-                    "glo" => "GLO",
-                    "9mobile" => "9MOBILE",
-                    "mtn" => "MTN",
-                    "airtel" => "AIRTEL",
                     "bypass" => false,
                     "currency" => "NGN",
                     "symbol" => "₦",
@@ -378,10 +374,6 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
                 break;
             case "gh":
                 $vp_services = [
-                    "glo" => "TIGO",
-                    "9mobile" => "VODAFONE",
-                    "mtn" => "MTN",
-                    "airtel" => "AIRTEL",
                     "bypass" => true,
                     "currency" => "GHS",
                     "symbol" => "₵",
@@ -398,8 +390,13 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
                 ];
                 break;
         }
-
-        return $vp_services;
+        $networks = [
+                    "glo" => vp_getoption("filter_glo","GLO"),
+                    "9mobile" => vp_getoption("filter_9mobile","9MOBILE"),
+                    "mtn" => vp_getoption("filter_mtn","MTN"),
+                    "airtel" => vp_getoption("filter_airtel","AIRTEL"),
+        ];
+        return array_merge($vp_services,$networks);
     }
 
     /**

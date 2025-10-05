@@ -1448,8 +1448,8 @@ if(vp_getoption("vtupress_custom_bet") == "yes"){
 
         <div class="alert alert-info">
           <strong> <i class="fas fa-info"></i></strong>
-          <span>Vtupress now partnering with connectbridge for seemless integration outside the box! We are now...
-            <a href="https://vtupress.com/connect-bridge/" class="">Read More</a>
+          <span>Please note vtupress now work in other countries, only switch your country to another if you are building for customers of that country. You can't revert any country switch made...
+            <a href="#" class="d-none">Read More</a>
         </div>
         <!-- ============================================================== -->
         <!-- End Bread crumb and right sidebar toggle -->

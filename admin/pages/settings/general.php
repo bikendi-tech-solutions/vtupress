@@ -44,8 +44,8 @@ if ($_GET["subpage"] == "general") {
     <div class=" mb-3 d-flex flex-column">
       <div class="input-group ">
         <span class="input-group-text" id="basic-addon1">Country</span>
-        <select class="form-select updateThis form-select-sm" name="country" '.$switch.'>
-        <option value="' . vp_getoption("vp_country","ng") . '">' . vp_getoption("vp_country","NG") . '</option>
+        <select class="form-select updateThis form-select-sm" name="country" ' . $switch . '>
+        <option value="' . vp_getoption("vp_country", "ng") . '">' . vp_getoption("vp_country", "NG") . '</option>
         <option value="ng">NG</option>
         <option value="gh">GH</option>
         </select>
@@ -59,16 +59,16 @@ if ($_GET["subpage"] == "general") {
       <option value="' . vp_getoption("vp_template") . '">' . vp_getoption("vp_template") . '</option>
       <option value="default">Default</option>
       ';
-              if (vp_getoption("resell") == "yes") {
-                if (!$bypass):
-                  echo '
+            if (vp_getoption("resell") == "yes") {
+              if (!$bypass):
+                echo '
             <option value="classic">Classic</option>
           ';
-                endif;
-                do_action("list_vtupress_templates");
-              }
+              endif;
+              do_action("list_vtupress_templates");
+            }
 
-              echo '
+            echo '
       </select>
     </div>
     
@@ -135,14 +135,43 @@ if ($_GET["subpage"] == "general") {
     </div>
 
     <div class="input-group  mb-2">
-    <span class="input-group-text" id="basic-addon1">HIDE the Why button from users? (Not Recommended)</span>
+              <span class="input-group-text" id="basic-addon1">HIDE the Why button from users? (Not Recommended)</span>
                        <select name="hide_why"  class="form-control updateThis ">
                        <option value="' . vp_getoption('hide_why') . '">' . vp_getoption('hide_why') . '</option>
                        <option value="yes">Yes</option>
                        <option value="no">No</option>
                        </select>
     </div>
+    <div class="mb-3">
+          <small class="text-muted mb-2">Custom change the telecom network default names</small>
+          <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="input-group  mb-2">
+                                  <span class="input-group-text" id="basic-addon1">Filter name MTN</span>
+                                  <input type="text" class="form-control updateThis " name="filter_mtn" value="' . strtoupper(vp_getoption("filter_mtn","MTN")) . '" >
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="input-group  mb-2">
+                                  <span class="input-group-text" id="basic-addon1">Filter name GLO</span>
+                                  <input type="text" class="form-control updateThis " name="filter_glo" value="' . strtoupper(vp_getoption("filter_glo","GLO")) . '" >
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="input-group  mb-2">
+                                  <span class="input-group-text" id="basic-addon1">Filter name AIRTEL</span>
+                                  <input type="text" class="form-control updateThis " name="filter_airtel" value="' . strtoupper(vp_getoption("filter_airtel","AIRTEL")) . '" >
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="input-group  mb-2">
+                                  <span class="input-group-text" id="basic-addon1">Filter name 9MOBILE</span>
+                                  <input type="text" class="form-control updateThis " name="filter_9mobile" value="' . strtoupper(vp_getoption("filter_9mobile","9MOBILE")) . '" >
+                </div>
+            </div>
 
+          </div>
+    </div>
     
     </div>
     </div>
