@@ -778,37 +778,72 @@ $level = $wpdb->get_results($wpdb->prepare("SELECT * FROM  $table_name WHERE nam
 
 if($level != NULL && !empty($level)){
     $ref_chargeback = $level[0]->charge_back_percentage;
+    $chargeback = isset($level[0]->my_charge_back_percentage) ? floatval(str_replace("%","",$level[0]->my_charge_back_percentage)) : 0 ;
 
     if($ref_chargeback > 0){
-
-    
- $ref_remove = ($total_amount *  $ref_chargeback) / 100;
+        $ref_remove = ($total_amount *  $ref_chargeback) / 100;
 
 
-$who_ref_bal =  vp_getuser($who_ref_id, "vp_bal", true);
+        $who_ref_bal =  vp_getuser($who_ref_id, "vp_bal", true);
 
-$total_to_add =  $ref_remove;
+        $total_to_add =  $ref_remove;
 
-$add_to_ref_bal = intval($who_ref_bal) + $total_to_add;
+        $add_to_ref_bal = intval($who_ref_bal) + $total_to_add;
 
-//error_log("id = $who_ref_id, plan = $plan, $who_ref_bal + $total_to_add = $add_to_ref_bal",0);
+        //error_log("id = $who_ref_id, plan = $plan, $who_ref_bal + $total_to_add = $add_to_ref_bal",0);
 
-$rname = get_userdata($who_ref_id)->user_login;
-$table_name = $wpdb->prefix.'vp_wallet';
-$added = $wpdb->insert($table_name, array(
-'name'=> "$rname",
-'type'=> 'wallet',
-'description'=> "Got ref bonus from $rname",
-'fund_amount' => $total_to_add,
-'before_amount' => $who_ref_bal ,
-'now_amount' => $add_to_ref_bal,
-'user_id' => $who_ref_id,
-'status' => "approved",
-'the_time' => current_time('mysql', 1)
-));
+        $rname = get_userdata($who_ref_id)->user_login;
+        $table_name = $wpdb->prefix.'vp_wallet';
+        $added = $wpdb->insert($table_name, array(
+        'name'=> "$rname",
+        'type'=> 'wallet',
+        'description'=> "Got ref bonus from $rname",
+        'fund_amount' => $total_to_add,
+        'before_amount' => $who_ref_bal ,
+        'now_amount' => $add_to_ref_bal,
+        'user_id' => $who_ref_id,
+        'status' => "approved",
+        'the_time' => current_time('mysql', 1)
+        ));
 
-vp_updateuser($who_ref_id,"vp_bal",$add_to_ref_bal);
-}
+        vp_updateuser($who_ref_id,"vp_bal",$add_to_ref_bal);
+    }
+
+    $min_fund = isset($level[0]->min_fund) ? $level[0]->min_fund : 200;
+    $capped_at = isset($level[0]->capped_at) ? $level[0]->capped_at : 1000;
+    $one_time = isset($level[0]->one_time) ? $level[0]->one_time : "no";
+    $have_i_been_added = ($one_time == "no") ? "no" : vp_getuser($userid,"have_i_been_added",true) ;
+
+    if($chargeback > 0 && $have_i_been_added != "yes" && $total_amount >= $min_fund){
+            $isPercentage = preg_match("/%/",$level[0]->my_charge_back_percentage);
+
+            vp_updateuser($userid,"have_i_been_added","yes");
+            $ref_remove = $isPercentage ? ($total_amount *  $chargeback) / 100 : $chargeback;
+            $who_ref_bal =  vp_getuser($userid, "vp_bal", true);
+            if($isPercentage && $ref_remove > $capped_at ){
+                $total_to_add =  $capped_at;
+            }else{
+                $total_to_add =  $ref_remove;
+            }
+            $add_to_ref_bal = intval($who_ref_bal) + $total_to_add;
+            $rname = get_userdata($userid)->user_login;
+            $table_name = $wpdb->prefix.'vp_wallet';
+            $added = $wpdb->insert($table_name, array(
+            'name'=> "$rname",
+            'type'=> 'wallet',
+            'description'=> "Got funding bonus ",
+            'fund_amount' => $total_to_add,
+            'before_amount' => $who_ref_bal ,
+            'now_amount' => $add_to_ref_bal,
+            'user_id' => $who_ref_id,
+            'status' => "approved",
+            'the_time' => current_time('mysql', 1)
+            ));
+
+            vp_updateuser($who_ref_id,"vp_bal",$add_to_ref_bal); //update ref bal
+
+
+    }
 
 }
 else{

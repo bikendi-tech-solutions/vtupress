@@ -109,7 +109,7 @@ $where = "WHERE id = $level";
 $datas = $wpdb->get_results("SELECT * FROM  $table_name $where");
 $data = $wpdb->get_results("SELECT * FROM  $table_name");
 
-function levelsDb($value){
+function levelsDb($value,$default = "000"){
   global $datas,$wpdb;
 
   if(!empty($value)){
@@ -120,7 +120,7 @@ function levelsDb($value){
 		$table_name = $wpdb->prefix."vp_levels";
 		maybe_add_column($table_name,$value, "ALTER TABLE $table_name ADD $value text ");
 
-    $ret = "000";
+    $ret = $default;
   }
   }else{
     $ret = "e0";
@@ -206,10 +206,12 @@ Please note that all values are percentage based and are calculated based on fix
 <span class="input-group-text">UPGRADE BONUS</span>
 <input type="number" placeholder="Bonus Price" name="upgrade_bonus" value="<?php echo floatval(vp_getvalue(levelsDb("upgrade_bonus")));?>">
 </div>
-<div class="input-group">
-<span class="input-group-text">FUNDING COMMISION FROM REFEREE %</span>
-<input type="number" placeholder="Fund Chargeback" name="charge_back_percentage" value="<?php echo floatval(vp_getvalue(levelsDb("charge_back_percentage")));?>">
-</div>
+  <div class="input-group">
+    <span class="input-group-text">FUNDING COMMISION FROM REFEREE %</span>
+    <input type="number" placeholder="Fund Chargeback" name="charge_back_percentage" value="<?php echo floatval(vp_getvalue(levelsDb("charge_back_percentage")));?>">
+  </div>
+
+
 </div>
 
 <div class="col-12 col-sm bg bg-secondary p-3">
@@ -250,6 +252,36 @@ Please note that all values are percentage based and are calculated based on fix
 <input type="number" placeholder="Upgrade PV" name="upgrade_pv" value="<?php echo floatval(vp_getvalue(levelsDb("upgrade_pv")));?>">
 </div>
 </div>
+
+
+  <div class="my-2 col-12 bg bg-secondary d-flex gap-2">
+
+    <div class="input-group">
+      <span class="input-group-text">FUNDING BONUS</span>
+      <input type="text" placeholder="e.g 2% or 2" name="my_charge_back_percentage" value="<?php echo floatval(vp_getvalue(levelsDb("my_charge_back_percentage")));?>">
+      <code>e.g 2% or 2</code>
+    </div>
+
+    <div class="input-group">
+      <span class="input-group-text">Min Funding</span>
+      <input type="number" placeholder="Min funding to get comm..." name="min_fund" value="<?php echo floatval(vp_getvalue(levelsDb("min_fund",200)));?>">
+    </div>
+
+    <div class="input-group">
+      <span class="input-group-text">Capped At <?php echo $currency;?></span>
+      <input type="number" placeholder="Capped at" name="capped_at" value="<?php echo floatval(vp_getvalue(levelsDb("capped_at",1000)));?>">
+    </div>
+
+    <div class="input-group">
+      <span class="input-group-text">One Time?</span>
+      <select name="one_time" id="">
+        <option value="<?php echo strtolower(vp_getvalue(levelsDb("one_time","yes")));?>"><?php echo strtoupper(vp_getvalue(levelsDb("one_time","yes")));?></option>
+        <option value="yes">YES</option>
+        <option value="no">NO</option>
+      </select>
+    </div>
+
+  </div>
 
 </div>
 </div>

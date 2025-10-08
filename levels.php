@@ -339,6 +339,10 @@ $arr['glo_vtu']= $_REQUEST['glo_vtu'];
 $arr['mobile_vtu']= $_REQUEST['mobile_vtu'];
 $arr['airtel_vtu']= $_REQUEST['airtel_vtu'];
 $arr['charge_back_percentage'] = $_REQUEST['charge_back_percentage'];
+$arr['my_charge_back_percentage'] = $_REQUEST['my_charge_back_percentage'];
+$arr['min_fund'] = $_REQUEST['min_fund'];
+$arr['capped_at'] = $_REQUEST['capped_at'];
+$arr['one_time'] = $_REQUEST['one_time'];
 
 $arr['mtn_awuf']= $_REQUEST['mtn_awuf'];
 $arr['glo_awuf']= $_REQUEST['glo_awuf'];

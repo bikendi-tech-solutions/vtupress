@@ -63,7 +63,7 @@ if($verify_username){
 if($verify_email){
 	$verify_pass = preg_match("/^[a-zA-Z0-9\.]/",$pass);
 	if($verify_pass){
-		$verify_phone = preg_match("/^[0-9]{11}$/",$phone);
+		$verify_phone = preg_match("/^[0-9]{9,11}$/",$phone);
 		if($verify_phone){
 			$verify_ref = preg_match("/^[0-9]/",$ref);
 			if( $verify_ref || !is_plugin_active("vpmlm/vpmlm.php")){
@@ -636,7 +636,7 @@ do_action( 'user_register', $userid, $userdata );
 
 //blast
 $message = vp_getoption('resc');
-if($message != "false" && !is_numeric($message) && strlen($phone) == 11){
+if($message != "false" && !is_numeric($message) && (strlen($phone) == 11 || $bypass)){
   if(vp_getoption("vtupress_custom_weblinksms") == "yes" && vp_getoption("sms_welcome") == "yes"){
     $data = [
       "phone" => $phone,
@@ -677,7 +677,7 @@ die('{"status":"100"}');
 			}	
 		}
 		else{
-		die('{"status":"101","message":"Enter Your 11 Digits Phone Numbers"}');	
+		die('{"status":"101","message":"Enter a valid digits Phone Numbers"}');	
 		}
 	}
 	else{
