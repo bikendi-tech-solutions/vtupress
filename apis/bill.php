@@ -106,8 +106,8 @@ vp_updateoption("billvalue".$cheaders,$_REQUEST["billvalue".$cheaders]);
 vp_updateoption("billaddpost",$_REQUEST["billaddpost"]);
 
 
-for($cpost=1; $cpost<=5; $cpost++){
-vp_updateoption("billpostdata".$cpost,$_REQUEST["billpostdata".$cpost]);
+for($cpost=1; $cpost<=8; $cpost++){
+vp_updateoption("billpostdata".$cpost,isset($_REQUEST["billpostdata".$cpost]) ? $_REQUEST["billpostdata".$cpost] : "");
 vp_updateoption("billpostvalue".$cpost,$_REQUEST["billpostvalue".$cpost]);
 }
 

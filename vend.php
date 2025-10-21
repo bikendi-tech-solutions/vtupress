@@ -546,7 +546,7 @@ if (isset($_POST["vend"])) {
     }
 
     // Minimum purchase amount check
-    if ($amount < 5 && $tcode != "csms") { // SMS might have different minimums
+    if ($amount < $minimum_trans_amount && $tcode != "csms") { // SMS might have different minimums
         $wpdb->query('ROLLBACK');
         die("You can't purchase less than 5 [$amount]");
     }

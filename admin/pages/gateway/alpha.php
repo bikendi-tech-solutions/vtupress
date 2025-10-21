@@ -346,7 +346,7 @@ for($alphaaddheaders=1; $alphaaddheaders<=4; $alphaaddheaders++){
 <label class="form-label simple">ALPHA Post Datas </label>
 <br>
 <?php
-for($alphapost=1; $alphapost<=5; $alphapost++){
+for($alphapost=1; $alphapost<=8; $alphapost++){
 		if($alphapost > 2){
 		$hide_this = "hide-data";
 	}

@@ -113,8 +113,8 @@ vp_updateoption("smilevalue".$cheaders,$_REQUEST["smilevalue".$cheaders]);
 
 vp_updateoption("smileaddpost",$_REQUEST["smileaddpost"]);
 
-for($cpost=1; $cpost<=5; $cpost++){
-vp_updateoption("smilepostdata".$cpost,$_REQUEST["smilepostdata".$cpost]);
+for($cpost=1; $cpost<=8; $cpost++){
+vp_updateoption("smilepostdata".$cpost,isset(isset($_REQUEST["smilepostdata".$cpost]) ? $_REQUEST["smilepostdata".$cpost] : "") ? isset($_REQUEST["smilepostdata".$cpost]) ? $_REQUEST["smilepostdata".$cpost] : "" : "");
 vp_updateoption("smilepostvalue".$cpost,$_REQUEST["smilepostvalue".$cpost]);
 }
 

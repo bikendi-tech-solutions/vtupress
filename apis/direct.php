@@ -112,8 +112,8 @@ vp_updateoption("rdatavalue".$cheaders,$_REQUEST["rdatavalue".$cheaders]);
 
 vp_updateoption("rdataaddpost",$_REQUEST["rdataaddpost"]);
 
-for($cpost=1; $cpost<=5; $cpost++){
-vp_updateoption("rdatapostdata".$cpost,$_REQUEST["rdatapostdata".$cpost]);
+for($cpost=1; $cpost<=8; $cpost++){
+vp_updateoption("rdatapostdata".$cpost,isset($_REQUEST["rdatapostdata".$cpost]) ? $_REQUEST["rdatapostdata".$cpost] : "");
 vp_updateoption("rdatapostvalue".$cpost,$_REQUEST["rdatapostvalue".$cpost]);
 }
 

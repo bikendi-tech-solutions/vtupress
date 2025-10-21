@@ -109,8 +109,8 @@ vp_updateoption("sairtimevalue".$cheaders,$_REQUEST["sairtimevalue".$cheaders]);
 vp_updateoption("sairtimeaddpost",$_REQUEST["sairtimeaddpost"]);
 
 
-for($cpost=1; $cpost<=5; $cpost++){
-vp_updateoption("sairtimepostdata".$cpost,$_REQUEST["sairtimepostdata".$cpost]);
+for($cpost=1; $cpost<=8; $cpost++){
+vp_updateoption("sairtimepostdata".$cpost,isset($_REQUEST["sairtimepostdata".$cpost]) ? $_REQUEST["sairtimepostdata".$cpost] : "");
 vp_updateoption("sairtimepostvalue".$cpost,$_REQUEST["sairtimepostvalue".$cpost]);
 }
 

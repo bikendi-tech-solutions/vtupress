@@ -1,584 +1,396 @@
 <?php
 header("Access-Control-Allow-Origin: 'self'");
-
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 
-if(!defined('ABSPATH')){
+if (!defined('ABSPATH')) {
     $pagePath = explode('/wp-content/', dirname(__FILE__));
-    include_once(str_replace('wp-content/' , '', $pagePath[0] . '/wp-load.php'));
+    include_once(str_replace('wp-content/', '', $pagePath[0] . '/wp-load.php'));
 }
-if(WP_DEBUG == false){
-error_reporting(0);	
-}
-require_once(ABSPATH.'wp-load.php');
-include_once(ABSPATH.'wp-admin/includes/plugin.php');
-include_once(ABSPATH .'wp-content/plugins/vtupress/functions.php');
 
-  // $vp_country = vp_country();
-	// $currency = $vp_country["currency"];
-	// $country = $vp_country["country"];
+if (WP_DEBUG == false) {
+    error_reporting(0);
+}
+
+require_once(ABSPATH . 'wp-load.php');
+include_once(ABSPATH . 'wp-admin/includes/plugin.php');
+include_once(ABSPATH . 'wp-content/plugins/vtupress/functions.php');
+
+// Referrer protection (as in original)
 $allowed_referrers = [
-  $_SERVER['SERVER_NAME']
+    $_SERVER['SERVER_NAME']
 ];
 
-// Check if the referrer is set
 if (isset($_SERVER['HTTP_REFERER'])) {
-  $referer = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
-  
-  // Check if the referrer is in the allowed list
-  if (!in_array($referer, $allowed_referrers)) {
-      die("REF ENT PERM");
-  }
+    $referer = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
+    if (!in_array($referer, $allowed_referrers)) {
+        die("REF ENT PERM");
+    }
 } else {
-  die("BAD");
+    die("BAD");
 }
 
-
-if(isset($_POST['pay'])){
+if (!isset($_POST['pay'])) {
+    echo "Error";
+    exit;
+}
 
 do_action("vppay");
 
-//$uniqidvalue = $_POST['uniqidvalue'];
+$paychoice = $_POST["paymentchoice"] ?? null;
 
-$paychoice = $_POST["paymentchoice"];
-
-
-if(isset($_POST["amounte"])){
-$userid = $_POST["userid"];
-setcookie('userid', $_POST["userid"], time() + (30 * 24 * 60 * 60), "/");
-$amounte = $_POST['amounte'];
+// handle amounte cookie (original behavior)
+if (isset($_POST["amounte"])) {
+    $userid = $_POST["userid"] ?? '';
+    setcookie('userid', $userid, time() + (30 * 24 * 60 * 60), "/");
+    $amounte = $_POST['amounte'];
 }
 
+// tcode / amount handling (original behavior)
+if (isset($_POST["tcode"])) {
+    $id = get_current_user_id();
+    $user = get_userdata($id);
+    $name = $user ? $user->display_name : '';
+    $email = $user ? $user->user_email : '';
 
-if(isset($_POST["tcode"])){
+    if (vp_getoption("charge_method") == "fixed") {
+        $amount = intval($_POST['amount']) + floatval(vp_getoption("charge_back"));
+    } else {
+        $remove = (intval($_POST['amount']) * floatval(vp_getoption("charge_back"))) / 100;
+        $amount = intval($_POST['amount']) + $remove;
+    }
 
+    $tcode = $_POST['tcode'] ?? '';
+    setcookie('amount', $amount, time() + (30 * 24 * 60 * 60), "/");
 
-$id = get_current_user_id();
-$name = get_userdata($id)->user_name;
-$email = get_userdata($id)->user_email;
-
-if(vp_getoption("charge_method") == "fixed"){
-$amount = intval($_POST['amount']) + floatval(vp_getoption("charge_back"));
-}
-else{
-$remove = (intval($_POST['amount']) *  floatval(vp_getoption("charge_back"))) / 100;
-$amount = intval($_POST['amount']) + $remove;
-}
-
-
-$tcode = $_POST['tcode'];
-
-
-setcookie('amount', $amount, time() + (30 * 24 * 60 * 60), "/");
-
-if(isset($_POST['secret'])){
-setcookie('secret', $_POST['secret'], time() + (30 * 24 * 60 * 60), "/");
-}
-setcookie('tcode', "wallet", time() + (30 * 24 * 60 * 60), "/");
-}
-if(isset($_POST["ud"])){
-	$ud = $_POST['ud'];
-	setcookie('ud', $_POST['ud'], time() + (30 * 24 * 60 * 60), "/");
-}
-if(isset($_POST["id"])){
-	$id = $_POST['id'];
-	setcookie('id', $_POST['id'], time() + (30 * 24 * 60 * 60), "/");
+    if (isset($_POST['secret'])) {
+        setcookie('secret', $_POST['secret'], time() + (30 * 24 * 60 * 60), "/");
+    }
+    setcookie('tcode', "wallet", time() + (30 * 24 * 60 * 60), "/");
 }
 
-
+if (isset($_POST["ud"])) {
+    setcookie('ud', $_POST['ud'], time() + (30 * 24 * 60 * 60), "/");
+}
+if (isset($_POST["id"])) {
+    setcookie('id', $_POST['id'], time() + (30 * 24 * 60 * 60), "/");
+}
 
 $check_bal = vp_getoption("checkbal");
 
+// Proceed only if amount present or balance check disabled
+if (!isset($amounte) && $check_bal != "no") {
+    echo "<script>
+            alert('Sorry this transaction can\\'t be completed at the moment please check back later');
+            window.history.back();
+          </script>";
+    exit;
+}
 
+/**
+ * Helper: output minimal JS/CSS includes used by multiple gateways
+ * (keeps behavior same as original where files are included inline)
+ */
+function output_shared_assets()
+{
+    // NOTE: these paths match your original structure
+    echo '<link href="' . get_option('siteurl') . '/wp-content/plugins/vtupress/formstyle.css?v=1" rel="stylesheet" />';
+    echo '<div id="cover-spin" style="display:none;"></div>';
+    echo '<script src="' . esc_url(plugins_url("vtupress/js/sweet.js?v=1")) . '"></script>';
+    echo '<script src="' . esc_url(plugins_url("vtupress/js/jquery.js?v=1")) . '"></script>';
+}
 
-if(isset($amounte) || $check_bal == "no"){
+/**
+ * Helper: a simple unified AJAX processor for Paystack responses
+ * url: the process.php url (constructed in Paystack section)
+ */
+function output_paystack_ajax_helpers()
+{
+    ?>
+    <script>
+    // show/hide cover spinner
+    function vpShowSpinner() {
+        try { jQuery("#cover-spin").show(); } catch(e) {}
+    }
+    function vpHideSpinner() {
+        try { jQuery("#cover-spin").hide(); } catch(e) {}
+    }
 
+    function vpProcessPaystack(url) {
+        vpShowSpinner();
+        jQuery.ajax({
+            url: url,
+            dataType: 'text',
+            cache: false,
+            async: true,
+            type: 'POST',
+            success: function(data) {
+                vpHideSpinner();
+                if (data == "100") {
+                    swal({
+                        title: "Successful!",
+                        text: "Account Funded!",
+                        icon: "success",
+                        button: "Okay",
+                    }).then(function() { window.location.href = "/vpaccount"; });
+                } else {
+                    swal({
+                        title: "Error",
+                        text: data,
+                        icon: "error",
+                        button: "Okay",
+                    }).then(function() { window.location.href = "/vpaccount"; });
+                }
+            },
+            error: function(jqXHR, exception) {
+                vpHideSpinner();
+                var msg = "";
+                if (jqXHR.status === 0) {
+                    msg = "No Connection. Verify Network.";
+                } else if (jqXHR.status == 404) {
+                    msg = "Requested page not found. [404]";
+                } else if (jqXHR.status == 500) {
+                    msg = "Internal Server Error [500].";
+                } else if (exception === "parsererror") {
+                    msg = "Requested JSON parse failed.";
+                } else if (exception === "timeout") {
+                    msg = "Time out error.";
+                } else if (exception === "abort") {
+                    msg = "Ajax request aborted.";
+                } else {
+                    msg = "Uncaught Error.\n" + (jqXHR.responseText || "");
+                }
+                swal({ title: "Error!", text: msg, icon: "error", button: "Okay" });
+            }
+        });
+    }
+    </script>
+    <?php
+}
 
-	
-if($paychoice == "flutterwave"){
+// -------------------------
+// FLUTTERWAVE
+// -------------------------
+if ($paychoice === "flutterwave") {
+    // Keep your $k, $currency, $country, $name, $email as-is (you said they're defined elsewhere or earlier)
+    // Output a hidden button that auto-clicks to open Flutterwave checkout (v3/v2 compatibility handled by including correct script)
+    // Using FlutterwaveCheckout as in your original but cleaned and simplified.
+    echo '<div style="visibility:hidden;">
+            <form>
+              <script src="https://checkout.flutterwave.com/v3.js"></script>
+              <button type="button" id="payf" onclick="makePayment()">Pay Now</button>
+            </form>
+          </div>';
 
-echo'
-<div style="visibility:hidden;">
-<form>
-  <script src="https://checkout.flutterwave.com/v3.js"></script>
-  <button type="button" onClick="makePayment()" id="payf">Pay Now</button>
-</form>
-  </div>
-<script>
-  function makePayment() {
-    FlutterwaveCheckout({
-      public_key: "'.$k.'",
-      tx_ref: "vtu"+Math.floor((Math.random() * 1000000000) + 1),
-      amount: "'.$amount.'",
-      currency: "'.$currency.'",
-      country: "'.$country.'",
-      payment_options: " ",
-      customer: {
-        email:  "'.$email.'",
-        phone_number: "07049626922",
-        name: "'.$name.'",
-      },
-      callback: function (data) {
-     let dstatus = data.status;
-	 let dtransaction_id = data.transaction_id;
-	 let dtx_ref = data.tx_ref;
-	 if(dstatus == "successful" || dstatus == "Completed" || dstatus == "completed"){
+    // JS for flutterwave
+    // preserve $k, $amount, $currency, $country, $email, $name variables (assumed defined)
+    ?>
+    <script>
+    function makePayment() {
+        FlutterwaveCheckout({
+            public_key: "<?php echo $k; ?>",
+            tx_ref: "vtu" + Math.floor((Math.random() * 1000000000) + 1),
+            amount: "<?php echo $amount; ?>",
+            currency: "<?php echo $currency; ?>",
+            country: "<?php echo $country; ?>",
+            customer: {
+                email: "<?php echo addslashes($email ?? ''); ?>",
+                phone_number: "07049626922",
+                name: "<?php echo addslashes($name ?? ''); ?>"
+            },
+            callback: function (data) {
+                var status = data.status;
+                if (status === "successful" || status === "Completed" || status === "completed") {
+                    swal({
+                        title: "Funding Successful",
+                        text: "Might take a few minutes to finalize transaction",
+                        icon: "success"
+                    }).then(function() { window.location.href = "/vpaccount"; });
+                } else {
+                    swal({
+                        title: "Transaction Failed",
+                        text: "Transaction failed! CODE[" + status + "]",
+                        icon: "error"
+                    }).then(function() { window.history.back(); });
+                }
+            },
+            onclose: function() {
+                window.history.back();
+            },
+            customizations: {
+                title: "<?php echo get_bloginfo('name'); ?>",
+                description: "Payment for vtu services"
+            }
+        });
+    }
 
-    			swal({
-  title: "Funding Successful",
-  text: "Might Take Few Minute To Finallize Transaction",
-  icon: "success",
-})
-.then((value) => {
-  switch (value) {
- 
-    case "defeat":
-	window.location.href = "/vpaccount";
-      break;
-    default:
-    window.location.href = "/vpaccount";
-  }
-}); 
-    
-	 }
-	 else{
-		alert("Transaction Failed To Complete!, You\'ll Be Redirected Back CODE["+dstatus+"]"); 
-		  window.history.back();
-	 }
-         console.log(data);
-	  },
-      onclose: function() {
-        // close 
-		window.history.back();
-      },
-      customizations: {
-        title: "'; bloginfo("name"); echo'",
-        description: "Payment for vtu services",
-      },
-    });
-  }
-</script>
-<script>
-    
     document.getElementById("payf").click();
-</script>
-';
+    </script>
+    <?php
+    exit;
 }
-elseif($paychoice == "paystack"){
 
-  if(vp_getoption("paystack_charge_method") == "fixed"){
-    $amount = intval($_POST['amount']) + floatval(vp_getoption("paystack_charge_back"));
+// -------------------------
+// PAYSTACK (v2 inline)
+// -------------------------
+if ($paychoice === "paystack") {
+    // calculate amount as original code does for paystack charge method
+    if (vp_getoption("paystack_charge_method") == "fixed") {
+        $amount = intval($_POST['amount']) + floatval(vp_getoption("paystack_charge_back"));
+    } else {
+        $remove = (intval($_POST['amount']) * floatval(vp_getoption("paystack_charge_back"))) / 100;
+        $amount = intval($_POST['amount']) + $remove;
     }
-    else{
-    $remove = (intval($_POST['amount']) *  floatval(vp_getoption("paystack_charge_back"))) / 100;
-    $amount = intval($_POST['amount']) + $remove;
-    }
-
 
     setcookie('amount', $amount, time() + (30 * 24 * 60 * 60), "/");
 
-echo '
-<div style="visibility:hidden;">
-<form id="paymentForm" >
-<div class="form-submit" >
-    <button type="submit" onclick="payWithPaystack()" id="payk"> Pay </button>
-  </div>
-</form>
-</div
+    // Output shared assets (css + sweet + jquery + cover spinner)
+    output_shared_assets();
+    output_paystack_ajax_helpers();
 
+    // Use Paystack v2 inline script (the v2 script URL)
+    // and use PaystackPop.setup (standard inline integration)
+    ?>
+    <div style="visibility:hidden;">
+        <form id="paymentForm">
+            <div class="form-submit">
+                <button type="submit" id="payk"> Pay </button>
+            </div>
+        </form>
+    </div>
 
-<link href="'.vp_option_array($option_array,'siteurl').'/wp-content/plugins/vtupress/formstyle.css?v=1" rel="stylesheet" />
-      <div id="cover-spin" >
-	  
-	  </div>
+    <script src="https://js.paystack.co/v2/inline.js"></script>
+    <script>
+    document.getElementById("paymentForm").addEventListener("submit", payWithPaystack, false);
 
+    function payWithPaystack(e) {
+        e.preventDefault();
 
+        var handler = PaystackPop.setup({
+            key: "<?php echo vp_getoption("ppub"); ?>",
+            email: "<?php echo addslashes($email ?? ''); ?>",
+            amount: <?php echo intval($amount); ?> * 100,
+            currency: "<?php echo $currency; ?>",
+            ref: "vtu" + Math.floor((Math.random() * 1000000000) + 1),
+            onClose: function(){
+                window.history.back();
+            },
+            callback: function(response){
+                // Construct the server verification URL (matches your original)
+                var locatio = "<?php echo vp_getoption("siteurl"); ?>/wp-content/plugins/vtupress/process.php?status=successful&current_clr=<?php echo urlencode($_COOKIE["current_clr"] ?? ""); ?>&gateway=paystack&amount=<?php echo intval($amount); ?>&reference=" + response.reference;
 
-<script src="'.esc_url(plugins_url("vtupress/js/sweet.js?v=1")).'" ></script>
-<script src="'.esc_url(plugins_url("vtupress/js/jquery.js?v=1")).'" ></script>
-<script src="https://js.paystack.co/v1/inline.js"></script>
-<script>
-const paymentForm = document.getElementById("paymentForm");
-paymentForm.addEventListener("submit", payWithPaystack, false);
-function payWithPaystack(e) {
-  e.preventDefault();
-  let handler = PaystackPop.setup({
-    key: "'.vp_getoption("ppub").'", // Replace with your public key
-    email:  "'.$email.'",
-    amount: '.$amount.' * 100,
-    channels: "",
-    ref: "vtu"+Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
-    // label: "Optional string that replaces customer email"
-    onClose: function(){
-      window.history.back();
-    },
-    callback: function(response){
-		 var locatio = "'.vp_getoption("siteurl").'/wp-content/plugins/vtupress/process.php?status=successful&current_clr='.$_COOKIE["current_clr"].'&gateway=paystack&amount='.$amount.'&reference=" + response.reference;
-     
-     			swal({
-  title: "Wait",
-  text: "\"Press Okay And Wait For A Response To Fund Your Account\" ",
-  icon: "success",
-})
-.then((value) => {
-  switch (value) {
- 
-    case "defeat":
-	/*window.location.href = "/vpaccount";*/
-	 
-	   jQuery("#cover-spin").show();
-	  ';
-	?>  
-	  jQuery.ajax({
-  url: locatio,
- dataType: 'json',
-  'cache': false,
-  "async": true,
-  error: function (jqXHR, exception) {
-	  jQuery("#cover-spin").hide();
-        var msg = "";
-        if (jqXHR.status === 0) {
-            msg = "No Connection.\n Verify Network.";
-     swal({
-  title: "Error!",
-  text: msg,
-  icon: "error",
-  button: "Okay",
-});
-  
-        } else if (jqXHR.status == 404) {
-            msg = "Requested page not found. [404]";
-			 swal({
-  title: "Error!",
-  text: msg,
-  icon: "error",
-  button: "Okay",
-});
-        } else if (jqXHR.status == 500) {
-            msg = "Internal Server Error [500].";
-			 swal({
-  title: "Error!",
-  text: msg,
-  icon: "error",
-  button: "Okay",
-});
-        } else if (exception === "parsererror") {
-            msg = "Requested JSON parse failed.";
-			   swal({
-  title: msg,
-  text: jqXHR.responseText,
-  icon: "error",
-  button: "Okay",
-});
-        } else if (exception === "timeout") {
-            msg = "Time out error.";
-			 swal({
-  title: "Error!",
-  text: msg,
-  icon: "error",
-  button: "Okay",
-});
-        } else if (exception === "abort") {
-            msg = "Ajax request aborted.";
-			 swal({
-  title: "Error!",
-  text: msg,
-  icon: "error",
-  button: "Okay",
-});
-        } else {
-            msg = "Uncaught Error.\n" + jqXHR.responseText;
-			 swal({
-  title: "Error!",
-  text: msg,
-  icon: "error",
-  button: "Okay",
-});
-        }
-    },
-  
-  success: function(data) {
-	  jQuery("#cover-spin").hide();
-        if(data == "100"){
-		  swal({
-  title: "Successful!!!",
-  text: "Account Funded!",
-  icon: "success",
-  button: "Okay",
-}).then((value) => {
-	window.location.href = "/vpaccount";
-});
-	  }
-	  else{
-		 jQuery("#cover-spin").hide();
-swal({
-  title: "Error",
-  text: data,
-  icon: "error",
-  button: "Okay",
-}).then((value) => {
-	jQuery("#cover-spin").show();
-	window.location.href = "/vpaccount";
-});
+                swal({
+                    title: "Please Wait",
+                    text: "Press Okay and wait for account funding...",
+                    icon: "info"
+                }).then(function() {
+                    // Use unified AJAX processor
+                    vpProcessPaystack(locatio);
+                });
+            }
+        });
 
-  }
-  },
-  type: 'POST'
+        
 
-});
-	  
-	  <?php
-	  echo'
-	  
-	  
-	  break;
-    default:
-	
-	';
-	?>
-	 jQuery("#cover-spin").show();
-		  jQuery.ajax({
-  url: locatio,
- dataType: 'json',
-  'cache': false,
-  "async": true,
-  error: function (jqXHR, exception) {
-	  jQuery("#cover-spin").hide();
-        var msg = "";
-        if (jqXHR.status === 0) {
-            msg = "No Connection.\n Verify Network.";
-     swal({
-  title: "Error!",
-  text: msg,
-  icon: "error",
-  button: "Okay",
-});
-  
-        } else if (jqXHR.status == 404) {
-            msg = "Requested page not found. [404]";
-			 swal({
-  title: "Error!",
-  text: msg,
-  icon: "error",
-  button: "Okay",
-});
-        } else if (jqXHR.status == 500) {
-            msg = "Internal Server Error [500].";
-			 swal({
-  title: "Error!",
-  text: msg,
-  icon: "error",
-  button: "Okay",
-});
-        } else if (exception === "parsererror") {
-            msg = "Requested JSON parse failed.";
-			   swal({
-  title: msg,
-  text: jqXHR.responseText,
-  icon: "error",
-  button: "Okay",
-});
-        } else if (exception === "timeout") {
-            msg = "Time out error.";
-			 swal({
-  title: "Error!",
-  text: msg,
-  icon: "error",
-  button: "Okay",
-});
-        } else if (exception === "abort") {
-            msg = "Ajax request aborted.";
-			 swal({
-  title: "Error!",
-  text: msg,
-  icon: "error",
-  button: "Okay",
-});
-        } else {
-            msg = "Uncaught Error.\n" + jqXHR.responseText;
-			 swal({
-  title: "Error!",
-  text: msg,
-  icon: "error",
-  button: "Okay",
-});
-        }
-    },
-  
-  success: function(data) {
-	  jQuery("#cover-spin").hide();
-        if(data == "100"){
-		  swal({
-  title: "Successful!!!",
-  text: "Account Funded",
-  icon: "success",
-  button: "Okay",
-}).then((value) => {
-	window.location.href = "/vpaccount";
-});
-	  }
-	  else{
-		 jQuery("#cover-spin").hide();
-swal({
-  title: "Error",
-  text: data,
-  icon: "error",
-  button: "Okay",
-}).then((value) => {
-	jQuery("#cover-spin").show();
-	window.location.href = "/vpaccount";
-});
-
-  }
-  },
-  type: 'POST'
-
-});
-	
-	<?php
-	
-	echo'
-     /* window.location.href = "/vpaccount";*/
-  }
-});  
+        handler.openIframe();
     }
-  });
-  handler.openIframe();
-}
 
-</script>
-<script>
-    
+    // auto-click to start
     document.getElementById("payk").click();
-</script>
-';
+    </script>
+    <?php
+    exit;
 }
-elseif($paychoice == "monnify"){
-	
-  if(vp_getoption("charge_method") == "fixed"){
-    $amount = intval($_POST['amount']) + floatval(vp_getoption("charge_back"));
-    }
-    else{
-    $remove = (intval($_POST['amount']) *  floatval(vp_getoption("charge_back"))) / 100;
-    $amount = intval($_POST['amount']) + $remove;
-    }
 
+// -------------------------
+// MONNIFY (preserve original logic, cleaned)
+// -------------------------
+if ($paychoice === "monnify") {
+    if (vp_getoption("charge_method") == "fixed") {
+        $amount = intval($_POST['amount']) + floatval(vp_getoption("charge_back"));
+    } else {
+        $remove = (intval($_POST['amount']) * floatval(vp_getoption("charge_back"))) / 100;
+        $amount = intval($_POST['amount']) + $remove;
+    }
 
     setcookie('amount', $amount, time() + (30 * 24 * 60 * 60), "/");
-    
-  $apikeym = vp_getoption("monnifyapikey");
-$secretkeym = vp_getoption("monnifysecretkey");
 
-  if(stripos($apikeym,"prod") == false) {
-    $baseurl =  "https://sandbox.monnify.com";
-    $mode = "test";
-}
-else{
-    $baseurl =  "https://api.monnify.com";
-    $mode = "live";
-}
-    
+    $apikeym = vp_getoption("monnifyapikey");
+    $secretkeym = vp_getoption("monnifysecretkey");
 
+    $baseurl = (stripos($apikeym, "prod") === false) ? "https://sandbox.monnify.com" : "https://api.monnify.com";
 
-
-$curl = curl_init();
-
-curl_setopt_array($curl, array(
-  CURLOPT_URL => $baseurl.'/api/v1/auth/login/',
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => '',
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 0,
-  CURLOPT_FOLLOWLOCATION => true,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => 'POST',
-  CURLOPT_HTTPHEADER => [
+    // Get access token
+    $curl = curl_init();
+    curl_setopt_array($curl, [
+        CURLOPT_URL => $baseurl . '/api/v1/auth/login/',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_HTTPHEADER => [
             "Content-Type: application/json",
-            "Authorization: Basic ".base64_encode("$apikeym:$secretkeym") 
+            "Authorization: Basic " . base64_encode("$apikeym:$secretkeym")
         ],
-));
+    ]);
 
-$response = curl_exec($curl);
+    $response = curl_exec($curl);
+    curl_close($curl);
+    $res = json_decode($response);
 
-curl_close($curl);
-$res  = json_decode($response);
+    if (!isset($res->responseBody->accessToken)) {
+        die("CREDENTIALS INCORRECT OR ERROR WITH MONNIFY");
+    }
+    $auth = $res->responseBody->accessToken;
 
-if(!isset($res->responseBody->accessToken)){
-  die("CREDENTIALS INCORRECT OR ERROR WITH MONNIFY");
-}
-$auth = $res->responseBody->accessToken;
+    // Initiate transaction
+    $payload = json_encode([
+        "amount" => $amount,
+        "customerName" => $name,
+        "customerEmail" => $email,
+        "paymentReference" => uniqid("vtu-", false),
+        "paymentDescription" => "VTU SERVICE",
+        "currencyCode" => $currency,
+        "contractCode" => vp_getoption("monnifycontractcode"),
+        "redirectUrl" => vp_getoption("siteurl") . '/vpaccount',
+        "paymentMethods" => ["CARD", "ACCOUNT_TRANSFER"]
+    ]);
 
+    $curl = curl_init();
+    curl_setopt_array($curl, [
+        CURLOPT_URL => $baseurl . '/api/v1/merchant/transactions/init-transaction',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS => $payload,
+        CURLOPT_HTTPHEADER => [
+            'Authorization: Bearer ' . $auth,
+            'Content-Type: application/json'
+        ],
+    ]);
 
-$curl = curl_init();
+    $response = curl_exec($curl);
+    curl_close($curl);
+    $respp = json_decode($response);
 
-curl_setopt_array($curl, array(
-  CURLOPT_URL => $baseurl.'/api/v1/merchant/transactions/init-transaction',
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => '',
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 0,
-  CURLOPT_FOLLOWLOCATION => true,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => 'POST',
-  CURLOPT_POSTFIELDS =>'{
-  "amount":'.$amount.',
-  "customerName": "'.$name.'",
-  "customerEmail": "'.$email.'",
-  "paymentReference":"'.uniqid("vtu-",false).'",
-  "paymentDescription": "VTU SERVICE",
-  "currencyCode": "'.$currency.'",
-  "contractCode": "'.vp_getoption("monnifycontractcode").'",
-  "redirectUrl": "'.vp_getoption("siteurl").'/vpaccount",
-  "paymentMethods": [
-    "CARD",
-    "ACCOUNT_TRANSFER"
-  ]
-}',
-  CURLOPT_HTTPHEADER => array(
-    'Authorization: Bearer '.$auth,
-    'Content-Type: application/json'
-  ),
-));
-
-$response = curl_exec($curl);
-
-curl_close($curl);
-$respp  = json_decode($response);
-
-if(isset($respp->responseBody->checkoutUrl)){
-
-header("Location:".$respp->responseBody->checkoutUrl);
-}
-else{
-  die("NO RESPONSE FROM MONNIFY. Please check your API KEYS and CONTRACT CODES");
+    if (isset($respp->responseBody->checkoutUrl)) {
+        header("Location: " . $respp->responseBody->checkoutUrl);
+        exit;
+    } else {
+        die("NO RESPONSE FROM MONNIFY. Please check your API KEYS and CONTRACT CODES");
+    }
 }
 
-}else{
-  echo "
-<script>
-alert('Invalid payment gateway selected! Sorry this transaction can\'t be completed at the moment please check back later');
-window.history.back();
-
-</script>
-
-";
-}
-}
-else{
-	
-echo "
-<script>
-alert('Sorry this transaction can\'t be completed at the moment please check back later');
-window.history.back();
-
-</script>
-
-";
-
-}
-}
-else{
-echo "Error";	
-	
-}
+// If we reach here, invalid gateway
+echo "<script>
+    alert('Invalid payment gateway selected! Sorry this transaction can\\'t be completed at the moment please check back later');
+    window.history.back();
+    </script>";
+exit;
 ?>

@@ -344,7 +344,7 @@ for($shareaddheaders=1; $shareaddheaders<=4; $shareaddheaders++){
 <label class="form-label simple">Shared Post Datas</label>
 <br>
 <?php
-for($airtimepost=1; $airtimepost<=5; $airtimepost++){
+for($airtimepost=1; $airtimepost<=8; $airtimepost++){
 		if($airtimepost > 2){
 		$hide_this = "hide-data";
 	}

@@ -329,7 +329,7 @@ for($billaddheaders=1; $billaddheaders<=4; $billaddheaders++){
 <br>
 
 <?php
-for($billpost=1; $billpost<=5; $billpost++){
+for($billpost=1; $billpost<=8; $billpost++){
 	
 			if($billpost > 2){
 		$hide_this = "hide-data";

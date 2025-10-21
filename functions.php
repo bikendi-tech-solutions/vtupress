@@ -362,6 +362,7 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
                     "symbol" => "₦",
                     "line_prefix" => "234",
                     "country" => "ng",
+                    "minimum_trans_amount" => 100,
                     "airtime" => true,
                     "data" => true,
                     "cabletv" => true,
@@ -379,6 +380,7 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
                     "symbol" => "₵",
                     "line_prefix" => "233",
                     "country" => "gh",
+                    "minimum_trans_amount" => 0.50,
                     "airtime" => true,
                     "data" => true,
                     "cabletv" => false,
@@ -754,6 +756,7 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
     $symbol = $vp_country["symbol"];
     $currency = $vp_country["currency"];
     $country = $vp_country["country"];
+    $minimum_trans_amount = $vp_country["minimum_trans_amount"];
     /**
      * Updates KYC (Know Your Customer) limits and displays a notification.
      * This function seems to be called directly or within a hook.

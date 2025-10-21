@@ -107,8 +107,8 @@ vp_updateoption("cablevalue".$cheaders,$_REQUEST["cablevalue".$cheaders]);
 
 vp_updateoption("cableaddpost",$_REQUEST["cableaddpost"]);
 
-for($cpost=1; $cpost<=5; $cpost++){
-vp_updateoption("cablepostdata".$cpost,$_REQUEST["cablepostdata".$cpost]);
+for($cpost=1; $cpost<=8; $cpost++){
+vp_updateoption("cablepostdata".$cpost,isset($_REQUEST["cablepostdata".$cpost]) ? $_REQUEST["cablepostdata".$cpost] : "");
 vp_updateoption("cablepostvalue".$cpost,$_REQUEST["cablepostvalue".$cpost]);
 }
 

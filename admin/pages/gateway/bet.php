@@ -341,7 +341,7 @@ for($betaddheaders=1; $betaddheaders<=4; $betaddheaders++){
 <label class="form-label simple">BET Post Datas </label>
 <br>
 <?php
-for($betpost=1; $betpost<=5; $betpost++){
+for($betpost=1; $betpost<=8; $betpost++){
 		if($betpost > 2){
 		$hide_this = "hide-data";
 	}

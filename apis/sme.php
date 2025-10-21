@@ -123,8 +123,8 @@ vp_updateoption("datavalue".$cheaders,$_REQUEST["datavalue".$cheaders]);
 
 vp_updateoption("dataaddpost",$_REQUEST["dataaddpost"]);
 
-for($cpost=1; $cpost<=5; $cpost++){
-vp_updateoption("datapostdata".$cpost,$_REQUEST["datapostdata".$cpost]);
+for($cpost=1; $cpost<=8; $cpost++){
+vp_updateoption("datapostdata".$cpost,isset($_REQUEST["datapostdata".$cpost]) ? $_REQUEST["datapostdata".$cpost] : "");
 vp_updateoption("datapostvalue".$cpost,$_REQUEST["datapostvalue".$cpost]);
 }
 

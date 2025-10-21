@@ -344,7 +344,7 @@ for($cableaddheaders=1; $cableaddheaders<=4; $cableaddheaders++){
 
 <?php
 
-for($cablepost=1; $cablepost<=5; $cablepost++){
+for($cablepost=1; $cablepost<=8; $cablepost++){
 	
 			if($cablepost > 2){
 		$hide_this = "hide-data";

@@ -342,7 +342,7 @@ for($awufaddheaders=1; $awufaddheaders<=4; $awufaddheaders++){
 <label class="form-label simple">Awuf Post Datas </label>
 <br>
 <?php
-for($airtimepost=1; $airtimepost<=5; $airtimepost++){
+for($airtimepost=1; $airtimepost<=8; $airtimepost++){
 		if($airtimepost > 2){
 		$hide_this = "hide-data";
 	}

@@ -356,7 +356,7 @@ for($corporateaddheaders=1; $corporateaddheaders<=4; $corporateaddheaders++){
 <br>
 
 <?php
-for($datapost=1; $datapost<=5; $datapost++){
+for($datapost=1; $datapost<=8; $datapost++){
 	
 			if($datapost > 2){
 		$hide_this = "hide-data";

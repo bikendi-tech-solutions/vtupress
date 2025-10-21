@@ -351,7 +351,7 @@ for($directaddheaders=1; $directaddheaders<=4; $directaddheaders++){
 <label class="form-label simple">C.G Post Datas</label>
 <br>
 <?php
-for($datapost=1; $datapost<=5; $datapost++){
+for($datapost=1; $datapost<=8; $datapost++){
 	
 			if($datapost > 2){
 		$hide_this = "hide-data";

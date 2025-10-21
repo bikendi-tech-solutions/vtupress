@@ -346,7 +346,7 @@ for($smileaddheaders=1; $smileaddheaders<=4; $smileaddheaders++){
 <label class="form-label simple">SMILE Post Datas </label>
 <br>
 <?php
-for($smilepost=1; $smilepost<=5; $smilepost++){
+for($smilepost=1; $smilepost<=8; $smilepost++){
 		if($smilepost > 2){
 		$hide_this = "hide-data";
 	}

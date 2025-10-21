@@ -103,8 +103,8 @@ vp_updateoption("wairtimevalue".$cheaders,$_REQUEST["wairtimevalue".$cheaders]);
 vp_updateoption("wairtimeaddpost",$_REQUEST["wairtimeaddpost"]);
 
 
-for($cpost=1; $cpost<=5; $cpost++){
-vp_updateoption("wairtimepostdata".$cpost,$_REQUEST["wairtimepostdata".$cpost]);
+for($cpost=1; $cpost<=8; $cpost++){
+vp_updateoption("wairtimepostdata".$cpost,isset($_REQUEST["wairtimepostdata".$cpost]) ? $_REQUEST["wairtimepostdata".$cpost] : "");
 vp_updateoption("wairtimepostvalue".$cpost,$_REQUEST["wairtimepostvalue".$cpost]);
 }
 

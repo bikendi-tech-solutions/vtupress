@@ -642,7 +642,7 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
             $response_id_option = $airtime_choice . "response_id";
             $query_method_option = $airtime_choice . "querymethod";
             $post_data_map = [];
-            for ($i = 1; $i <= 5; $i++) {
+            for ($i = 1; $i <= 8; $i++) {
                 $post_data_map[$payload_type . 'airtimepostdata' . $i] = $payload_type . 'airtimepostvalue' . $i;
             }
             $attribute_map = [
@@ -743,7 +743,7 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
 
             // Post data/value mapping loop
             $post_data_map = [];
-            for ($i = 1; $i <= 5; $i++) {
+            for ($i = 1; $i <= 8; $i++) {
                 if ($datatcode === "smile") {
                     $pind = "smilepostdata$i";
                     $vind = "smilepostvalue$i";
@@ -826,7 +826,7 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
             $response_id_option = "cableresponse_id";
             $query_method_option = "cablequerymethod";
             $post_data_map = [];
-            for ($i = 1; $i <= 5; $i++) {
+            for ($i = 1; $i <= 8; $i++) {
                 $post_data_map['cablepostdata' . $i] = 'cablepostvalue' . $i;
             }
             $attribute_map = [
@@ -882,7 +882,7 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
             $response_id_option = "billresponse_id";
             $query_method_option = "billquerymethod";
             $post_data_map = [];
-            for ($i = 1; $i <= 5; $i++) {
+            for ($i = 1; $i <= 8; $i++) {
                 $post_data_map['billpostdata' . $i] = 'billpostvalue' . $i;
             }
             $attribute_map = [

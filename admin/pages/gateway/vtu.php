@@ -357,7 +357,7 @@ for($vtuaddheaders=1; $vtuaddheaders<=4; $vtuaddheaders++){
 <label class="form-label simple">Vtu Post Datas</label>
 <br>
 <?php
-for($airtimepost=1; $airtimepost<=5; $airtimepost++){
+for($airtimepost=1; $airtimepost<=8; $airtimepost++){
 	
 	if($airtimepost > 2){
 		$hide_this = "hide-data";

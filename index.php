@@ -909,11 +909,11 @@ switch(strtolower($processor)){
 
         if(vp_getoption("paymentpoint_charge_method") == "fixed"){
             $minus = $total_amount - $charge;
-            }
-            else{
+        }
+        else{
             $remove = ($total_amount *  $charge) / 100;
             $minus = $total_amount - $remove ;
-            }
+        }
     break;
     case"monnify":
         $charge = floatval(vp_getoption("charge_back"));

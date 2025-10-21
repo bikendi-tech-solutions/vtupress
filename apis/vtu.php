@@ -76,8 +76,8 @@ vp_updateoption("airtimevalue".$cheaders,$_REQUEST["airtimevalue".$cheaders]);
 vp_updateoption("airtimeaddpost",$_REQUEST["airtimeaddpost"]);
 vp_updateoption("airtime_head",$_REQUEST["airtimehead"]);
 
-for($cpost=1; $cpost<=5; $cpost++){
-vp_updateoption("airtimepostdata".$cpost,$_REQUEST["airtimepostdata".$cpost]);
+for($cpost=1; $cpost<=8; $cpost++){
+vp_updateoption("airtimepostdata".$cpost,isset($_REQUEST["airtimepostdata".$cpost]) ? $_REQUEST["airtimepostdata".$cpost] : "");
 vp_updateoption("airtimepostvalue".$cpost,$_REQUEST["airtimepostvalue".$cpost]);
 }
 

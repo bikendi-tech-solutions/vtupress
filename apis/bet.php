@@ -112,8 +112,8 @@ vp_updateoption("betvalue".$cheaders,$_REQUEST["betvalue".$cheaders]);
 
 vp_updateoption("betaddpost",$_REQUEST["betaddpost"]);
 
-for($cpost=1; $cpost<=5; $cpost++){
-vp_updateoption("betpostdata".$cpost,$_REQUEST["betpostdata".$cpost]);
+for($cpost=1; $cpost<=8; $cpost++){
+vp_updateoption("betpostdata".$cpost,isset($_REQUEST["betpostdata".$cpost]) ? $_REQUEST["betpostdata".$cpost] : "");
 vp_updateoption("betpostvalue".$cpost,$_REQUEST["betpostvalue".$cpost]);
 }
 

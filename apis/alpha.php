@@ -121,8 +121,8 @@ vp_updateoption("alphavalue".$cheaders,$_REQUEST["alphavalue".$cheaders]);
 
 vp_updateoption("alphaaddpost",$_REQUEST["alphaaddpost"]);
 
-for($cpost=1; $cpost<=5; $cpost++){
-vp_updateoption("alphapostdata".$cpost,$_REQUEST["alphapostdata".$cpost]);
+for($cpost=1; $cpost<=8; $cpost++){
+vp_updateoption("alphapostdata".$cpost,isset($_REQUEST["alphapostdata".$cpost]) ? $_REQUEST["alphapostdata".$cpost] : "");
 vp_updateoption("alphapostvalue".$cpost,$_REQUEST["alphapostvalue".$cpost]);
 }
 

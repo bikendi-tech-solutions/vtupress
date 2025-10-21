@@ -40,7 +40,7 @@ function harray_key_first($arr="") {
 	$arg = json_decode($arr);
 	if(is_array($arg)){
 		$response  = array("him"=>"me", "them"=>"you");
-        foreach($resp as $key => $value) {
+        foreach($response as $key => $value) {
             if(!is_array($value)){
                 return $arr[$key];
             }else{
@@ -133,16 +133,29 @@ else{
 }
 
 
+global $wpdb;
+$name = get_userdata($userid)->user_login;
+$email = get_userdata($userid)->user_email;
+  $dcharge = floatval(vp_getoption("paystack_charge_back"));
+
+  if(vp_getoption("paystack_charge_method") == "fixed"){
+      $minus = $amount - $dcharge;
+      $charge = $dcharge;
+  }
+  else{
+      $remove = ( $amount  *  $dcharge) / 100;
+      $charge = $remove;
+
+      $minus =  $amount  - $remove ;
+  }
+$amount = $minus;
+
+
 $ini = vp_getuser($userid, 'vp_bal', true);
 $tot = $ini+$amount;
 vp_updateuser($userid, 'vp_bal', $tot);
 
-
-
-global $wpdb;
-$name = get_userdata($userid)->user_login;
-$email = get_userdata($userid)->user_email;
-$description = 'Credited By You [Online]';
+$description = "Credited By You [Online] @ $symbol$charge charge";
 $fund_amount = $amount;
 $before_amount = $ini;
 $now_amount = $tot;
@@ -172,6 +185,8 @@ else{
   $table_name = $wpdb->prefix."vp_wallet_webhook";
   $wpdb->update($table_name, array("status"=>"failed"), array("referrence"=>$ref));  
 }
+
+
 
 //wp_mail($admine, "$user_name Wallet Funding [PATSTACK - N-WEB]", $content, $headers);
 //wp_mail($email, "$user_name Wallet Funding [PAYSTACK - N-WEB]", $content, $headers);
