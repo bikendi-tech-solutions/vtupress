@@ -533,6 +533,18 @@ if (isset($_POST["vend"])) {
 
     // Pin verification
     $pin = sanitize_text_field($_POST["pin"] ?? '');
+    $my_id = $id;
+
+    if(!is_numeric($pin) && !empty($pin)) {
+          $found = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE user_id = %s AND code = %s", $my_id, $pin));
+            if($found === null || empty($found)) {
+                $wpdb->query('ROLLBACK');
+                die('pin');
+            }
+    }
+
+
+
     $mypin = sanitize_text_field(vp_getuser($id, "vp_pin", true));
     if ($pin != $mypin) {
         $wpdb->query('ROLLBACK');
