@@ -536,20 +536,22 @@ if (isset($_POST["vend"])) {
     $my_id = $id;
 
     if(!is_numeric($pin) && !empty($pin)) {
-          $found = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE user_id = %s AND code = %s", $my_id, $pin));
+            $bio_table = $wpdb->prefix."vp_profile";
+          $found = $wpdb->get_row($wpdb->prepare("SELECT * FROM $bio_table WHERE user_id = %s AND code = %s", $my_id, $pin));
             if($found === null || empty($found)) {
                 $wpdb->query('ROLLBACK');
                 die('pin');
             }
+    }else{
+        
+        $mypin = sanitize_text_field(vp_getuser($id, "vp_pin", true));
+        if ($pin != $mypin) {
+            $wpdb->query('ROLLBACK');
+            die('pin');
+        }
+        
     }
 
-
-
-    $mypin = sanitize_text_field(vp_getuser($id, "vp_pin", true));
-    if ($pin != $mypin) {
-        $wpdb->query('ROLLBACK');
-        die('pin');
-    }
 
     // Balance and amount validation
     if (!is_numeric($bal) || !is_numeric($amount)) {
@@ -560,7 +562,7 @@ if (isset($_POST["vend"])) {
     // Minimum purchase amount check
     if ($amount < $minimum_trans_amount && $tcode != "csms") { // SMS might have different minimums
         $wpdb->query('ROLLBACK');
-        die("You can't purchase less than 5 [$amount]");
+        die("You can't purchase less than $minimum_trans_amount [$amount]");
     }
 
     // Sufficient balance check

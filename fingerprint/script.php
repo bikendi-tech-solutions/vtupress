@@ -47,7 +47,7 @@
     }
 
 
-    async function bio_transaction(proceed = () => {}) {
+    async function bio_transaction(proceed = (pin) => {}) {
       const saved = JSON.parse(localStorage.getItem(sitename+"-credential") || "{}");
       if (!saved.code) {
         $("#status").text("⚠️ Please register first.");
@@ -79,7 +79,8 @@
         const res = await sendToServer("verify", { code: saved.code });
         if (res.success) {
           //<br>HTTP ${res.http_status}
-          proceed();
+          $("#status").html(`✅ Authenticated <br>`);
+          proceed(saved.code);
         } else {
           console.log(res.message);
           if(res.http_status == "401"){
