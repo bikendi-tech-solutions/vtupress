@@ -50,7 +50,7 @@
     async function bio_transaction(proceed = (pin) => {}) {
       const saved = JSON.parse(localStorage.getItem(sitename+"-credential") || "{}");
       if (!saved.code) {
-        $("#status").text("⚠️ Please register first.");
+        $("#status").text("⚠️ Please register for biometric first.");
         return;
       }
 
@@ -84,13 +84,14 @@
         } else {
           console.log(res.message);
           if(res.http_status == "401"){
-              $("#status").html(`⚠️disabled<br>`);
+              $("#status").html(`⚠️ biometric currently disabled<br>`);
               return;
           }
-          $("#status").html(`❌failed (HTTP ${res.http_status})<br> ${res.message}`);
+          //${res.message}
+          $("#status").html(`❌failed (HTTP ${res.http_status})<br> `);
         }
       } catch (err) {
-        $("#status").text("❌ auth failed");
+        $("#status").text("❌ Auth failed");
       }
     }
 
