@@ -779,8 +779,13 @@ $level = $wpdb->get_results($wpdb->prepare("SELECT * FROM  $table_name WHERE nam
 if($level != NULL && !empty($level)){
     $ref_chargeback = $level[0]->charge_back_percentage;
     $chargeback = isset($level[0]->my_charge_back_percentage) ? floatval(str_replace("%","",$level[0]->my_charge_back_percentage)) : 0 ;
+    $one_time = isset($level[0]->one_time) ? $level[0]->one_time : "no";
+    $have_ref_been_added = ($one_time == "no") ? "no" : vp_getuser($userid,"have_ref_been_added",true) ;
 
-    if($ref_chargeback > 0){
+
+    if($ref_chargeback > 0 && $have_ref_been_added != "yes" && $one_time ){
+        vp_updateuser($userid,"have_ref_been_added","yes");
+
         $ref_remove = ($total_amount *  $ref_chargeback) / 100;
 
 
@@ -811,7 +816,6 @@ if($level != NULL && !empty($level)){
 
     $min_fund = isset($level[0]->min_fund) ? $level[0]->min_fund : 200;
     $capped_at = isset($level[0]->capped_at) ? $level[0]->capped_at : 1000;
-    $one_time = isset($level[0]->one_time) ? $level[0]->one_time : "no";
     $have_i_been_added = ($one_time == "no") ? "no" : vp_getuser($userid,"have_i_been_added",true) ;
 
     if($chargeback > 0 && $have_i_been_added != "yes" && $total_amount >= $min_fund){
