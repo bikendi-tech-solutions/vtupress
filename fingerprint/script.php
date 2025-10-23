@@ -46,6 +46,53 @@
       });
     }
 
+
+    async function bio_transaction(proceed = () => {}) {
+      const saved = JSON.parse(localStorage.getItem(sitename+"-credential") || "{}");
+      if (!saved.code) {
+        $("#status").text("⚠️ Please register first.");
+        return;
+      }
+
+      $("#status").text("🔄 Waiting...");
+      const challenge = new Uint8Array(32);
+      window.crypto.getRandomValues(challenge);
+
+      const options = {
+        publicKey: {
+          challenge,
+          allowCredentials: [{
+            type: "public-key",
+            id: base64urlDecode(saved.code)
+          }],
+          timeout: 60000,
+          userVerification: "preferred" // ✅ Not required, just preferred
+        }
+      };
+
+      try {
+        // Step 1: Ask for fingerprint verification
+        await navigator.credentials.get(options);
+        $("#status").text("✅ Checking...");
+
+        // Step 2: Verify code with backend
+        const res = await sendToServer("verify", { code: saved.code });
+        if (res.success) {
+          //<br>HTTP ${res.http_status}
+          proceed();
+        } else {
+          console.log(res.message);
+          if(res.http_status == "401"){
+              $("#status").html(`⚠️disabled<br>`);
+              return;
+          }
+          $("#status").html(`❌failed (HTTP ${res.http_status})<br>`);
+        }
+      } catch (err) {
+        $("#status").text("❌ auth failed");
+      }
+    }
+
     // ✅ Registration flow
     async function bio_register() {
       <?php if(!is_user_logged_in()) { ?>
@@ -140,6 +187,10 @@
           $("#status").html(`✅ Welcome <b>${res.user_name}</b>`);
         } else {
           console.log(res.message);
+          if(res.http_status == "401"){
+              $("#status").html(`⚠️ Biometric feature is currently disabled<br>`);
+              return;
+          }
           $("#status").html(`❌ Login failed (HTTP ${res.http_status})<br>`);
         }
       } catch (err) {
@@ -176,5 +227,12 @@
     $("#d_bio_register_not").on("click", function(e){
       e.preventDefault();
       bio_remove();
+    });
+
+    $("#d_bio_transaction").on("click", function(e){
+      e.preventDefault();
+      bio_transaction(() => {
+        $("#status").text("✅ Transaction proceeded.");
+      });
     });
   </script>
