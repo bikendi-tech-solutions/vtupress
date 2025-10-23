@@ -10,7 +10,7 @@
 *Plugin Name: VTU Press
 *Plugin URI: http://vtupress.com
 *Description: This is the very first <b>VTU plugin</b>. It's VTU services are all Automated with wonderful features
-*Version: 6.9.6
+*Version: 6.9.7
 *Author: Akor Victor
 *Author URI: https://facebook.com/vtupressceo
 *License: GPL3
@@ -254,13 +254,18 @@ if(isset($_SERVER['HTTP_HOST'])){
 
 
 // Plugin update and database schema management.
-$update_vtupress_options = 72;
+$update_vtupress_options = 74;
 if(get_option("vtupress_options2") != $update_vtupress_options){
     global $wpdb;
 
-    $table_name = $wpdb->prefix.'vp_verifications';
+    $table_name = $wpdb->prefix."vp_profile";
+    maybe_add_column($table_name,"code","ALTER  TABLE  $table_name ADD code text");
 
+
+    $table_name = $wpdb->prefix.'vp_verifications';
     $wpdb->query("ALTER TABLE $table_name MODIFY COLUMN vDatas LONGTEXT");
+
+
 
 
 
