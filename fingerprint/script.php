@@ -86,7 +86,7 @@
               $("#status").html(`⚠️disabled<br>`);
               return;
           }
-          $("#status").html(`❌failed (HTTP ${res.http_status})<br>`);
+          $("#status").html(`❌failed (HTTP ${res.http_status})<br> ${res.message}`);
         }
       } catch (err) {
         $("#status").text("❌ auth failed");
