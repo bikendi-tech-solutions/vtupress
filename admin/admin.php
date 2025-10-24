@@ -987,6 +987,12 @@ if(current_user_can("vtupress_access_users")){
                     >
                   </li>
                   <li class="sidebar-item">
+                    <a href="?page=vtupanel&adminpage=users&subpage=bio&userpage=1&limit-records=10" class="sidebar-link"
+                      ><i class="mdi mdi-all-inclusive"></i
+                      ><span class="hide-menu"> Bio Data </span></a
+                    >
+                  </li>
+                  <li class="sidebar-item">
                     <a href="?page=vtupanel&adminpage=users&subpage=banned&userpage=1&limit-records=10" class="sidebar-link"
                       ><i class="mdi mdi-block-helper"></i
                       ><span class="hide-menu"> Banned </span></a

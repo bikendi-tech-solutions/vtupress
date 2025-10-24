@@ -193,7 +193,11 @@ function pagination_kyc_before($where=""){
   $start = ($page - 1) * $limit;
   
   
+  if($where == "bio"){
+      $table_name = $wpdb->prefix."vp_profile";
+  }else{
       $table_name = $wpdb->prefix."vp_kyc";
+  }
   
       $use = $wpdb->get_results("SELECT * FROM  $table_name $where ORDER BY ID DESC LIMIT $start, $limit");
 

@@ -37,6 +37,9 @@ elseif($_GET["subpage"] == "banned"){
 elseif($_GET["subpage"] == "kycbanned"){
     include_once(ABSPATH .'wp-content/plugins/vtupress/admin/pages/users/kyc/ban.php');  
 }
+elseif($_GET["subpage"] == "bio"){
+    include_once(ABSPATH .'wp-content/plugins/vtupress/admin/pages/users/kyc/biometric.php');  
+}
 elseif($_GET["subpage"] == "approved"){
     include_once(ABSPATH .'wp-content/plugins/vtupress/admin/pages/users/kyc/approved.php');  
 }
