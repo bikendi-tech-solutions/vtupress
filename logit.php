@@ -66,6 +66,8 @@ if(file_exists($path) && in_array('vtupress/vtupress.php', apply_filters(
 
 global $blogname;
 
+$current_timestamp = current_time('timestamp');
+
 $blogname = get_option("blogname");
 if(isset($_POST['username'])) {
     global $wpdb;
@@ -169,7 +171,7 @@ if(isset($_POST['username'])) {
         die('{"status":"101","message":"Wrong Credentials for '.$username.' - '.$password.'"}');
     } else {
 
-        $current_timestamp = current_time('timestamp');
+
         
         setcookie("vtuloggedin", "yes", time() + (30 * 24 * 60 * 60), "/");
         setcookie("last_login", date('Y-m-d H:i:s',$current_timestamp), time() + (30 * 24 * 60 * 60), "/");

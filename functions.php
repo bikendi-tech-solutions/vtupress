@@ -351,11 +351,8 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
     function vp_country()
     {
         $vp_country = vp_getoption("vp_country", "ng");
-
-
         switch ($vp_country) {
             case "ng":
-
                 $vp_services = [
                     "bypass" => false,
                     "currency" => "NGN",
@@ -390,7 +387,7 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
                     "bills" => false,
                     "others" => false
                 ];
-                break;
+            break;
         }
         $networks = [
                     "glo" => vp_getoption("filter_glo","GLO"),
@@ -398,6 +395,9 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
                     "mtn" => vp_getoption("filter_mtn","MTN"),
                     "airtel" => vp_getoption("filter_airtel","AIRTEL"),
         ];
+
+        // print_r($vp_services);
+        // die();
         return array_merge($vp_services,$networks);
     }
 
