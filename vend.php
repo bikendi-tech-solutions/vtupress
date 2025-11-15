@@ -262,6 +262,7 @@ if (isset($_POST["vend"])) {
                 }
                 $amountv = $amount - ($amount * $discount_rate / 100);
                 $baln = $bal - $amount; // Balance is deducted by the full amount
+        
                 break;
 
             case "cdat": // Data
@@ -435,8 +436,8 @@ if (isset($_POST["vend"])) {
     } else {
         $discount_method = "null";
     }
-
-    $realAmt = $_POST['amount']; // This should be the final amount to be charged to the user's balance
+    
+    $realAmt = $amount;
 
     // KYC check
     $add_total = "maybe"; // Default value
@@ -559,10 +560,11 @@ if (isset($_POST["vend"])) {
         die('Amount Or Balance Invalid');
     }
 
+     
     // Minimum purchase amount check
-    if ($amount < $minimum_trans_amount && $tcode != "csms") { // SMS might have different minimums
+    if ($realAmt < $minimum_trans_amount && $tcode != "csms") { // SMS might have different minimums
         $wpdb->query('ROLLBACK');
-        die("You can't purchase less than $minimum_trans_amount [$amount]");
+        die("You can't purchase less than $minimum_trans_amount [$realAmt]");
     }
 
     // Sufficient balance check
