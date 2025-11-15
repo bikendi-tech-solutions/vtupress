@@ -426,6 +426,8 @@ if (isset($_POST["vend"])) {
         }
     }
 
+    $realAmt = $amount;
+
     // Adjust amount based on discount method if MLM is active
     if (is_plugin_active("vpmlm/vpmlm.php")) {
         $discount_method = vp_getoption("discount_method");
@@ -436,8 +438,8 @@ if (isset($_POST["vend"])) {
     } else {
         $discount_method = "null";
     }
-    
-    $realAmt = $amount;
+
+
 
     // KYC check
     $add_total = "maybe"; // Default value

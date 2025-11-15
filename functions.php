@@ -359,7 +359,7 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
                     "symbol" => "₦",
                     "line_prefix" => "234",
                     "country" => "ng",
-                    "minimum_trans_amount" => 100,
+                    "minimum_trans_amount" => 50,
                     "airtime" => true,
                     "data" => true,
                     "cabletv" => true,
