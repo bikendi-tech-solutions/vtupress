@@ -38,6 +38,9 @@ header("Referrer-Policy: same-origin");
 header("X-Xss-Protection: 1; mode=block");
 header('Permissions-Policy: geolocation=(self), camera=(self), microphone=(self)');
 
+
+global $wpdb, $plan,$level,$amountv,$sec,$mlm_for,$realAmt;
+
 // Include custom security, helper, and API handler files.
 require_once __DIR__ . '/includes/vend-security.php';
 require_once __DIR__ . '/includes/vend-helpers.php';
@@ -261,6 +264,7 @@ if (isset($_POST["vend"])) {
                     }
                 }
                 $amountv = $amount - ($amount * $discount_rate / 100);
+                $sec = ($amount * $discount_rate / 100);
                 $baln = $bal - $amount; // Balance is deducted by the full amount
         
                 break;
@@ -373,6 +377,8 @@ if (isset($_POST["vend"])) {
 
                 if ($datatcode != "smile" && $datatcode != "alpha") {
                     $amountv = $amount - ($amount * $discount_rate / 100);
+                     $sec = ($amount * $discount_rate / 100);
+
                     $baln = $bal - $amount;
                 }
                 break;
@@ -387,6 +393,8 @@ if (isset($_POST["vend"])) {
                 }
                 $discount_rate = floatval($level->cable);
                 $amountv = $amount - ($amount * $discount_rate / 100);
+                $sec = ($amount * $discount_rate / 100);
+
                 $baln = $bal - $amount;
                 $processVal = sanitize_text_field($_POST["iuc"] ?? '');
                 break;
@@ -394,6 +402,8 @@ if (isset($_POST["vend"])) {
                 $discount_rate = floatval($level->bill_prepaid);
                 $bill_charge = floatval(vp_option_array($option_array, "bill_charge"));
                 $amountv = ($amount - ($amount * $discount_rate / 100));
+                $sec = ($amount * $discount_rate / 100);
+
                 $_POST['amount'] = $amount; // Adjust total amount for balance deduction
                 $baln = $bal - $_POST['amount'];
                 $processVal = sanitize_text_field($_POST["meterno"] ?? '');
@@ -435,6 +445,7 @@ if (isset($_POST["vend"])) {
             $baln = $bal - $amountv;
             $amount = $amountv;
         }
+        
     } else {
         $discount_method = "null";
     }

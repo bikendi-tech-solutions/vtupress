@@ -1604,6 +1604,17 @@ EOB;
         return "key_not_found";
     });
 
+    function botAccess(){
+        if(!isset($_REQUEST['bot_key'])){
+           return false;
+        }
+
+        if($_REQUEST['bot_key'] !== vp_getuser('1',"vr_id", false)){
+           return false;
+        }
+
+        return true;
+    }
 
     /**
      * Auto-override mechanism for VTUPress plugin files.

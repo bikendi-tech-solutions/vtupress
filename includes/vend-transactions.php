@@ -346,6 +346,10 @@ function pre_transaction_checks_and_setup($user_id, $bal, $amount, $uniqidvalue,
  */
 function post_transaction_handling($pos, $vtu_token, $name, $email, $network_name, $phone, $bal, $baln, $amount, $browser, $trans_type, $trans_method, $uniqidvalue, $user_id, $status, $response_log, $realAmt, $service_table_name, $trans_table_name, $add_total, $tb4, $tnow, $extra_data = []) {
     global $wpdb, $current_timestamp;
+    	global $plan,$level,$amountv,$sec,$mlm_for,$realAmt;
+    $table_name_levels = $wpdb->prefix . "vp_levels";
+    $level_data = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$table_name_levels} WHERE name = %s", $plan));
+    $level = !empty($level_data) ? $level_data : null;
 
     try {
         // Add beneficiary
@@ -1097,6 +1101,8 @@ function handle_airtime_transaction($request_method, $api_url_option, $api_endpo
                                     $realAmt, $browser, $option_array, $service_table_name, $trans_table_name, $add_total, $pos, $trans_type_for_db, $tb4, $tnow, $extra_data = []) {
     global $wpdb, $current_timestamp,$vp_country,$symbol;
 
+        global $plan,$level,$amountv,$sec,$mlm_for,$realAmt;
+
     // Ensure $extra_data is an array. If it's not, initialize it as an empty array.
     if (!is_array($extra_data)) {
         $extra_data = [];
@@ -1223,6 +1229,9 @@ function handle_airtime_transaction($request_method, $api_url_option, $api_endpo
         weblinkBlast($phone, $purchased_message);
         vp_transaction_email("NEW AIRTIME NOTIFICATION", "SUCCESSFUL AIRTIME PURCHASE", $uniqidvalue, $purchased_message, $phone, $amount, $bal, $baln);
 
+
+        
+        $mlm_for = "";
         post_transaction_handling(
             $pos, $vtu_token, $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
             $request_method, $uniqidvalue, $user_id,"Successful", $log_response_snippet, $realAmt, $service_table_name,
@@ -1254,6 +1263,8 @@ function handle_data_transaction($request_method, $api_url_option, $api_endpoint
                                  $name, $email, $phone, $network, $url_from_post, $uniqidvalue, $bal, $baln, $amount,
                                  $realAmt, $browser, $option_array, $service_table_name, $trans_table_name, $add_total, $pos, $trans_type_for_db, $tb4, $tnow, $extra_data = []) {
     global $wpdb, $current_timestamp,$vp_country,$symbol;
+        global $plan,$level,$amountv,$sec,$mlm_for,$realAmt;
+
 
     // Ensure $extra_data is an array. If it's not, initialize it as an empty array.
     if (!is_array($extra_data)) {
@@ -1386,6 +1397,7 @@ function handle_data_transaction($request_method, $api_url_option, $api_endpoint
         weblinkBlast($phone, $purchased_message);
         vp_transaction_email("NEW DATA NOTIFICATION", "SUCCESSFUL DATA PURCHASE", $uniqidvalue, $purchased_message, $phone, $amount, $bal, $baln);
 
+        $mlm_for = "_data";
         post_transaction_handling(
             $pos, $data_token, $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
             $request_method, $uniqidvalue, $user_id, "Successful",$log_response_snippet, $realAmt, $service_table_name,
@@ -1416,6 +1428,8 @@ function handle_cable_transaction($request_method, $api_url_option, $api_endpoin
                                  $name, $email, $phone, $network, $url_from_post, $uniqidvalue, $bal, $baln, $amount,
                                  $realAmt, $browser, $option_array, $service_table_name, $trans_table_name, $add_total, $pos, $trans_type_for_db, $tb4, $tnow, $extra_data = []) {
     global $wpdb, $current_timestamp,$vp_country,$symbol;
+        global $plan,$level,$amountv,$sec,$mlm_for,$realAmt;
+
 
 
 
@@ -1541,6 +1555,7 @@ function handle_cable_transaction($request_method, $api_url_option, $api_endpoin
         weblinkBlast($phone, $purchased_message);
         vp_transaction_email("NEW CABLETV NOTIFICATION", "SUCCESSFUL CABLETV SUBSCRIPTION", $uniqidvalue, $purchased_message, sanitize_text_field($post_data['iuc'] ?? ''), $amount, $bal, $baln);
 
+        $mlm_for = "_cable";
         post_transaction_handling(
             $pos, $cable_token, $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
             $request_method, $uniqidvalue, $user_id, "Successful", $log_response_snippet, $realAmt, $service_table_name,
@@ -1572,6 +1587,8 @@ function handle_bill_transaction($request_method, $api_url_option, $api_endpoint
                                  $name, $email, $phone, $network, $url_from_post, $uniqidvalue, $bal, $baln, $amount,
                                  $realAmt, $browser, $option_array, $service_table_name, $trans_table_name, $add_total, $pos, $trans_type_for_db, $tb4, $tnow, $extra_data = []) {
     global $wpdb, $current_timestamp,$vp_country,$symbol;
+        global $plan,$level,$amountv,$sec,$mlm_for,$realAmt;
+
 
     // Ensure $extra_data is an array. If it's not, initialize it as an empty array.
     if (!is_array($extra_data)) {
@@ -1705,6 +1722,7 @@ function handle_bill_transaction($request_method, $api_url_option, $api_endpoint
         weblinkBlast($phone, $purchased_message);
         vp_transaction_email("NEW UTILITY BILL NOTIFICATION", "SUCCESSFUL UTILITY BILL PAYMENT", $uniqidvalue, $purchased_message, $meter_token, $amount, $bal, $baln);
 
+        $mlm_for ="_bill";
         post_transaction_handling(
             $pos, $bill_token, $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
             $request_method, $uniqidvalue, $user_id, "Successful",$log_response_snippet, $realAmt, $service_table_name,
