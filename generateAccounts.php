@@ -11,7 +11,7 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/functions.php');
 
 if (isset($_SERVER['HTTP_REFERER'])) {
     $referer = $_SERVER['HTTP_REFERER'];
-$nm = $_SERVER['SERVER_NAME'];
+    $nm = $_SERVER['SERVER_NAME'];
     if(!preg_match("/$nm/",$referer)) {
         die("NO REF");
     }
@@ -46,8 +46,15 @@ return  $the_email;
 }
 
 
-
-$id = get_current_user_id();
+if(!is_user_logged_in() && !botAccess()){
+    die("Please login");
+}
+elseif(botAccess()){
+    $id = $_POST["user_id"];
+}
+else{
+    $id = get_current_user_id();
+}
 
 
 if(!isset($_POST["for"])){
