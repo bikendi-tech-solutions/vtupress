@@ -369,7 +369,7 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
                     "bills" => true,
                     "others" => true
                 ];
-                break;
+            break;
             case "gh":
                 $vp_services = [
                     "bypass" => true,
@@ -388,6 +388,25 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
                     "others" => false
                 ];
             break;
+            default:
+                $vp_services = [
+                    "bypass" => false,
+                    "currency" => "NGN",
+                    "symbol" => "₦",
+                    "line_prefix" => "234",
+                    "country" => "ng",
+                    "minimum_trans_amount" => 50,
+                    "airtime" => true,
+                    "data" => true,
+                    "cabletv" => true,
+                    "electricity" => true,
+                    "education" => true,
+                    "betting" => true,
+                    "bills" => true,
+                    "others" => true
+                ];
+            break;
+
         }
         $networks = [
                     "glo" => vp_getoption("filter_glo","GLO"),

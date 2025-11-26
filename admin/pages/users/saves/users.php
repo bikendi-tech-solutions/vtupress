@@ -1575,14 +1575,16 @@ vp_updateuser($userid,"squadAccountName",$customer_firstN);
         $id = intval(trim($_POST["userid"]));
         $plan = trim($_POST["plan"]);
         $vrid = trim($_POST["apikey"]);
+        $tme = trim($_POST["tme"]);
   
        $updated_user = vp_updateuser($id,'vr_plan', $plan);
+       $updated_user = str_replace("@","",vp_updateuser($id,'telegram_username', $tme));
        
   $apikey = trim(vp_getuser($id,'vr_id',true));
   if( empty($apikey) || strtolower($apikey) == "null" || $apikey === "0" || $apikey != $vrid ){
 
     if(!empty($vrid) && strtolower($vrid) != "null"){
-  $updated_user1 = vp_updateuser($id,'vr_id',$vrid);
+         $updated_user1 = vp_updateuser($id,'vr_id',$vrid);
  // die("good");
     }
     else{

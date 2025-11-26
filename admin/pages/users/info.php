@@ -49,6 +49,7 @@ if(is_plugin_active("vpmlm/vpmlm.php") && vp_option_array($option_array,'mlm') =
     $plan = vp_user_array($user_array,$id,'vr_plan', true);
 
     $vrid = vp_user_array($user_array,$id, 'vr_id', true);
+    $tme =  vp_user_array($user_array,$id, 'telegram_username', true);
         
     $ref = vp_user_array($user_array,$id, "vp_who_ref", true);
 
@@ -415,6 +416,10 @@ $ref_data = get_referees_by_referrer_id($id);
                                         <div class="mb-3">
                                                     <label for="recipient-key" class="col-form-label">API KEY:</label>
                                                     <input type="text" class="form-control user-key" id="recipient-key" value="<?php echo $vrid;?>" \>
+                                        </div>
+                                        <div class="mb-3">
+                                                    <label for="recipient-key" class="col-form-label">TELEGRAM USERNAME:</label>
+                                                    <input type="text" class="form-control telegram-username" id="telegram-username" value="<?php echo $tme;?>" \>
                                         </div>
                                       </form>
                                     </div>
@@ -999,6 +1004,7 @@ function changeplan(id){
     obj["action"] = "changeplan";
     obj['plan'] = jQuery(".user-plan").val();
     obj['apikey'] = jQuery(".user-key").val();
+    obj['tme'] = jQuery(".telegram-username").val();
 
     if(obj['apikey'] == "" || obj['apikey'] == " " || obj['apikey'].toLowerCase() == 'null'){
         var message = "User Plan And Api Key Changed";
