@@ -6,7 +6,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-global $wpdb, $message, $sent_count,$mail_body,$mail_header,$audience_type,$inactive_days,$specific_emails_input;
+global $wpdb, $message, $sent_count, $mail_body, $mail_header, $audience_type, $inactive_days, $specific_emails_input;
+
 // Global variable to hold the success message
 $message = '';
 $sent_count = 0;
@@ -16,35 +17,80 @@ $audience_type = '';
 $inactive_days = '';
 $specific_emails_input = '';
 
+// Define the custom action hook for the background task
+define('MASS_MAILER_TASK_HOOK', 'mass_mailer_background_send');
+
 /**
- * Sends the mass email based on the selected audience and content.
+ * Executes the mass mail sending in the background.
+ * This function is hooked to the WP-Cron action and runs non-blockingly.
+ *
+ * @param string $task_id The unique ID used to retrieve the transient data.
+ */
+function execute_mass_mail_task($task_id) {
+    // 1. Retrieve the task data from the transient
+    $task_data = get_transient($task_id);
+
+    // If data is missing or transient expired, exit.
+    if (empty($task_data) || !is_array($task_data) || empty($task_data['emails'])) {
+        error_log("Mass Mail Task $task_id failed: Data missing or expired.");
+        return;
+    }
+
+    $target_emails = $task_data['emails'];
+    $mail_header   = $task_data['subject'];
+    $email_template = $task_data['template'];
+    $headers       = $task_data['headers'];
+    $success_count = 0;
+
+    // 2. Send Emails in a loop
+    foreach ($target_emails as $email) {
+        // wp_mail returns true on success, false on failure
+        if (wp_mail($email, $mail_header, $email_template, $headers)) {
+            $success_count++;
+        }
+    }
+
+    // 3. Cleanup and Notification
+    delete_transient($task_id); // Remove the transient data
+
+    // Log the result (for admin/debugging)
+    $log_message = sprintf(
+        "Mass Mail Task %s Completed: Targeted %d, Successfully Sent %d.",
+        $task_id,
+        count($target_emails),
+        $success_count
+    );
+    error_log($log_message);
+}
+add_action(MASS_MAILER_TASK_HOOK, 'execute_mass_mail_task', 10, 1);
+
+
+/**
+ * Handles the mass mail form submission by scheduling the task.
  */
 function handle_mass_mail_submission() {
-    global $wpdb, $message, $sent_count,$mail_body,$mail_header,$audience_type,$inactive_days,$specific_emails_input;
-
+    global $wpdb, $message, $mail_body, $mail_header, $audience_type, $inactive_days, $specific_emails_input;
 
     // Check for POST request and nonce for security (essential for admin pages)
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['send_mail_nonce']) && wp_verify_nonce($_POST['send_mail_nonce'], 'send_mass_mail')) {
 
-        // 1. Sanitize and Validate Input
+        // 1. Sanitize and Validate Input (Inputs are saved to global variables for form persistence)
         $mail_header = sanitize_text_field($_POST['mail_header']);
-        $mail_body = wp_kses_post($_POST['mail_body']); // Use wp_kses_post for rich content
+        $mail_body = wp_kses_post($_POST['mail_body']);
         $audience_type = sanitize_text_field($_POST['audience_type']);
         $inactive_days = isset($_POST['inactive_days']) ? intval($_POST['inactive_days']) : 0;
         $specific_emails_input = isset($_POST['specific_emails']) ? sanitize_textarea_field($_POST['specific_emails']) : '';
-        $from_email = get_option('admin_email'); // Default sender email
+        $from_email = get_option('admin_email');
 
         if (empty($mail_header) || empty($mail_body)) {
-            // Revert alert styling to simple inline CSS for non-Tailwind
             $message = '<div style="background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; padding: 15px; margin-bottom: 1rem; border-radius: 0.25rem;" role="alert">Error: Email header and body cannot be empty.</div>';
             return;
         }
 
         $target_emails = [];
 
-        // 2. Determine Target Users based on Audience Type
+        // 2. Determine Target Users based on Audience Type (Logic remains the same)
         if ($audience_type === 'all') {
-            // Target: All Users
             $users = get_users(['fields' => ['user_email']]);
             foreach ($users as $user) {
                 if (is_email($user->user_email)) {
@@ -53,14 +99,12 @@ function handle_mass_mail_submission() {
             }
 
         } elseif ($audience_type === 'inactive' && $inactive_days > 0) {
-            // Target: Users Inactive for X days
             $cutoff_date = date('Y-m-d H:i:s', strtotime("-$inactive_days days", current_time('timestamp', 1)));
-            
+
             $airtime_table = $wpdb->prefix . 'sairtime';
             $data_table = $wpdb->prefix . 'sdata';
             $users_table = $wpdb->prefix . 'users';
 
-            // Find IDs of users who have been ACTIVE since the cutoff date
             $active_user_ids = $wpdb->get_col( $wpdb->prepare("
                 SELECT DISTINCT user_id FROM (
                     SELECT user_id, the_time FROM $airtime_table WHERE status = 'successful' AND the_time > %s
@@ -69,59 +113,62 @@ function handle_mass_mail_submission() {
                 ) AS recent_transactions
             ", $cutoff_date, $cutoff_date));
 
-            // Convert array of active IDs to a comma-separated string
             $active_user_id_list = !empty($active_user_ids) ? implode(',', array_map('intval', $active_user_ids)) : '0';
 
-            // Find all users *not* in the active list (INACTIVE users)
             $inactive_users = $wpdb->get_results("
                 SELECT user_email FROM $users_table
                 WHERE ID NOT IN ($active_user_id_list) AND ID != 0
             ");
 
             foreach ($inactive_users as $user) {
-                 if (is_email($user->user_email)) {
+                if (is_email($user->user_email)) {
                     $target_emails[] = $user->user_email;
                 }
             }
         } elseif ($audience_type === 'specific') {
-            // Target: Specific Emails
             $emails_array = array_map('trim', explode(',', $specific_emails_input));
-            
+
             foreach ($emails_array as $email) {
                 if (is_email($email)) {
                     $target_emails[] = $email;
                 }
             }
-            
+
             if (empty($target_emails)) {
-                // Revert alert styling to simple inline CSS for non-Tailwind
                 $message = '<div style="background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; padding: 15px; margin-bottom: 1rem; border-radius: 0.25rem;" role="alert">Warning: No valid emails were found in the specific emails list.</div>';
                 return;
             }
         }
-        
+
+        if (empty($target_emails)) {
+             $message = '<div style="background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; padding: 15px; margin-bottom: 1rem; border-radius: 0.25rem;" role="alert">Warning: No target users found for the selected audience.</div>';
+             return;
+        }
+
         // 3. Prepare Email Content and Headers
         $email_template = get_email_template($mail_header, $mail_body);
-        $headers = array(
+        $headers = [
             'Content-Type: text/html; charset=UTF-8',
-            // Using get_bloginfo('name') for the sender name
             "From: " . get_bloginfo('name') . " <$from_email>",
-        );
+        ];
 
-        $success_count = 0;
-        
-        // 4. Send Emails using wp_mail()
-        foreach ($target_emails as $email) {
-            // wp_mail returns true on success, false on failure
-            if (wp_mail($email, $mail_header, $email_template, $headers)) {
-                $success_count++;
-            }
-        }
-        
-        $sent_count = $success_count;
-        // Revert alert styling to simple inline CSS for non-Tailwind
+        // 4. Save data to Transient and Schedule Task (ASYNC!)
+        $task_id = uniqid('mass_mail_');
+        $task_data = [
+            'emails' => $target_emails,
+            'subject' => $mail_header,
+            'template' => $email_template,
+            'headers' => $headers,
+        ];
+
+        // Store the task data for 1 hour
+        set_transient($task_id, $task_data, HOUR_IN_SECONDS);
+
+        // Schedule the task to run as soon as possible via WP-Cron
+        wp_schedule_single_action(time(), MASS_MAILER_TASK_HOOK, [$task_id]);
+
         $message = "<div style='background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; padding: 15px; margin-bottom: 1rem; border-radius: 0.25rem;' role='alert'>
-            Mass mail sent successfully! Total users targeted: " . count($target_emails) . ". Successfully sent mails: <strong>$success_count</strong>.
+            <strong>Success!</strong> The mass email process has been initiated in the background. It will send to <strong>" . count($target_emails) . "</strong> users. You can close this page now. The task will complete asynchronously.
         </div>";
 
     } else {
@@ -276,13 +323,13 @@ function get_email_template($header, $body) {
             <!-- 1. Email Header -->
             <div class="form-group">
                 <label for="mail_header" class="d-block mb-2" style="font-weight: 500;">Email Subject/Header</label>
-                <input type="text" name="mail_header" id="mail_header" class="form-control" required value="<?php echo $mail_header;?>">
+                <input type="text" name="mail_header" id="mail_header" class="form-control" required value="<?php echo esc_attr($mail_header);?>">
             </div>
 
             <!-- 2. Email Body  (Supports HTML content)-->
             <div class="form-group mb-4">
                 <label for="mail_body" class="d-block mb-2" style="font-weight: 500;">Email Body </label>
-                <textarea name="mail_body" id="mail_body" rows="8" class="form-control" required placeholder="Enter the main body of your email here."><?php echo $mail_body;?></textarea>
+                <textarea name="mail_body" id="mail_body" rows="8" class="form-control" required placeholder="Enter the main body of your email here."><?php echo esc_textarea($mail_body);?></textarea>
             </div>
 
             <!-- 3. Targeting Audience -->
@@ -292,23 +339,23 @@ function get_email_template($header, $body) {
                     <label for="audience_type" class="d-block mb-2" style="font-weight: 500;">Audience Selection</label>
                     <!-- Audience Selector -->
                     <select name="audience_type" id="audience_type" class="form-control">
-                        <option value="all" <?php echo $audience_type == "all" ? 'selected' : '';?>>All Users</option>
-                        <option value="inactive" <?php echo $audience_type == "inactive" ? 'selected' : '';?>>Users Inactive for X Days</option>
-                        <option value="specific" <?php echo $audience_type == "specific" ? 'selected' : '';?>>Specific Emails (Comma Separated)</option>
+                        <option value="all" <?php selected($audience_type, "all");?>>All Users</option>
+                        <option value="inactive" <?php selected($audience_type, "inactive");?>>Users Inactive for X Days</option>
+                        <option value="specific" <?php selected($audience_type, "specific");?>>Specific Emails (Comma Separated)</option>
                     </select>
                 </div>
 
                 <!-- Conditional Input for Inactive Days -->
                 <div id="inactive_days_container" class="mt-4 hidden">
                     <label for="inactive_days" class="d-block mb-2" style="font-weight: 500;">Number of Days Inactive</label>
-                    <input type="number" name="inactive_days" id="inactive_days" value="<?php echo (!empty($inactive_days)) ? $inactive_days : "30";?>" min="1" class="form-control" style="width: 100px;">
+                    <input type="number" name="inactive_days" id="inactive_days" value="<?php echo (!empty($inactive_days)) ? esc_attr($inactive_days) : "30";?>" min="1" class="form-control" style="width: 100px;">
                     <p class="text-muted mt-1">Users who haven't made a successful Airtime or Data purchase in the last this many days.</p>
                 </div>
 
                 <!-- Conditional Input for Specific Emails -->
                 <div id="specific_emails_container" class="mt-4 hidden">
                     <label for="specific_emails" class="d-block mb-2" style="font-weight: 500;">Specific Emails (Comma Separated)</label>
-                    <textarea name="specific_emails" id="specific_emails" rows="3" class="form-control" placeholder="e.g., user1@example.com, user2@example.com, test@site.com"><?php echo $specific_emails_input;?></textarea>
+                    <textarea name="specific_emails" id="specific_emails" rows="3" class="form-control" placeholder="e.g., user1@example.com, user2@example.com, test@site.com"><?php echo esc_textarea($specific_emails_input);?></textarea>
                     <p class="text-muted mt-1">Enter valid email addresses separated by commas.</p>
                 </div>
 
@@ -344,10 +391,10 @@ jQuery(document).ready(function($) {
 
         if (selectedAudience === 'inactive') {
             inactiveDaysContainer.show();
-            inactiveDaysInput.prop('required', true);
+            // Note: PHP validation handles the required check, but setting here for visual cue
         } else if (selectedAudience === 'specific') {
             specificEmailsContainer.show();
-            specificEmailsInput.prop('required', true);
+            // Note: PHP validation handles the required check, but setting here for visual cue
         }
     }
 
