@@ -165,8 +165,9 @@ function handle_mass_mail_submission() {
         set_transient($task_id, $task_data, HOUR_IN_SECONDS);
 
         // Schedule the task to run as soon as possible via WP-Cron
-        wp_schedule_single_action(time(), MASS_MAILER_TASK_HOOK, [$task_id]);
-
+        if (!wp_next_scheduled(MASS_MAILER_TASK_HOOK, array($task_id))) {
+            wp_schedule_single_event(time(), MASS_MAILER_TASK_HOOK, array($task_id));
+        }
         $message = "<div style='background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; padding: 15px; margin-bottom: 1rem; border-radius: 0.25rem;' role='alert'>
             <strong>Success!</strong> The mass email process has been initiated in the background. It will send to <strong>" . count($target_emails) . "</strong> users. You can close this page now. The task will complete asynchronously.
         </div>";
