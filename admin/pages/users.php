@@ -17,12 +17,6 @@ if(current_user_can("vtupress_access_users")){
                 }
             </style>
 
-<p style="visibility:hidden;">
-Please take note to always have security system running and checked. DO not disclose your login details to anyone except for confidential reasons. 
-Not even the developers of this plugin should be trusted enough to grant access anyhow.
-
-                  </p>
-
 
 <?php
 if($_GET["subpage"] == "all" ){
@@ -30,6 +24,9 @@ include_once(ABSPATH .'wp-content/plugins/vtupress/admin/pages/users/all.php');
 }
 elseif($_GET["subpage"] == "info" ){
     include_once(ABSPATH .'wp-content/plugins/vtupress/admin/pages/users/info.php');
+}
+elseif($_GET["subpage"] == "mail" ){
+    include_once(ABSPATH .'wp-content/plugins/vtupress/admin/pages/users/mail.php');
 }
 elseif($_GET["subpage"] == "banned"){
     include_once(ABSPATH .'wp-content/plugins/vtupress/admin/pages/users/banned.php');  

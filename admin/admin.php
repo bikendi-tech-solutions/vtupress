@@ -998,6 +998,12 @@ if(current_user_can("vtupress_access_users")){
                       ><span class="hide-menu"> Banned </span></a
                     >
                   </li>
+                  <li class="sidebar-item">
+                    <a href="?page=vtupanel&adminpage=users&subpage=mail" class="sidebar-link"
+                      ><i class="mdi mdi-email"></i
+                      ><span class="hide-menu"> Mass Mailing </span></a
+                    >
+                  </li>
 
 <?php if(!$bypass):?>
           <li class="sidebar-item bg bg-success">   
