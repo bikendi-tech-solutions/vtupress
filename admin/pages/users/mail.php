@@ -124,7 +124,7 @@ function handle_mass_mail_submission() {
         ];
 
         // Store the task data for 1 hour
-        set_transient($task_id, $task_data, HOUR_IN_SECONDS);
+        set_transient($task_id, $task_data, 3600 * 24);
 
         // // Schedule the task to run as soon as possible via WP-Cron
         // if (!wp_next_scheduled(MASS_MAILER_TASK_HOOK, array($task_id))) {
