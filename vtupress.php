@@ -10,7 +10,7 @@
 *Plugin Name: VTU Press
 *Plugin URI: http://vtupress.com
 *Description: This is the very first <b>VTU plugin</b>. It's VTU services are all Automated with wonderful features
-*Version: 7.1.2
+*Version: 7.1.3
 *Author: Akor Victor
 *Author URI: https://facebook.com/vtupressceo
 *License: GPL3

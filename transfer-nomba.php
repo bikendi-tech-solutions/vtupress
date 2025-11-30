@@ -163,10 +163,13 @@ if(empty($name) || empty($bank_code)):
   die("Invalid bank details");
 endif;
 
-if($get_details):
+if ($get_details):
   $wpdb->query('ROLLBACK');
-    die($name);
+  die($name);
+elseif (botAccess() && $get_details):
+  die(json_encode(['success' => true, 'name' => $name]));
 endif;
+
 
 
   if($amount < 9999 ){
@@ -331,4 +334,8 @@ maybe_add_column($table_name,"charge","ALTER TABLE $table_name ADD charge text")
 
 
 $wpdb->query('COMMIT');
+
+if(botAccess()){
+  die(json_encode($data));
+}
 die($return);
