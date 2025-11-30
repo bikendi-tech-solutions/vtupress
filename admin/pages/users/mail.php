@@ -17,52 +17,14 @@ $audience_type = '';
 $inactive_days = '';
 $specific_emails_input = '';
 
-// Define the custom action hook for the background task
-define('MASS_MAILER_TASK_HOOK', 'mass_mailer_background_send');
+if(vp_getoption("vtupress_custom_mass_mail") != "yes"){
+        echo "<div style='background-color: #d4edda; color: #be2f16ff; border: 1px solid #c3e6cb; padding: 15px; margin-bottom: 1rem; border-radius: 0.25rem;' role='alert'>
+            <strong>Success!</strong> The mass email process has been initiated in the background. It will send to <strong>Addon Required</strong> You need to activate the custom addon for mass mailing
+        </div>";
 
-/**
- * Executes the mass mail sending in the background.
- * This function is hooked to the WP-Cron action and runs non-blockingly.
- *
- * @param string $task_id The unique ID used to retrieve the transient data.
- */
-function execute_mass_mail_task($task_id) {
-    // 1. Retrieve the task data from the transient
-    $task_data = get_transient($task_id);
-
-    // If data is missing or transient expired, exit.
-    if (empty($task_data) || !is_array($task_data) || empty($task_data['emails'])) {
-        error_log("Mass Mail Task $task_id failed: Data missing or expired.");
         return;
-    }
-
-    $target_emails = $task_data['emails'];
-    $mail_header   = $task_data['subject'];
-    $email_template = $task_data['template'];
-    $headers       = $task_data['headers'];
-    $success_count = 0;
-
-    // 2. Send Emails in a loop
-    foreach ($target_emails as $email) {
-        // wp_mail returns true on success, false on failure
-        if (wp_mail($email, $mail_header, $email_template, $headers)) {
-            $success_count++;
-        }
-    }
-
-    // 3. Cleanup and Notification
-    delete_transient($task_id); // Remove the transient data
-
-    // Log the result (for admin/debugging)
-    $log_message = sprintf(
-        "Mass Mail Task %s Completed: Targeted %d, Successfully Sent %d.",
-        $task_id,
-        count($target_emails),
-        $success_count
-    );
-    error_log($log_message);
 }
-add_action(MASS_MAILER_TASK_HOOK, 'execute_mass_mail_task', 10, 1);
+
 
 
 /**
@@ -164,10 +126,10 @@ function handle_mass_mail_submission() {
         // Store the task data for 1 hour
         set_transient($task_id, $task_data, HOUR_IN_SECONDS);
 
-        // Schedule the task to run as soon as possible via WP-Cron
-        if (!wp_next_scheduled(MASS_MAILER_TASK_HOOK, array($task_id))) {
-            wp_schedule_single_event(time(), MASS_MAILER_TASK_HOOK, array($task_id));
-        }
+        // // Schedule the task to run as soon as possible via WP-Cron
+        // if (!wp_next_scheduled(MASS_MAILER_TASK_HOOK, array($task_id))) {
+        //     wp_schedule_single_event(time(), MASS_MAILER_TASK_HOOK, array($task_id));
+        // }
         $message = "<div style='background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; padding: 15px; margin-bottom: 1rem; border-radius: 0.25rem;' role='alert'>
             <strong>Success!</strong> The mass email process has been initiated in the background. It will send to <strong>" . count($target_emails) . "</strong> users. You can close this page now. The task will complete asynchronously.
         </div>";
