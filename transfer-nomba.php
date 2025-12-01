@@ -264,7 +264,7 @@ if(preg_match("/succ/",$status) || preg_match("/receiv/",$status) || preg_match(
     $data = [
       'user_id' => $id,
       'amount' => $amount,
-      'amount_before' => $current_balance,
+      'amount' => $current_balance,
       'amount_now' => $updatedBalance,
       'status' => "success",
       'bank_details' => $name."-".$accountNo."-".$bank_name,

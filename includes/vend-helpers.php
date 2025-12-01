@@ -1172,7 +1172,7 @@ function handle_paywall_upgrade($post_data)
  */
 function handle_withdrawal($post_data)
 {
-    global $current_timestamp, $option_array;
+    global $current_timestamp, $option_array,$wpdb;
 
     $withdrawal_status = vp_getoption('allow_withdrawal');
     $withdrawal_to_bank = vp_getoption('allow_to_bank');
@@ -1182,6 +1182,10 @@ function handle_withdrawal($post_data)
     $withdrawal_amount = $_POST["withamt"];
     $id = get_current_user_id();
     $withdrawal_option = $_POST["withto"];
+    $bal = vp_getuser($id, 'vp_bal',true);
+
+    $total_bal_with  = floatval(vp_getuser($id, "vp_tot_ref_earn",true))  +  floatval(vp_getuser($id, "vp_tot_in_ref_earn",true))  +  floatval(vp_getuser($id, "vp_tot_in_ref_earn3",true)) + 
+        floatval(vp_getuser($id, "vp_tot_dir_trans",true))  +  floatval(vp_getuser($id, "vp_tot_indir_trans",true))  +  floatval(vp_getuser($id, "vp_tot_indir_trans3",true))  +  floatval(vp_getuser($id, "vp_tot_trans_bonus",true));
 
 
     if (preg_match("/-/", $withdrawal_amount)) {
@@ -1197,7 +1201,8 @@ function handle_withdrawal($post_data)
     switch ($source) {
         case "bonus":
             if ($current_withdrawal_balance > $total_bal_with) {
-                die('{"status":"400"}');
+                // die($current_withdrawal_balance ." --- ".$total_bal_with);
+                die('{"status":"400","error:":"'.$current_withdrawal_balance.' --- '.$total_bal_with.'"}');
             } elseif ($current_withdrawal_balance < $total_bal_with) {
                 die('{"status":"410"}');
             }

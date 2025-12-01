@@ -26,8 +26,6 @@ $action = $_POST["action"];
 
 
 
-
-
 if (vp_getoption('allow_to_bank') != "yes" || vp_getoption("vtupress_custom_transfer") != "yes") {
   die("Enable Bank To Bank transfer");
 }
@@ -95,8 +93,9 @@ if ($lastRecentNowBal == $current_balance) {
 if (vp_getoption("enable_nomba") == "yes") {
   include_once 'transfer-nomba.php';
 }
+
 $secret_key = vp_getoption('psec'); //get_option('jettrade_paystack_secret');
-$symbol = vp_country()["symbol"];
+$symbol = vp_country()["currency"];
 $name = vp_getuser($userid, 'first_name') . " " . vp_getuser($userid, 'last_name');
 $accountNo = trim($_POST["account_number"]);
 $bank_code = trim($_POST["bank_code"]);
@@ -109,6 +108,8 @@ $get_details = false;
 if (isset($_POST["get_details"])):
   $get_details = true;
 endif;
+
+
 
 //create recipient
 
@@ -141,6 +142,8 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 //execute post
 $result = curl_exec($ch);
 
+// die(json_encode($fields)." ---- ".$result);
+
 $json = json_decode($result, true);
 
 
@@ -171,7 +174,7 @@ if (empty($name) || empty($bank_code)):
   die("Invalid bank details");
 endif;
 
-if ($get_details):
+if ($get_details && !botAccess()):
   $wpdb->query('ROLLBACK');
   die($name);
 elseif (botAccess() && $get_details):
