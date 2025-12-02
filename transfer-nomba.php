@@ -163,7 +163,7 @@ if(empty($name) || empty($bank_code)):
   die("Invalid bank details");
 endif;
 
-if ($get_details):
+if ($get_details && !botAccess()):
   $wpdb->query('ROLLBACK');
   die($name);
 elseif (botAccess() && $get_details):
