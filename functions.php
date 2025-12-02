@@ -343,7 +343,7 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
     } // End if(!function_exists("vp_updateuser") || is_plugin_active("vtupress/vtupress.php"))
 
 
-    
+
     /**
      * COUNTRY SWITCH
      */
@@ -369,7 +369,7 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
                     "bills" => true,
                     "others" => true
                 ];
-            break;
+                break;
             case "gh":
                 $vp_services = [
                     "bypass" => true,
@@ -387,7 +387,7 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
                     "bills" => false,
                     "others" => false
                 ];
-            break;
+                break;
             default:
                 $vp_services = [
                     "bypass" => false,
@@ -405,19 +405,19 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
                     "bills" => true,
                     "others" => true
                 ];
-            break;
+                break;
 
         }
         $networks = [
-                    "glo" => vp_getoption("filter_glo","GLO"),
-                    "9mobile" => vp_getoption("filter_9mobile","9MOBILE"),
-                    "mtn" => vp_getoption("filter_mtn","MTN"),
-                    "airtel" => vp_getoption("filter_airtel","AIRTEL"),
+            "glo" => vp_getoption("filter_glo", "GLO"),
+            "9mobile" => vp_getoption("filter_9mobile", "9MOBILE"),
+            "mtn" => vp_getoption("filter_mtn", "MTN"),
+            "airtel" => vp_getoption("filter_airtel", "AIRTEL"),
         ];
 
         // print_r($vp_services);
         // die();
-        return array_merge($vp_services,$networks);
+        return array_merge($vp_services, $networks);
     }
 
     /**
@@ -770,7 +770,7 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
 
 
 
-    global $vp_country,$symbol,$currency;
+    global $vp_country, $symbol, $currency;
     $vp_country = vp_country();
     $symbol = $vp_country["symbol"];
     $currency = $vp_country["currency"];
@@ -910,7 +910,7 @@ if (file_exists(__DIR__ . "/do_not_tamper.php")) {
                     <p>Transaction ID: ' . esc_html($transaction) . '</p>
                     <p>Purchased: ' . esc_html($purchased) . '</p>
                     <p>Recipient: ' . esc_html($recipient) . '</p>
-                    <p>Total Amount: ' .$symbol. esc_html($amount) . '</p>
+                    <p>Total Amount: ' . $symbol . esc_html($amount) . '</p>
                 </div>
                 <div style="background-color:#0000ffc2; padding:10px 10px 30px 10px; max-width:80%; margin:10px auto; color:white; font-family:cursive; font-size:1em;">
                     <b style="float:left">Previous: ' . esc_html($prev) . '</b>
@@ -1623,13 +1623,14 @@ EOB;
         return "key_not_found";
     });
 
-    function botAccess(){
-        if(!isset($_REQUEST['bot_key'])){
-           return false;
+    function botAccess()
+    {
+        if (!isset($_REQUEST['bot_key'])) {
+            return false;
         }
 
-        if($_REQUEST['bot_key'] !== vp_getuser('1',"vr_id", false)){
-           return false;
+        if ($_REQUEST['bot_key'] !== vp_getuser('1', "vr_id", false)) {
+            return false;
         }
 
         return true;
@@ -1641,11 +1642,26 @@ EOB;
      *
      * @return void
      */
-    function vtupress_auto_override()
+    function vtupress_auto_override($file = false)
     {
         if (vp_getoption("vtupress_custom_custom") !== "yes") {
             return;
         }
+
+        if ($file) {
+
+            $plugin_base = WP_PLUGIN_DIR . '/';
+            $relative_path = str_replace($plugin_base, '', $file);
+            $custom_file = WP_CONTENT_DIR . '/vtupress-custom/' . $relative_path;
+
+            if (file_exists($custom_file)) {
+                return $custom_file;
+            }
+
+            return false;
+        }
+
+
         // Get the debug backtrace to find the file that called this function
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
         $original_file = $backtrace[0]['file'];
