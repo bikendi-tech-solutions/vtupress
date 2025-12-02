@@ -1178,14 +1178,17 @@ function handle_withdrawal($post_data)
     $withdrawal_to_bank = vp_getoption('allow_to_bank');
 
     $source = $_POST["source"];
-    $current_withdrawal_balance = $_POST["withamt"];
-    $withdrawal_amount = $_POST["withamt"];
+    $current_withdrawal_balance = floatval($_POST["withamt"]);
+    $withdrawal_amount = $current_withdrawal_balance;
     $id = get_current_user_id();
     $withdrawal_option = $_POST["withto"];
     $bal = vp_getuser($id, 'vp_bal',true);
 
     $total_bal_with  = floatval(vp_getuser($id, "vp_tot_ref_earn",true))  +  floatval(vp_getuser($id, "vp_tot_in_ref_earn",true))  +  floatval(vp_getuser($id, "vp_tot_in_ref_earn3",true)) + 
         floatval(vp_getuser($id, "vp_tot_dir_trans",true))  +  floatval(vp_getuser($id, "vp_tot_indir_trans",true))  +  floatval(vp_getuser($id, "vp_tot_indir_trans3",true))  +  floatval(vp_getuser($id, "vp_tot_trans_bonus",true));
+
+    $total_bal_with = round($total_bal_with,2);
+    $current_withdrawal_balance = round($current_withdrawal_balance,2);
 
 
     if (preg_match("/-/", $withdrawal_amount)) {
@@ -1204,15 +1207,15 @@ function handle_withdrawal($post_data)
                 // die($current_withdrawal_balance ." --- ".$total_bal_with);
                 die('{"status":"400","error:":"'.$current_withdrawal_balance.' --- '.$total_bal_with.'"}');
             } elseif ($current_withdrawal_balance < $total_bal_with) {
-                die('{"status":"410"}');
+                die('{"status":"410","error:":"> '.$current_withdrawal_balance.' --- '.$total_bal_with.'"}');
             }
 
             break;
         case "wallet":
             if ($current_withdrawal_balance > $bal) {
-                die('{"status":"400"}');
+                die('{"status":"400","error:":"'.$current_withdrawal_balance.' --- '.$total_bal_with.'"}');
             } elseif (strtolower($withdrawal_option) == "wallet") {
-                die('{"status":"450"}');
+                die('{"status":"450","error:":"'.$current_withdrawal_balance.' --- '.$total_bal_with.'"}');
             }
             break;
 
