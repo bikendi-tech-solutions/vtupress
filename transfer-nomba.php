@@ -62,7 +62,6 @@ CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 CURLOPT_CUSTOMREQUEST => "POST",
     CURLOPT_POSTFIELDS =>json_encode($payload,JSON_UNESCAPED_SLASHES),
 CURLOPT_HTTPHEADER => [
-    "Authorization: Bearer $secret_key",
     "accountId: $account_id",
     "Content-Type: application/json"
 ],
