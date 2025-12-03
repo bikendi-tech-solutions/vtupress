@@ -239,10 +239,6 @@ $json = json_decode($result,true);
   
 if(isset($json["description"])):
   $status = strtolower($json["description"]);
-  if($status != "success"):
-    $wpdb->query('ROLLBACK');
-      die($status);
-  endif;
 else:
   error_log("running transfer error .. ".$result);
   $wpdb->query('ROLLBACK');
