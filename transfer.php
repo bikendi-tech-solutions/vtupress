@@ -192,9 +192,9 @@ $amountWithCharge = ($amount + $charge);
 if ($current_balance < $amount):
   $wpdb->query('ROLLBACK');
   die("Insufficient balance [$current_balance]");
-elseif ($amount < 100):
+elseif ($amount < 50):
   $wpdb->query('ROLLBACK');
-  die("Minimum transfer amount is 100");
+  die("Minimum transfer amount is 50");
 elseif ($current_balance < $amountWithCharge):
   $wpdb->query('ROLLBACK');
   die("Insufficient balance to cover transfer fee [$charge] inclusively");

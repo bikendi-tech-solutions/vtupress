@@ -11,7 +11,11 @@ $nomba = ["090645"=>"Nombank","120001"=>"9PSB","090270"=>"AB Microfinance Bank",
 $action = $_POST["action"];
 
 
-$id = get_current_user_id();
+if (botAccess()) {
+  $id = $_POST["user_id"];
+} else {
+  $id = get_current_user_id();
+}
 
 
 
@@ -184,9 +188,9 @@ endif;
   if($current_balance < $amount):
     $wpdb->query('ROLLBACK');
     die("Insufficient balance [$current_balance]");
-  elseif($amount < 100):
+  elseif($amount < 50):
     $wpdb->query('ROLLBACK');
-      die("Minimum transfer amount is 100");
+      die("Minimum transfer amount is 50");
   elseif($current_balance < $amountWithCharge):
     $wpdb->query('ROLLBACK');
     die("Insufficient balance to cover transfer fee [$charge] inclusively");
