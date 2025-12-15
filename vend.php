@@ -114,6 +114,20 @@ if (vp_getoption("vp_security") == "yes") {
 
 // --- MAIN TRANSACTION PROCESSING BLOCK ---
 if (isset($_POST["vend"])) {
+    $wpdb->query('START TRANSACTION');
+    /*
+    UPDATE wpg6_usermeta
+SET meta_value = JSON_SET(
+    CAST(meta_value AS JSON),
+    '$.vp_bal',
+    CAST(JSON_EXTRACT(CAST(meta_value AS JSON), '$.vp_bal') AS DECIMAL(15,2)) - 200
+)
+WHERE user_id = 1
+AND meta_key = 'vp_user_data'
+AND JSON_VALID(meta_value)
+AND CAST(JSON_EXTRACT(CAST(meta_value AS JSON), '$.vp_bal') AS DECIMAL(15,2)) >= 200;
+
+*/
 
     global $vp_country;
     $vp_country = vp_country();
@@ -124,7 +138,6 @@ if (isset($_POST["vend"])) {
     if ($current_user_id === 0) {
         die('{"status":"200","response":"User not logged in or invalid user ID."}');
     }
-    vend_init($current_user_id); // Call the new function for early race condition fix
 
     // Sanitize and validate amount early
     if (isset($_POST["amount"])) {
@@ -152,8 +165,7 @@ if (isset($_POST["vend"])) {
         $phone = "0800000001"; // Default phone if not set for user
     }
 
-    $tphone =
-        $bal = floatval(vp_getuser($id, "vp_bal", true)); // User's current balance
+    $bal = floatval(vp_getuser($id, "vp_bal", true)); // User's current balance
 
     // Initialize $uniqidvalue
     $uniqidvalue = date('Ymd', $current_timestamp) . date('H', $current_timestamp) . date("i", $current_timestamp) . date("s", $current_timestamp) . uniqid('', false);
@@ -652,6 +664,12 @@ if (isset($_POST["vend"])) {
     // Process transaction based on tcode.
     // This function will now be responsible for calling pre_transaction_checks_and_setup
     // and then dispatching to the specific service handlers.
+    $balance_updated = update_balance($current_user_id,$amount); // Call the new function for early race condition fix
+
+    if($balance_updated !== true){
+        $wpdb->query('ROLLBACK');
+        die($balance_updated);
+    }
     process_transaction($tcode, $_POST, $id, $name, $email, $processVal, $network, $url, $uniqidvalue, $bal, $baln, $amount, $realAmt, $browser, $option_array, $add_total, $tb4, $tnow);
 
 } elseif (isset($_GET["plugin_infos"])) {

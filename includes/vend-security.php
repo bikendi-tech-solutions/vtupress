@@ -18,48 +18,42 @@ if (!defined('ABSPATH')) {
  * @param int $user_id The ID of the current user.
  * @return void Dies on failure to acquire lock or if the lock table cannot be created.
  */
-function vend_init($user_id) {
+function update_balance($user_id, $amount){
     global $wpdb;
 
-    $table_lock = "{$wpdb->prefix}vp_wallet_lock";
-
-    // Ensure the lock table exists. This should ideally be done on plugin activation.
-    // However, including it here as a fallback ensures it's created if missing.
-    $create_table_sql = "
-        CREATE TABLE IF NOT EXISTS {$table_lock} (
-            user_id BIGINT PRIMARY KEY,
-            locked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        ) ENGINE=InnoDB
+    $sql = "
+        UPDATE {$wpdb->usermeta}
+        SET meta_value = JSON_SET(
+            CAST(meta_value AS JSON),
+            '$.vp_bal',
+            CAST(JSON_UNQUOTE(JSON_EXTRACT(meta_value, '$.vp_bal')) AS DECIMAL(15,2)) - %f
+        )
+        WHERE user_id = %d
+        AND meta_key = 'vp_user_data'
+        AND JSON_VALID(meta_value)
+        AND CAST(JSON_UNQUOTE(JSON_EXTRACT(meta_value, '$.vp_bal')) AS DECIMAL(15,2)) >= %f
     ";
-    $wpdb->query($create_table_sql);
 
-    // Start database transaction.
-    $wpdb->query('START TRANSACTION');
+    $affected = $wpdb->query($wpdb->prepare($sql, $amount, $user_id, $amount));
 
-    try {
-        // Insert or update a row for the user in the lock table.
-        // This ensures a row exists for the user before attempting to lock it.
-        $insert_lock_sql = $wpdb->prepare(
-            "INSERT INTO {$table_lock} (user_id) VALUES (%d) ON DUPLICATE KEY UPDATE locked_at = CURRENT_TIMESTAMP",
+    if ($affected === false) {
+        return "Database error while attempting to update wallet.";
+    } elseif ($affected === 0) {
+        // Distinguish between missing wallet vs insufficient balance
+        $exists = $wpdb->get_var($wpdb->prepare(
+            "SELECT COUNT(*) FROM {$wpdb->usermeta} WHERE user_id = %d AND meta_key = 'vp_user_data'",
             $user_id
-        );
-        $wpdb->query($insert_lock_sql);
+        ));
+        return $exists ? "Insufficient balance." : "User wallet not found.";
+    } else {
+        // Clear user cache
+        clean_user_cache($user_id);
+        wp_cache_delete($user_id, 'user_meta');
 
-        // Acquire an exclusive lock on the user's row in the lock table.
-        // This prevents other concurrent transactions from modifying the same user's balance.
-        $lock_row_sql = $wpdb->prepare(
-            "SELECT user_id FROM {$table_lock} WHERE user_id = %d FOR UPDATE",
-            $user_id
-        );
-        $wpdb->get_row($lock_row_sql);
-
-    } catch (Exception $e) {
-        // Rollback transaction and log error if lock cannot be acquired or table creation fails.
-        $wpdb->query('ROLLBACK');
-        error_log("Failed to initialize vend transaction for user $user_id: " . $e->getMessage());
-        die("An internal error occurred. Please try again or contact support. [INIT_FAIL]");
+        return true;
     }
 }
+
 
 
 /**
@@ -71,8 +65,9 @@ function vend_init($user_id) {
  * @param string $receiver The recipient of the transaction (e.g., phone number, meter number).
  * @return void
  */
-function vpSec($receiver) {
-    global $wpdb, $current_timestamp,$processVal;
+function vpSec($receiver)
+{
+    global $wpdb, $current_timestamp, $processVal;
     $processVal = $receiver;
 
     if (vp_getoption("vp_security") === "yes" && vp_getoption("secur_mod") !== "off") {
@@ -122,7 +117,8 @@ function vpSec($receiver) {
  * @param float $current_balance The user's current wallet balance.
  * @return void
  */
-function check_wallet_history($user_id, $current_balance) {
+function check_wallet_history($user_id, $current_balance)
+{
     global $wpdb;
     $table_name = $wpdb->prefix . 'vp_wallet';
     $result = $wpdb->get_results($wpdb->prepare(
@@ -154,9 +150,10 @@ function check_wallet_history($user_id, $current_balance) {
  * @param array $option_array Global options array.
  * @return void
  */
-function handle_kyc_check($user_id, $amount, $option_array) {
+function handle_kyc_check($user_id, $amount, $option_array)
+{
     global $wpdb, $current_timestamp;
-    $table_name = $wpdb->prefix."vp_kyc_settings";
+    $table_name = $wpdb->prefix . "vp_kyc_settings";
     $kyc_data = $wpdb->get_results("SELECT * FROM $table_name WHERE id = 1");
 
     // $kyc_data = vp_getuser($user_id, "vp_kyc_data", true); // Assuming this fetches KYC data
@@ -207,7 +204,8 @@ function handle_kyc_check($user_id, $amount, $option_array) {
  * @param string $current_date The current date in 'Y-m-d' format.
  * @return void
  */
-function update_kyc_limits($user_id, $duration, $current_date) {
+function update_kyc_limits($user_id, $duration, $current_date)
+{
     if (strtolower($duration) === "day") {
         vp_updateuser($user_id, "vp_kyc_end", date('Y-m-d', strtotime($current_date . " +1 days")));
         vp_updateuser($user_id, 'vp_kyc_total', "0");
@@ -225,7 +223,8 @@ function update_kyc_limits($user_id, $duration, $current_date) {
  * @param string $processVal The recipient value to check (e.g., phone number).
  * @return void
  */
-function handle_raptor_security($processVal) {
+function handle_raptor_security($processVal)
+{
     global $wpdb, $current_timestamp;
     echo vp_getoption("raptor_allow_security");
     echo "<pre>";
@@ -292,73 +291,71 @@ function handle_raptor_security($processVal) {
  * @param array $post_data POST data containing 'key', 'custom', 'plan', 'for', and 'meta'.
  * @return void
  */
-function handle_custom_activation($post_data) {
+function handle_custom_activation($post_data)
+{
     global $wpdb;
-    		function runMeta($meta,$Dmode = "add"){
+    function runMeta($meta, $Dmode = "add")
+    {
 
-			$esc = str_replace('\"','"',$meta);
+        $esc = str_replace('\"', '"', $meta);
 
-			$meta = json_decode($esc,true);
-
-
-
-			if(isset($meta["cron"])){
-
-				//error_log("There's cron",0);
-
-				$value = $meta["cron"];
-				$name = $value["name"]; // module name to add in cron e.g ibro
-				$status = $value["status"]; //true or false
-				$schedule = $value["schedule"]; //e.g 0 */5 * * *
-				$time = $value["time"]; //e.g custom
-				$path_mode = $value["path"]["mode"]; // e.g default
-				$path_value = $value["path"]["path"]; //  e.g wp-content/plugins/vtupress/crons/provider/ibro.php
+        $meta = json_decode($esc, true);
 
 
 
-				//$url_to_register_cron = esc_url(plugins_url('vtupress/registry/crons/config.php'));
+        if (isset($meta["cron"])) {
 
-					//$url = $url_to_register_cron;
+            //error_log("There's cron",0);
 
-				
-					$datas = [
-						"module" => $name,
-						"operator" => $Dmode,
-						"time" => $time,
-						"schedule" => $schedule,
-						"path_mode" => $path_mode,
-						"path_value" => $path_value
-					];
+            $value = $meta["cron"];
+            $name = $value["name"]; // module name to add in cron e.g ibro
+            $status = $value["status"]; //true or false
+            $schedule = $value["schedule"]; //e.g 0 */5 * * *
+            $time = $value["time"]; //e.g custom
+            $path_mode = $value["path"]["mode"]; // e.g default
+            $path_value = $value["path"]["path"]; //  e.g wp-content/plugins/vtupress/crons/provider/ibro.php
 
-					foreach($datas as $key => $value){
-						$_REQUEST[$key] = $value;
-					}
 
-					include_once(ABSPATH .'wp-content/plugins/vtupress/registry/crons/config.php');
 
-					if($response == "InvalidP"){
-						die("Invalid Path");
-					}
-					elseif($response == "cant_remove"){
-						die("Can't Remove Existing Cron");
-					}
-					elseif($response == "no_shell"){
-						die("Server need shell_exec() enabled to use this");
-					}
-					elseif($response == "failedA" && $Dmode == "add"){
-						die("Failed To Add Cron Job");
-						
-					}
-					elseif($response == "failedR" && $Dmode == "remove"){
-						die("Failed To Remove Cron Job");
-						
-					}
+            //$url_to_register_cron = esc_url(plugins_url('vtupress/registry/crons/config.php'));
 
-			}else{
-				//error_log(print_r($meta));
-				//error_log("No cron",0);
-			}
-		}
+            //$url = $url_to_register_cron;
+
+
+            $datas = [
+                "module" => $name,
+                "operator" => $Dmode,
+                "time" => $time,
+                "schedule" => $schedule,
+                "path_mode" => $path_mode,
+                "path_value" => $path_value
+            ];
+
+            foreach ($datas as $key => $value) {
+                $_REQUEST[$key] = $value;
+            }
+
+            include_once(ABSPATH . 'wp-content/plugins/vtupress/registry/crons/config.php');
+
+            if ($response == "InvalidP") {
+                die("Invalid Path");
+            } elseif ($response == "cant_remove") {
+                die("Can't Remove Existing Cron");
+            } elseif ($response == "no_shell") {
+                die("Server need shell_exec() enabled to use this");
+            } elseif ($response == "failedA" && $Dmode == "add") {
+                die("Failed To Add Cron Job");
+
+            } elseif ($response == "failedR" && $Dmode == "remove") {
+                die("Failed To Remove Cron Job");
+
+            }
+
+        } else {
+            //error_log(print_r($meta));
+            //error_log("No cron",0);
+        }
+    }
 
     $frk = (vp_getoption("vtupress_custom_frk") === "yes");
     $lfrk = (vp_getoption("vtupress_custom_lfrk") === "yes");

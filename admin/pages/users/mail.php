@@ -36,6 +36,7 @@ function handle_mass_mail_submission() {
     // Check for POST request and nonce for security (essential for admin pages)
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['send_mail_nonce']) && wp_verify_nonce($_POST['send_mail_nonce'], 'send_mass_mail')) {
 
+        // wp_die("WORKING");
         // 1. Sanitize and Validate Input (Inputs are saved to global variables for form persistence)
         $mail_header = sanitize_text_field($_POST['mail_header']);
         $mail_body = wp_kses_post($_POST['mail_body']);
@@ -124,7 +125,12 @@ function handle_mass_mail_submission() {
         ];
 
         // Store the task data for 1 hour
-        set_transient($task_id, $task_data, 3600 * 24);
+        $return = set_transient($task_id, $task_data, 3600 * 24);
+        if(!$return){
+            $message = '<div style="background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; padding: 15px; margin-bottom: 1rem; border-radius: 0.25rem;" role="alert">Warning: Unable to set transient.</div>';
+             return;
+        }
+
 
         // // Schedule the task to run as soon as possible via WP-Cron
         // if (!wp_next_scheduled(MASS_MAILER_TASK_HOOK, array($task_id))) {

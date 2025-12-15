@@ -308,7 +308,7 @@ function pre_transaction_checks_and_setup($user_id, $bal, $amount, $uniqidvalue,
 
     // Deduct balance within the transaction
     $tot = $bal - $amount;
-    vp_updateuser($user_id, 'vp_bal', $tot);
+    // vp_updateuser($user_id, 'vp_bal', $tot);
     setcookie("recent_amount", $amount, time() + (30 * 24 * 60 * 60), "/");
 
     return true;
@@ -514,7 +514,7 @@ function handle_transaction_failure($pos, $vtu_token, $name, $email, $network_na
             // Update wallet with reversal entry
             update_wallet("Approved", "Reversal For Failed " . ucfirst($trans_type) . " Purchase With Id " . $uniqidvalue, $amount, $baln, $bal);
         }else{
-            vp_updateuser($user_id, "vp_bal", $baln);
+            // vp_updateuser($user_id, "vp_bal", $baln);
             setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/");
         }
 
