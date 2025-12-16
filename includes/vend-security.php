@@ -25,14 +25,14 @@ function update_balance($user_id, $amount){
     $sql = "
         UPDATE $tb
         SET meta_value = JSON_SET(
-            CAST(meta_value AS JSON),
+            meta_value,
             '$.vp_bal',
             CAST(JSON_UNQUOTE(JSON_EXTRACT(meta_value, '$.vp_bal')) AS DECIMAL(15,2)) - %f
         )
         WHERE user_id = %d
         AND meta_key = 'vp_user_data'
         AND JSON_VALID(meta_value)
-        AND CAST(JSON_UNQUOTE(JSON_EXTRACT(meta_value, '$.vp_bal')) AS DECIMAL(15,2)) >= %f
+        AND CAST(JSON_UNQUOTE(JSON_EXTRACT(meta_value, '$.vp_bal')) AS DECIMAL(15,2)) >= %f;
     ";
 
     $affected = $wpdb->query($wpdb->prepare($sql, $amount, $user_id, $amount));

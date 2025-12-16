@@ -671,6 +671,9 @@ AND CAST(JSON_EXTRACT(CAST(meta_value AS JSON), '$.vp_bal') AS DECIMAL(15,2)) >=
         die($balance_updated);
     }
 
+    $bal = vp_getuser($current_user_id, 'vp_bal', true) + $amount;
+    $baln = $bal - $amount;
+
     // $bal = floatval(vp_getuser($id, "vp_bal", true)); // User's current balance
     // $baln = $bal - $amount; // New balance after transaction
     process_transaction($tcode, $_POST, $id, $name, $email, $processVal, $network, $url, $uniqidvalue, $bal, $baln, $amount, $realAmt, $browser, $option_array, $add_total, $tb4, $tnow);
