@@ -20,9 +20,10 @@ if (!defined('ABSPATH')) {
  */
 function update_balance($user_id, $amount){
     global $wpdb;
+    $tb = $wpdb->prefix."usermeta";
 
     $sql = "
-        UPDATE {$wpdb->usermeta}
+        UPDATE $tb
         SET meta_value = JSON_SET(
             CAST(meta_value AS JSON),
             '$.vp_bal',
