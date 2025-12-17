@@ -115,6 +115,7 @@ if (vp_getoption("vp_security") == "yes") {
 // --- MAIN TRANSACTION PROCESSING BLOCK ---
 if (isset($_POST["vend"])) {
     $wpdb->query('START TRANSACTION');
+    
     /*
     UPDATE wpg6_usermeta
 SET meta_value = JSON_SET(

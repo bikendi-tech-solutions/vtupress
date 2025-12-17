@@ -18,41 +18,64 @@ if (!defined('ABSPATH')) {
  * @param int $user_id The ID of the current user.
  * @return void Dies on failure to acquire lock or if the lock table cannot be created.
  */
-function update_balance($user_id, $amount){
+
+function update_balance($user_id, $amount) {
     global $wpdb;
-    $tb = $wpdb->prefix."usermeta";
+    $tb = $wpdb->prefix . "usermeta";
 
-    $sql = "
-        UPDATE $tb
-        SET meta_value = JSON_SET(
-            meta_value,
-            '$.vp_bal',
-            CAST(JSON_UNQUOTE(JSON_EXTRACT(meta_value, '$.vp_bal')) AS DECIMAL(15,2)) - %f
-        )
-        WHERE user_id = %d
-        AND meta_key = 'vp_user_data'
-        AND JSON_VALID(meta_value)
-        AND CAST(JSON_UNQUOTE(JSON_EXTRACT(meta_value, '$.vp_bal')) AS DECIMAL(15,2)) >= %f;
-    ";
+    // Start transaction
+    // $wpdb->query('START TRANSACTION');
 
-    $affected = $wpdb->query($wpdb->prepare($sql, $amount, $user_id, $amount));
+    // Lock the row for this user
+    $row = $wpdb->get_row($wpdb->prepare("
+        SELECT meta_value
+        FROM $tb
+        WHERE user_id = %d AND meta_key = 'vp_user_data'
+        FOR UPDATE
+    ", $user_id), ARRAY_A);
 
-    if ($affected === false) {
-        return "Database error while attempting to update wallet.";
-    } elseif ($affected === 0) {
-        // Distinguish between missing wallet vs insufficient balance
-        $exists = $wpdb->get_var($wpdb->prepare(
-            "SELECT COUNT(*) FROM {$wpdb->usermeta} WHERE user_id = %d AND meta_key = 'vp_user_data'",
-            $user_id
-        ));
-        return $exists ? "Insufficient balance." : "User wallet not found.";
-    } else {
-        // Clear user cache
-        clean_user_cache($user_id);
-        wp_cache_delete($user_id, 'user_meta');
-
-        return true;
+    if (!$row) {
+        $wpdb->query('ROLLBACK');
+        return 'User wallet not found.';
     }
+
+    // Decode JSON balance
+    $meta = json_decode($row['meta_value'], true);
+    if (!isset($meta['vp_bal'])) {
+        $wpdb->query('ROLLBACK');
+        return 'Wallet balance not found.';
+    }
+
+    $bal = floatval($meta['vp_bal']);
+
+    if ($bal < $amount) {
+        $wpdb->query('ROLLBACK');
+        return 'Insufficient balance.';
+    }
+
+    // Deduct balance
+    $meta['vp_bal'] = round($bal - $amount, 2);
+
+    // Update DB
+    $updated = $wpdb->update(
+        $tb,
+        ['meta_value' => wp_json_encode($meta)],
+        ['user_id' => $user_id, 'meta_key' => 'vp_user_data']
+    );
+
+    if ($updated === false) {
+        $wpdb->query('ROLLBACK');
+        return 'Database error while updating wallet.';
+    }
+
+    // Commit transaction
+    $wpdb->query('COMMIT');
+
+    // Clear cache
+    clean_user_cache($user_id);
+    wp_cache_delete($user_id, 'user_meta');
+
+    return true;
 }
 
 
