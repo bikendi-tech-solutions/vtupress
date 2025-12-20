@@ -399,23 +399,18 @@ function pre_transaction_checks_and_setup($user_id, $bal, $amount, $uniqidvalue,
 
     if ($recent_txn) {
 
-        $db_time = $recent_txn->$time_col;
-        $cur_time = date("Y-m-d H:i:s A", $current_timestamp);
-        $time_start = new DateTime($db_time);
-        $time_end = new DateTime($cur_time);
+        // 1. Get the DB time string
+        $db_time = $recent_txn->$time_col; 
 
-        // 2. Calculate the difference
-        $interval = $time_start->diff($time_end);
-        $seconds_elapsed = ($interval->days * 24 * 60 * 60) +
-            ($interval->h * 60 * 60) +
-            ($interval->i * 60) +
-            $interval->s;
+        $start_timestamp = strtotime($db_time);
+        $end_timestamp = time(); 
 
-        // die($db_time." - ".$cur_time);
+        // 3. Simple subtraction gives you exact seconds elapsed
+        $seconds_elapsed = $start_timestamp - $end_timestamp;
 
-        // 4. Apply your logic
-        if ($seconds_elapsed < 15) {
-            $wait_time = 15 - $seconds_elapsed;
+        if ((3600 - $seconds_elapsed) < 15) {
+            // Ensure we don't show a negative wait time
+            $wait_time = 15 - (3600 - $seconds_elapsed);
             die("[T/C] Please wait {$wait_time} more seconds to purchase for same number.");
         }
     }
