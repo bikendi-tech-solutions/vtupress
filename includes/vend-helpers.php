@@ -1536,6 +1536,7 @@ function handle_setpin($post){
 
 function handle_activation(){
     
+    global $current_timestamp;
 
 	$datenow = date("Y-m-d h:i A", $current_timestamp);
 	$next = date('Y-m-d h:i A', strtotime($datenow . " +12 hours"));

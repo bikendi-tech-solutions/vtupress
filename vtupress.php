@@ -10,7 +10,7 @@
 *Plugin Name: VTU Press
 *Plugin URI: http://vtupress.com
 *Description: This is the very first <b>VTU plugin</b>. It's VTU services are all Automated with wonderful features
-*Version: 7.2.6
+*Version: 7.2.7
 *Author: Akor Victor
 *Author URI: https://facebook.com/vtupressceo
 *License: GPL3
@@ -254,9 +254,20 @@ if(isset($_SERVER['HTTP_HOST'])){
 
 
 // Plugin update and database schema management.
-$update_vtupress_options = 74;
+$update_vtupress_options = 76;
 if(get_option("vtupress_options2") != $update_vtupress_options){
     global $wpdb;
+
+    $vend_lock = $wpdb->prefix . "vend_lock";
+
+    $wpdb->query("CREATE TABLE $vend_lock (
+        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+        vend VARCHAR(100) NOT NULL,
+        user_id BIGINT NOT NULL,
+        created_at DATETIME NOT NULL,
+        UNIQUE KEY uniq_vend (vend)
+    ) ENGINE=InnoDB;
+    ");
 
     $table_name = $wpdb->prefix."vp_profile";
     maybe_add_column($table_name,"code","ALTER  TABLE  $table_name ADD code text");
@@ -269,14 +280,6 @@ if(get_option("vtupress_options2") != $update_vtupress_options){
 
 
 
-    // Create or update vp_wallet_lock table.
-    $table_lock = "{$wpdb->prefix}vp_wallet_lock";
-    $wpdb->query("
-        CREATE TABLE IF NOT EXISTS {$wpdb->prefix}vp_wallet_lock (
-            user_id BIGINT PRIMARY KEY,
-            locked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        ) ENGINE=InnoDB
-    ");
 
     // Convert existing tables to InnoDB engine if not already.
     $tables = ["sairtime","sdata","scable","sbill","vp_wallet"];

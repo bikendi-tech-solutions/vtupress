@@ -13,9 +13,9 @@ if (!defined('ABSPATH')) {
     die('Access denied.');
 }
 
-    global $vp_country,$symbol;
-    $vp_country = vp_country();
-	$symbol = $vp_country["symbol"];
+global $vp_country, $symbol;
+$vp_country = vp_country();
+$symbol = $vp_country["symbol"];
 /**
  * Returns the specific columns and their formats for a given service table.
  * This is crucial for handling different database structures.
@@ -24,7 +24,8 @@ if (!defined('ABSPATH')) {
  * @param array $data An associative array of data to be inserted.
  * @return array An array containing 'columns' and 'formats'.
  */
-function get_service_table_columns($trans_type, $data) {
+function get_service_table_columns($trans_type, $data)
+{
     $columns = [];
     $formats = [];
 
@@ -33,29 +34,46 @@ function get_service_table_columns($trans_type, $data) {
         case 'share':
         case 'awuf':
             $columns = [
-                'run_code'     => $data['run_code'],
-                'response_id'  => $data['response_id'],
-                'name'         => $data['name'],
-                'email'        => $data['email'],
-                'network'      => $data['network'],
-                'phone'        => $data['phone'],
-                'bal_bf'       => $data['bal_bf'],
-                'bal_nw'       => $data['bal_nw'],
-                'amount'       => $data['amount'],
-                'resp_log'     => $data['resp_log'],
-                'browser'      => $data['browser'],
-                'trans_type'   => $data['trans_type'],
+                'run_code' => $data['run_code'],
+                'response_id' => $data['response_id'],
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'network' => $data['network'],
+                'phone' => $data['phone'],
+                'bal_bf' => $data['bal_bf'],
+                'bal_nw' => $data['bal_nw'],
+                'amount' => $data['amount'],
+                'resp_log' => $data['resp_log'],
+                'browser' => $data['browser'],
+                'trans_type' => $data['trans_type'],
                 'trans_method' => $data['trans_method'],
-                'via'          => $data['via'],
-                'time_taken'   => $data['time_taken'],
-                'request_id'   => $data['request_id'],
-                'user_id'      => $data['user_id'],
-                'status'       => $data['status'],
-                'the_time'     => $data['the_time'],
+                'via' => $data['via'],
+                'time_taken' => $data['time_taken'],
+                'request_id' => $data['request_id'],
+                'user_id' => $data['user_id'],
+                'status' => $data['status'],
+                'the_time' => $data['the_time'],
             ];
             $formats = [
-                '%s', '%s', '%s', '%s', '%s', '%s', '%f', '%f', '%f', '%s',
-                '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s'
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%f',
+                '%f',
+                '%f',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%d',
+                '%s',
+                '%s'
             ];
             break;
 
@@ -65,158 +83,251 @@ function get_service_table_columns($trans_type, $data) {
         case 'smile':
         case 'alpha':
             $columns = [
-                'run_code'     => $data['run_code'],
-                'response_id'  => $data['response_id'],
-                'name'         => $data['name'],
-                'email'        => $data['email'],
-                'phone'        => $data['phone'],
-                'plan'         => $data['plan'], // Specific to data
-                'bal_bf'       => $data['bal_bf'],
-                'bal_nw'       => $data['bal_nw'],
-                'amount'       => $data['amount'],
-                'resp_log'     => $data['resp_log'],
-                'browser'      => $data['browser'],
-                'trans_type'   => $data['trans_type'],
+                'run_code' => $data['run_code'],
+                'response_id' => $data['response_id'],
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'phone' => $data['phone'],
+                'plan' => $data['plan'], // Specific to data
+                'bal_bf' => $data['bal_bf'],
+                'bal_nw' => $data['bal_nw'],
+                'amount' => $data['amount'],
+                'resp_log' => $data['resp_log'],
+                'browser' => $data['browser'],
+                'trans_type' => $data['trans_type'],
                 'trans_method' => $data['trans_method'],
-                'via'          => $data['via'],
-                'time_taken'   => $data['time_taken'],
-                'request_id'   => $data['request_id'],
-                'user_id'      => $data['user_id'],
-                'status'       => $data['status'],
-                'the_time'     => $data['the_time'],
+                'via' => $data['via'],
+                'time_taken' => $data['time_taken'],
+                'request_id' => $data['request_id'],
+                'user_id' => $data['user_id'],
+                'status' => $data['status'],
+                'the_time' => $data['the_time'],
             ];
             $formats = [
-                '%s', '%s', '%s', '%s', '%s', '%s', '%f', '%f', '%f', '%s',
-                '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s'
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%f',
+                '%f',
+                '%f',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%d',
+                '%s',
+                '%s'
             ];
             break;
 
         case 'cable': // For scable table
             $columns = [
-                'run_code'     => $data['run_code'],
-                'response_id'  => $data['response_id'],
-                'name'         => $data['name'],
-                'email'        => $data['email'],
-                'iucno'        => $data['iucno'], // Specific to cable
-                'phone'        => $data['phone'],
-                'bal_bf'       => $data['bal_bf'],
-                'bal_nw'       => $data['bal_nw'],
-                'amount'       => $data['amount'],
-                'resp_log'     => $data['resp_log'],
-                'browser'      => $data['browser'],
-                'trans_type'   => $data['trans_type'],
+                'run_code' => $data['run_code'],
+                'response_id' => $data['response_id'],
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'iucno' => $data['iucno'], // Specific to cable
+                'phone' => $data['phone'],
+                'bal_bf' => $data['bal_bf'],
+                'bal_nw' => $data['bal_nw'],
+                'amount' => $data['amount'],
+                'resp_log' => $data['resp_log'],
+                'browser' => $data['browser'],
+                'trans_type' => $data['trans_type'],
                 'trans_method' => $data['trans_method'],
-                'via'          => $data['via'],
-                'time_taken'   => $data['time_taken'],
-                'request_id'   => $data['request_id'],
-                'product_id'   => $data['product_id'], // Specific to cable
-                'type'         => $data['type'],       // Specific to cable (e.g., DStv, GOtv)
-                'status'       => $data['status'],
-                'user_id'      => $data['user_id'],
-                'time'         => $data['the_time'], // Note: 'time' column name in old vs 'the_time'
+                'via' => $data['via'],
+                'time_taken' => $data['time_taken'],
+                'request_id' => $data['request_id'],
+                'product_id' => $data['product_id'], // Specific to cable
+                'type' => $data['type'],       // Specific to cable (e.g., DStv, GOtv)
+                'status' => $data['status'],
+                'user_id' => $data['user_id'],
+                'time' => $data['the_time'], // Note: 'time' column name in old vs 'the_time'
             ];
             $formats = [
-                '%s', '%s', '%s', '%s', '%s', '%s', '%f', '%f', '%f', '%s',
-                '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s'
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%f',
+                '%f',
+                '%f',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%d',
+                '%s'
             ];
             break;
 
         case 'bill': // For sbill table
             $columns = [
-                'run_code'     => $data['run_code'],
-                'response_id'  => $data['response_id'],
-                'name'         => $data['name'],
-                'email'        => $data['email'],
-                'meterno'      => $data['meterno'],    // Specific to bill
-                'phone'        => $data['phone'],
-                'bal_bf'       => $data['bal_bf'],
-                'bal_nw'       => $data['bal_nw'],
-                'amount'       => $data['amount'],
-                'resp_log'     => $data['resp_log'],
-                'browser'      => $data['browser'],
-                'charge'       => $data['charge'],     // Specific to bill
-                'trans_type'   => $data['trans_type'],
+                'run_code' => $data['run_code'],
+                'response_id' => $data['response_id'],
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'meterno' => $data['meterno'],    // Specific to bill
+                'phone' => $data['phone'],
+                'bal_bf' => $data['bal_bf'],
+                'bal_nw' => $data['bal_nw'],
+                'amount' => $data['amount'],
+                'resp_log' => $data['resp_log'],
+                'browser' => $data['browser'],
+                'charge' => $data['charge'],     // Specific to bill
+                'trans_type' => $data['trans_type'],
                 'trans_method' => $data['trans_method'],
-                'via'          => $data['via'],
-                'time_taken'   => $data['time_taken'],
-                'request_id'   => $data['request_id'],
-                'user_id'      => $data['user_id'],
-                'status'       => $data['status'],
-                'product_id'   => $data['product_id'], // Specific to bill
-                'meter_token'  => $data['meter_token'],// Specific to bill
-                'type'         => $data['type'],       // Specific to bill (e.g., prepaid, postpaid)
-                'time'         => $data['the_time'],   // Note: 'time' column name in old vs 'the_time'
+                'via' => $data['via'],
+                'time_taken' => $data['time_taken'],
+                'request_id' => $data['request_id'],
+                'user_id' => $data['user_id'],
+                'status' => $data['status'],
+                'product_id' => $data['product_id'], // Specific to bill
+                'meter_token' => $data['meter_token'],// Specific to bill
+                'type' => $data['type'],       // Specific to bill (e.g., prepaid, postpaid)
+                'time' => $data['the_time'],   // Note: 'time' column name in old vs 'the_time'
             ];
             $formats = [
-                '%s', '%s', '%s', '%s', '%s', '%s', '%f', '%f', '%f', '%s',
-                '%s', '%f', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%s'
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%f',
+                '%f',
+                '%f',
+                '%s',
+                '%s',
+                '%f',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%d',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s'
             ];
             break;
 
         case 'sms': // For ssms table
             $columns = [
-                'name'         => $data['name'],
-                'email'        => $data['email'],
-                'sender'       => $data['sender'],   // Specific to SMS
-                'receiver'     => $data['receiver'], // Specific to SMS
-                'bal_bf'       => $data['bal_bf'],
-                'bal_nw'       => $data['bal_nw'],
-                'amount'       => $data['amount'],
-                'user_id'      => $data['user_id'],
-                'status'       => $data['status'],
-                'resp_log'     => $data['resp_log'],
-                'the_time'     => $data['the_time'],
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'sender' => $data['sender'],   // Specific to SMS
+                'receiver' => $data['receiver'], // Specific to SMS
+                'bal_bf' => $data['bal_bf'],
+                'bal_nw' => $data['bal_nw'],
+                'amount' => $data['amount'],
+                'user_id' => $data['user_id'],
+                'status' => $data['status'],
+                'resp_log' => $data['resp_log'],
+                'the_time' => $data['the_time'],
             ];
             $formats = [
-                '%s', '%s', '%s', '%s', '%f', '%f', '%f', '%d', '%s', '%s', '%s'
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%f',
+                '%f',
+                '%f',
+                '%d',
+                '%s',
+                '%s',
+                '%s'
             ];
             break;
 
         case 'bet': // For sbet table
             $columns = [
-                'run_code'     => $data['run_code'],
-                'response_id'  => $data['response_id'],
-                'name'         => $data['name'],
-                'email'        => $data['email'],
-                'customerid'   => $data['customerid'], // Specific to betting
-                'company'      => $data['company'],    // Specific to betting
-                'bal_bf'       => $data['bal_bf'],
-                'bal_nw'       => $data['bal_nw'],
-                'amount'       => $data['amount'],
-                'resp_log'     => $data['resp_log'],
-                'browser'      => $data['browser'],
-                'trans_type'   => $data['trans_type'],
+                'run_code' => $data['run_code'],
+                'response_id' => $data['response_id'],
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'customerid' => $data['customerid'], // Specific to betting
+                'company' => $data['company'],    // Specific to betting
+                'bal_bf' => $data['bal_bf'],
+                'bal_nw' => $data['bal_nw'],
+                'amount' => $data['amount'],
+                'resp_log' => $data['resp_log'],
+                'browser' => $data['browser'],
+                'trans_type' => $data['trans_type'],
                 'trans_method' => $data['trans_method'],
-                'via'          => $data['via'],
-                'time_taken'   => $data['time_taken'],
-                'request_id'   => $data['request_id'],
-                'user_id'      => $data['user_id'],
-                'status'       => $data['status'],
-                'the_time'     => $data['the_time'],
+                'via' => $data['via'],
+                'time_taken' => $data['time_taken'],
+                'request_id' => $data['request_id'],
+                'user_id' => $data['user_id'],
+                'status' => $data['status'],
+                'the_time' => $data['the_time'],
             ];
             $formats = [
-                '%s', '%s', '%s', '%s', '%s', '%s', '%f', '%f', '%f', '%s',
-                '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s'
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%f',
+                '%f',
+                '%f',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%d',
+                '%s',
+                '%s'
             ];
             break;
 
         default:
             // Fallback for unknown transaction types (e.g., log to vp_transactions)
             $columns = [
-                'status'     => $data['status'],
-                'service'    => $data['service'] ?? 'unknown',
-                'name'       => $data['name'],
-                'email'      => $data['email'],
-                'recipient'  => $data['recipient'],
-                'bal_bf'     => $data['bal_bf'],
-                'bal_nw'     => $data['bal_nw'],
-                'amount'     => $data['amount'],
+                'status' => $data['status'],
+                'service' => $data['service'] ?? 'unknown',
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'recipient' => $data['recipient'],
+                'bal_bf' => $data['bal_bf'],
+                'bal_nw' => $data['bal_nw'],
+                'amount' => $data['amount'],
                 'request_id' => $data['request_id'],
-                'user_id'    => $data['user_id'],
-                'the_time'   => $data['the_time'],
+                'user_id' => $data['user_id'],
+                'the_time' => $data['the_time'],
             ];
             $formats = [
-                '%s', '%s', '%s', '%s', '%s', '%f', '%f', '%f', '%s', '%d', '%s'
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%f',
+                '%f',
+                '%f',
+                '%s',
+                '%d',
+                '%s'
             ];
             break;
     }
@@ -241,27 +352,95 @@ function get_service_table_columns($trans_type, $data) {
  * @param string $pos A track code for duplicate checks.
  * @return bool True if pre-transaction checks pass and setup is complete, dies on failure.
  */
-function pre_transaction_checks_and_setup($user_id, $bal, $amount, $uniqidvalue, $name, $email, $phone, $service, $baln, $pos) {
+function pre_transaction_checks_and_setup($user_id, $bal, $amount, $uniqidvalue, $name, $email, $phone, $service, $baln, $pos)
+{
     global $wpdb, $current_timestamp;
+
+    $vend_lock = $wpdb->prefix . "vend_lock";
+
 
     $table_trans = $wpdb->prefix . 'vp_transactions';
 
-    // Check for duplicate transaction track code in the relevant service table
-    // This assumes 'run_code' is a common column for duplicate checks across service tables.
-    // The actual table for this check might need to be passed as a parameter or derived.
-    // For now, let's assume 'sairtime' for this check as in vend-old.php.
-    $tableh = $wpdb->prefix . $service; // This needs to be dynamic based on the actual service type
-    $rest = $wpdb->get_results($wpdb->prepare("SELECT * FROM $tableh WHERE run_code = %s", $pos));
+    if ($pos != vp_getuser($user_id, 'run_code', true)) {
+        die('[T/C] Invalid Transaction Code!!! 1 Please refresh your browser and try again. ' . $pos . ' - ' . vp_getuser($user_id, 'run_code', true));
+    }
+    // Map service to its relevant column for recipient and time
+    $service_columns = [
+        'scable' => ['recipient' => 'iucno', 'time' => 'time'],
+        'sbill' => ['recipient' => 'meterno', 'time' => 'time'],
+        'sairtime' => ['recipient' => 'phone', 'time' => 'the_time'],
+        'sdata' => ['recipient' => 'phone', 'time' => 'the_time']
+    ];
+
+    if (!isset($service_columns[$service])) {
+        die('Invalid service type');
+    }
+
+    $recipient_col = $service_columns[$service]['recipient'];
+    $time_col = $service_columns[$service]['time'];
+    $tableh = $wpdb->prefix . $service;
+
+
+
+    // 1️⃣  Check for transactions to same recipient in last 15 seconds (pure SQL)
+
+    // 1. Fetch only the most recent transaction for this recipient
+    $sql = $wpdb->prepare(
+        "SELECT $time_col FROM $tableh 
+         WHERE $recipient_col = %s 
+         ORDER BY id DESC 
+         LIMIT 1",
+        $phone
+    );
+
+    // die($sql);
+    $recent_txn = $wpdb->get_row($sql);
+
+
+    if ($recent_txn) {
+
+        $db_time = $recent_txn->$time_col;
+        $cur_time = date("Y-m-d H:i:s A", $current_timestamp);
+        $time_start = new DateTime($db_time);
+        $time_end = new DateTime($cur_time);
+
+        // 2. Calculate the difference
+        $interval = $time_start->diff($time_end);
+        $seconds_elapsed = ($interval->days * 24 * 60 * 60) +
+            ($interval->h * 60 * 60) +
+            ($interval->i * 60) +
+            $interval->s;
+
+        // die($db_time." - ".$cur_time);
+
+        // 4. Apply your logic
+        if ($seconds_elapsed < 15) {
+            $wait_time = 15 - $seconds_elapsed;
+            die("[T/C] Please wait {$wait_time} more seconds to purchase for same number.");
+        }
+    }
+
+
+    // 2️⃣ Check for duplicate run_code/transaction ID
+    $rest = $wpdb->get_results(
+        $wpdb->prepare("SELECT * FROM $tableh WHERE run_code = %s", $pos)
+    );
     if (!empty($rest)) {
-        $wpdb->query('ROLLBACK'); // Rollback if duplicate
+        $wpdb->delete($vend_lock, ['user_id' => $user_id]);
+
+        $wpdb->query('ROLLBACK');
         die('[T/C] Duplicate Transaction!!! Check your transaction history please');
     }
+
+
 
     // Check for balance anomaly from previous transaction
     if ($bal == (isset($_COOKIE["last_bal"]) ? $_COOKIE["last_bal"] : null) && (isset($_COOKIE["trans_reversal"]) ? $_COOKIE["trans_reversal"] : 'yes') === "no") {
         $amtts = $bal - (isset($_COOKIE["recent_amount"]) ? round(floatval($_COOKIE["recent_amount"]), 2) : 0);
         update_wallet("Approved", "Auto-Deducted a stated amount as we discovered an anomaly in previous transaction which no reversal was initiated", $_COOKIE["recent_amount"], $bal, $amtts);
         vp_updateuser($user_id, "vp_bal", $amtts);
+        $wpdb->delete($vend_lock, ['user_id' => $user_id]);
+
         $wpdb->query('COMMIT'); // Rollback if anomaly detected
         die("Error With Previous Balance Check.. Please Refresh Your Browser And Try Again ");
     } else {
@@ -270,24 +449,39 @@ function pre_transaction_checks_and_setup($user_id, $bal, $amount, $uniqidvalue,
     }
 
     // Pre-record transaction as failed (will be updated later) in vp_transactions
-    $unrecorded_added = $wpdb->insert($table_trans, array(
-        'status' => 'Fa',
-        'service' => sanitize_text_field(substr($service, 1)),
-        'name' => sanitize_user($name),
-        'email' => sanitize_email($email),
-        'recipient' => sanitize_text_field($phone),
-        'bal_bf' => round(floatval($bal), 2),
-        'bal_nw' => round(floatval($baln), 2),
-        'amount' => round(floatval($amount), 2),
-        'request_id' => sanitize_text_field($uniqidvalue),
-        'user_id' => $user_id,
-        'the_time' => date('Y-m-d h:i:s A', $current_timestamp)
-    ),
-    array(
-        '%s', '%s', '%s', '%s', '%s', '%f', '%f', '%f', '%s', '%d', '%s'
-    ));
+    $unrecorded_added = $wpdb->insert(
+        $table_trans,
+        array(
+            'status' => 'Fa',
+            'service' => sanitize_text_field(substr($service, 1)),
+            'name' => sanitize_user($name),
+            'email' => sanitize_email($email),
+            'recipient' => sanitize_text_field($phone),
+            'bal_bf' => round(floatval($bal), 2),
+            'bal_nw' => round(floatval($baln), 2),
+            'amount' => round(floatval($amount), 2),
+            'request_id' => sanitize_text_field($uniqidvalue),
+            'user_id' => $user_id,
+            'the_time' => date('Y-m-d h:i:s A', $current_timestamp)
+        ),
+        array(
+            '%s',
+            '%s',
+            '%s',
+            '%s',
+            '%s',
+            '%f',
+            '%f',
+            '%f',
+            '%s',
+            '%d',
+            '%s'
+        )
+    );
 
     if (!is_numeric($unrecorded_added) || $unrecorded_added === 0 || $unrecorded_added === false) {
+        $wpdb->delete($vend_lock, ['user_id' => $user_id]);
+
         $wpdb->query('ROLLBACK'); // Rollback if pre-recording fails
         die("Error Pre-recording: Please refresh your browser and try again later");
     }
@@ -344,9 +538,16 @@ function pre_transaction_checks_and_setup($user_id, $bal, $amount, $uniqidvalue,
  * @param array $extra_data Additional data specific to the transaction type (e.g., plan, iucno, meterno).
  * @return void Dies with success/pending message.
  */
-function post_transaction_handling($pos, $vtu_token, $name, $email, $network_name, $phone, $bal, $baln, $amount, $browser, $trans_type, $trans_method, $uniqidvalue, $user_id, $status, $response_log, $realAmt, $service_table_name, $trans_table_name, $add_total, $tb4, $tnow, $extra_data = []) {
+function post_transaction_handling($pos, $vtu_token, $name, $email, $network_name, $phone, $bal, $baln, $amount, $browser, $trans_type, $trans_method, $uniqidvalue, $user_id, $status, $response_log, $realAmt, $service_table_name, $trans_table_name, $add_total, $tb4, $tnow, $extra_data = [])
+{
     global $wpdb, $current_timestamp;
-    	global $plan,$level,$amountv,$sec,$mlm_for,$realAmt;
+    global $plan, $level, $amountv, $sec, $mlm_for, $realAmt;
+    $vend_lock = $wpdb->prefix . "vend_lock";
+
+
+    vp_updateuser($user_id, 'run_code', uniqid());
+
+
     $table_name_levels = $wpdb->prefix . "vp_levels";
     $level_data = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$table_name_levels} WHERE name = %s", $plan));
     $level = !empty($level_data) ? $level_data : null;
@@ -360,25 +561,25 @@ function post_transaction_handling($pos, $vtu_token, $name, $email, $network_nam
 
         // Prepare common data for insertion
         $common_data = [
-            'run_code'     => esc_html($pos),
-            'response_id'  => esc_html($vtu_token),
-            'name'         => sanitize_user($name),
-            'email'        => sanitize_email($email),
-            'phone'        => sanitize_text_field($phone),
-            'bal_bf'       => round(floatval($bal), 2),
-            'bal_nw'       => round(floatval($baln), 2),
-            'amount'       => round(floatval($amount), 2),
-            'resp_log'     => sanitize_text_field($response_log),
-            'browser'      => sanitize_text_field($browser),
-            'trans_type'   => sanitize_text_field($trans_type),
+            'run_code' => esc_html($pos),
+            'response_id' => esc_html($vtu_token),
+            'name' => sanitize_user($name),
+            'email' => sanitize_email($email),
+            'phone' => sanitize_text_field($phone),
+            'bal_bf' => round(floatval($bal), 2),
+            'bal_nw' => round(floatval($baln), 2),
+            'amount' => round(floatval($amount), 2),
+            'resp_log' => sanitize_text_field($response_log),
+            'browser' => sanitize_text_field($browser),
+            'trans_type' => sanitize_text_field($trans_type),
             'trans_method' => sanitize_text_field($trans_method),
-            'via'          => 'site',
-            'time_taken'   => '1',
-            'request_id'   => sanitize_text_field($uniqidvalue),
-            'user_id'      => $user_id,
-            'status'       => sanitize_text_field($status),
-            'the_time'     => date('Y-m-d h:i:s A', $current_timestamp),
-            'network'      => sanitize_text_field($network_name), // Added network for airtime/data
+            'via' => 'site',
+            'time_taken' => '1',
+            'request_id' => sanitize_text_field($uniqidvalue),
+            'user_id' => $user_id,
+            'status' => sanitize_text_field($status),
+            'the_time' => date('Y-m-d h:i:s A', $current_timestamp),
+            'network' => sanitize_text_field($network_name), // Added network for airtime/data
         ];
 
         // Merge common data with extra_data
@@ -411,6 +612,8 @@ function post_transaction_handling($pos, $vtu_token, $name, $email, $network_nam
 
         // Commit the transaction
         $wpdb->query('COMMIT');
+        $wpdb->delete($vend_lock, ['user_id' => $user_id]);
+
 
         $status = strtolower($status);
         if ($status === "successful") {
@@ -420,6 +623,8 @@ function post_transaction_handling($pos, $vtu_token, $name, $email, $network_nam
         }
     } catch (Exception $e) {
         // If an error occurs during post-handling, attempt to rollback
+        $wpdb->delete($vend_lock, ['user_id' => $user_id]);
+
         $wpdb->query('ROLLBACK');
         error_log("Transaction post-handling failed for user $user_id (Request ID: $uniqidvalue): " . $e->getMessage());
         die("An unexpected error occurred after transaction. Please contact support.");
@@ -453,35 +658,41 @@ function post_transaction_handling($pos, $vtu_token, $name, $email, $network_nam
  * @param array $extra_data Additional data specific to the transaction type.
  * @return void Dies with error message.
  */
-function handle_transaction_failure($pos, $vtu_token, $name, $email, $network_name, $phone, $bal, $baln, $amount, $browser, $trans_type, $trans_method, $uniqidvalue, $user_id, $response_log, $service_table_name, $trans_table_name, $api_response_code, $en_status, $response_format, $extra_data = []) {
+function handle_transaction_failure($pos, $vtu_token, $name, $email, $network_name, $phone, $bal, $baln, $amount, $browser, $trans_type, $trans_method, $uniqidvalue, $user_id, $response_log, $service_table_name, $trans_table_name, $api_response_code, $en_status, $response_format, $extra_data = [])
+{
     global $wpdb, $current_timestamp;
+    $vend_lock = $wpdb->prefix . "vend_lock";
+
 
     try {
+
+        vp_updateuser($user_id, 'run_code', uniqid());
+
         $refund = strtolower(vp_getoption('auto_refund'));
-        if($refund == "yes"){
+        if ($refund == "yes") {
             $baln = $bal;
         }
         // Prepare common data for insertion
         $common_data = [
-            'run_code'     => esc_html($pos),
-            'response_id'  => esc_html($vtu_token),
-            'name'         => sanitize_user($name),
-            'email'        => sanitize_email($email),
-            'phone'        => sanitize_text_field($phone),
-            'bal_bf'       => round(floatval($bal), 2),
-            'bal_nw'       => round(floatval($baln), 2), // Balance remains same on failure before reversal
-            'amount'       => round(floatval($amount), 2),
-            'resp_log'     => sanitize_text_field($response_log),
-            'browser'      => sanitize_text_field($browser),
-            'trans_type'   => sanitize_text_field($trans_type),
+            'run_code' => esc_html($pos),
+            'response_id' => esc_html($vtu_token),
+            'name' => sanitize_user($name),
+            'email' => sanitize_email($email),
+            'phone' => sanitize_text_field($phone),
+            'bal_bf' => round(floatval($bal), 2),
+            'bal_nw' => round(floatval($baln), 2), // Balance remains same on failure before reversal
+            'amount' => round(floatval($amount), 2),
+            'resp_log' => sanitize_text_field($response_log),
+            'browser' => sanitize_text_field($browser),
+            'trans_type' => sanitize_text_field($trans_type),
             'trans_method' => sanitize_text_field($trans_method),
-            'via'          => 'site',
-            'time_taken'   => '1',
-            'request_id'   => sanitize_text_field($uniqidvalue),
-            'user_id'      => $user_id,
-            'status'       => "Failed",
-            'the_time'     => date('Y-m-d h:i:s A', $current_timestamp),
-            'network'      => sanitize_text_field($network_name), // Added network for airtime/data
+            'via' => 'site',
+            'time_taken' => '1',
+            'request_id' => sanitize_text_field($uniqidvalue),
+            'user_id' => $user_id,
+            'status' => "Failed",
+            'the_time' => date('Y-m-d h:i:s A', $current_timestamp),
+            'network' => sanitize_text_field($network_name), // Added network for airtime/data
         ];
 
         // Merge common data with extra_data
@@ -506,14 +717,14 @@ function handle_transaction_failure($pos, $vtu_token, $name, $email, $network_na
             vp_updateuser($user_id, "beneficiaries", $beneficiary . "," . $phone);
         }
 
-        
-        if($refund == "yes"){
+
+        if ($refund == "yes") {
             // Revert balance
             vp_updateuser($user_id, "vp_bal", $bal);
             setcookie("trans_reversal", "yes", time() + (30 * 24 * 60 * 60), "/");
             // Update wallet with reversal entry
             update_wallet("Approved", "Reversal For Failed " . ucfirst($trans_type) . " Purchase With Id " . $uniqidvalue, $amount, $baln, $bal);
-        }else{
+        } else {
             // vp_updateuser($user_id, "vp_bal", $baln);
             setcookie("trans_reversal", "no", time() + (30 * 24 * 60 * 60), "/");
         }
@@ -521,8 +732,10 @@ function handle_transaction_failure($pos, $vtu_token, $name, $email, $network_na
 
         // Delete from unrecorded transactions table
         $wpdb->delete($wpdb->prefix . $trans_table_name, array('request_id' => $uniqidvalue));
-        
+
         // Rollback the transaction
+        $wpdb->delete($vend_lock, ['user_id' => $user_id]);
+
         $wpdb->query('COMMIT');
 
         // Die with error message
@@ -565,38 +778,40 @@ function handle_transaction_failure($pos, $vtu_token, $name, $email, $network_na
  * @param float $tnow KYC total now.
  * @return void
  */
-function dbFromTcode($data=""){
-        global $wpdb, $current_timestamp;
-        switch($data){
-            case"cair":
-                return "sairtime";
+function dbFromTcode($data = "")
+{
+    global $wpdb, $current_timestamp;
+    switch ($data) {
+        case "cair":
+            return "sairtime";
             break;
-            case"cdat":
-                return "sdata";
+        case "cdat":
+            return "sdata";
             break;
-            case"ccab":
-                return "scable";
+        case "ccab":
+            return "scable";
             break;
-            case"cbill":
-                return "sbill";
+        case "cbill":
+            return "sbill";
             break;
-            case"cepin":
-                return "sepins";
+        case "cepin":
+            return "sepins";
             break;
-            case"csms":
-                return "ssms";
+        case "csms":
+            return "ssms";
             break;
-            case"cbet":
-                return "sbet";
+        case "cbet":
+            return "sbet";
             break;
-            default:
-                $wpdb->query('ROLLBACK');
-                die("Invalid transaction code.");
+        default:
+            $wpdb->query('ROLLBACK');
+            die("Invalid transaction code.");
             break;
 
-        }
+    }
 }
-function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone, $network, $url, $uniqidvalue, $bal, $baln, $amount, $realAmt, $browser, $option_array, $add_total, $tb4, $tnow) {
+function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone, $network, $url, $uniqidvalue, $bal, $baln, $amount, $realAmt, $browser, $option_array, $add_total, $tb4, $tnow)
+{
     global $wpdb, $current_timestamp;
 
 
@@ -621,11 +836,10 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
             $payload_type = '';
             $var = "";
 
-            if($airtime_choice == 'share'){
+            if ($airtime_choice == 'share') {
                 $payload_type = 's';
                 $var = $payload_type;
-            }
-            elseif($airtime_choice == 'awuf'){
+            } elseif ($airtime_choice == 'awuf') {
                 $payload_type = 'w';
                 $var = $payload_type;
             }
@@ -663,15 +877,47 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
             $add_headers_prefix = $airtime_choice . 'addheaders';
             $add_value_prefix = $airtime_choice . 'addvalue';
 
+            //$phone
+
             handle_airtime_transaction(
-                $request_method, $api_url_option, $api_endpoint_option, $success_code_option,
-                $response_format_option, $success_value_option, $success_value2_option,
-                $response_id_option, $query_method_option, $post_data_map, $attribute_map,
-                $header_map, $add_headers_prefix, $add_value_prefix, $post_data, $user_id,
-                $name, $email, $phone, $network, $url, $uniqidvalue, $bal, $baln, $amount,
-                $realAmt, $browser, $option_array, $service_table, 'vp_transactions', $add_total, $pos, $trans_type_for_db, $tb4, $tnow, $extra_data
+                $request_method,
+                $api_url_option,
+                $api_endpoint_option,
+                $success_code_option,
+                $response_format_option,
+                $success_value_option,
+                $success_value2_option,
+                $response_id_option,
+                $query_method_option,
+                $post_data_map,
+                $attribute_map,
+                $header_map,
+                $add_headers_prefix,
+                $add_value_prefix,
+                $post_data,
+                $user_id,
+                $name,
+                $email,
+                $phone,
+                $network,
+                $url,
+                $uniqidvalue,
+                $bal,
+                $baln,
+                $amount,
+                $realAmt,
+                $browser,
+                $option_array,
+                $service_table,
+                'vp_transactions',
+                $add_total,
+                $pos,
+                $trans_type_for_db,
+                $tb4,
+                $tnow,
+                $extra_data
             );
-        break;
+            break;
 
         case "cdat": // Data
             $datatcode = sanitize_text_field($post_data['datatcode'] ?? '');
@@ -680,19 +926,16 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
             $payload_type = '';
             $var = "c";
 
-            if($datatcode == 'corporate'){
+            if ($datatcode == 'corporate') {
                 $payload_type = 'r2';
-                $var = $payload_type."c";
-            }
-            elseif($datatcode == 'direct'){
+                $var = $payload_type . "c";
+            } elseif ($datatcode == 'direct') {
                 $payload_type = 'r';
-                $var = $payload_type."c";
-            }
-            elseif($datatcode == 'smile'){
+                $var = $payload_type . "c";
+            } elseif ($datatcode == 'smile') {
                 $payload_type = 'smile';
                 $var = 'smile';
-            }
-            elseif($datatcode == 'alpha'){
+            } elseif ($datatcode == 'alpha') {
                 $payload_type = 'alpha';
                 $var = 'alpha';
             }
@@ -705,7 +948,7 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
             // Determine API options based on data type
             // die($datatcode);
             $request_method = ($datatcode == "smile" || $datatcode == "alpha") ? vp_getoption($payload_type . "request") : vp_getoption($payload_type . "datarequest");
-            $api_url_option = $datatcode =="smile" ? "smilebaseurl" : ($datatcode =="alpha" ? "alphabaseurl" : $payload_type . "databaseurl");
+            $api_url_option = $datatcode == "smile" ? "smilebaseurl" : ($datatcode == "alpha" ? "alphabaseurl" : $payload_type . "databaseurl");
 
             // Define mappings once
             $endpointMap = [
@@ -719,11 +962,11 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
             ];
 
             $responseFormatMap = [
-                "sme"       => "data1",
-                "direct"    => "data2",
+                "sme" => "data1",
+                "direct" => "data2",
                 "corporate" => "data3",
-                "smile"     => "smile1",
-                "alpha"     => "alpha1",
+                "smile" => "smile1",
+                "alpha" => "alpha1",
             ];
 
             $successValueMap = [
@@ -737,13 +980,13 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
             ];
 
             // Use fallback with null coalescing (??)
-            $api_endpoint_option      = $endpointMap[$datatcode]     ?? $payload_type . "dataendpoint";
-            $success_code_option      = $successCodeMap[$datatcode]  ?? $payload_type . "datasuccesscode";
-            $response_format_option   = ($responseFormatMap[$datatcode] ?? $payload_type . "data") . "_response_format";
-            $success_value_option     = $successValueMap[$datatcode] ?? $payload_type . "datasuccessvalue";
-            $success_value2_option    = $successValue2Map[$datatcode]?? $payload_type . "datasuccessvalue2";
-            $response_id_option       = $payload_type . "response_id";
-            $query_method_option      = $datatcode . "querymethod";
+            $api_endpoint_option = $endpointMap[$datatcode] ?? $payload_type . "dataendpoint";
+            $success_code_option = $successCodeMap[$datatcode] ?? $payload_type . "datasuccesscode";
+            $response_format_option = ($responseFormatMap[$datatcode] ?? $payload_type . "data") . "_response_format";
+            $success_value_option = $successValueMap[$datatcode] ?? $payload_type . "datasuccessvalue";
+            $success_value2_option = $successValue2Map[$datatcode] ?? $payload_type . "datasuccessvalue2";
+            $response_id_option = $payload_type . "response_id";
+            $query_method_option = $datatcode . "querymethod";
 
             // Post data/value mapping loop
             $post_data_map = [];
@@ -770,8 +1013,8 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
                 'network' => $attrsp . 'networkattribute',
                 'amount' => $attrsp . 'amountattribute',
                 'phone' => $attrsp . 'phoneattribute',
-                'plan' => $var.'variationattr',
-                'request_id' => $payload_type .'request_id'
+                'plan' => $var . 'variationattr',
+                'request_id' => $payload_type . 'request_id'
             ];
 
             $header_map = [
@@ -785,7 +1028,7 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
 
             $network = ($_POST["network"]) ? sanitize_text_field($_POST["network"]) : "";
 
-            if(empty($network)){
+            if (empty($network)) {
                 die("No Network");
             }
 
@@ -795,15 +1038,47 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
             // print_r($api_url_option);
             // print_r($api_endpoint_option);
 
+            //$phone
+
             handle_data_transaction(
-                $request_method, $api_url_option, $api_endpoint_option, $success_code_option,
-                $response_format_option, $success_value_option, $success_value2_option,
-                $response_id_option, $query_method_option, $post_data_map, $attribute_map,
-                $header_map, $add_headers_prefix, $add_value_prefix, $post_data, $user_id,
-                $name, $email, $phone, $network, $url, $uniqidvalue, $bal, $baln, $amount,
-                $realAmt, $browser, $option_array, $service_table, 'vp_transactions', $add_total, $pos, $trans_type_for_db, $tb4, $tnow, $extra_data
+                $request_method,
+                $api_url_option,
+                $api_endpoint_option,
+                $success_code_option,
+                $response_format_option,
+                $success_value_option,
+                $success_value2_option,
+                $response_id_option,
+                $query_method_option,
+                $post_data_map,
+                $attribute_map,
+                $header_map,
+                $add_headers_prefix,
+                $add_value_prefix,
+                $post_data,
+                $user_id,
+                $name,
+                $email,
+                $phone,
+                $network,
+                $url,
+                $uniqidvalue,
+                $bal,
+                $baln,
+                $amount,
+                $realAmt,
+                $browser,
+                $option_array,
+                $service_table,
+                'vp_transactions',
+                $add_total,
+                $pos,
+                $trans_type_for_db,
+                $tb4,
+                $tnow,
+                $extra_data
             );
-        break;
+            break;
 
         case "ccab": // Cable
             $ccable = sanitize_text_field($post_data["ccable"] ?? '');
@@ -814,9 +1089,9 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
 
             // Data specific to cable transaction
             $extra_data = [
-                'iucno'      => $iuc,
+                'iucno' => $iuc,
                 'product_id' => $ccable,
-                'type'       => $cabtype,
+                'type' => $cabtype,
             ];
 
             // Determine API options for cable
@@ -850,12 +1125,42 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
             $add_value_prefix = 'cableaddvalue';
 
             handle_cable_transaction(
-                $request_method, $api_url_option, $api_endpoint_option, $success_code_option,
-                $response_format_option, $success_value_option, $success_value2_option,
-                $response_id_option, $query_method_option, $post_data_map, $attribute_map,
-                $header_map, $add_headers_prefix, $add_value_prefix, $post_data, $user_id,
-                $name, $email, $phone, $network, $url, $uniqidvalue, $bal, $baln, $amount,
-                $realAmt, $browser, $option_array, $service_table, 'vp_transactions', $add_total, $pos, $trans_type_for_db, $tb4, $tnow, $extra_data
+                $request_method,
+                $api_url_option,
+                $api_endpoint_option,
+                $success_code_option,
+                $response_format_option,
+                $success_value_option,
+                $success_value2_option,
+                $response_id_option,
+                $query_method_option,
+                $post_data_map,
+                $attribute_map,
+                $header_map,
+                $add_headers_prefix,
+                $add_value_prefix,
+                $post_data,
+                $user_id,
+                $name,
+                $email,
+                $phone,
+                $network,
+                $url,
+                $uniqidvalue,
+                $bal,
+                $baln,
+                $amount,
+                $realAmt,
+                $browser,
+                $option_array,
+                $service_table,
+                'vp_transactions',
+                $add_total,
+                $pos,
+                $trans_type_for_db,
+                $tb4,
+                $tnow,
+                $extra_data
             );
             break;
 
@@ -868,10 +1173,10 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
 
             // Data specific to bill transaction
             $extra_data = [
-                'meterno'     => $meterno,
-                'product_id'  => $cbill,
-                'type'        => $type,
-                'charge'      => floatval(vp_option_array($option_array, "bill_charge")),
+                'meterno' => $meterno,
+                'product_id' => $cbill,
+                'type' => $type,
+                'charge' => floatval(vp_option_array($option_array, "bill_charge")),
                 'meter_token' => sanitize_text_field($post_data["meter_token"] ?? 'No Record'), // Assuming meter_token might be passed
             ];
 
@@ -906,12 +1211,42 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
             $add_value_prefix = 'billaddvalue';
 
             handle_bill_transaction(
-                $request_method, $api_url_option, $api_endpoint_option, $success_code_option,
-                $response_format_option, $success_value_option, $success_value2_option,
-                $response_id_option, $query_method_option, $post_data_map, $attribute_map,
-                $header_map, $add_headers_prefix, $add_value_prefix, $post_data, $user_id,
-                $name, $email, $phone, $network, $url, $uniqidvalue, $bal, $baln, $amount,
-                $realAmt, $browser, $option_array, $service_table, 'vp_transactions', $add_total, $pos, $trans_type_for_db, $tb4, $tnow, $extra_data
+                $request_method,
+                $api_url_option,
+                $api_endpoint_option,
+                $success_code_option,
+                $response_format_option,
+                $success_value_option,
+                $success_value2_option,
+                $response_id_option,
+                $query_method_option,
+                $post_data_map,
+                $attribute_map,
+                $header_map,
+                $add_headers_prefix,
+                $add_value_prefix,
+                $post_data,
+                $user_id,
+                $name,
+                $email,
+                $phone,
+                $network,
+                $url,
+                $uniqidvalue,
+                $bal,
+                $baln,
+                $amount,
+                $realAmt,
+                $browser,
+                $option_array,
+                $service_table,
+                'vp_transactions',
+                $add_total,
+                $pos,
+                $trans_type_for_db,
+                $tb4,
+                $tnow,
+                $extra_data
             );
             break;
 
@@ -923,9 +1258,28 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
             // No extra_data for now, but can be added if needed
             // If API call is needed, create handle_epin_transaction and call it here.
             post_transaction_handling(
-                $pos, 'Nill', $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-                'N/A', $uniqidvalue, $user_id, 'E-PIN processed locally or no API response', $realAmt, $service_table,
-                $service_table, $add_total, $tb4, $tnow, $extra_data
+                $pos,
+                'Nill',
+                $name,
+                $email,
+                $network,
+                $phone,
+                $bal,
+                $baln,
+                $amount,
+                $browser,
+                $trans_type_for_db,
+                'N/A',
+                $uniqidvalue,
+                $user_id,
+                'E-PIN processed locally or no API response',
+                $realAmt,
+                $service_table,
+                $service_table,
+                $add_total,
+                $tb4,
+                $tnow,
+                $extra_data
             );
             break;
 
@@ -938,7 +1292,7 @@ function process_transaction($tcode, $post_data, $user_id, $name, $email, $phone
 
             // Data specific to SMS transaction
             $extra_data = [
-                'sender'   => $sender,
+                'sender' => $sender,
                 'receiver' => $receiver,
                 'resp_log' => $theMessage, // SMS message itself can be part of log
             ];
@@ -953,6 +1307,7 @@ EOD;
             global $theWord; // This global is used in containsSpam
 
             if (containsSpam($theMessage, $spamWordsArray) && preg_match('/cliqsms/', vp_getoption("smsbaseurl"))) {
+
                 $wpdb->query('ROLLBACK');
                 die("[" . $theWord . "] is filtered, replace with another word");
             }
@@ -986,12 +1341,42 @@ EOD;
             $add_value_prefix = 'smsaddvalue';
 
             handle_sms_transaction(
-                $request_method, $api_url_option, $api_endpoint_option, $success_code_option,
-                $response_format_option, $success_value_option, $success_value2_option,
-                $response_id_option, $query_method_option, $post_data_map, $attribute_map,
-                $header_map, $add_headers_prefix, $add_value_prefix, $post_data, $user_id,
-                $name, $email, $phone, $network, $url, $uniqidvalue, $bal, $baln, $amount,
-                $realAmt, $browser, $option_array, $service_table, 'vp_transactions', $add_total, $pos, $trans_type_for_db, $tb4, $tnow, $extra_data
+                $request_method,
+                $api_url_option,
+                $api_endpoint_option,
+                $success_code_option,
+                $response_format_option,
+                $success_value_option,
+                $success_value2_option,
+                $response_id_option,
+                $query_method_option,
+                $post_data_map,
+                $attribute_map,
+                $header_map,
+                $add_headers_prefix,
+                $add_value_prefix,
+                $post_data,
+                $user_id,
+                $name,
+                $email,
+                $phone,
+                $network,
+                $url,
+                $uniqidvalue,
+                $bal,
+                $baln,
+                $amount,
+                $realAmt,
+                $browser,
+                $option_array,
+                $service_table,
+                'vp_transactions',
+                $add_total,
+                $pos,
+                $trans_type_for_db,
+                $tb4,
+                $tnow,
+                $extra_data
             );
             break;
 
@@ -1004,7 +1389,7 @@ EOD;
             // Data specific to betting transaction
             $extra_data = [
                 'customerid' => $customerid,
-                'company'    => $company,
+                'company' => $company,
             ];
 
             // Determine API options for betting
@@ -1036,19 +1421,49 @@ EOD;
             $add_value_prefix = 'betaddvalue';
 
             handle_bet_transaction(
-                $request_method, $api_url_option, $api_endpoint_option, $success_code_option,
-                $response_format_option, $success_value_option, $success_value2_option,
-                $response_id_option, $query_method_option, $post_data_map, $attribute_map,
-                $header_map, $add_headers_prefix, $add_value_prefix, $post_data, $user_id,
-                $name, $email, $phone, $network, $url, $uniqidvalue, $bal, $baln, $amount,
-                $realAmt, $browser, $option_array, $service_table, 'vp_transactions', $add_total, $pos, $trans_type_for_db, $tb4, $tnow, $extra_data
+                $request_method,
+                $api_url_option,
+                $api_endpoint_option,
+                $success_code_option,
+                $response_format_option,
+                $success_value_option,
+                $success_value2_option,
+                $response_id_option,
+                $query_method_option,
+                $post_data_map,
+                $attribute_map,
+                $header_map,
+                $add_headers_prefix,
+                $add_value_prefix,
+                $post_data,
+                $user_id,
+                $name,
+                $email,
+                $phone,
+                $network,
+                $url,
+                $uniqidvalue,
+                $bal,
+                $baln,
+                $amount,
+                $realAmt,
+                $browser,
+                $option_array,
+                $service_table,
+                'vp_transactions',
+                $add_total,
+                $pos,
+                $trans_type_for_db,
+                $tb4,
+                $tnow,
+                $extra_data
             );
             break;
 
         default:
             $wpdb->query('ROLLBACK');
             die("Invalid transaction code.");
-        break;
+            break;
     }
 }
 
@@ -1093,15 +1508,47 @@ EOD;
  * @param array $extra_data Additional data specific to the transaction type.
  * @return void
  */
-function handle_airtime_transaction($request_method, $api_url_option, $api_endpoint_option, $success_code_option,
-                                    $response_format_option, $success_value_option, $success_value2_option,
-                                    $response_id_option, $query_method_option, $post_data_map, $attribute_map,
-                                    $header_map, $add_headers_prefix, $add_value_prefix, $post_data, $user_id,
-                                    $name, $email, $phone, $network, $url_from_post, $uniqidvalue, $bal, $baln, $amount,
-                                    $realAmt, $browser, $option_array, $service_table_name, $trans_table_name, $add_total, $pos, $trans_type_for_db, $tb4, $tnow, $extra_data = []) {
-    global $wpdb, $current_timestamp,$vp_country,$symbol;
+function handle_airtime_transaction(
+    $request_method,
+    $api_url_option,
+    $api_endpoint_option,
+    $success_code_option,
+    $response_format_option,
+    $success_value_option,
+    $success_value2_option,
+    $response_id_option,
+    $query_method_option,
+    $post_data_map,
+    $attribute_map,
+    $header_map,
+    $add_headers_prefix,
+    $add_value_prefix,
+    $post_data,
+    $user_id,
+    $name,
+    $email,
+    $phone,
+    $network,
+    $url_from_post,
+    $uniqidvalue,
+    $bal,
+    $baln,
+    $amount,
+    $realAmt,
+    $browser,
+    $option_array,
+    $service_table_name,
+    $trans_table_name,
+    $add_total,
+    $pos,
+    $trans_type_for_db,
+    $tb4,
+    $tnow,
+    $extra_data = []
+) {
+    global $wpdb, $current_timestamp, $vp_country, $symbol;
 
-        global $plan,$level,$amountv,$sec,$mlm_for,$realAmt;
+    global $plan, $level, $amountv, $sec, $mlm_for, $realAmt;
 
     // Ensure $extra_data is an array. If it's not, initialize it as an empty array.
     if (!is_array($extra_data)) {
@@ -1128,10 +1575,14 @@ function handle_airtime_transaction($request_method, $api_url_option, $api_endpo
     }
 
     // Add dynamic attributes
-    if (isset($attribute_map['network'])) $datass[vp_option_array($option_array, $attribute_map['network'])] = $network;
-    if (isset($attribute_map['amount'])) $datass[vp_option_array($option_array, $attribute_map['amount'])] = round(floatval($realAmt), 2);
-    if (isset($attribute_map['phone'])) $datass[vp_option_array($option_array, $attribute_map['phone'])] = $phone;
-    if (isset($attribute_map['request_id'])) $datass[vp_option_array($option_array, $attribute_map['request_id'])] = $uniqidvalue;
+    if (isset($attribute_map['network']))
+        $datass[vp_option_array($option_array, $attribute_map['network'])] = $network;
+    if (isset($attribute_map['amount']))
+        $datass[vp_option_array($option_array, $attribute_map['amount'])] = round(floatval($realAmt), 2);
+    if (isset($attribute_map['phone']))
+        $datass[vp_option_array($option_array, $attribute_map['phone'])] = $phone;
+    if (isset($attribute_map['request_id']))
+        $datass[vp_option_array($option_array, $attribute_map['request_id'])] = $uniqidvalue;
 
     $headers_array = [
         'Content-Type' => 'application/json',
@@ -1171,6 +1622,10 @@ function handle_airtime_transaction($request_method, $api_url_option, $api_endpo
     $response = '';
     // die($request_method);
 
+    if ($pos != vp_getuser($user_id, 'run_code', true)) {
+        die('[T/C] Invalid Transaction Code!!! 2 Please refresh your browser and try again. ' . $pos . ' - ' . vp_getuser($user_id, 'run_code', true));
+    }
+
     if ($query_method != "array") { // Direct GET/POST request
         if ($request_method == "get") {
             $final_url = add_query_arg($datass, $url); // Append data to URL for GET
@@ -1191,9 +1646,27 @@ function handle_airtime_transaction($request_method, $api_url_option, $api_endpo
         if ($response == "error") {
             global $return_message; // Assuming vp_remote_post_fn sets this global
             handle_transaction_failure(
-                $pos, 'no_response', $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-                $request_method, $uniqidvalue, $user_id, $return_message, $service_table_name, $trans_table_name,
-                wp_remote_retrieve_response_code($call), 'FALSE', 'TEXT', $extra_data
+                $pos,
+                'no_response',
+                $name,
+                $email,
+                $network,
+                $phone,
+                $bal,
+                $baln,
+                $amount,
+                $browser,
+                $trans_type_for_db,
+                $request_method,
+                $uniqidvalue,
+                $user_id,
+                $return_message,
+                $service_table_name,
+                $trans_table_name,
+                wp_remote_retrieve_response_code($call),
+                'FALSE',
+                'TEXT',
+                $extra_data
             );
         }
     }
@@ -1202,9 +1675,27 @@ function handle_airtime_transaction($request_method, $api_url_option, $api_endpo
     if (is_wp_error($call)) {
         $error_message = vp_getoption("vpdebug") != "yes" ? $call->get_error_code() : $call->get_error_message();
         handle_transaction_failure(
-            $pos, 'no_response', $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-            $request_method, $uniqidvalue, $user_id, $error_message, $service_table_name, $trans_table_name,
-            wp_remote_retrieve_response_code($call), 'FALSE', 'TEXT', $extra_data
+            $pos,
+            'no_response',
+            $name,
+            $email,
+            $network,
+            $phone,
+            $bal,
+            $baln,
+            $amount,
+            $browser,
+            $trans_type_for_db,
+            $request_method,
+            $uniqidvalue,
+            $user_id,
+            $error_message,
+            $service_table_name,
+            $trans_table_name,
+            wp_remote_retrieve_response_code($call),
+            'FALSE',
+            'TEXT',
+            $extra_data
         );
     }
 
@@ -1230,24 +1721,82 @@ function handle_airtime_transaction($request_method, $api_url_option, $api_endpo
         vp_transaction_email("NEW AIRTIME NOTIFICATION", "SUCCESSFUL AIRTIME PURCHASE", $uniqidvalue, $purchased_message, $phone, $amount, $bal, $baln);
 
 
-        
+
         $mlm_for = "";
         post_transaction_handling(
-            $pos, $vtu_token, $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-            $request_method, $uniqidvalue, $user_id,"Successful", $log_response_snippet, $realAmt, $service_table_name,
-            $trans_table_name, $add_total, $tb4, $tnow, $extra_data
+            $pos,
+            $vtu_token,
+            $name,
+            $email,
+            $network,
+            $phone,
+            $bal,
+            $baln,
+            $amount,
+            $browser,
+            $trans_type_for_db,
+            $request_method,
+            $uniqidvalue,
+            $user_id,
+            "Successful",
+            $log_response_snippet,
+            $realAmt,
+            $service_table_name,
+            $trans_table_name,
+            $add_total,
+            $tb4,
+            $tnow,
+            $extra_data
         );
     } elseif ($en_status == "MAYBE") {
         post_transaction_handling(
-            $pos, $vtu_token, $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-            $request_method, $uniqidvalue, $user_id,"pending", $log_response_snippet, $realAmt, $service_table_name,
-            $trans_table_name, $add_total, $tb4, $tnow, $extra_data
+            $pos,
+            $vtu_token,
+            $name,
+            $email,
+            $network,
+            $phone,
+            $bal,
+            $baln,
+            $amount,
+            $browser,
+            $trans_type_for_db,
+            $request_method,
+            $uniqidvalue,
+            $user_id,
+            "pending",
+            $log_response_snippet,
+            $realAmt,
+            $service_table_name,
+            $trans_table_name,
+            $add_total,
+            $tb4,
+            $tnow,
+            $extra_data
         ); // Status will be "Pending"
     } else {
         handle_transaction_failure(
-            $pos, $vtu_token, $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-            $request_method, $uniqidvalue, $user_id, $log_response_snippet, $service_table_name, $trans_table_name,
-            wp_remote_retrieve_response_code($call), $en_status, $response_format, $extra_data
+            $pos,
+            $vtu_token,
+            $name,
+            $email,
+            $network,
+            $phone,
+            $bal,
+            $baln,
+            $amount,
+            $browser,
+            $trans_type_for_db,
+            $request_method,
+            $uniqidvalue,
+            $user_id,
+            $log_response_snippet,
+            $service_table_name,
+            $trans_table_name,
+            wp_remote_retrieve_response_code($call),
+            $en_status,
+            $response_format,
+            $extra_data
         );
     }
 }
@@ -1256,14 +1805,46 @@ function handle_airtime_transaction($request_method, $api_url_option, $api_endpo
  * Handles data transactions.
  * (Similar structure to handle_airtime_transaction, but with data-specific parameters)
  */
-function handle_data_transaction($request_method, $api_url_option, $api_endpoint_option, $success_code_option,
-                                 $response_format_option, $success_value_option, $success_value2_option,
-                                 $response_id_option, $query_method_option, $post_data_map, $attribute_map,
-                                 $header_map, $add_headers_prefix, $add_value_prefix, $post_data, $user_id,
-                                 $name, $email, $phone, $network, $url_from_post, $uniqidvalue, $bal, $baln, $amount,
-                                 $realAmt, $browser, $option_array, $service_table_name, $trans_table_name, $add_total, $pos, $trans_type_for_db, $tb4, $tnow, $extra_data = []) {
-    global $wpdb, $current_timestamp,$vp_country,$symbol;
-        global $plan,$level,$amountv,$sec,$mlm_for,$realAmt;
+function handle_data_transaction(
+    $request_method,
+    $api_url_option,
+    $api_endpoint_option,
+    $success_code_option,
+    $response_format_option,
+    $success_value_option,
+    $success_value2_option,
+    $response_id_option,
+    $query_method_option,
+    $post_data_map,
+    $attribute_map,
+    $header_map,
+    $add_headers_prefix,
+    $add_value_prefix,
+    $post_data,
+    $user_id,
+    $name,
+    $email,
+    $phone,
+    $network,
+    $url_from_post,
+    $uniqidvalue,
+    $bal,
+    $baln,
+    $amount,
+    $realAmt,
+    $browser,
+    $option_array,
+    $service_table_name,
+    $trans_table_name,
+    $add_total,
+    $pos,
+    $trans_type_for_db,
+    $tb4,
+    $tnow,
+    $extra_data = []
+) {
+    global $wpdb, $current_timestamp, $vp_country, $symbol;
+    global $plan, $level, $amountv, $sec, $mlm_for, $realAmt;
 
 
     // Ensure $extra_data is an array. If it's not, initialize it as an empty array.
@@ -1291,11 +1872,16 @@ function handle_data_transaction($request_method, $api_url_option, $api_endpoint
     }
 
     // Add dynamic attributes specific to data
-    if (isset($attribute_map['network'])) $datass[vp_option_array($option_array, $attribute_map['network'])] = $network;
-    if (isset($attribute_map['amount'])) $datass[vp_option_array($option_array, $attribute_map['amount'])] = round(floatval($amount), 2);
-    if (isset($attribute_map['phone'])) $datass[vp_option_array($option_array, $attribute_map['phone'])] = $phone;
-    if (isset($attribute_map['plan'])) $datass[vp_option_array($option_array, $attribute_map['plan'])] = sanitize_text_field($post_data['cplan'] ?? '');
-    if (isset($attribute_map['request_id'])) $datass[vp_option_array($option_array, $attribute_map['request_id'])] = $uniqidvalue;
+    if (isset($attribute_map['network']))
+        $datass[vp_option_array($option_array, $attribute_map['network'])] = $network;
+    if (isset($attribute_map['amount']))
+        $datass[vp_option_array($option_array, $attribute_map['amount'])] = round(floatval($amount), 2);
+    if (isset($attribute_map['phone']))
+        $datass[vp_option_array($option_array, $attribute_map['phone'])] = $phone;
+    if (isset($attribute_map['plan']))
+        $datass[vp_option_array($option_array, $attribute_map['plan'])] = sanitize_text_field($post_data['cplan'] ?? '');
+    if (isset($attribute_map['request_id']))
+        $datass[vp_option_array($option_array, $attribute_map['request_id'])] = $uniqidvalue;
 
     $headers_array = [
         'Content-Type' => 'application/json',
@@ -1339,6 +1925,9 @@ function handle_data_transaction($request_method, $api_url_option, $api_endpoint
     if (!$force_success) { // Only make API call if not forced by hollatag
 
 
+        if ($pos != vp_getuser($user_id, 'run_code', true)) {
+            die('[T/C] Invalid Transaction Code!!! 3 Please refresh your browser and try again. ' . $pos . ' - ' . vp_getuser($user_id, 'run_code', true));
+        }
         // die($request_method);
         if ($query_method != "array") {
             if ($request_method == "get") {
@@ -1357,9 +1946,27 @@ function handle_data_transaction($request_method, $api_url_option, $api_endpoint
             if ($response == "error") {
                 global $return_message;
                 handle_transaction_failure(
-                    $pos, 'no_response', $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-                    $request_method, $uniqidvalue, $user_id, $return_message, $service_table_name, $trans_table_name,
-                    wp_remote_retrieve_response_code($call), 'FALSE', 'TEXT', $extra_data
+                    $pos,
+                    'no_response',
+                    $name,
+                    $email,
+                    $network,
+                    $phone,
+                    $bal,
+                    $baln,
+                    $amount,
+                    $browser,
+                    $trans_type_for_db,
+                    $request_method,
+                    $uniqidvalue,
+                    $user_id,
+                    $return_message,
+                    $service_table_name,
+                    $trans_table_name,
+                    wp_remote_retrieve_response_code($call),
+                    'FALSE',
+                    'TEXT',
+                    $extra_data
                 );
             }
         }
@@ -1369,9 +1976,27 @@ function handle_data_transaction($request_method, $api_url_option, $api_endpoint
     if (is_wp_error($call)) {
         $error_message = vp_getoption("vpdebug") != "yes" ? $call->get_error_code() : $call->get_error_message();
         handle_transaction_failure(
-            $pos, 'no_response', $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-            $request_method, $uniqidvalue, $user_id, $error_message, $service_table_name, $trans_table_name,
-            wp_remote_retrieve_response_code($call), 'FALSE', 'TEXT', $extra_data
+            $pos,
+            'no_response',
+            $name,
+            $email,
+            $network,
+            $phone,
+            $bal,
+            $baln,
+            $amount,
+            $browser,
+            $trans_type_for_db,
+            $request_method,
+            $uniqidvalue,
+            $user_id,
+            $error_message,
+            $service_table_name,
+            $trans_table_name,
+            wp_remote_retrieve_response_code($call),
+            'FALSE',
+            'TEXT',
+            $extra_data
         );
     }
 
@@ -1399,21 +2024,79 @@ function handle_data_transaction($request_method, $api_url_option, $api_endpoint
 
         $mlm_for = "_data";
         post_transaction_handling(
-            $pos, $data_token, $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-            $request_method, $uniqidvalue, $user_id, "Successful",$log_response_snippet, $realAmt, $service_table_name,
-            $trans_table_name, $add_total, $tb4, $tnow, $extra_data
+            $pos,
+            $data_token,
+            $name,
+            $email,
+            $network,
+            $phone,
+            $bal,
+            $baln,
+            $amount,
+            $browser,
+            $trans_type_for_db,
+            $request_method,
+            $uniqidvalue,
+            $user_id,
+            "Successful",
+            $log_response_snippet,
+            $realAmt,
+            $service_table_name,
+            $trans_table_name,
+            $add_total,
+            $tb4,
+            $tnow,
+            $extra_data
         );
     } elseif ($en_status == "MAYBE") {
         post_transaction_handling(
-            $pos, $data_token, $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-            $request_method, $uniqidvalue, $user_id, "pending", $log_response_snippet, $realAmt, $service_table_name,
-            $trans_table_name, $add_total, $tb4, $tnow, $extra_data
+            $pos,
+            $data_token,
+            $name,
+            $email,
+            $network,
+            $phone,
+            $bal,
+            $baln,
+            $amount,
+            $browser,
+            $trans_type_for_db,
+            $request_method,
+            $uniqidvalue,
+            $user_id,
+            "pending",
+            $log_response_snippet,
+            $realAmt,
+            $service_table_name,
+            $trans_table_name,
+            $add_total,
+            $tb4,
+            $tnow,
+            $extra_data
         );
     } else {
         handle_transaction_failure(
-            $pos, $data_token, $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-            $request_method, $uniqidvalue, $user_id, $log_response_snippet, $service_table_name, $trans_table_name,
-            wp_remote_retrieve_response_code($call), $en_status, $response_format, $extra_data
+            $pos,
+            $data_token,
+            $name,
+            $email,
+            $network,
+            $phone,
+            $bal,
+            $baln,
+            $amount,
+            $browser,
+            $trans_type_for_db,
+            $request_method,
+            $uniqidvalue,
+            $user_id,
+            $log_response_snippet,
+            $service_table_name,
+            $trans_table_name,
+            wp_remote_retrieve_response_code($call),
+            $en_status,
+            $response_format,
+            $extra_data
         );
     }
 }
@@ -1421,14 +2104,46 @@ function handle_data_transaction($request_method, $api_url_option, $api_endpoint
 /**
  * Handles cable transactions.
  */
-function handle_cable_transaction($request_method, $api_url_option, $api_endpoint_option, $success_code_option,
-                                 $response_format_option, $success_value_option, $success_value2_option,
-                                 $response_id_option, $query_method_option, $post_data_map, $attribute_map,
-                                 $header_map, $add_headers_prefix, $add_value_prefix, $post_data, $user_id,
-                                 $name, $email, $phone, $network, $url_from_post, $uniqidvalue, $bal, $baln, $amount,
-                                 $realAmt, $browser, $option_array, $service_table_name, $trans_table_name, $add_total, $pos, $trans_type_for_db, $tb4, $tnow, $extra_data = []) {
-    global $wpdb, $current_timestamp,$vp_country,$symbol;
-        global $plan,$level,$amountv,$sec,$mlm_for,$realAmt;
+function handle_cable_transaction(
+    $request_method,
+    $api_url_option,
+    $api_endpoint_option,
+    $success_code_option,
+    $response_format_option,
+    $success_value_option,
+    $success_value2_option,
+    $response_id_option,
+    $query_method_option,
+    $post_data_map,
+    $attribute_map,
+    $header_map,
+    $add_headers_prefix,
+    $add_value_prefix,
+    $post_data,
+    $user_id,
+    $name,
+    $email,
+    $phone,
+    $network,
+    $url_from_post,
+    $uniqidvalue,
+    $bal,
+    $baln,
+    $amount,
+    $realAmt,
+    $browser,
+    $option_array,
+    $service_table_name,
+    $trans_table_name,
+    $add_total,
+    $pos,
+    $trans_type_for_db,
+    $tb4,
+    $tnow,
+    $extra_data = []
+) {
+    global $wpdb, $current_timestamp, $vp_country, $symbol;
+    global $plan, $level, $amountv, $sec, $mlm_for, $realAmt;
 
 
 
@@ -1458,12 +2173,18 @@ function handle_cable_transaction($request_method, $api_url_option, $api_endpoin
     }
 
     // Add dynamic attributes specific to cable
-    if (isset($attribute_map['iucno'])) $datass[vp_option_array($option_array, $attribute_map['iucno'])] = sanitize_text_field($post_data['iuc'] ?? '');
-    if (isset($attribute_map['amount'])) $datass[vp_option_array($option_array, $attribute_map['amount'])] = round(floatval($amount), 2);
-    if (isset($attribute_map['phone'])) $datass[vp_option_array($option_array, $attribute_map['phone'])] = $phone;
-    if (isset($attribute_map['product_id'])) $datass[vp_option_array($option_array, $attribute_map['product_id'])] = sanitize_text_field($post_data['ccable'] ?? '');
-    if (isset($attribute_map['type'])) $datass[vp_option_array($option_array, $attribute_map['type'])] = sanitize_text_field($post_data['cabtype'] ?? '');
-    if (isset($attribute_map['request_id'])) $datass[vp_option_array($option_array, $attribute_map['request_id'])] = $uniqidvalue;
+    if (isset($attribute_map['iucno']))
+        $datass[vp_option_array($option_array, $attribute_map['iucno'])] = sanitize_text_field($post_data['iuc'] ?? '');
+    if (isset($attribute_map['amount']))
+        $datass[vp_option_array($option_array, $attribute_map['amount'])] = round(floatval($amount), 2);
+    if (isset($attribute_map['phone']))
+        $datass[vp_option_array($option_array, $attribute_map['phone'])] = $phone;
+    if (isset($attribute_map['product_id']))
+        $datass[vp_option_array($option_array, $attribute_map['product_id'])] = sanitize_text_field($post_data['ccable'] ?? '');
+    if (isset($attribute_map['type']))
+        $datass[vp_option_array($option_array, $attribute_map['type'])] = sanitize_text_field($post_data['cabtype'] ?? '');
+    if (isset($attribute_map['request_id']))
+        $datass[vp_option_array($option_array, $attribute_map['request_id'])] = $uniqidvalue;
 
     $headers_array = [
         'Content-Type' => 'application/json',
@@ -1502,6 +2223,10 @@ function handle_cable_transaction($request_method, $api_url_option, $api_endpoin
     $call = null;
     $response = '';
 
+    if ($pos != vp_getuser($user_id, 'run_code', true)) {
+        die('[T/C] Invalid Transaction Code!!! 4 Please refresh your browser and try again. ' . $pos . ' - ' . vp_getuser($user_id, 'run_code', true));
+    }
+
     if ($query_method != "array") {
         if ($request_method == "get") {
             $final_url = add_query_arg($datass, $url);
@@ -1516,9 +2241,27 @@ function handle_cable_transaction($request_method, $api_url_option, $api_endpoin
         if ($response == "error") {
             global $return_message;
             handle_transaction_failure(
-                $pos, 'no_response', $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-                $request_method, $uniqidvalue, $user_id, $return_message, $service_table_name, $trans_table_name,
-                wp_remote_retrieve_response_code($call), 'FALSE', 'TEXT', $extra_data
+                $pos,
+                'no_response',
+                $name,
+                $email,
+                $network,
+                $phone,
+                $bal,
+                $baln,
+                $amount,
+                $browser,
+                $trans_type_for_db,
+                $request_method,
+                $uniqidvalue,
+                $user_id,
+                $return_message,
+                $service_table_name,
+                $trans_table_name,
+                wp_remote_retrieve_response_code($call),
+                'FALSE',
+                'TEXT',
+                $extra_data
             );
         }
     }
@@ -1527,9 +2270,27 @@ function handle_cable_transaction($request_method, $api_url_option, $api_endpoin
     if (is_wp_error($call)) {
         $error_message = vp_getoption("vpdebug") != "yes" ? $call->get_error_code() : $call->get_error_message();
         handle_transaction_failure(
-            $pos, 'no_response', $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-            $request_method, $uniqidvalue, $user_id, $error_message, $service_table_name, $trans_table_name,
-            wp_remote_retrieve_response_code($call), 'FALSE', 'TEXT', $extra_data
+            $pos,
+            'no_response',
+            $name,
+            $email,
+            $network,
+            $phone,
+            $bal,
+            $baln,
+            $amount,
+            $browser,
+            $trans_type_for_db,
+            $request_method,
+            $uniqidvalue,
+            $user_id,
+            $error_message,
+            $service_table_name,
+            $trans_table_name,
+            wp_remote_retrieve_response_code($call),
+            'FALSE',
+            'TEXT',
+            $extra_data
         );
     }
 
@@ -1557,21 +2318,79 @@ function handle_cable_transaction($request_method, $api_url_option, $api_endpoin
 
         $mlm_for = "_cable";
         post_transaction_handling(
-            $pos, $cable_token, $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-            $request_method, $uniqidvalue, $user_id, "Successful", $log_response_snippet, $realAmt, $service_table_name,
-            $trans_table_name, $add_total, $tb4, $tnow, $extra_data
+            $pos,
+            $cable_token,
+            $name,
+            $email,
+            $network,
+            $phone,
+            $bal,
+            $baln,
+            $amount,
+            $browser,
+            $trans_type_for_db,
+            $request_method,
+            $uniqidvalue,
+            $user_id,
+            "Successful",
+            $log_response_snippet,
+            $realAmt,
+            $service_table_name,
+            $trans_table_name,
+            $add_total,
+            $tb4,
+            $tnow,
+            $extra_data
         );
     } elseif ($en_status == "MAYBE") {
         post_transaction_handling(
-            $pos, $cable_token, $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-            $request_method, $uniqidvalue, $user_id, "pending",$log_response_snippet, $realAmt, $service_table_name,
-            $trans_table_name, $add_total, $tb4, $tnow, $extra_data
+            $pos,
+            $cable_token,
+            $name,
+            $email,
+            $network,
+            $phone,
+            $bal,
+            $baln,
+            $amount,
+            $browser,
+            $trans_type_for_db,
+            $request_method,
+            $uniqidvalue,
+            $user_id,
+            "pending",
+            $log_response_snippet,
+            $realAmt,
+            $service_table_name,
+            $trans_table_name,
+            $add_total,
+            $tb4,
+            $tnow,
+            $extra_data
         );
     } else {
         handle_transaction_failure(
-            $pos, $cable_token, $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-            $request_method, $uniqidvalue, $user_id, $log_response_snippet, $service_table_name, $trans_table_name,
-            wp_remote_retrieve_response_code($call), $en_status, $response_format, $extra_data
+            $pos,
+            $cable_token,
+            $name,
+            $email,
+            $network,
+            $phone,
+            $bal,
+            $baln,
+            $amount,
+            $browser,
+            $trans_type_for_db,
+            $request_method,
+            $uniqidvalue,
+            $user_id,
+            $log_response_snippet,
+            $service_table_name,
+            $trans_table_name,
+            wp_remote_retrieve_response_code($call),
+            $en_status,
+            $response_format,
+            $extra_data
         );
     }
 }
@@ -1580,14 +2399,46 @@ function handle_cable_transaction($request_method, $api_url_option, $api_endpoin
 /**
  * Handles bill transactions.
  */
-function handle_bill_transaction($request_method, $api_url_option, $api_endpoint_option, $success_code_option,
-                                 $response_format_option, $success_value_option, $success_value2_option,
-                                 $response_id_option, $query_method_option, $post_data_map, $attribute_map,
-                                 $header_map, $add_headers_prefix, $add_value_prefix, $post_data, $user_id,
-                                 $name, $email, $phone, $network, $url_from_post, $uniqidvalue, $bal, $baln, $amount,
-                                 $realAmt, $browser, $option_array, $service_table_name, $trans_table_name, $add_total, $pos, $trans_type_for_db, $tb4, $tnow, $extra_data = []) {
-    global $wpdb, $current_timestamp,$vp_country,$symbol;
-        global $plan,$level,$amountv,$sec,$mlm_for,$realAmt;
+function handle_bill_transaction(
+    $request_method,
+    $api_url_option,
+    $api_endpoint_option,
+    $success_code_option,
+    $response_format_option,
+    $success_value_option,
+    $success_value2_option,
+    $response_id_option,
+    $query_method_option,
+    $post_data_map,
+    $attribute_map,
+    $header_map,
+    $add_headers_prefix,
+    $add_value_prefix,
+    $post_data,
+    $user_id,
+    $name,
+    $email,
+    $phone,
+    $network,
+    $url_from_post,
+    $uniqidvalue,
+    $bal,
+    $baln,
+    $amount,
+    $realAmt,
+    $browser,
+    $option_array,
+    $service_table_name,
+    $trans_table_name,
+    $add_total,
+    $pos,
+    $trans_type_for_db,
+    $tb4,
+    $tnow,
+    $extra_data = []
+) {
+    global $wpdb, $current_timestamp, $vp_country, $symbol;
+    global $plan, $level, $amountv, $sec, $mlm_for, $realAmt;
 
 
     // Ensure $extra_data is an array. If it's not, initialize it as an empty array.
@@ -1614,17 +2465,23 @@ function handle_bill_transaction($request_method, $api_url_option, $api_endpoint
         }
     }
 
-    
+
     $bill_charge = floatval(vp_option_array($option_array, "bill_charge"));
     $buyAmt = $amount - $bill_charge;
 
     // Add dynamic attributes specific to bill
-    if (isset($attribute_map['meterno'])) $datass[vp_option_array($option_array, $attribute_map['meterno'])] = sanitize_text_field($post_data['meterno'] ?? '');
-    if (isset($attribute_map['amount'])) $datass[vp_option_array($option_array, $attribute_map['amount'])] = round(floatval($buyAmt), 2);
-    if (isset($attribute_map['phone'])) $datass[vp_option_array($option_array, $attribute_map['phone'])] = $phone;
-    if (isset($attribute_map['product_id'])) $datass[vp_option_array($option_array, $attribute_map['product_id'])] = sanitize_text_field($post_data['cbill'] ?? '');
-    if (isset($attribute_map['type'])) $datass[vp_option_array($option_array, $attribute_map['type'])] = sanitize_text_field($post_data['type'] ?? '');
-    if (isset($attribute_map['request_id'])) $datass[vp_option_array($option_array, $attribute_map['request_id'])] = $uniqidvalue;
+    if (isset($attribute_map['meterno']))
+        $datass[vp_option_array($option_array, $attribute_map['meterno'])] = sanitize_text_field($post_data['meterno'] ?? '');
+    if (isset($attribute_map['amount']))
+        $datass[vp_option_array($option_array, $attribute_map['amount'])] = round(floatval($buyAmt), 2);
+    if (isset($attribute_map['phone']))
+        $datass[vp_option_array($option_array, $attribute_map['phone'])] = $phone;
+    if (isset($attribute_map['product_id']))
+        $datass[vp_option_array($option_array, $attribute_map['product_id'])] = sanitize_text_field($post_data['cbill'] ?? '');
+    if (isset($attribute_map['type']))
+        $datass[vp_option_array($option_array, $attribute_map['type'])] = sanitize_text_field($post_data['type'] ?? '');
+    if (isset($attribute_map['request_id']))
+        $datass[vp_option_array($option_array, $attribute_map['request_id'])] = $uniqidvalue;
 
     $headers_array = [
         'Content-Type' => 'application/json',
@@ -1663,6 +2520,10 @@ function handle_bill_transaction($request_method, $api_url_option, $api_endpoint
     $call = null;
     $response = '';
 
+    if ($pos != vp_getuser($user_id, 'run_code', true)) {
+        die('[T/C] Invalid Transaction Code!!! 5 Please refresh your browser and try again. ' . $pos . ' - ' . vp_getuser($user_id, 'run_code', true));
+    }
+
     if ($query_method != "array") {
         if ($request_method == "get") {
             $final_url = add_query_arg($datass, $url);
@@ -1677,9 +2538,27 @@ function handle_bill_transaction($request_method, $api_url_option, $api_endpoint
         if ($response == "error") {
             global $return_message;
             handle_transaction_failure(
-                $pos, 'no_response', $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-                $request_method, $uniqidvalue, $user_id, $return_message, $service_table_name, $trans_table_name,
-                wp_remote_retrieve_response_code($call), 'FALSE', 'TEXT', $extra_data
+                $pos,
+                'no_response',
+                $name,
+                $email,
+                $network,
+                $phone,
+                $bal,
+                $baln,
+                $amount,
+                $browser,
+                $trans_type_for_db,
+                $request_method,
+                $uniqidvalue,
+                $user_id,
+                $return_message,
+                $service_table_name,
+                $trans_table_name,
+                wp_remote_retrieve_response_code($call),
+                'FALSE',
+                'TEXT',
+                $extra_data
             );
         }
     }
@@ -1688,9 +2567,27 @@ function handle_bill_transaction($request_method, $api_url_option, $api_endpoint
     if (is_wp_error($call)) {
         $error_message = vp_getoption("vpdebug") != "yes" ? $call->get_error_code() : $call->get_error_message();
         handle_transaction_failure(
-            $pos, 'no_response', $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-            $request_method, $uniqidvalue, $user_id, $error_message, $service_table_name, $trans_table_name,
-            wp_remote_retrieve_response_code($call), 'FALSE', 'TEXT', $extra_data
+            $pos,
+            'no_response',
+            $name,
+            $email,
+            $network,
+            $phone,
+            $bal,
+            $baln,
+            $amount,
+            $browser,
+            $trans_type_for_db,
+            $request_method,
+            $uniqidvalue,
+            $user_id,
+            $error_message,
+            $service_table_name,
+            $trans_table_name,
+            wp_remote_retrieve_response_code($call),
+            'FALSE',
+            'TEXT',
+            $extra_data
         );
     }
 
@@ -1722,23 +2619,81 @@ function handle_bill_transaction($request_method, $api_url_option, $api_endpoint
         weblinkBlast($phone, $purchased_message);
         vp_transaction_email("NEW UTILITY BILL NOTIFICATION", "SUCCESSFUL UTILITY BILL PAYMENT", $uniqidvalue, $purchased_message, $meter_token, $amount, $bal, $baln);
 
-        $mlm_for ="_bill";
+        $mlm_for = "_bill";
         post_transaction_handling(
-            $pos, $bill_token, $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-            $request_method, $uniqidvalue, $user_id, "Successful",$log_response_snippet, $realAmt, $service_table_name,
-            $trans_table_name, $add_total, $tb4, $tnow, $extra_data
+            $pos,
+            $bill_token,
+            $name,
+            $email,
+            $network,
+            $phone,
+            $bal,
+            $baln,
+            $amount,
+            $browser,
+            $trans_type_for_db,
+            $request_method,
+            $uniqidvalue,
+            $user_id,
+            "Successful",
+            $log_response_snippet,
+            $realAmt,
+            $service_table_name,
+            $trans_table_name,
+            $add_total,
+            $tb4,
+            $tnow,
+            $extra_data
         );
     } elseif ($en_status == "MAYBE") {
         post_transaction_handling(
-            $pos, $bill_token, $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-            $request_method, $uniqidvalue, $user_id, "pending",$log_response_snippet, $realAmt, $service_table_name,
-            $trans_table_name, $add_total, $tb4, $tnow, $extra_data
+            $pos,
+            $bill_token,
+            $name,
+            $email,
+            $network,
+            $phone,
+            $bal,
+            $baln,
+            $amount,
+            $browser,
+            $trans_type_for_db,
+            $request_method,
+            $uniqidvalue,
+            $user_id,
+            "pending",
+            $log_response_snippet,
+            $realAmt,
+            $service_table_name,
+            $trans_table_name,
+            $add_total,
+            $tb4,
+            $tnow,
+            $extra_data
         );
     } else {
         handle_transaction_failure(
-            $pos, $bill_token, $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-            $request_method, $uniqidvalue, $user_id, $log_response_snippet, $service_table_name, $trans_table_name,
-            wp_remote_retrieve_response_code($call), $en_status, $response_format, $extra_data
+            $pos,
+            $bill_token,
+            $name,
+            $email,
+            $network,
+            $phone,
+            $bal,
+            $baln,
+            $amount,
+            $browser,
+            $trans_type_for_db,
+            $request_method,
+            $uniqidvalue,
+            $user_id,
+            $log_response_snippet,
+            $service_table_name,
+            $trans_table_name,
+            wp_remote_retrieve_response_code($call),
+            $en_status,
+            $response_format,
+            $extra_data
         );
     }
 }
@@ -1747,12 +2702,44 @@ function handle_bill_transaction($request_method, $api_url_option, $api_endpoint
 /**
  * Handles SMS transactions.
  */
-function handle_sms_transaction($request_method, $api_url_option, $api_endpoint_option, $success_code_option,
-                                $response_format_option, $success_value_option, $success_value2_option,
-                                $response_id_option, $query_method_option, $post_data_map, $attribute_map,
-                                $header_map, $add_headers_prefix, $add_value_prefix, $post_data, $user_id,
-                                $name, $email, $phone, $network, $url_from_post, $uniqidvalue, $bal, $baln, $amount,
-                                $realAmt, $browser, $option_array, $service_table_name, $trans_table_name, $add_total, $pos, $trans_type_for_db, $tb4, $tnow, $extra_data = []) {
+function handle_sms_transaction(
+    $request_method,
+    $api_url_option,
+    $api_endpoint_option,
+    $success_code_option,
+    $response_format_option,
+    $success_value_option,
+    $success_value2_option,
+    $response_id_option,
+    $query_method_option,
+    $post_data_map,
+    $attribute_map,
+    $header_map,
+    $add_headers_prefix,
+    $add_value_prefix,
+    $post_data,
+    $user_id,
+    $name,
+    $email,
+    $phone,
+    $network,
+    $url_from_post,
+    $uniqidvalue,
+    $bal,
+    $baln,
+    $amount,
+    $realAmt,
+    $browser,
+    $option_array,
+    $service_table_name,
+    $trans_table_name,
+    $add_total,
+    $pos,
+    $trans_type_for_db,
+    $tb4,
+    $tnow,
+    $extra_data = []
+) {
     global $wpdb, $current_timestamp;
 
     // Ensure $extra_data is an array. If it's not, initialize it as an empty array.
@@ -1780,10 +2767,14 @@ function handle_sms_transaction($request_method, $api_url_option, $api_endpoint_
     }
 
     // Add dynamic attributes specific to SMS
-    if (isset($attribute_map['sender'])) $datass[vp_option_array($option_array, $attribute_map['sender'])] = sanitize_text_field($post_data['sender'] ?? '');
-    if (isset($attribute_map['receiver'])) $datass[vp_option_array($option_array, $attribute_map['receiver'])] = sanitize_text_field($post_data['receiver'] ?? '');
-    if (isset($attribute_map['message'])) $datass[vp_option_array($option_array, $attribute_map['message'])] = sanitize_textarea_field($post_data['message'] ?? '');
-    if (isset($attribute_map['request_id'])) $datass[vp_option_array($option_array, $attribute_map['request_id'])] = $uniqidvalue;
+    if (isset($attribute_map['sender']))
+        $datass[vp_option_array($option_array, $attribute_map['sender'])] = sanitize_text_field($post_data['sender'] ?? '');
+    if (isset($attribute_map['receiver']))
+        $datass[vp_option_array($option_array, $attribute_map['receiver'])] = sanitize_text_field($post_data['receiver'] ?? '');
+    if (isset($attribute_map['message']))
+        $datass[vp_option_array($option_array, $attribute_map['message'])] = sanitize_textarea_field($post_data['message'] ?? '');
+    if (isset($attribute_map['request_id']))
+        $datass[vp_option_array($option_array, $attribute_map['request_id'])] = $uniqidvalue;
 
     $headers_array = [
         'Content-Type' => 'application/json',
@@ -1822,6 +2813,10 @@ function handle_sms_transaction($request_method, $api_url_option, $api_endpoint_
     $call = null;
     $response = '';
 
+    if ($pos != vp_getuser($user_id, 'run_code', true)) {
+        die('[T/C] Invalid Transaction Code!!! 6 Please refresh your browser and try again. ' . $pos . ' - ' . vp_getuser($user_id, 'run_code', true));
+    }
+
     if ($query_method != "array") {
         if ($request_method == "get") {
             $final_url = add_query_arg($datass, $url);
@@ -1836,9 +2831,27 @@ function handle_sms_transaction($request_method, $api_url_option, $api_endpoint_
         if ($response == "error") {
             global $return_message;
             handle_transaction_failure(
-                $pos, 'no_response', $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-                $request_method, $uniqidvalue, $user_id, $return_message, $service_table_name, $trans_table_name,
-                wp_remote_retrieve_response_code($call), 'FALSE', 'TEXT', $extra_data
+                $pos,
+                'no_response',
+                $name,
+                $email,
+                $network,
+                $phone,
+                $bal,
+                $baln,
+                $amount,
+                $browser,
+                $trans_type_for_db,
+                $request_method,
+                $uniqidvalue,
+                $user_id,
+                $return_message,
+                $service_table_name,
+                $trans_table_name,
+                wp_remote_retrieve_response_code($call),
+                'FALSE',
+                'TEXT',
+                $extra_data
             );
         }
     }
@@ -1847,9 +2860,27 @@ function handle_sms_transaction($request_method, $api_url_option, $api_endpoint_
     if (is_wp_error($call)) {
         $error_message = vp_getoption("vpdebug") != "yes" ? $call->get_error_code() : $call->get_error_message();
         handle_transaction_failure(
-            $pos, 'no_response', $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-            $request_method, $uniqidvalue, $user_id, $error_message, $service_table_name, $trans_table_name,
-            wp_remote_retrieve_response_code($call), 'FALSE', 'TEXT', $extra_data
+            $pos,
+            'no_response',
+            $name,
+            $email,
+            $network,
+            $phone,
+            $bal,
+            $baln,
+            $amount,
+            $browser,
+            $trans_type_for_db,
+            $request_method,
+            $uniqidvalue,
+            $user_id,
+            $error_message,
+            $service_table_name,
+            $trans_table_name,
+            wp_remote_retrieve_response_code($call),
+            'FALSE',
+            'TEXT',
+            $extra_data
         );
     }
 
@@ -1875,21 +2906,79 @@ function handle_sms_transaction($request_method, $api_url_option, $api_endpoint_
         vp_transaction_email("SMS SENT NOTIFICATION", "MESSAGE SENT", $uniqidvalue, $purchased_message, sanitize_text_field($post_data["receiver"] ?? ''), $amount, $bal, $baln);
 
         post_transaction_handling(
-            $pos, $sms_token, $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-            $request_method, $uniqidvalue, $user_id, "Successful",$log_response_snippet, $realAmt, $service_table_name,
-            $trans_table_name, $add_total, $tb4, $tnow, $extra_data
+            $pos,
+            $sms_token,
+            $name,
+            $email,
+            $network,
+            $phone,
+            $bal,
+            $baln,
+            $amount,
+            $browser,
+            $trans_type_for_db,
+            $request_method,
+            $uniqidvalue,
+            $user_id,
+            "Successful",
+            $log_response_snippet,
+            $realAmt,
+            $service_table_name,
+            $trans_table_name,
+            $add_total,
+            $tb4,
+            $tnow,
+            $extra_data
         );
     } elseif ($en_status == "MAYBE") {
         post_transaction_handling(
-            $pos, $sms_token, $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-            $request_method, $uniqidvalue, $user_id, "pending",$log_response_snippet, $realAmt, $service_table_name,
-            $trans_table_name, $add_total, $tb4, $tnow, $extra_data
+            $pos,
+            $sms_token,
+            $name,
+            $email,
+            $network,
+            $phone,
+            $bal,
+            $baln,
+            $amount,
+            $browser,
+            $trans_type_for_db,
+            $request_method,
+            $uniqidvalue,
+            $user_id,
+            "pending",
+            $log_response_snippet,
+            $realAmt,
+            $service_table_name,
+            $trans_table_name,
+            $add_total,
+            $tb4,
+            $tnow,
+            $extra_data
         );
     } else {
         handle_transaction_failure(
-            $pos, $sms_token, $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-            $request_method, $uniqidvalue, $user_id, $log_response_snippet, $service_table_name, $trans_table_name,
-            wp_remote_retrieve_response_code($call), $en_status, $response_format, $extra_data
+            $pos,
+            $sms_token,
+            $name,
+            $email,
+            $network,
+            $phone,
+            $bal,
+            $baln,
+            $amount,
+            $browser,
+            $trans_type_for_db,
+            $request_method,
+            $uniqidvalue,
+            $user_id,
+            $log_response_snippet,
+            $service_table_name,
+            $trans_table_name,
+            wp_remote_retrieve_response_code($call),
+            $en_status,
+            $response_format,
+            $extra_data
         );
     }
 }
@@ -1898,12 +2987,44 @@ function handle_sms_transaction($request_method, $api_url_option, $api_endpoint_
 /**
  * Handles betting transactions.
  */
-function handle_bet_transaction($request_method, $api_url_option, $api_endpoint_option, $success_code_option,
-                                $response_format_option, $success_value_option, $success_value2_option,
-                                $response_id_option, $query_method_option, $post_data_map, $attribute_map,
-                                $header_map, $add_headers_prefix, $add_value_prefix, $post_data, $user_id,
-                                $name, $email, $phone, $network, $url_from_post, $uniqidvalue, $bal, $baln, $amount,
-                                $realAmt, $browser, $option_array, $service_table_name, $trans_table_name, $add_total, $pos, $trans_type_for_db, $tb4, $tnow, $extra_data = []) {
+function handle_bet_transaction(
+    $request_method,
+    $api_url_option,
+    $api_endpoint_option,
+    $success_code_option,
+    $response_format_option,
+    $success_value_option,
+    $success_value2_option,
+    $response_id_option,
+    $query_method_option,
+    $post_data_map,
+    $attribute_map,
+    $header_map,
+    $add_headers_prefix,
+    $add_value_prefix,
+    $post_data,
+    $user_id,
+    $name,
+    $email,
+    $phone,
+    $network,
+    $url_from_post,
+    $uniqidvalue,
+    $bal,
+    $baln,
+    $amount,
+    $realAmt,
+    $browser,
+    $option_array,
+    $service_table_name,
+    $trans_table_name,
+    $add_total,
+    $pos,
+    $trans_type_for_db,
+    $tb4,
+    $tnow,
+    $extra_data = []
+) {
     global $wpdb, $current_timestamp;
 
     // Ensure $extra_data is an array. If it's not, initialize it as an empty array.
@@ -1931,10 +3052,14 @@ function handle_bet_transaction($request_method, $api_url_option, $api_endpoint_
     }
 
     // Add dynamic attributes specific to betting
-    if (isset($attribute_map['customerid'])) $datass[vp_option_array($option_array, $attribute_map['customerid'])] = sanitize_text_field($post_data['phone'] ?? ''); // Assuming phone is customerid
-    if (isset($attribute_map['amount'])) $datass[vp_option_array($option_array, $attribute_map['amount'])] = round(floatval($amount), 2);
-    if (isset($attribute_map['company'])) $datass[vp_option_array($option_array, $attribute_map['company'])] = sanitize_text_field($post_data['network'] ?? ''); // Assuming network is company
-    if (isset($attribute_map['request_id'])) $datass[vp_option_array($option_array, $attribute_map['request_id'])] = $uniqidvalue;
+    if (isset($attribute_map['customerid']))
+        $datass[vp_option_array($option_array, $attribute_map['customerid'])] = sanitize_text_field($post_data['phone'] ?? ''); // Assuming phone is customerid
+    if (isset($attribute_map['amount']))
+        $datass[vp_option_array($option_array, $attribute_map['amount'])] = round(floatval($amount), 2);
+    if (isset($attribute_map['company']))
+        $datass[vp_option_array($option_array, $attribute_map['company'])] = sanitize_text_field($post_data['network'] ?? ''); // Assuming network is company
+    if (isset($attribute_map['request_id']))
+        $datass[vp_option_array($option_array, $attribute_map['request_id'])] = $uniqidvalue;
 
     $headers_array = [
         'Content-Type' => 'application/json',
@@ -1973,6 +3098,10 @@ function handle_bet_transaction($request_method, $api_url_option, $api_endpoint_
     $call = null;
     $response = '';
 
+    if ($pos != vp_getuser($user_id, 'run_code', true)) {
+        die('[T/C] Invalid Transaction Code!!! 7 Please refresh your browser and try again. ' . $pos . ' - ' . vp_getuser($user_id, 'run_code', true));
+    }
+
     if ($query_method != "array") {
         if ($request_method == "get") {
             $final_url = add_query_arg($datass, $url);
@@ -1987,9 +3116,27 @@ function handle_bet_transaction($request_method, $api_url_option, $api_endpoint_
         if ($response == "error") {
             global $return_message;
             handle_transaction_failure(
-                $pos, 'no_response', $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-                $request_method, $uniqidvalue, $user_id, $return_message, $service_table_name, $trans_table_name,
-                wp_remote_retrieve_response_code($call), 'FALSE', 'TEXT', $extra_data
+                $pos,
+                'no_response',
+                $name,
+                $email,
+                $network,
+                $phone,
+                $bal,
+                $baln,
+                $amount,
+                $browser,
+                $trans_type_for_db,
+                $request_method,
+                $uniqidvalue,
+                $user_id,
+                $return_message,
+                $service_table_name,
+                $trans_table_name,
+                wp_remote_retrieve_response_code($call),
+                'FALSE',
+                'TEXT',
+                $extra_data
             );
         }
     }
@@ -1998,9 +3145,27 @@ function handle_bet_transaction($request_method, $api_url_option, $api_endpoint_
     if (is_wp_error($call)) {
         $error_message = vp_getoption("vpdebug") != "yes" ? $call->get_error_code() : $call->get_error_message();
         handle_transaction_failure(
-            $pos, 'no_response', $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-            $request_method, $uniqidvalue, $user_id, $error_message, $service_table_name, $trans_table_name,
-            wp_remote_retrieve_response_code($call), 'FALSE', 'TEXT', $extra_data
+            $pos,
+            'no_response',
+            $name,
+            $email,
+            $network,
+            $phone,
+            $bal,
+            $baln,
+            $amount,
+            $browser,
+            $trans_type_for_db,
+            $request_method,
+            $uniqidvalue,
+            $user_id,
+            $error_message,
+            $service_table_name,
+            $trans_table_name,
+            wp_remote_retrieve_response_code($call),
+            'FALSE',
+            'TEXT',
+            $extra_data
         );
     }
 
@@ -2026,21 +3191,79 @@ function handle_bet_transaction($request_method, $api_url_option, $api_endpoint_
         vp_transaction_email("NEW BET FUNDING NOTIFICATION", "SUCCESSFUL BET FUNDING TRANSACTION", $uniqidvalue, $purchased_message, sanitize_text_field($post_data['phone'] ?? ''), $amount, $bal, $baln);
 
         post_transaction_handling(
-            $pos, $bet_token, $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-            $request_method, $uniqidvalue, $user_id, "Successful",$log_response_snippet, $realAmt, $service_table_name,
-            $trans_table_name, $add_total, $tb4, $tnow, $extra_data
+            $pos,
+            $bet_token,
+            $name,
+            $email,
+            $network,
+            $phone,
+            $bal,
+            $baln,
+            $amount,
+            $browser,
+            $trans_type_for_db,
+            $request_method,
+            $uniqidvalue,
+            $user_id,
+            "Successful",
+            $log_response_snippet,
+            $realAmt,
+            $service_table_name,
+            $trans_table_name,
+            $add_total,
+            $tb4,
+            $tnow,
+            $extra_data
         );
     } elseif ($en_status == "MAYBE") {
         post_transaction_handling(
-            $pos, $bet_token, $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-            $request_method, $uniqidvalue, $user_id, "pending",$log_response_snippet, $realAmt, $service_table_name,
-            $trans_table_name, $add_total, $tb4, $tnow, $extra_data
+            $pos,
+            $bet_token,
+            $name,
+            $email,
+            $network,
+            $phone,
+            $bal,
+            $baln,
+            $amount,
+            $browser,
+            $trans_type_for_db,
+            $request_method,
+            $uniqidvalue,
+            $user_id,
+            "pending",
+            $log_response_snippet,
+            $realAmt,
+            $service_table_name,
+            $trans_table_name,
+            $add_total,
+            $tb4,
+            $tnow,
+            $extra_data
         );
     } else {
         handle_transaction_failure(
-            $pos, $bet_token, $name, $email, $network, $phone, $bal, $baln, $amount, $browser, $trans_type_for_db,
-            $request_method, $uniqidvalue, $user_id, $log_response_snippet, $service_table_name, $trans_table_name,
-            wp_remote_retrieve_response_code($call), $en_status, $response_format, $extra_data
+            $pos,
+            $bet_token,
+            $name,
+            $email,
+            $network,
+            $phone,
+            $bal,
+            $baln,
+            $amount,
+            $browser,
+            $trans_type_for_db,
+            $request_method,
+            $uniqidvalue,
+            $user_id,
+            $log_response_snippet,
+            $service_table_name,
+            $trans_table_name,
+            wp_remote_retrieve_response_code($call),
+            $en_status,
+            $response_format,
+            $extra_data
         );
     }
 }

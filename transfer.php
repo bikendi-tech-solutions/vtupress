@@ -23,7 +23,7 @@ if (!isset($_POST["action"])) {
 
 $action = $_POST["action"];
 
-
+$current_user_id = $id;
 
 
 if (vp_getoption('allow_to_bank') != "yes" || vp_getoption("vtupress_custom_transfer") != "yes") {
@@ -36,38 +36,48 @@ vp_sessions();
 
 
 global $wpdb;
-$table_lock = "{$wpdb->prefix}vp_wallet_lock";
 
-$wpdb->query("
-    CREATE TABLE IF NOT EXISTS {$wpdb->prefix}vp_wallet_lock (
-        user_id BIGINT PRIMARY KEY,
-        locked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    ) ENGINE=InnoDB
-");
+    $vend_lock = $wpdb->prefix . "vend_lock";
 
-$wpdb->query('START TRANSACTION');
+    // 🔒 START TRANSACTION FIRST
+    // $wpdb->query("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+    $wpdb->query("START TRANSACTION");
+
+    // 🔐 SINGLE-USE GUARANTEE (THIS LINE IS THE KEY)
+    try {
+        $inserted = $wpdb->query(
+            $wpdb->prepare(
+                "INSERT IGNORE INTO $vend_lock (vend, user_id, created_at)
+             VALUES (%s, %d, NOW())",
+                $amount,
+                $current_user_id
+            )
+        );
+
+        if ($inserted !== 1) {
+            if (vp_getoption("vp_security") == "yes" && vp_getoption("secur_mod") == "wild") {
+                $wpdb->query("ROLLBACK");
+                vp_block_user("Banned for hacking attempt ");
+                die('Duplicate or replayed request so you have been banned . Please contact support');
+            }
+            $wpdb->query("ROLLBACK");
+            die('Duplicate or replayed request');
+        }
+
+    } catch (Exception $e) {
+        if (vp_getoption("vp_security") == "yes"  && vp_getoption("secur_mod") == "wild") {
+            $wpdb->query("ROLLBACK");
+            vp_block_user("Banned for hacking attempt ");
+            die('Duplicate or replayed request so you have been banned . Please contact support');
+        }
+        $wpdb->query("ROLLBACK");
+        die('Duplicate or replayed request');
+    }
 
 
-$wpdb->query("INSERT INTO {$wpdb->prefix}vp_wallet_lock (user_id) VALUES ($id)
-              ON DUPLICATE KEY UPDATE user_id = user_id");
-
-// Step 3: Lock the user's row in the lock table
-$wpdb->get_row("SELECT user_id FROM $table_lock WHERE user_id = $id FOR UPDATE");
 
 
 $table_name = $wpdb->prefix . 'vp_wallet';
-
-// Step 1: Check the table engine
-$table_status = $wpdb->get_row("SHOW TABLE STATUS WHERE Name = '$table_name'");
-$engine = isset($table_status->Engine) ? strtoupper($table_status->Engine) : '';
-
-// Step 2: Convert to InnoDB if needed
-if ($engine !== 'INNODB') {
-  $wpdb->query("ALTER TABLE {$table_name} ENGINE=InnoDB");
-}
-
-
-
 // Step 4: Lock only the row for the specific user
 $result = $wpdb->get_row("
     SELECT * 
@@ -85,6 +95,7 @@ $current_balance = floatval(vp_getuser($id, 'vp_bal', true));
 // 
 $lastRecentNowBal = floatval($result->before_amount);
 if ($lastRecentNowBal == $current_balance) {
+    $wpdb->query('ROLLBACK');
   vp_block_user("Banned because we discovered an anomality. [$current_balance == $lastRecentNowBal]");
   die("Banned because we discovered an anomality. [$current_balance == $lastRecentNowBal]");
 }

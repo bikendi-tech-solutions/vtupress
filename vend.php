@@ -28,6 +28,8 @@ include_once(ABSPATH . 'wp-content/plugins/vtupress/functions.php'); // Ensure y
 // Auto-override VTUPress settings.
 vtupress_auto_override();
 
+// date_default_timezone_set( 'Africa/Lagos');
+
 // Set CORS header for self-origin.
 header("Access-Control-Allow-Origin: 'self'");
 header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;");
@@ -39,7 +41,7 @@ header("X-Xss-Protection: 1; mode=block");
 header('Permissions-Policy: geolocation=(self), camera=(self), microphone=(self)');
 
 
-global $wpdb, $plan,$level,$amountv,$sec,$mlm_for,$realAmt;
+global $wpdb, $plan, $level, $amountv, $sec, $mlm_for, $realAmt;
 
 // Include custom security, helper, and API handler files.
 require_once __DIR__ . '/includes/vend-security.php';
@@ -47,6 +49,12 @@ require_once __DIR__ . '/includes/vend-helpers.php';
 require_once __DIR__ . '/includes/vend-api-handlers.php';
 require_once __DIR__ . '/includes/vend-transactions.php';
 
+$ma_id = get_current_user_id();
+$vpaccess = vp_getuser($ma_id, 'vp_user_access', true);
+
+if (strtolower($vpaccess) != "false" && strtolower($vpaccess) != "access" && !current_user_can("administrator")) {
+    die("You Are Currently Banned From Making Transactions. Please Contact Admin ");
+}
 
 // Referrer check for security.
 $allowed_referrers = [$_SERVER["SERVER_NAME"]];
@@ -114,8 +122,55 @@ if (vp_getoption("vp_security") == "yes") {
 
 // --- MAIN TRANSACTION PROCESSING BLOCK ---
 if (isset($_POST["vend"])) {
-    $wpdb->query('START TRANSACTION');
-    
+
+    $vend = sanitize_text_field($_POST['vend']);
+    if ($vend === '') {
+        die('Invalid vend token');
+    }
+
+    $current_user_id = get_current_user_id();
+    if ($current_user_id === 0) {
+        die('Not logged in');
+    }
+
+    $vend_lock = $wpdb->prefix . "vend_lock";
+
+    // 🔒 START TRANSACTION FIRST
+    // $wpdb->query("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+    $wpdb->query("START TRANSACTION");
+
+    // 🔐 SINGLE-USE GUARANTEE (THIS LINE IS THE KEY)
+    try {
+        $inserted = $wpdb->query(
+            $wpdb->prepare(
+                "INSERT IGNORE INTO $vend_lock (vend, user_id, created_at)
+             VALUES (%s, %d, NOW())",
+                $vend,
+                $current_user_id
+            )
+        );
+
+        if ($inserted !== 1) {
+            if (vp_getoption("vp_security") == "yes" && vp_getoption("secur_mod") == "wild") {
+                $wpdb->query("ROLLBACK");
+                vp_block_user("Banned for hacking attempt ");
+                die('Duplicate or replayed request so you have been banned for an hacking attempt');
+            }
+            $wpdb->query("ROLLBACK");
+            die('Duplicate or replayed request');
+        }
+
+    } catch (Exception $e) {
+        if (vp_getoption("vp_security") == "yes"  && vp_getoption("secur_mod") == "wild") {
+            $wpdb->query("ROLLBACK");
+            vp_block_user("Banned for hacking attempt ");
+            die('Duplicate or replayed request so you have been banned for an hacking attempt');
+        }
+        $wpdb->query("ROLLBACK");
+        die('Duplicate or replayed request');
+    }
+
+
     /*
     UPDATE wpg6_usermeta
 SET meta_value = JSON_SET(
@@ -135,7 +190,6 @@ AND CAST(JSON_EXTRACT(CAST(meta_value AS JSON), '$.vp_bal') AS DECIMAL(15,2)) >=
     $symbol = $vp_country["symbol"];
     // 1. Race condition fix: Start database transaction and lock user row immediately.
     // This is the earliest point to prevent concurrent modifications.
-    $current_user_id = get_current_user_id();
     if ($current_user_id === 0) {
         die('{"status":"200","response":"User not logged in or invalid user ID."}');
     }
@@ -145,11 +199,13 @@ AND CAST(JSON_EXTRACT(CAST(meta_value AS JSON), '$.vp_bal') AS DECIMAL(15,2)) >=
         $amount_raw = $_POST["amount"];
         if (preg_match("/-/", $amount_raw)) {
             vp_block_user("Tried to perform a transaction with a negative amount!");
+            $wpdb->delete($vend_lock, ['user_id' => $current_user_id]);
             $wpdb->query('ROLLBACK'); // Rollback if invalid amount
             die("Don't try negative balance");
         }
         $amount = floatval($amount_raw);
     } else {
+        $wpdb->delete($vend_lock, ['user_id' => $current_user_id]);
         $wpdb->query('ROLLBACK'); // Rollback if amount is missing
         die("Invalid request: Amount is missing.");
     }
@@ -192,6 +248,7 @@ AND CAST(JSON_EXTRACT(CAST(meta_value AS JSON), '$.vp_bal') AS DECIMAL(15,2)) >=
     // Check for negative amount (already done above, but good to have a final check before processing)
     if ($amount < 0) {
         vp_block_user("Tried to make transaction with a negative amount!");
+        $wpdb->delete($vend_lock, ['user_id' => $current_user_id]);
         $wpdb->query('ROLLBACK');
         die("Don't try negative balance");
     }
@@ -199,6 +256,7 @@ AND CAST(JSON_EXTRACT(CAST(meta_value AS JSON), '$.vp_bal') AS DECIMAL(15,2)) >=
     // Check user access
     $vpaccess = vp_getuser($id, 'vp_user_access', true);
     if (strtolower($vpaccess) != "false" && strtolower($vpaccess) != "access" && empty($vpaccess) && !current_user_can("administrator")) {
+        $wpdb->delete($vend_lock, ['user_id' => $current_user_id]);
         $wpdb->query('ROLLBACK');
         die('{"status":"222","response":"You Are Currently Banned From Making Transactions. Please Contact Admin -- CODE --  [' . $vpaccess . ']');
     }
@@ -219,6 +277,7 @@ AND CAST(JSON_EXTRACT(CAST(meta_value AS JSON), '$.vp_bal') AS DECIMAL(15,2)) >=
 
 
     if ($level == null) {
+        $wpdb->delete($vend_lock, ['user_id' => $current_user_id]);
         $wpdb->query('ROLLBACK');
         die("Current User Package Not Found");
     } else {
@@ -279,7 +338,7 @@ AND CAST(JSON_EXTRACT(CAST(meta_value AS JSON), '$.vp_bal') AS DECIMAL(15,2)) >=
                 $amountv = $amount - ($amount * $discount_rate / 100);
                 $sec = ($amount * $discount_rate / 100);
                 $baln = $bal - $amount; // Balance is deducted by the full amount
-        
+
                 break;
 
             case "cdat": // Data
@@ -378,10 +437,14 @@ AND CAST(JSON_EXTRACT(CAST(meta_value AS JSON), '$.vp_bal') AS DECIMAL(15,2)) >=
                     $right = preg_replace('/\s+/u', ' ', trim($expected_plan_name . " $symbol" . $expected_plan_price));
 
                     if ($left !== $right) {
+                        $wpdb->delete($vend_lock, ['user_id' => $current_user_id]);
+
                         $wpdb->query('ROLLBACK');
                         die('Plan mis-match please refresh and try again');
                     }
                     if ($amount != $expected_plan_price) {
+                        $wpdb->delete($vend_lock, ['user_id' => $current_user_id]);
+
                         vp_block_user("Modified the Price");
                         $wpdb->query('ROLLBACK');
                         die("Get OFF!!! The submitted price can't be different from what is set");
@@ -390,7 +453,7 @@ AND CAST(JSON_EXTRACT(CAST(meta_value AS JSON), '$.vp_bal') AS DECIMAL(15,2)) >=
 
                 if ($datatcode != "smile" && $datatcode != "alpha") {
                     $amountv = $amount - ($amount * $discount_rate / 100);
-                     $sec = ($amount * $discount_rate / 100);
+                    $sec = ($amount * $discount_rate / 100);
 
                     $baln = $bal - $amount;
                 }
@@ -401,6 +464,8 @@ AND CAST(JSON_EXTRACT(CAST(meta_value AS JSON), '$.vp_bal') AS DECIMAL(15,2)) >=
                 $expected_cable_price = floatval(vp_getoption("ccablep" . $planIndex));
                 if ($amount < $expected_cable_price) {
                     vp_block_user("Modified the Price");
+                    $wpdb->delete($vend_lock, ['user_id' => $current_user_id]);
+
                     $wpdb->query('ROLLBACK');
                     die("Get OFF!!! The submitted price can't be different from what is set");
                 }
@@ -458,7 +523,7 @@ AND CAST(JSON_EXTRACT(CAST(meta_value AS JSON), '$.vp_bal') AS DECIMAL(15,2)) >=
             $baln = $bal - $amountv;
             $amount = $amountv;
         }
-        
+
     } else {
         $discount_method = "null";
     }
@@ -505,6 +570,8 @@ AND CAST(JSON_EXTRACT(CAST(meta_value AS JSON), '$.vp_bal') AS DECIMAL(15,2)) >=
                     if (($tb4 + $tnow) <= $limitT) {
                         $add_total = "yes";
                     } else {
+                        $wpdb->delete($vend_lock, ['user_id' => $current_user_id]);
+
                         $wpdb->query('ROLLBACK');
                         die("Verify Account To Perform This Transaction");
                     }
@@ -520,6 +587,8 @@ AND CAST(JSON_EXTRACT(CAST(meta_value AS JSON), '$.vp_bal') AS DECIMAL(15,2)) >=
                                     vp_updateuser($id, "vp_kyc_end", date('Y-m-d', strtotime($datenow . " +1 month")));
                                     vp_updateuser($id, 'vp_kyc_total', "0");
                                 } else {
+                                    $wpdb->delete($vend_lock, ['user_id' => $current_user_id]);
+
                                     $wpdb->query('ROLLBACK');
                                     die("KYC DURATION ERROR");
                                 }
@@ -532,12 +601,16 @@ AND CAST(JSON_EXTRACT(CAST(meta_value AS JSON), '$.vp_bal') AS DECIMAL(15,2)) >=
                                 vp_updateuser($id, "vp_kyc_end", date('Y-m-d', strtotime($datenow . " +1 month")));
                                 vp_updateuser($id, 'vp_kyc_total', "0");
                             } else {
+                                $wpdb->delete($vend_lock, ['user_id' => $current_user_id]);
+
                                 $wpdb->query('ROLLBACK');
                                 die("KYC DURATION ERROR");
                             }
                         }
                     } else {
                         if ($datenow < $next_end_date) {
+                            $wpdb->delete($vend_lock, ['user_id' => $current_user_id]);
+
                             $wpdb->query('ROLLBACK');
                             die("Verify Your Account To Proceed With This Transaction");
                         } elseif ($datenow >= $next_end_date) {
@@ -548,6 +621,8 @@ AND CAST(JSON_EXTRACT(CAST(meta_value AS JSON), '$.vp_bal') AS DECIMAL(15,2)) >=
                                 vp_updateuser($id, "vp_kyc_end", date('Y-m-d', strtotime($datenow . " +1 month")));
                                 vp_updateuser($id, 'vp_kyc_total', "0");
                             } else {
+                                $wpdb->delete($vend_lock, ['user_id' => $current_user_id]);
+
                                 $wpdb->query('ROLLBACK');
                                 die("KYC DURATION ERROR");
                             }
@@ -562,39 +637,49 @@ AND CAST(JSON_EXTRACT(CAST(meta_value AS JSON), '$.vp_bal') AS DECIMAL(15,2)) >=
     $pin = sanitize_text_field($_POST["pin"] ?? '');
     $my_id = $id;
 
-    if(!is_numeric($pin) && !empty($pin)) {
-            $bio_table = $wpdb->prefix."vp_profile";
-          $found = $wpdb->get_row($wpdb->prepare("SELECT * FROM $bio_table WHERE user_id = %s AND code = %s", $my_id, $pin));
-            if($found === null || empty($found)) {
-                $wpdb->query('ROLLBACK');
-                die('pin');
-            }
-    }else{
-        
-        $mypin = sanitize_text_field(vp_getuser($id, "vp_pin", true));
-        if ($pin != $mypin) {
+    if (!is_numeric($pin) && !empty($pin)) {
+        $bio_table = $wpdb->prefix . "vp_profile";
+        $found = $wpdb->get_row($wpdb->prepare("SELECT * FROM $bio_table WHERE user_id = %s AND code = %s", $my_id, $pin));
+        if ($found === null || empty($found)) {
+            $wpdb->delete($vend_lock, ['user_id' => $current_user_id]);
+
             $wpdb->query('ROLLBACK');
             die('pin');
         }
-        
+    } else {
+
+        $mypin = sanitize_text_field(vp_getuser($id, "vp_pin", true));
+        if ($pin != $mypin) {
+            $wpdb->delete($vend_lock, ['user_id' => $current_user_id]);
+
+            $wpdb->query('ROLLBACK');
+            die('pin');
+        }
+
     }
 
 
     // Balance and amount validation
     if (!is_numeric($bal) || !is_numeric($amount)) {
+        $wpdb->delete($vend_lock, ['user_id' => $current_user_id]);
+
         $wpdb->query('ROLLBACK');
         die('Amount Or Balance Invalid');
     }
 
-     
+
     // Minimum purchase amount check
     if ($realAmt < $minimum_trans_amount && $tcode != "csms") { // SMS might have different minimums
+        $wpdb->delete($vend_lock, ['user_id' => $current_user_id]);
+
         $wpdb->query('ROLLBACK');
         die("You can't purchase less than $minimum_trans_amount [$realAmt]");
     }
 
     // Sufficient balance check
     if ($bal < $amount) {
+        $wpdb->delete($vend_lock, ['user_id' => $current_user_id]);
+
         $wpdb->query('ROLLBACK');
         die("Insufficient Balance");
     }
@@ -635,10 +720,14 @@ AND CAST(JSON_EXTRACT(CAST(meta_value AS JSON), '$.vp_bal') AS DECIMAL(15,2)) >=
                         if (strtolower(vp_getoption("secur_mod")) == "wild") {
                             vp_block_user("Blocked by raptor for purchasing to a blacklisted recipient $processVal ");
                             vp_updateoption("raptor_last_blocked", date("Y-m-d h:i:s A", $current_timestamp));
+                            $wpdb->delete($vend_lock, ['user_id' => $current_user_id]);
+
                             $wpdb->query('ROLLBACK');
                             die("You've just been banned for trying to make a transaction to a blacklisted recipient");
                         } else {
                             vp_updateoption("raptor_last_blocked", date("Y-m-d h:i:s A", $current_timestamp));
+                            $wpdb->delete($vend_lock, ['user_id' => $current_user_id]);
+
                             $wpdb->query('ROLLBACK');
                             die("You can't make transaction to a blacklisted recipient");
                         }
@@ -648,10 +737,14 @@ AND CAST(JSON_EXTRACT(CAST(meta_value AS JSON), '$.vp_bal') AS DECIMAL(15,2)) >=
                 }
             }
         } else {
+            $wpdb->delete($vend_lock, ['user_id' => $current_user_id]);
+
             if (isset($json_raptor->message)) {
+
                 $wpdb->query('ROLLBACK');
                 die("Raptor => " . $json_raptor->message);
             }
+
             $wpdb->query('ROLLBACK');
             die("Raptor => " . $response_raptor);
         }
@@ -665,9 +758,11 @@ AND CAST(JSON_EXTRACT(CAST(meta_value AS JSON), '$.vp_bal') AS DECIMAL(15,2)) >=
     // Process transaction based on tcode.
     // This function will now be responsible for calling pre_transaction_checks_and_setup
     // and then dispatching to the specific service handlers.
-    $balance_updated = update_balance($current_user_id,$amount); // Call the new function for early race condition fix
+    $balance_updated = update_balance($current_user_id, $amount); // Call the new function for early race condition fix
 
-    if($balance_updated !== true){
+    if ($balance_updated !== true) {
+        $wpdb->delete($vend_lock, ['user_id' => $current_user_id]);
+
         $wpdb->query('ROLLBACK');
         die($balance_updated);
     }
